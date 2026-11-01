@@ -249,6 +249,7 @@ async function init(){
    theme=(await kget('theme'))||'ruby';
    var hs=await kget('hideSold');hideSold=typeof hs==='boolean'?hs:true;
  }
+ secretCfg=(await kget('secret'))||secretCfg;
  gal=await kget('gallery');if(!gal){gal=galFromItems();await saveGallery()}
  if(!THEMES[theme])theme='ruby';
 }
@@ -271,7 +272,7 @@ function fees(i){return num(i.feeFinal)||0}
 function sw(n){var c=COLORS[String(n).toLowerCase()];return c?'<span class="sw" style="background:'+c+'"></span>':''}
 function stars(n){return n?'❤️'.repeat(n):''}
 function distinct(arr){var m={};arr.forEach(function(v){if(v===''||v==null)return;var s=String(v).trim();if(!s)return;var k=s.toLowerCase();if(!m[k]||(s.charAt(0)===s.charAt(0).toUpperCase()&&m[k].charAt(0)!==m[k].charAt(0).toUpperCase()))m[k]=s});return Object.keys(m).sort().map(function(k){return m[k]})}
-function allOf(fn){return distinct(items.reduce(function(a,i){return a.concat(fn(i)||[])},[]))}
+function allOf(fn){return distinct(vis().reduce(function(a,i){return a.concat(fn(i)||[])},[]))}
 function finger(i){
  if(i.category!=='Ring')return null;
  var s=i.ringSize===''||i.ringSize==null?NaN:Number(i.ringSize);
@@ -288,6 +289,35 @@ function calcs(o){
  var pay=num(o.payout),net=pay==null?null:pay-(num(o.shipActual)||0)-(num(o.feeFinal)||0)-(cost||0);
  var d=days(o);
  return {'c-days':d==null?'—':d+' days','c-net':money(net),sugE:money(sE),sugI:money(sI),potE:sE==null?'—':money(sE-cost),potI:sI==null?'—':money(sI-cost)};
+}
+
+/* ---------- secret compartment ---------- */
+var secretCfg={on:false,hash:'',threshold:null},secretUnlocked=false;
+function isHidden(i){return secretCfg.threshold!=null&&num(i.cost)!=null&&num(i.cost)>secretCfg.threshold}
+function vis(){return secretCfg.on?items.filter(function(i){return !isHidden(i)}):items}
+function saveSecret(){return kset('secret',secretCfg)}
+function hashKW(kw){
+ var s='ntts-salt-v1|'+String(kw).trim().toLowerCase();
+ if(window.crypto&&crypto.subtle){return crypto.subtle.digest('SHA-256',new TextEncoder().encode(s)).then(function(buf){return Array.prototype.map.call(new Uint8Array(buf),function(b){return ('0'+b.toString(16)).slice(-2)}).join('')})}
+ var h=5381;for(var n=0;n<s.length;n++)h=((h<<5)+h+s.charCodeAt(n))|0;
+ return Promise.resolve('djb2-'+(h>>>0).toString(16));
+}
+function secretGate(){
+ var M=document.getElementById('modal');
+ if(secretUnlocked){show('secret');return}
+ if(!secretCfg.hash){M.innerHTML='<div class="modal" data-a="backdrop"><div><h3 style="margin:0 0 6px">Set a keyword</h3><p class="meta">Choose a keyword to open the Secret Compartment. There is no reset, so remember it.</p><input type="password" id="skw" placeholder="Keyword"><div class="bar" style="justify-content:center;margin:12px 0 0"><button class="pri" data-a="sset">Save</button><button data-a="x">Cancel</button></div></div></div>';return}
+ M.innerHTML='<div class="modal" data-a="backdrop"><div><h3 style="margin:0 0 6px">Secret Compartment</h3><input type="password" id="skw" placeholder="Keyword"><div class="bar" style="justify-content:center;margin:12px 0 0"><button class="pri" data-a="slogin">Open</button><button data-a="x">Cancel</button></div></div></div>';
+}
+function renderSecret(){
+ if(!secretUnlocked)return '<h2>Secret Compartment</h2><p class="meta">Locked.</p>';
+ var hidden=items.filter(isHidden);
+ return '<h2>Secret Compartment</h2>'
+  +'<div class="bar"><label class="swl" style="margin:0"><input type="checkbox" data-a="smode"'+(secretCfg.on?' checked':'')+'> Hide these pieces in the Jewelry Box</label></div>'
+  +'<div class="f"><label>Cost threshold (hide pieces above this)<input type="text" inputmode="decimal" data-a="sthr" data-money="1" value="'+esc(secretCfg.threshold==null?'':fmtMoney(secretCfg.threshold))+'" placeholder="$0.00"></label>'
+  +'<label>Change keyword<input type="password" id="skw2" placeholder="New keyword"></label></div>'
+  +'<div class="bar"><button data-a="skwchg">Save keyword</button><button data-a="slock">Lock</button></div>'
+  +'<p class="meta">'+hidden.length+' piece'+(hidden.length===1?'':'s')+' over the threshold'+(secretCfg.on?' (hidden from the Jewelry Box)':' (mode is off, so they show)')+'.</p>'
+  +'<div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(120px,1fr))">'+hidden.map(function(i){return '<div>'+thumb(i)+'<div class="meta">'+esc(title(i))+' · '+money(num(i.cost))+'</div></div>'}).join('')+'</div>';
 }
 
 /* ---------- migration ---------- */
@@ -374,22 +404,23 @@ var FACETS=[
  {k:'status',l:'Status',v:function(){return STAT},g:function(i){return [i.status]}},
  {k:'category',l:'Type',v:function(){return CATS},g:function(i){return [i.category]}},
  {k:'period',l:'Period',v:function(){return PERIODS},g:function(i){return [i.period]}},
- {k:'era',l:'Era/Movement',v:function(){return allOf(function(i){return [i.era]})},g:function(i){return [i.era]}},
+ {k:'era',l:'Era/Movement',counted:1,v:function(){return allOf(function(i){return [i.era]})},g:function(i){return [i.era]}},
  {k:'tags',l:'Motifs',cloud:1,v:function(){return allOf(function(i){return i.tags})},g:function(i){return i.tags||[]}},
- {k:'stones',l:'Stones',cloud:1,v:function(){return allOf(function(i){return i.stones})},g:function(i){return i.stones||[]}},
- {k:'colorMain',l:'Color',sw:1,v:function(){return COLOR_ORDER.filter(function(c){return items.some(function(i){return i.colorMain===c})})},g:function(i){return [i.colorMain]}},
+ {k:'stones',l:'Stones',cloud:1,counted:1,v:function(){return allOf(function(i){return i.stones})},g:function(i){return i.stones||[]}},
+ {k:'colorMain',l:'Color',sw:1,v:function(){return COLOR_ORDER.filter(function(c){return vis().some(function(i){return i.colorMain===c})})},g:function(i){return [i.colorMain]}},
  {k:'finger',l:'Finger (rings, by size)',v:function(){return FINGERS},g:function(i){return [finger(i)]}}
 ];
 function facetOf(k){return FACETS.filter(function(F){return F.k===k})[0]}
-function cntColor(c){return items.filter(function(i){return i.colorMain===c}).length}
-function facetVals(F){var v=F.v();if(F.k==='colorMain')v=v.slice().sort(function(a,b){return cntColor(b)-cntColor(a)||COLOR_ORDER.indexOf(a)-COLOR_ORDER.indexOf(b)});return v}
+function cntColor(c){return vis().filter(function(i){return i.colorMain===c}).length}
+function cntF(F,v){var lv=String(v).toLowerCase();return vis().filter(function(i){return F.g(i).map(function(x){return String(x==null?'':x).toLowerCase()}).indexOf(lv)>-1}).length}
+function facetVals(F){var v=F.v();if(F.counted)v=v.map(function(x){return {x:x,c:cntF(F,x)}}).sort(function(a,b){return b.c-a.c||String(a.x).localeCompare(String(b.x))}).map(function(o){return o.x});if(F.k==='colorMain')v=v.slice().sort(function(a,b){return cntColor(b)-cntColor(a)||COLOR_ORDER.indexOf(a)-COLOR_ORDER.indexOf(b)});return v}
 function matchQ(i){
  if(!q)return true;
  var h=[title(i),i.notes,i.category,i.status,i.period,i.era,i.country,(i.stones||[]).join(' '),(i.metals||[]).join(' '),(i.tags||[]).join(' '),(i.cut||[]).join(' '),i.colorMain,i.hallmarks,i.seller,i.purchasePlatform,i.sellPlatform].join(' ').toLowerCase();
  return q.split(/\s+/).every(function(w){return h.indexOf(w)>-1});
 }
 function inR(k,v){var r=rng[k];if(!r)return true;return v!=null&&v!==''&&Number(v)>=r[0]&&Number(v)<=r[1]}
-function pass(i){
+function pass(i){if(secretCfg.on&&isHidden(i))return false;
  if(!matchQ(i))return false;
  var pickedStatus=fsel.status&&fsel.status.length;
  if(hideSold&&!pickedStatus&&!(i.status==='Waiting'||i.status==='Private Collection'))return false;
@@ -423,7 +454,7 @@ function wholeMoney(v){return '$'+Math.round(v).toLocaleString('en-US')}
 function rangeBlock(k,l,nums,fmt){
  if(!nums.length)return '<fieldset class="facet"><legend>'+l+'</legend><p class="meta">Add a '+l.toLowerCase()+' to a piece to use this slider.</p></fieldset>';
  var mn=Math.min.apply(null,nums),mx=Math.max.apply(null,nums);if(mn===mx)mx=mn+1;
- var r=rng[k]||[mn,mx];
+ var r=rng[k]?[Math.max(mn,rng[k][0]),Math.min(mx,rng[k][1])]:[mn,mx];
  return '<fieldset class="facet"><legend>'+l+'</legend><div class="meta" id="rl-'+k+'">'+fmt(r[0])+' – '+fmt(r[1])+'</div><div class="dual"><div class="rail"></div>'
   +'<input type="range" data-a="rng" data-k="'+k+'" min="'+mn+'" max="'+mx+'" step="1" value="'+r[0]+'">'
   +'<input type="range" data-a="rng" data-k="'+k+'" min="'+mn+'" max="'+mx+'" step="1" value="'+r[1]+'"></div></fieldset>';
@@ -438,8 +469,8 @@ function filtersHTML(){
      var sel=fsel[F.k]||[],open=!!showAllF[F.k],shown=open?vals:vals.slice(0,6);
      var chips=shown.map(function(v){
        var on=sel.indexOf(v)>-1;
-       if(F.cloud)return '<button data-a="f" data-k="'+F.k+'" data-val="'+esc(v)+'"'+(on?' class="on"':'')+'>'+esc(v)+'</button>';
-       var lbl=F.sw?(HEARTS[v]||'')+' '+v+' ('+cntColor(v)+')':v;
+       if(F.cloud)return '<button data-a="f" data-k="'+F.k+'" data-val="'+esc(v)+'"'+(on?' class="on"':'')+'>'+esc(v)+(F.counted?' ('+cntF(F,v)+')':'')+'</button>';
+       var lbl=F.sw?(HEARTS[v]||'')+' '+v+' ('+cntColor(v)+')':(F.counted?v+' ('+cntF(F,v)+')':v);
        return '<label><input type="checkbox" data-a="fc" data-k="'+F.k+'" data-val="'+esc(v)+'"'+(on?' checked':'')+'>'+esc(lbl)+'</label>';
      }).join('');
      h+='<fieldset class="facet"><legend>'+F.l+'</legend>'+(F.cloud?'<div class="cloud">'+chips+'</div>':chips)
@@ -447,7 +478,7 @@ function filtersHTML(){
    }
    if(F.k==='era')h+=rangeBlock('year','Year',items.map(function(i){return num(i.yearMade)}).filter(function(n){return n!=null}),function(v){return String(Math.round(v))});
  });
- h+=rangeBlock('cost','Cost',items.map(function(i){return num(i.cost)}).filter(function(n){return n!=null}),wholeMoney);
+ h+=rangeBlock('cost','Cost',vis().map(function(i){return num(i.cost)}).filter(function(n){return n!=null}),wholeMoney);
  if(anyFilter())h+='<p><button data-a="clear">Clear all filters</button></p>';
  return h;
 }
@@ -500,7 +531,7 @@ function renderTable(){
 }
 function renderBox(){
  if(vmode==='table')return renderTable();
- var list=ro?sorted(items):sorted(items.filter(pass));
+ var list=ro?sorted(vis()):sorted(items.filter(pass));
  return (ro?'<div class="bar"><span class="meta">Drag a photo onto another to move it. Order saves automatically.</span><button class="pri" data-a="ro">Done</button></div>':'')
   +'<div class="box"><div class="grid'+(ro?' ro':'')+'" style="grid-template-columns:repeat('+cols+',1fr)">'+list.map(thumb).join('')+'</div></div>'
   +(list.length?'':'<p class="meta">No pieces match.</p>')+countLine(list.length);
@@ -558,7 +589,7 @@ function copyText(id,btn){
  var fallback=function(){ta.focus();ta.select();try{document.execCommand('copy')}catch(e){}done()};
  if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(ta.value).then(done,fallback);else fallback();
 }
-var QA_KEYS=['title','category','period','era','yearMade','country','stones','metals','hallmarks','measurements','weight','ringSize','cut','colorMain','colorSecondary','tags','notes','purchaseDate','seller','purchasePlatform','cost','sellPlatform','dateListed','linkSale'];
+var QA_KEYS=['title','category','period','era','yearMade','country','stones','metals','hallmarks','measurements','weight','ringSize','cut','colorMain','tags','notes','purchaseDate','seller','purchasePlatform','cost'];
 function quickPrompt(){
  var lines=QA_KEYS.map(function(k){var s=FS[k],t=s[1],hint=t==='sel'?'one of: '+s[2].filter(Boolean).join(', '):t==='list'?'array of strings':t==='money'?'number, no $':t==='date'?'YYYY-MM-DD':t==='ringsz'?'number 0 to 13 in steps of 0.25':t==='number'?'number':t==='url'?'URL':'text';return '"'+k+'": '+hint+' ('+s[0]+')'});
  return 'Read the attached jewelry listing screenshots and output ONLY a JSON object with these keys. Omit any key you cannot find. No commentary.\n'+lines.join('\n');
@@ -643,7 +674,7 @@ function refreshCalc(){
 }
 function dimLabels(){}
 function renderMain(){
- document.getElementById('app').innerHTML=view==='box'?renderBox():view==='gallery'?renderGallery():view==='secret'?'<h2>Secret Compartment</h2><p class="meta">Coming soon.</p>':renderEdit();
+ document.getElementById('app').innerHTML=view==='box'?renderBox():view==='gallery'?renderGallery():view==='secret'?renderSecret():renderEdit();
  updateSummary();setTabs();
 }
 function render(){renderMain();renderDrawer()}
@@ -781,7 +812,7 @@ function importJSON(text){
 function deleteAll(){
  var t=prompt('This erases every piece, photo, and setting on this device. Type DELETE to confirm.');
  if(t!=='DELETE')return;
- items=[];gal={refs:[],covers:[]};galSel={refs:{},covers:{}};order=[];theme='ruby';hideSold=true;fsel={};rng={};q='';document.getElementById('q').value='';sortBy='new';ro=false;view='box';
+ items=[];gal={refs:[],covers:[]};secretCfg={on:false,hash:'',threshold:null};secretUnlocked=false;galSel={refs:{},covers:{}};order=[];theme='ruby';hideSold=true;fsel={};rng={};q='';document.getElementById('q').value='';sortBy='new';ro=false;view='box';
  kclear().then(function(){return Promise.all([saveItems(),saveOrder(),saveSettings(),saveGallery()])}).then(function(){applyTheme();render();alert('Everything has been reset.')});
 }
 
@@ -814,7 +845,11 @@ document.addEventListener('click',function(e){
  switch(d.a){
   case 'drawer':drawer(true);break;
   case 'dclose':drawer(false);break;
-  case 'nav':if(d.new)editing=newItem();show(d.v);break;
+  case 'nav':if(d.new)editing=newItem();if(d.v==='secret'){secretGate();break}show(d.v);break;
+  case 'slogin':hashKW(((document.getElementById('skw')||{}).value)||'').then(function(h){if(h===secretCfg.hash){secretUnlocked=true;document.getElementById('modal').innerHTML='';show('secret')}else alert('Incorrect keyword')});break;
+  case 'sset':var kwa=document.getElementById('skw').value.trim();if(!kwa){alert('Enter a keyword');break}hashKW(kwa).then(function(h){secretCfg.hash=h;secretUnlocked=true;saveSecret();document.getElementById('modal').innerHTML='';show('secret')});break;
+  case 'skwchg':var kwb=document.getElementById('skw2').value.trim();if(!kwb){alert('Enter a new keyword');break}hashKW(kwb).then(function(h){secretCfg.hash=h;saveSecret();document.getElementById('skw2').value='';alert('Keyword saved.')});break;
+  case 'slock':secretUnlocked=false;show('box');break;
   case 'jotd':drawer(false);jotd();break;
   case 'showall':showAllF[d.k]=!showAllF[d.k];renderDrawer();break;
   case 'f':toggleFilter(d.k,d.val);render();break;
@@ -867,6 +902,8 @@ document.addEventListener('click',function(e){
 document.addEventListener('change',function(e){
  var t=e.target,a=t.getAttribute('data-a');
  if(t.id==='sort'){sortBy=t.value;render();return}
+ if(a==='smode'){secretCfg.on=t.checked;saveSecret();render();return}
+ if(a==='sthr'){secretCfg.threshold=num(parseMoney(t.value));t.value=secretCfg.threshold==null?'':fmtMoney(secretCfg.threshold);saveSecret();render();return}
  if(a==='fc'){toggleFilter(t.getAttribute('data-k'),t.getAttribute('data-val'));render();return}
  if(a==='hidesold'){hideSold=t.checked;saveSettings();render();return}
  if(t.id==='fcsv'&&t.files[0]){readFile(t.files[0],importCSV);t.value='';return}
