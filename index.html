@@ -43,6 +43,8 @@ label{display:flex;flex-direction:column;font-size:.82rem;color:var(--mute);gap:
 input,select,textarea{border:1px solid var(--line);border-radius:8px;padding:9px;background:var(--bg);font-size:16px;width:100%;text-align:left}
 .f input,.f select,.f textarea{height:44px;min-height:44px;min-width:0;max-width:100%;line-height:1.2}
 .f textarea{height:auto;min-height:44px;resize:vertical}
+.f input[type=date]{-webkit-appearance:none;appearance:none;display:block;width:100%;height:44px;min-height:44px;min-width:0;padding:9px;line-height:1.2;font-size:16px;text-align:left;color:var(--fg);background:var(--bg)}
+.f input[type=date]::-webkit-date-and-time-value{text-align:left;margin:0}
 .calc{background:var(--bg);border:1px dashed var(--line);border-radius:8px;padding:9px;color:var(--fg);height:44px;min-height:44px;display:flex;align-items:center;font-size:16px;line-height:1.2;text-align:left}
 h4.sub{margin:14px 0 6px;font-size:.95rem;letter-spacing:.03em;grid-column:1/-1}
 .sticky{position:sticky;bottom:0;background:var(--bg);padding:10px 0;display:flex;gap:8px;flex-wrap:wrap;justify-content:center;border-top:1px solid var(--line)}
@@ -91,7 +93,7 @@ h4.side{margin:14px 0 6px;font-size:.95rem;letter-spacing:.03em}
 table{border-collapse:collapse;width:max-content;min-width:100%;font-size:.86rem}
 th,td{padding:8px 8px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top;white-space:normal;overflow-wrap:normal;word-break:normal;min-width:96px;max-width:220px}
 th{color:var(--mute);font-weight:normal;font-size:.76rem}
-td.stk,th.stk{position:sticky;left:0;z-index:2;background:var(--card);width:120px;min-width:120px;max-width:120px}
+td.stk,th.stk{position:sticky;left:0;z-index:2;background:var(--card);width:156px;min-width:156px;max-width:156px}
 tr.grp td{background:var(--bg);font-weight:bold;letter-spacing:.03em;color:var(--acc);font-size:.8rem;white-space:nowrap}
 </style>
 </head>
@@ -393,11 +395,11 @@ function renderTable(){
  var rows=list.slice((page-1)*PER,page*PER),last='',body='';
  rows.forEach(function(i){
    var gk=i.category+'|'+i.period;
-   if(gk!==last){body+='<tr class="grp"><td colspan="'+(cols.length+2)+'">'+esc(i.category)+' · '+esc(i.period)+'</td></tr>';last=gk}
-   body+='<tr><td class="stk"><div style="display:flex;gap:6px;align-items:flex-start">'+(i.cover?'<img class="ph" src="'+esc(i.cover)+'" alt="">':'<span class="phe">'+(EMOJI[String(i.category).toLowerCase()]||'💎')+'</span>')+'<span>'+esc(title(i))+'</span></div></td>'+cols.map(function(c){return '<td>'+c[1](i)+'</td>'}).join('')+'<td><button data-a="edit" data-id="'+i.id+'" aria-label="Edit" style="padding:6px 10px">✏️</button></td></tr>';
+   if(gk!==last){body+='<tr class="grp"><td colspan="'+(cols.length+2)+'"><span style="position:sticky;left:0;display:inline-block">'+esc(i.category)+' · '+esc(i.period)+'</span></td></tr>';last=gk}
+   body+='<tr><td class="stk"><div style="display:flex;gap:6px;align-items:flex-start">'+(i.cover?'<img class="ph" src="'+esc(i.cover)+'" alt="">':'<span class="phe">'+(EMOJI[String(i.category).toLowerCase()]||'💎')+'</span>')+'<span>'+esc(i.title||'—')+'</span></div></td>'+cols.map(function(c){return '<td>'+c[1](i)+'</td>'}).join('')+'<td><button data-a="edit" data-id="'+i.id+'" aria-label="Edit" style="padding:6px 10px">✏️</button></td></tr>';
  });
  return '<div class="bar"><button data-a="ct" data-v="Item"'+(ctab==='Item'?' class="on"':'')+'>Piece</button><button data-a="ct" data-v="Transaction"'+(ctab==='Transaction'?' class="on"':'')+'>Transaction</button><button data-a="ct" data-v="Stats"'+(ctab==='Stats'?' class="on"':'')+'>Stats</button><span class="meta">'+list.length+' pieces</span></div>'
-  +'<div class="tw"><table><thead><tr><th class="stk">Piece</th>'+cols.map(function(c){return '<th>'+c[0]+'</th>'}).join('')+'<th></th></tr></thead><tbody>'+body+'</tbody></table></div>'
+  +'<div class="tw"><table><thead><tr><th class="stk">Title</th>'+cols.map(function(c){return '<th>'+c[0]+'</th>'}).join('')+'<th></th></tr></thead><tbody>'+body+'</tbody></table></div>'
   +(rows.length?'':'<p class="meta">No pieces match these filters.</p>')
   +'<div class="pager"><button data-a="pg" data-v="-1"'+(page<=1?' disabled':'')+'>Prev</button><span>Page '+page+' of '+n+'</span><button data-a="pg" data-v="1"'+(page>=n?' disabled':'')+'>Next</button></div>';
 }
@@ -414,7 +416,7 @@ function fieldHTML(k,v){
  else if(t==='textarea')c='<textarea name="'+k+'" rows="3">'+esc(val)+'</textarea>';
  else if(t==='hearts')c='<select name="hearts">'+[0,1,2,3,4,5].map(function(n){return '<option value="'+n+'"'+(Number(val)===n?' selected':'')+'>'+(n?hearts(n):'No hearts')+'</option>'}).join('')+'</select>';
  else if(t==='money')c='<input name="'+k+'" type="text" inputmode="decimal" data-money="1" value="'+esc(fmtMoney(v))+'" placeholder="$0.00">';
- else if(t==='date')c='<input name="'+k+'" type="text" inputmode="numeric" placeholder="mm/dd/yyyy" data-date="1" value="'+esc(fmtDate(v))+'">';
+ else if(t==='date')c='<input name="'+k+'" type="date" value="'+esc(v||'')+'">';
  else if(t==='number')c='<input name="'+k+'" type="number" step="1" inputmode="numeric" value="'+esc(val)+'">';
  else c='<input name="'+k+'" type="'+(t==='url'?'url':'text')+'" value="'+esc(val)+'">';
  return '<label>'+s[1]+c+'</label>';
@@ -423,10 +425,10 @@ function calcLabel(id,label,val){return '<label>'+label+'<div class="calc" id="'
 function imagesHTML(){
  var refs=editing.refs||[],lib=coverLibrary();
  return '<div class="f"><h4 class="sub">Reference screenshots</h4><div class="seg" style="grid-column:1/-1"><button type="button" data-a="refadd">+ Add images</button></div>'
-  +'<div style="grid-column:1/-1">'+(refs.length?'<div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(90px,1fr))">'+refs.map(function(r,n){return '<div style="position:relative"><img src="'+esc(r)+'" style="width:100%;aspect-ratio:1;object-fit:cover;border-radius:8px;display:block" alt=""><button type="button" data-a="rmref" data-i="'+n+'" style="position:absolute;top:4px;right:4px;padding:2px 8px;min-height:0">✕</button></div>'}).join('')+'</div>':'<p class="meta">No reference screenshots yet.</p>')+'</div>'
+  +'<div style="grid-column:1/-1">'+(refs.length?'<div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(90px,1fr))">'+refs.map(function(r,n){return '<div style="position:relative"><img src="'+esc(r)+'" style="width:100%;aspect-ratio:1;object-fit:cover;border-radius:8px;display:block" alt=""><span class="dim" style="position:absolute;left:4px;bottom:4px;font-size:.65rem;background:rgba(0,0,0,.6);color:#fff;padding:1px 4px;border-radius:4px">'+sizeOf(r)+'</span><button type="button" data-a="rmref" data-i="'+n+'" style="position:absolute;top:4px;right:4px;padding:2px 8px;min-height:0">✕</button></div>'}).join('')+'</div>':'<p class="meta">No reference screenshots yet.</p>')+'</div>'
   +'<input type="file" id="cvfile" accept="image/*" hidden><input type="file" id="reffile" accept="image/*" multiple hidden><h4 class="sub">Cover photo</h4>'
-  +'<div style="grid-column:1/-1">'+(editing.cover?'<img class="cvimg" src="'+esc(editing.cover)+'" alt="">':'<p class="meta">No cover yet.</p>')
-  +'<div class="seg"><button type="button" data-a="covadd">⬆ Upload new cover</button>'+(editing.cover?'<button type="button" data-a="cvadj">Zoom / pan</button><button type="button" data-a="cvrm">Remove cover</button>':'')+'</div>'
+  +'<div style="grid-column:1/-1">'+(editing.cover?'<img class="cvimg" src="'+esc(editing.cover)+'" alt=""><div class="meta dim">'+sizeOf(editing.cover)+'</div>':'<p class="meta">No cover yet.</p>')
+  +'<div class="seg"><button type="button" data-a="covadd">⬆ Upload new cover</button>'+(editing.cover?'<button type="button" data-a="cvadj">Pan &amp; Zoom</button><button type="button" data-a="cvrm">Remove cover</button>':'')+'</div>'
   +'<div id="crop" hidden><div id="cropv"><img id="cropimg" alt="" draggable="false"></div><input type="range" id="cropz" min="1" max="4" step="0.01" value="1" aria-label="Zoom"><p class="seg"><button type="button" class="pri" data-a="cvok">Use this crop</button><button type="button" data-a="cvcancel">Cancel</button></p><p class="meta">Drag to pan. Use the slider (or pinch) to zoom. The square is your thumbnail.</p></div></div>'
   +(refs.length?'<div style="grid-column:1/-1"><p class="meta">Use one of this piece’s reference images</p><div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(70px,1fr))">'+refs.map(function(src,n){return '<button type="button" data-a="pickref" data-i="'+n+'" style="padding:0;border-radius:8px;aspect-ratio:1;overflow:hidden;min-height:0;border:2px solid '+(src===editing.cover?'var(--acc)':'transparent')+'"><img src="'+esc(src)+'" alt="" style="width:100%;height:100%;object-fit:cover;display:block"></button>'}).join('')+'</div></div>':'')
   +(lib.length?'<div style="grid-column:1/-1"><p class="meta">Or use a previously uploaded image</p><div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(70px,1fr))">'+lib.slice(0,30).map(function(src,n){return '<button type="button" data-a="pickcover" data-i="'+n+'" style="padding:0;border-radius:8px;aspect-ratio:1;overflow:hidden;min-height:0;border:2px solid '+(src===editing.cover?'var(--acc)':'transparent')+'"><img src="'+esc(src)+'" alt="" style="width:100%;height:100%;object-fit:cover;display:block"></button>'}).join('')+'</div></div>':'')
@@ -489,18 +491,20 @@ function readForm(){
  return o;
 }
 function syncForm(){editing=readForm();return editing}
+function sizeOf(u){if(!u)return '';var b=u.split(',')[1]||'';var n=Math.floor(b.length*3/4)-(b.slice(-2)==='=='?2:b.slice(-1)==='='?1:0);return n<1048576?Math.round(n/1024)+' KB':(n/1048576).toFixed(1)+' MB'}
+function dimLabels(){document.querySelectorAll('#app img[data-dim]').forEach(function(im){var s=im.parentNode.querySelector('.dim');function f(){if(s)s.textContent=im.naturalWidth+' × '+im.naturalHeight+' px'}if(im.complete&&im.naturalWidth)f();else im.addEventListener('load',f)})}
 function renderMain(){
  document.getElementById('searchbar').style.display=view==='box'?'block':'none';
- document.getElementById('app').innerHTML=view==='box'?renderBox():renderEdit();
+ document.getElementById('app').innerHTML=view==='box'?renderBox():renderEdit();dimLabels();
 }
 function render(){renderMain();renderDrawer()}
 function show(v){view=v;ro=false;drawer(false);render();window.scrollTo(0,0)}
 
 /* ---------- images ---------- */
-function compress(file){
+function compress(file,max){max=max||800;
  return new Promise(function(res,rej){
    var r=new FileReader();
-   r.onload=function(){var img=new Image();img.onload=function(){var s=Math.min(1,800/Math.max(img.width,img.height)),c=document.createElement('canvas');c.width=Math.round(img.width*s);c.height=Math.round(img.height*s);c.getContext('2d').drawImage(img,0,0,c.width,c.height);res(c.toDataURL('image/jpeg',.72))};img.onerror=rej;img.src=r.result};
+   r.onload=function(){var img=new Image();img.onload=function(){var s=Math.min(1,max/Math.max(img.width,img.height)),c=document.createElement('canvas');c.width=Math.round(img.width*s);c.height=Math.round(img.height*s);c.getContext('2d').drawImage(img,0,0,c.width,c.height);res(c.toDataURL('image/jpeg',.72))};img.onerror=rej;img.src=r.result};
    r.onerror=rej;r.readAsDataURL(file);
  });
 }
@@ -523,8 +527,8 @@ function cropZoom(z){
 function cropApply(){
  if(!CR)return;var V=cropV().clientWidth,s=CR.s0*CR.z,c=document.createElement('canvas');c.width=c.height=800;
  c.getContext('2d').drawImage(CR.img,-CR.x/s,-CR.y/s,V/s,V/s,0,0,800,800);
- var url=c.toDataURL('image/jpeg',.72);CR=null;
- syncForm();editing.cover=url;renderMain();
+ var url=c.toDataURL('image/jpeg',.72),src=CR.img.src;CR=null;
+ syncForm();editing.cover=url;editing.coverSrc=src;renderMain();
 }
 
 /* ---------- JOTD & wear ---------- */
@@ -654,10 +658,10 @@ document.addEventListener('click',function(e){
   case 'covadd':document.getElementById('cvfile').click();break;
   case 'refadd':document.getElementById('reffile').click();break;
   case 'rmref':syncForm();editing.refs.splice(Number(d.i),1);renderMain();break;
-  case 'pickref':syncForm();editing.cover=editing.refs[Number(d.i)];renderMain();break;
-  case 'pickcover':syncForm();editing.cover=coverLibrary()[Number(d.i)];renderMain();break;
-  case 'cvrm':syncForm();editing.cover='';renderMain();break;
-  case 'cvadj':var cv=editing.cover;if(cv&&cv.indexOf('data:')===0){var im=new Image();im.onload=function(){openCrop(im)};im.src=cv}else alert('Upload a photo first, then you can zoom and pan it.');break;
+  case 'pickref':syncForm();editing.cover=editing.refs[Number(d.i)];editing.coverSrc=editing.cover;renderMain();break;
+  case 'pickcover':syncForm();editing.cover=coverLibrary()[Number(d.i)];editing.coverSrc=editing.cover;renderMain();break;
+  case 'cvrm':syncForm();editing.cover='';editing.coverSrc='';renderMain();break;
+  case 'cvadj':var cv=editing.coverSrc||editing.cover;if(cv&&cv.indexOf('data:')===0){var im=new Image();im.onload=function(){openCrop(im)};im.src=cv}else alert('Upload a photo first, then you can zoom and pan it.');break;
   case 'cvok':cropApply();break;
   case 'cvcancel':CR=null;document.getElementById('crop').hidden=true;break;
   case 'cancel':show('box');break;
@@ -672,10 +676,10 @@ document.addEventListener('change',function(e){
  if(a==='hidesold'){hideSold=t.checked;saveSettings();render();return}
  if(t.id==='fcsv'&&t.files[0]){readFile(t.files[0],importCSV);t.value='';return}
  if(t.id==='fjson'&&t.files[0]){readFile(t.files[0],importJSON);t.value='';return}
- if(t.id==='cvfile'&&t.files[0]){var img=new Image(),u=URL.createObjectURL(t.files[0]);img.onload=function(){openCrop(img)};img.src=u;t.value='';return}
+ if(t.id==='cvfile'&&t.files[0]){compress(t.files[0],1200).then(function(url){var img=new Image();img.onload=function(){openCrop(img)};img.src=url});t.value='';return}
  if(t.id==='reffile'&&t.files.length){
    var files=Array.prototype.slice.call(t.files);t.value='';
-   Promise.all(files.map(compress)).then(function(urls){syncForm();editing.refs=(editing.refs||[]).concat(urls);renderMain()});
+   Promise.all(files.map(function(f){return compress(f)})).then(function(urls){syncForm();editing.refs=(editing.refs||[]).concat(urls);renderMain()});
    return;
  }
  if(t.dataset&&t.dataset.money){t.value=fmtMoney(parseMoney(t.value));return}
