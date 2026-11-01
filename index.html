@@ -13,16 +13,19 @@ body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.45 Georgia,"Times
 body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--bg);z-index:10}
 header{position:sticky;top:env(safe-area-inset-top,0px);background:var(--bg);border-bottom:1px solid var(--line);padding:10px 14px;z-index:5;display:flex;align-items:center;gap:10px}
 h1{font-size:1.05rem;margin:0;letter-spacing:.04em;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-#searchbar{max-width:1100px;margin:0 auto;padding:12px 14px 0}
-#q{width:100%;border-radius:999px;padding:9px 14px}
+#q{display:none;flex:1;min-width:0;border-radius:999px;padding:8px 12px}
+header.sq #q{display:block}
+header.sq h1{display:none}
+#qb{border:0;background:transparent;padding:4px 8px;font-size:1.2rem;line-height:1;min-height:40px;flex:none}
+header button[data-a="drawer"]{border:0;background:transparent;padding:4px 8px;font-size:1.5rem;line-height:1;min-height:40px}
 nav,.bar,.seg{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
 .bar{margin-bottom:12px}
 button,select,input,textarea{font:inherit;color:inherit}
 button{border:1px solid var(--line);background:var(--card);padding:8px 14px;border-radius:999px;cursor:pointer;min-height:40px}
 button.on,button.pri{background:var(--acc);color:#fff;border-color:var(--acc)}
 button.dan{color:#b3261e}
-button.jot{background:var(--acc);color:#fff;border-color:var(--acc);font-weight:bold;letter-spacing:.06em;padding:6px 14px}
-header button[data-a="drawer"]{border:0;background:transparent;padding:4px 8px;font-size:1.5rem;line-height:1;min-height:40px}
+button:disabled{opacity:.45;cursor:default}
+.link{border:0;background:none;color:var(--acc);padding:4px 0;min-height:0;text-decoration:underline;font-size:.9rem;margin-top:4px}
 main{max-width:1100px;margin:0 auto;padding:14px}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}
 .box{background:url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .5 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.25'/%3E%3C/svg%3E"),radial-gradient(120% 90% at 30% 8%,rgba(255,255,255,.16),transparent 55%),radial-gradient(100% 80% at 85% 100%,rgba(0,0,0,.45),transparent 60%),linear-gradient(160deg,var(--v1),var(--v2));padding:12px;border-radius:14px;box-shadow:inset 0 0 44px rgba(0,0,0,.6),inset 0 0 0 1px rgba(255,255,255,.07)}
@@ -95,83 +98,133 @@ th,td{padding:8px 8px;border-bottom:1px solid var(--line);text-align:left;vertic
 th{color:var(--mute);font-weight:normal;font-size:.76rem}
 td.stk,th.stk{position:sticky;left:0;z-index:2;background:var(--card);width:156px;min-width:156px;max-width:156px}
 tr.grp td{background:var(--bg);font-weight:bold;letter-spacing:.03em;color:var(--acc);font-size:.8rem;white-space:nowrap}
+.upd{position:fixed;left:0;right:0;top:env(safe-area-inset-top,0px);z-index:50;background:var(--acc);color:#fff;padding:10px 14px;display:flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap;font-size:.9rem}
+.upd[hidden]{display:none}
+.upd button{border-color:#fff;background:transparent;color:#fff;min-height:36px;padding:6px 12px}
+.upd button.pri{background:#fff;color:var(--acc)}
+.upd a{color:#fff;text-decoration:underline}
+footer#ver{text-align:center;padding:24px 14px calc(36px + env(safe-area-inset-bottom,0px));font-size:.75rem}
+.ringtbl{width:100%;table-layout:fixed}
+.ringtbl th,.ringtbl td{min-width:0;max-width:none;white-space:normal;overflow-wrap:normal;word-break:normal;text-align:center;padding:6px 4px}
+.ringtbl th.us,.ringtbl td.us{font-weight:bold}
+.tabbar{display:none}
+@media (min-width:701px){
+ .tabbar{display:flex;justify-content:center;align-items:center;gap:8px;flex-wrap:wrap;padding:8px 14px;background:var(--card);border-bottom:1px solid var(--line)}
+ .tabbar button{flex-direction:row;align-items:center;gap:6px;border-radius:999px;min-height:40px;padding:6px 14px;font-size:.95rem;color:var(--fg);border:1px solid var(--line);background:var(--card)}
+ .tabbar button span{font-size:.95rem;margin-top:0;letter-spacing:0}
+ .tabbar button.big{font-size:1.1rem;padding:6px 18px}
+ .tabbar button.big span{font-size:1rem}
+ .tabbar button.on{background:var(--acc);color:#fff;border-color:var(--acc)}
+}
+@media (max-width:700px){
+ .tabbar{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:20;background:var(--card);border-top:1px solid var(--line);padding:6px 0 calc(6px + env(safe-area-inset-bottom,0px));justify-content:space-around}
+ .tabbar button{border:0;background:transparent;flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:1.25rem;min-height:50px;padding:2px 0;color:var(--mute);border-radius:0}
+ .tabbar button span{font-size:.68rem;margin-top:2px;letter-spacing:.02em}
+ .tabbar button.big{flex:1.5;font-size:1.6rem}
+ .tabbar button.big span+span{font-size:.75rem}
+ .tabbar button.on{color:var(--acc)}
+ main{padding-bottom:calc(100px + env(safe-area-inset-bottom,0px))}
+}
 </style>
 </head>
 <body>
 <header>
   <button data-a="drawer" aria-label="Menu">☰</button>
   <h1>NEVER TWICE THE SAME</h1>
-  <button class="jot" data-a="jotd">JOTD</button>
+  <input type="search" id="q" placeholder="Search jewelry" aria-label="Search" autocomplete="off">
+  <button id="qb" aria-label="Search">🔍</button>
 </header>
-<div id="searchbar"><input type="search" id="q" placeholder="Search jewelry" aria-label="Search" autocomplete="off"></div>
 <main id="app"><p class="meta">Loading…</p></main>
+<footer id="ver" class="meta"></footer>
+<div id="upd" class="upd" hidden></div>
+<nav id="tabbar" class="tabbar"><button data-a="jotd"><span>✨</span><span>JOTD</span></button><button data-a="nav" data-v="secret"><span>🔒</span><span>Secret Compartment</span></button><button data-a="nav" data-v="box" class="big"><span>💍</span><span>My Jewelry Box</span></button><button data-a="nav" data-v="gallery"><span>🖼️</span><span>Gallery</span></button><button data-a="nav" data-v="edit" data-new="1"><span>＋</span><span>Add to Collection</span></button></nav>
 <div class="scrim" id="scrim" data-a="dclose"></div>
 <aside class="drawer" id="drawer"></aside>
 <div id="modal"></div>
 <input type="file" id="fcsv" accept=".csv,text/csv" hidden>
 <input type="file" id="fjson" accept=".json,application/json" hidden>
+<input type="file" id="gfile" accept="image/*" multiple hidden>
 <script>
-var K='ntts_items_v2', OK='ntts_order_v1', PER=25;
+var K='ntts_items_v2',OK='ntts_order_v1',PER=25;
+var APP_VERSION='5.1.0',APP_DATE='2026-11-01',UPDATE_URL='';
 var EMOJI={ring:'💍',earring:'✨',necklace:'📿',bracelet:'⭕',watch:'⌚',other:'💎'};
 var CATS=['Ring','Earring','Necklace','Bracelet','Watch','Other'];
-var STAT=['Wishlist','Waiting','Private Collection','Listed','Sold'];
+var STAT=['Wishlist','Waiting','Private Collection','To List','Listed','Sold'];
 var PERIODS=['Ancient','Antique','Mid-Century','Vintage','New'];
 var FINGERS=['Index finger','Middle finger','Ring finger','Pinky'];
 var COLOR_ORDER=['Pink','Red','Orange','Brown','Yellow','Green','Light blue','Blue','Purple','Black','Gray','White','Multi'];
+var COLOR_SEL=[''].concat(COLOR_ORDER);
 var COLORS={pink:'#f4a7c1',red:'#d03a3a',orange:'#f0892b',brown:'#7b4a2a',yellow:'#f4d03f',green:'#3f9d5a','light blue':'#8fd3f4',blue:'#3d6fd0',purple:'#8a4fc0',black:'#1a1a1a',gray:'#8d8d8d',white:'#ffffff',multi:'conic-gradient(#d03a3a,#f4d03f,#3f9d5a,#3d6fd0,#8a4fc0,#d03a3a)'};
-var THEMES={ruby:{n:'Ruby',l:'#7b2d3b',d:'#d98a9b',v1:'#4d2036',v2:'#26101c'},sapphire:{n:'Sapphire',l:'#2e5aa8',d:'#8fb3ff',v1:'#1f2f5a',v2:'#0c1530'},emerald:{n:'Emerald',l:'#1f6b4a',d:'#7fd1a8',v1:'#1d4a37',v2:'#0a2118'}};
 var HEARTS={Pink:'🩷',Red:'❤️',Orange:'🧡',Brown:'🤎',Yellow:'💛',Green:'💚','Light blue':'🩵',Blue:'💙',Purple:'💜',Black:'🖤',Gray:'🩶',White:'🤍',Multi:'🌈'};
-var SORTS=[['new','Newest first (purchase date)'],['worn','Most worn'],['rest','Least recently worn'],['era','Era'],['status','Status'],['grp:mainColor','Group by Color'],['grp:category','Group by Type'],['grp:period','Group by Period'],['custom','My ordering']];
-var CSV_COLS=[['id','id'],['title','title'],['description','description'],['category','category'],['period','period'],['era','era'],['yearMade','year'],['country','country'],['stones','stones'],['metals','metals'],['hallmarks','hallmarks'],['measurements','measurements'],['weight','weight'],['size','size'],['cut','cut'],['mainColor','main color'],['secondaryColor','secondary color'],['tags','motifs'],['notes','notes'],['status','status'],['pdate','purchase date'],['seller','seller'],['platform','platform'],['cost','cost'],['channel','sales channel'],['dListed','date listed'],['link','listing link'],['feeFinal','platform fee'],['shipEst','shipping estimate'],['dSold','date sold'],['ship','shipping'],['final','final payout'],['lastWorn','last worn'],['wornCount','times worn'],['hearts','worn status']];
+var THEMES={ruby:{n:'Ruby',l:'#7b2d3b',d:'#d98a9b',v1:'#4d2036',v2:'#26101c'},sapphire:{n:'Sapphire',l:'#2e5aa8',d:'#8fb3ff',v1:'#1f2f5a',v2:'#0c1530'},emerald:{n:'Emerald',l:'#1f6b4a',d:'#7fd1a8',v1:'#1d4a37',v2:'#0a2118'}};
+var SORTS=[['new','Newest first (purchase date)'],['worn','Most worn'],['rest','Least recently worn'],['era','Era'],['status','Status'],['grp:colorMain','Group by Color'],['grp:category','Group by Type'],['grp:period','Group by Period'],['custom','My ordering']];
+var ALIAS={mainColor:'colorMain',secondaryColor:'colorSecondary',pdate:'purchaseDate',platform:'purchasePlatform',dListed:'dateListed',link:'linkSale',shipEst:'shipEstimate',dSold:'dateSold',ship:'shipActual',final:'payout',lastWorn:'wornLast',hearts:'rating',size:'ringSize',channel:'sellPlatform'};
+var CSV_COLS=[['id','id'],['title','title'],['category','category'],['period','period'],['era','era'],['yearMade','year'],['country','country'],['stones','stones'],['metals','metals'],['hallmarks','hallmarks'],['measurements','measurements'],['weight','weight'],['ringSize','ring size'],['cut','cut'],['colorMain','main color'],['colorSecondary','secondary color'],['tags','motifs'],['notes','notes'],['wornLast','last worn'],['wornCount','times worn'],['rating','rating'],['photoshoot','photoshoot'],['status','status'],['purchaseDate','purchase date'],['seller','seller'],['purchasePlatform','platform'],['cost','cost'],['sellPlatform','selling platform'],['dateListed','date listed'],['linkSale','listing link'],['dateSold','date sold'],['feeFinal','platform fee'],['shipActual','shipping'],['payout','final payout'],['shipEstimate','shipping estimate'],['buffer','buffer']];
 var FS={
- title:['title','Title','text'],
- description:['description','Description','textarea'],
- category:['category','Category','sel',CATS],
- period:['period','Period','sel',PERIODS],
- era:['era','Era (e.g. 1890s)','text'],
- yearMade:['yearMade','Year','number'],
- country:['country','Country of origin','text'],
- stones:['stones','Stones (separate with commas)','list'],
- metals:['metals','Metals (separate with commas)','list'],
- hallmarks:['hallmarks','Hallmarks','text'],
- measurements:['measurements','Measurements','text'],
- weight:['weight','Weight','text'],
- size:['size','Size (rings: number)','text'],
- cut:['cut','Cut (separate with commas)','list'],
- mainColor:['mainColor','Main color','sel',[''].concat(COLOR_ORDER)],
- secondaryColor:['secondaryColor','Secondary color','sel',[''].concat(COLOR_ORDER)],
- tags:['tags','Motifs (separate with commas)','list'],
- notes:['notes','Notes','textarea'],
- status:['status','Status','sel',STAT],
- lastWorn:['lastWorn','Last worn','date'],
- wornCount:['wornCount','Times worn','number'],
- hearts:['hearts','Worn Status','hearts'],
- pdate:['pdate','Purchase date','date'],
- seller:['seller','Seller','text'],
- platform:['platform','Platform','text'],
- cost:['cost','Cost','money'],
- channel:['channel','Sales channel','sel',['','eBay','Instagram']],
- dListed:['dListed','Date listed','date'],
- link:['link','Listing link','url'],
- feeFinal:['feeFinal','Platform fee','money'],
- shipEst:['shipEst','Shipping estimate','money'],
- dSold:['dSold','Date sold','date'],
- ship:['ship','Shipping','money'],
- final:['final','Final payout','money']
+ title:['Title','text'],
+ 
+ category:['Category','sel',CATS],
+ period:['Period','sel',PERIODS],
+ era:['Era/Movement','text'],
+ yearMade:['Year','number'],
+ country:['Country of origin','text'],
+ stones:['Stones (separate with commas)','list'],
+ metals:['Metals (separate with commas)','list'],
+ hallmarks:['Hallmarks','text'],
+ measurements:['Measurements','text'],
+ weight:['Weight','text'],
+ ringSize:['Ring size','ringsz'],
+ cut:['Cut (separate with commas)','list'],
+ colorMain:['Main color','sel',COLOR_SEL],
+ colorSecondary:['Secondary color','sel',COLOR_SEL],
+ tags:['Motifs (separate with commas)','list'],
+ notes:['Notes','textarea'],
+ wornLast:['Last worn','date'],
+ wornCount:['Times worn','number'],
+ rating:['Rating','rating'],
+ photoshoot:['Photoshoot?','check'],
+ status:['Status','sel',STAT],
+ purchaseDate:['Purchase date','date'],
+ seller:['Seller','text'],
+ purchasePlatform:['Platform','text'],
+ cost:['Cost','money'],
+ shipEstimate:['Shipping estimate','money'],
+ buffer:['Buffer (%)','number'],
+ ebayPct:['eBay fee %','pct'],
+ igPct:['Instagram %','pct'],
+ suggestedEbay:['Suggested eBay price','calc','sugE'],
+ suggestedIG:['Suggested Instagram price','calc','sugI'],
+ potentialEbay:['Potential eBay profit','calc','potE'],
+ potentialIG:['Potential Instagram price','calc','potI'],
+ sellPlatform:['Selling Platform','sel',['','eBay','Instagram']],
+ dateListed:['Date listed','date'],
+ linkSale:['Listing link','url'],
+ dateSold:['Date sold','date'],
+ turnover:['Turnover (days listed → sold)','calc','c-days'],
+ feeFinal:['Platform fee','money'],
+ shipActual:['Shipping','money'],
+ payout:['Final payout','money'],
+ netProfit:['Net profit','calc','c-net']
 };
 var LISTS=['stones','metals','tags','cut'];
-var PS={eb:13,ig:1.2};
+var ORDER_PIECE=['title','category','period','era','yearMade','country','stones','metals','hallmarks','measurements','weight','ringSize','cut','colorMain','colorSecondary','tags','notes'];
+var ORDER_STATS=['wornLast','wornCount','rating','photoshoot'];
+var ORDER_PURCH=['purchaseDate','seller','purchasePlatform','cost'];
+var ORDER_PRICE=['shipEstimate','buffer','ebayPct','igPct','suggestedEbay','suggestedIG','potentialEbay','potentialIG'];
+var ORDER_SOLD=['sellPlatform','dateListed','linkSale','dateSold','turnover','feeFinal','shipActual','payout','netProfit'];
+var FORM_ORDER=ORDER_PIECE.concat(ORDER_STATS,['status'],ORDER_PURCH,ORDER_PRICE,ORDER_SOLD);
+var SUM_SKIP=['shipEstimate','buffer','ebayPct','igPct','potentialEbay','potentialIG'];
 var seed=[
- {id:1,description:'Georgian paste ring. Closed-back setting.',category:'Ring',status:'Listed',period:'Antique',era:'1790s',yearMade:1795,country:'England',stones:['paste'],metals:['silver','gold'],hearts:3,cost:120,listPrice:340,channel:'eBay',pdate:'2026-08-15',dListed:'2026-09-01'},
- {id:2,description:'Snake bracelet with garnet eyes.',category:'Bracelet',status:'Sold',period:'Antique',era:'1870s',yearMade:1870,country:'France',stones:['garnet'],metals:['gold'],tags:['snake'],mainColor:'Red',hearts:4,cost:210,final:480,feeFinal:40,ship:12,channel:'Instagram',pdate:'2026-06-10',dListed:'2026-07-02',dSold:'2026-07-20'},
- {id:3,description:'Roman intaglio ring, carnelian.',category:'Ring',status:'Private Collection',period:'Antique',era:'Roman',country:'Italy',stones:['carnelian'],metals:['gold'],mainColor:'Orange',hearts:5,cost:650,pdate:'2026-03-02'},
- {id:4,description:'Emerald-cut drop earrings.',category:'Earring',status:'Private Collection',period:'Antique',era:'1905',yearMade:1905,country:'USA',stones:['emerald','diamond'],metals:['platinum'],mainColor:'Green',hearts:5,cost:380,pdate:'2026-05-20'}
+ {id:1,description:'Georgian paste ring. Closed-back setting.',category:'Ring',status:'Listed',period:'Antique',era:'1790s',yearMade:1795,country:'England',stones:['paste'],metals:['silver','gold'],rating:3,cost:120,payout:null,sellPlatform:'eBay',purchaseDate:'2026-08-15',dateListed:'2026-09-01'},
+ {id:2,description:'Snake bracelet with garnet eyes.',category:'Bracelet',status:'Sold',period:'Antique',era:'1870s',yearMade:1870,country:'France',stones:['garnet'],metals:['gold'],tags:['snake'],colorMain:'Red',rating:4,cost:210,payout:480,feeFinal:40,shipActual:12,sellPlatform:'Instagram',purchaseDate:'2026-06-10',dateListed:'2026-07-02',dateSold:'2026-07-20'},
+ {id:3,description:'Roman intaglio ring, carnelian.',category:'Ring',status:'Private Collection',period:'Ancient',era:'Roman',country:'Italy',stones:['carnelian'],metals:['gold'],colorMain:'Orange',rating:5,cost:650,purchaseDate:'2026-03-02'},
+ {id:4,description:'Emerald-cut drop earrings.',category:'Earring',status:'Private Collection',period:'Antique',era:'1905',yearMade:1905,country:'USA',stones:['emerald','diamond'],metals:['platinum'],colorMain:'Green',rating:5,cost:380,purchaseDate:'2026-05-20'}
 ];
 
 /* ---------- state ---------- */
-var items=[],order=[],theme='ruby',hideSold=true,view='box',page=1,editing=null,fsel={},rng={},sortBy='new',cols=4,ctab='Item',vmode='thumbs',q='',ro=false,dragEl=null,overEl=null,ioOpen=false,lastJ=null,CR=null,DB=null,MEM={},shipTouched=false;
+var items=[],order=[],theme='ruby',hideSold=true,view='box',page=1,editing=null,fsel={category:['Ring']},rng={},sortBy='new',cols=4,ctab='Piece',vmode='thumbs',q='',ro=false,dragEl=null,overEl=null,ioOpen=false,lastJ=null,CR=null,DB=null,MEM={},shipTouched=false,PS={eb:13,ig:0},showAllF={},gal={refs:[],covers:[]},galSel={refs:{},covers:{}},galKind='refs',swS=null,swp=null;
 
-/* ---------- storage (IndexedDB) ---------- */
+/* ---------- storage ---------- */
 function openDB(){return new Promise(function(res,rej){if(!window.indexedDB)return rej('no indexedDB');var r=indexedDB.open('ntts',1);r.onupgradeneeded=function(){r.result.createObjectStore('kv')};r.onsuccess=function(){res(r.result)};r.onerror=function(){rej(r.error)}})}
 function kget(k){return new Promise(function(res){if(!DB)return res(MEM[k]);var t=DB.transaction('kv').objectStore('kv').get(k);t.onsuccess=function(){res(t.result)};t.onerror=function(){res(undefined)}})}
 function kset(k,v){return new Promise(function(res){if(!DB){MEM[k]=JSON.parse(JSON.stringify(v));return res()}var t=DB.transaction('kv','readwrite');t.objectStore('kv').put(v,k);t.oncomplete=function(){res()};t.onerror=function(){alert('Could not save to this device. Storage may be full.');res()}})}
@@ -179,6 +232,7 @@ function kclear(){return new Promise(function(res){if(!DB){MEM={};return res()}v
 function saveItems(){return kset('items',items)}
 function saveOrder(){return kset('order',order)}
 function saveSettings(){kset('theme',theme);return kset('hideSold',hideSold)}
+function saveGallery(){return kset('gallery',gal)}
 async function init(){
  try{DB=await openDB()}catch(e){DB=null}
  var it=await kget('items');
@@ -195,107 +249,168 @@ async function init(){
    theme=(await kget('theme'))||'ruby';
    var hs=await kget('hideSold');hideSold=typeof hs==='boolean'?hs:true;
  }
+ gal=await kget('gallery');if(!gal){gal=galFromItems();await saveGallery()}
  if(!THEMES[theme])theme='ruby';
 }
 
-/* ---------- formatting & helpers ---------- */
+/* ---------- helpers ---------- */
 function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
 function cap(s){s=String(s||'');return s.charAt(0).toUpperCase()+s.slice(1)}
-function capColor(s){s=String(s||'').trim().toLowerCase();var k=COLOR_ORDER.filter(function(c){return c.toLowerCase()===s})[0];return k||''}
+function capColor(s){s=String(s||'').trim().toLowerCase();return COLOR_ORDER.filter(function(c){return c.toLowerCase()===s})[0]||''}
 function fmtMoney(n){if(n==null||n==='')return '';var v=Number(n);if(isNaN(v))return '';return (v<0?'-':'')+'$'+Math.abs(v).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})}
 function parseMoney(s){s=String(s==null?'':s).replace(/[^0-9.\-]/g,'');if(s===''||s==='-'||s==='.')return '';var n=Number(s);return isNaN(n)?'':n}
 function money(n){return n==null||n===''||isNaN(Number(n))?'—':fmtMoney(n)}
 function fmtDate(iso){var m=String(iso||'').match(/^(\d{4})-(\d{2})-(\d{2})$/);return m?m[2]+'/'+m[3]+'/'+m[1]:''}
 function parseDate(s){s=String(s||'').trim();if(/^\d{4}-\d{2}-\d{2}$/.test(s))return s;var m=s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);if(!m)return '';return m[3]+'-'+('0'+m[1]).slice(-2)+'-'+('0'+m[2]).slice(-2)}
 function today(){var d=new Date();return d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2)}
-function num(v){return v===''||v==null?null:Number(v)}
-function title(i){return i.title||(i.description||'Untitled').split('.')[0].slice(0,60)}
-function days(i){return i.dListed&&i.dSold?Math.round((new Date(i.dSold)-new Date(i.dListed))/864e5):null}
-function profit(i){return num(i.final)!=null&&num(i.cost)!=null?num(i.final)-num(i.cost):null}
-function fees(i){return Number(i.feeFinal)||0}
-function net(i){return profit(i)==null?null:profit(i)-fees(i)-(Number(i.ship)||0)}
+function num(v){return v===''||v==null||isNaN(Number(v))?null:Number(v)}
+function roundTens(x){return Math.round(x/10)*10}
+function title(i){return i.title||'Untitled'}
+function days(i){return i.dateListed&&i.dateSold?Math.round((new Date(i.dateSold)-new Date(i.dateListed))/864e5):null}
+function fees(i){return num(i.feeFinal)||0}
 function sw(n){var c=COLORS[String(n).toLowerCase()];return c?'<span class="sw" style="background:'+c+'"></span>':''}
-function hearts(n){return n?'❤️'.repeat(n):''}
-function distinct(arr){var s={};arr.forEach(function(v){if(v!==''&&v!=null)s[String(v)]=1});return Object.keys(s).sort()}
+function stars(n){return n?'❤️'.repeat(n):''}
+function distinct(arr){var m={};arr.forEach(function(v){if(v===''||v==null)return;var s=String(v).trim();if(!s)return;var k=s.toLowerCase();if(!m[k]||(s.charAt(0)===s.charAt(0).toUpperCase()&&m[k].charAt(0)!==m[k].charAt(0).toUpperCase()))m[k]=s});return Object.keys(m).sort().map(function(k){return m[k]})}
 function allOf(fn){return distinct(items.reduce(function(a,i){return a.concat(fn(i)||[])},[]))}
 function finger(i){
  if(i.category!=='Ring')return null;
- var s=parseFloat(String(i.size||'').replace(/[^0-9.]/g,''));
+ var s=i.ringSize===''||i.ringSize==null?NaN:Number(i.ringSize);
  if(isNaN(s)||!s)return null;
  return s>=8?'Index finger':s>=7?'Middle finger':s>=6?'Ring finger':'Pinky';
 }
-function shipDefault(cost){var c=Number(cost);return (cost===''||cost==null||isNaN(c)||c<500)?7:20}
+function shipDefault(cost){var c=num(cost);return (c==null||c<500)?7:20}
+function calcs(o){
+ var cost=num(o.cost),ship=num(o.shipEstimate),buf=num(o.buffer);
+ if(ship==null)ship=shipDefault(cost);
+ if(buf==null)buf=5;
+ var sE=cost==null?null:roundTens(((1+PS.eb/100)*cost+ship)*(1+buf/100));
+ var sI=cost==null?null:roundTens(((1+PS.ig/100)*cost+ship)*(1+buf/100));
+ var pay=num(o.payout),net=pay==null?null:pay-(num(o.shipActual)||0)-(num(o.feeFinal)||0)-(cost||0);
+ var d=days(o);
+ return {'c-days':d==null?'—':d+' days','c-net':money(net),sugE:money(sE),sugI:money(sI),potE:sE==null?'—':money(sE-cost),potI:sI==null?'—':money(sI-cost)};
+}
+
+/* ---------- migration ---------- */
 function mig(i){
+ if(!i.title&&i.description)i.title=String(i.description).split('.')[0].slice(0,60);
+ delete i.description;
+ Object.keys(ALIAS).forEach(function(old){if(old in i){if(i[ALIAS[old]]===undefined)i[ALIAS[old]]=i[old];delete i[old]}});
+ ['listPrice','pshots','simg','comps','cover_'].forEach(function(k){delete i[k]});
+ var ex=(num(i.fees)||0)+(num(i.promo)||0)+(num(i.feePay)||0);
+ if(ex)i.feeFinal=(num(i.feeFinal)||0)+ex;
+ delete i.fees;delete i.promo;delete i.feePay;
  if(STAT.indexOf(i.status)<0)i.status='Private Collection';
  var PM={Ancient:'Ancient',Georgian:'Antique',Victorian:'Antique',Edwardian:'Antique','Art Deco':'Vintage',Retro:'Vintage',Other:'Vintage','Mid-century':'Mid-Century','Mid-Century':'Mid-Century',Modern:'New',New:'New',Vintage:'Vintage',Antique:'Antique'};
  i.period=PM[i.period]||'Antique';
  if(typeof i.cut==='string')i.cut=i.cut.split(/[;,]/).map(function(s){return s.trim()}).filter(Boolean);
  if(!Array.isArray(i.cut))i.cut=[];
+ if(!Array.isArray(i.stones))i.stones=[];
+ if(!Array.isArray(i.metals))i.metals=[];
  if(!Array.isArray(i.refs))i.refs=[];
- var ex=(Number(i.fees)||0)+(Number(i.promo)||0)+(Number(i.feePay)||0);
- if(ex)i.feeFinal=(Number(i.feeFinal)||0)+ex;
- delete i.fees;delete i.promo;delete i.feePay;delete i.comps;delete i.pshots;delete i.simg;
  var t=[];
  (i.tags||[]).forEach(function(x){
    x=String(x);
    var m=x.match(/^colou?r:(.+)$/i);
-   if(m){if(!i.mainColor)i.mainColor=capColor(m[1]);return}
+   if(m){if(!i.colorMain)i.colorMain=capColor(m[1]);return}
    if(/^mood:/i.test(x))return;
    t.push(x.replace(/^motifs?:/i,''));
  });
  i.tags=t;
- i.mainColor=capColor(i.mainColor);i.secondaryColor=capColor(i.secondaryColor);
+ i.colorMain=capColor(i.colorMain);
+ i.colorSecondary=capColor(i.colorSecondary);
  i.category=CATS.filter(function(c){return c.toLowerCase()===String(i.category||'').toLowerCase()})[0]||'Other';
- i.hearts=Math.min(5,Math.max(0,Number(i.hearts)||0));
+ i.rating=Math.min(5,Math.max(0,Number(i.rating)||0));
+ i.photoshoot=!!i.photoshoot;
  if(i.notes==null)i.notes='';
+ if(i.buffer==null||i.buffer==='')i.buffer=5;
  return i;
 }
-function newItem(){return {id:Date.now(),_new:1,category:'Ring',period:'Antique',status:'Waiting',pdate:today(),hearts:0,tags:[],stones:[],metals:[],cut:[],refs:[]}}
+function newItem(){return {id:Date.now(),_new:1,category:'Ring',period:'Antique',status:'Waiting',purchaseDate:today(),rating:0,buffer:5,photoshoot:false,tags:[],stones:[],metals:[],cut:[],refs:[]}}
 function applyTheme(){
  var t=THEMES[theme]||THEMES.ruby,dk=window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches,s=document.documentElement.style;
  s.setProperty('--acc',dk?t.d:t.l);s.setProperty('--v1',t.v1);s.setProperty('--v2',t.v2);
 }
 
-/* ---------- filters & sort ---------- */
+/* ---------- gallery ---------- */
+function uid(){return 'g'+Date.now().toString(36)+Math.random().toString(36).slice(2,7)}
+function galFromItems(){var g={refs:[],covers:[]},sc={},sr={};items.forEach(function(i){if(i.cover&&!sc[i.cover]){sc[i.cover]=1;g.covers.push({id:uid(),src:i.cover})}(i.refs||[]).forEach(function(r){if(!sr[r]){sr[r]=1;g.refs.push({id:uid(),src:r})}})});return g}
+function usedBy(src){return items.filter(function(i){return i.cover===src||i.coverSrc===src||(i.refs||[]).indexOf(src)>-1})}
+function galRemove(kind,ids){
+ var ok=[],blocked=[];
+ ids.forEach(function(id){var g=gal[kind].filter(function(x){return x.id===id})[0];if(!g)return;var u=usedBy(g.src);if(u.length)blocked.push({g:g,pieces:u});else ok.push(id)});
+ gal[kind]=gal[kind].filter(function(x){return ok.indexOf(x.id)<0});
+ ok.forEach(function(id){delete galSel[kind][id]});
+ saveGallery();renderMain();
+ if(blocked.length)document.getElementById('modal').innerHTML=blockedHTML(blocked);
+}
+function blockedHTML(list){
+ return '<div class="modal" data-a="backdrop"><div><h3 style="margin:0 0 6px">Some images are still in use</h3><p class="meta">These images are linked to pieces, so they were not deleted. Remove each image from the piece first, then delete it here.</p>'
+  +list.map(function(b){return '<div style="display:flex;gap:10px;align-items:flex-start;margin:10px 0;border-top:1px solid var(--line);padding-top:10px"><img src="'+esc(b.g.src)+'" alt="" style="width:64px;height:64px;object-fit:cover;border-radius:8px;flex:none"><div style="display:flex;flex-direction:column;gap:6px;align-items:flex-start"><span class="meta">Used by</span>'+b.pieces.map(function(p){return '<button data-a="edit" data-id="'+p.id+'">'+esc(title(p))+'</button>'}).join('')+'</div></div>'}).join('')
+  +'<div class="bar" style="justify-content:center;margin:12px 0 0"><button data-a="x">OK</button></div></div></div>';
+}
+function previewHTML(src){return '<div class="modal" data-a="backdrop"><div style="max-width:94vw;text-align:center"><img src="'+esc(src)+'" alt="" style="max-width:100%;max-height:78vh;display:block;margin:0 auto;border-radius:10px"><p class="meta">'+sizeOf(src)+'</p><div class="bar" style="justify-content:center"><button data-a="x">Close</button></div></div></div>'}
+function gallerySection(kind,label){
+ var list=gal[kind],sel=galSel[kind],n=Object.keys(sel).filter(function(k){return sel[k]}).length;
+ return '<details open><summary>'+label+' ('+list.length+')</summary>'
+  +'<div class="bar"><button data-a="gadd" data-kind="'+kind+'">+ Add images</button><button data-a="gall" data-kind="'+kind+'">Select all</button><button data-a="gnone" data-kind="'+kind+'">Clear selection</button><button class="dan" data-a="gdelsel" data-kind="'+kind+'"'+(n?'':' disabled')+'>Delete selected ('+n+')</button></div>'
+  +(list.length?'<div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(110px,1fr))">'+list.map(function(g){var on=!!sel[g.id];return '<div style="position:relative"><img src="'+esc(g.src)+'" alt="" data-a="gview" data-kind="'+kind+'" data-id="'+g.id+'" style="width:100%;aspect-ratio:1;object-fit:cover;border-radius:8px;display:block;cursor:zoom-in;'+(on?'outline:3px solid var(--acc);':'')+'"><button data-a="gtog" data-kind="'+kind+'" data-id="'+g.id+'" style="position:absolute;top:4px;left:4px;padding:2px 7px;min-height:0">'+(on?'☑':'☐')+'</button><button data-a="gdel" data-kind="'+kind+'" data-id="'+g.id+'" style="position:absolute;top:4px;right:4px;padding:2px 7px;min-height:0">✕</button><span class="meta" style="position:absolute;left:4px;bottom:4px;background:rgba(0,0,0,.6);color:#fff;padding:1px 4px;border-radius:4px;font-size:.65rem">'+sizeOf(g.src)+'</span></div>'}).join('')+'</div>':'<p class="meta">No images yet.</p>')
+  +'</details>';
+}
+var RING_HEAD=['Inside Diameter (mm)','Inside Circumference (mm)','U.S. & Canada (LF sizes)','U.K., Europe & Australia','Italy, Spain, & Switzerland','China, Japan, & South America','India'];
+var RING_TXT=['15.9;50;5.25;J.5;10;;10','16.1;50.6;5.5;K;;10;','16.3;51.2;5.75;K.5;11.75;;11','16.5;51.8;6;L;12.75;11;12','16.7;52.5;6.25;L.5;;12;','16.9;53.1;6.5;M;14;13;13','17.1;53.7;6.75;M.5;;;','17.3;54.3;7;N;15.25;14;14','17.5;55;7.25;N.5;;;15','17.7;55.6;7.5;O;16.5;15;','17.9;56.2;7.75;O.5;;;16','18.1;56.9;8;P;17.75;16;17','18.3;57.5;8.25;P.5;;;','18.5;58.1;8.5;Q;;17;18','18.8;59.1;8.75;Q.5;19;;19','19;59.7;9;R;;18;','19.2;60.3;9.25;R.5;20.25;;20'];
+function ringTableHTML(){return '<div class="tw"><table class="ringtbl"><thead><tr>'+RING_HEAD.map(function(h,n){return '<th class="'+(n===2?'us':'')+'">'+esc(h)+'</th>'}).join('')+'</tr></thead><tbody>'+RING_TXT.map(function(r){return '<tr>'+r.split(';').map(function(c,n){return '<td class="'+(n===2?'us':'')+'">'+esc(c)+'</td>'}).join('')+'</tr>'}).join('')+'</tbody></table></div>'}
+function ringOpts(val){var o='';for(var z=0;z<=52;z++){var n=z/4;o+='<option value="'+n+'"'+(val!==''&&val!=null&&Number(val)===n?' selected':'')+'>'+n+'</option>'}return o}
+function renderGallery(){return '<h2>Image Gallery</h2>'+gallerySection('refs','Reference Screenshots')+gallerySection('covers','Cover Photo Thumbnails')+'<details open><summary>Ring Size Reference</summary>'+ringTableHTML()+'</details>'}
+function galPickHTML(){
+ var sec=function(kind,label){return '<p class="meta" style="margin:10px 0 4px">'+label+'</p><div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(80px,1fr))">'+(gal[kind].length?gal[kind].map(function(g){return '<button type="button" data-a="galuse" data-kind="'+kind+'" data-id="'+g.id+'" style="padding:0;aspect-ratio:1;overflow:hidden;border-radius:8px;min-height:0;border:2px solid transparent"><img src="'+esc(g.src)+'" alt="" style="width:100%;height:100%;object-fit:cover;display:block"></button>'}).join(''):'<p class="meta">None yet.</p>')+'</div>'};
+ return '<div class="modal" data-a="backdrop"><div><h3 style="margin:0 0 6px">Add from gallery</h3>'+sec('covers','Cover Photo Thumbnails')+sec('refs','Reference Screenshots')+'<div class="bar" style="justify-content:center;margin:12px 0 0"><button data-a="x">Cancel</button></div></div></div>';
+}
+function sizeOf(u){if(!u)return '';var b=u.split(',')[1]||'';var n=Math.floor(b.length*3/4)-(b.slice(-2)==='=='?2:b.slice(-1)==='='?1:0);return n<1048576?Math.round(n/1024)+' KB':(n/1048576).toFixed(1)+' MB'}
+function coverLibrary(){var seen={},out=[];items.forEach(function(i){if(i.cover&&!seen[i.cover]){seen[i.cover]=1;out.push(i.cover)}(i.refs||[]).forEach(function(r){if(!seen[r]){seen[r]=1;out.push(r)}})});return out}
+
+/* ---------- filters ---------- */
 var FACETS=[
+ {k:'photoshoot',l:'Photoshoot',v:function(){return ['Yes','No']},g:function(i){return [i.photoshoot?'Yes':'No']}},
  {k:'status',l:'Status',v:function(){return STAT},g:function(i){return [i.status]}},
  {k:'category',l:'Type',v:function(){return CATS},g:function(i){return [i.category]}},
- {k:'mainColor',l:'Color',sw:1,v:function(){return COLOR_ORDER.filter(function(c){return items.some(function(i){return i.mainColor===c})})},g:function(i){return [i.mainColor]}},
  {k:'period',l:'Period',v:function(){return PERIODS},g:function(i){return [i.period]}},
- {k:'era',l:'Era',v:function(){return allOf(function(i){return [i.era]})},g:function(i){return [i.era]}},
+ {k:'era',l:'Era/Movement',v:function(){return allOf(function(i){return [i.era]})},g:function(i){return [i.era]}},
  {k:'tags',l:'Motifs',cloud:1,v:function(){return allOf(function(i){return i.tags})},g:function(i){return i.tags||[]}},
  {k:'stones',l:'Stones',cloud:1,v:function(){return allOf(function(i){return i.stones})},g:function(i){return i.stones||[]}},
+ {k:'colorMain',l:'Color',sw:1,v:function(){return COLOR_ORDER.filter(function(c){return items.some(function(i){return i.colorMain===c})})},g:function(i){return [i.colorMain]}},
  {k:'finger',l:'Finger (rings, by size)',v:function(){return FINGERS},g:function(i){return [finger(i)]}}
 ];
 function facetOf(k){return FACETS.filter(function(F){return F.k===k})[0]}
+function cntColor(c){return items.filter(function(i){return i.colorMain===c}).length}
+function facetVals(F){var v=F.v();if(F.k==='colorMain')v=v.slice().sort(function(a,b){return cntColor(b)-cntColor(a)||COLOR_ORDER.indexOf(a)-COLOR_ORDER.indexOf(b)});return v}
 function matchQ(i){
  if(!q)return true;
- var h=[title(i),i.description,i.notes,i.category,i.status,i.period,i.era,i.country,(i.stones||[]).join(' '),(i.metals||[]).join(' '),(i.tags||[]).join(' '),(i.cut||[]).join(' '),i.mainColor,i.hallmarks,i.seller,i.platform,i.channel].join(' ').toLowerCase();
+ var h=[title(i),i.notes,i.category,i.status,i.period,i.era,i.country,(i.stones||[]).join(' '),(i.metals||[]).join(' '),(i.tags||[]).join(' '),(i.cut||[]).join(' '),i.colorMain,i.hallmarks,i.seller,i.purchasePlatform,i.sellPlatform].join(' ').toLowerCase();
  return q.split(/\s+/).every(function(w){return h.indexOf(w)>-1});
 }
 function inR(k,v){var r=rng[k];if(!r)return true;return v!=null&&v!==''&&Number(v)>=r[0]&&Number(v)<=r[1]}
 function pass(i){
  if(!matchQ(i))return false;
- var pickedSold=fsel.status&&fsel.status.indexOf('Sold')>-1;
- if(hideSold&&!pickedSold&&i.status==='Sold')return false;
+ var pickedStatus=fsel.status&&fsel.status.length;
+ if(hideSold&&!pickedStatus&&!(i.status==='Waiting'||i.status==='Private Collection'))return false;
  for(var n=0;n<FACETS.length;n++){
    var F=FACETS[n],s=fsel[F.k];
    if(!s||!s.length)continue;
-   var vals=F.g(i).map(function(v){return v==null?'':String(v)});
-   if(!s.some(function(x){return vals.indexOf(x)>-1}))return false;
+   var vals=F.g(i).map(function(v){return v==null?'':String(v).toLowerCase()});
+   if(!s.some(function(x){return vals.indexOf(String(x).toLowerCase())>-1}))return false;
  }
  return inR('year',i.yearMade)&&inR('cost',i.cost);
 }
 function gKey(i,p){
  var v=facetOf(p).g(i)[0];
- if(p==='mainColor'){var ix=COLOR_ORDER.indexOf(v);return ix<0?'99':('0'+ix).slice(-2)}
+ if(p==='colorMain'){var ix=COLOR_ORDER.indexOf(v);return ix<0?'99':('0'+ix).slice(-2)}
  return v==null||v===''?'~':String(v).toLowerCase();
 }
 function sorted(list){
  var a=list.slice();
- if(sortBy==='new')a.sort(function(x,y){var dx=x.pdate||'',dy=y.pdate||'';if(dx!==dy)return dx<dy?1:-1;return y.id-x.id});
+ if(sortBy==='new')a.sort(function(x,y){var dx=x.purchaseDate||'',dy=y.purchaseDate||'';if(dx!==dy)return dx<dy?1:-1;return y.id-x.id});
  else if(sortBy==='worn')a.sort(function(x,y){return (Number(y.wornCount)||0)-(Number(x.wornCount)||0)});
- else if(sortBy==='rest')a.sort(function(x,y){return (x.lastWorn||'').localeCompare(y.lastWorn||'')});
+ else if(sortBy==='rest')a.sort(function(x,y){return (x.wornLast||'').localeCompare(y.wornLast||'')});
  else if(sortBy==='custom')a.sort(function(x,y){return (order.indexOf(x.id)-order.indexOf(y.id))||(y.id-x.id)});
  else if(sortBy==='era'||sortBy==='status')a.sort(function(x,y){return String(x[sortBy]||'~').localeCompare(String(y[sortBy]||'~'))});
  else if(sortBy.indexOf('grp:')===0){var p=sortBy.slice(4);a.sort(function(x,y){var kx=gKey(x,p),ky=gKey(y,p);return kx<ky?-1:kx>ky?1:y.id-x.id})}
@@ -303,18 +418,7 @@ function sorted(list){
 }
 function groupCmp(a,b){var c=CATS.indexOf(a.category)-CATS.indexOf(b.category);if(c)return c;c=PERIODS.indexOf(a.period)-PERIODS.indexOf(b.period);if(c)return c;return title(a).localeCompare(title(b))}
 function anyFilter(){return q||Object.keys(rng).length||Object.keys(fsel).some(function(k){return fsel[k]&&fsel[k].length})}
-
-/* ---------- rendering ---------- */
-function thumb(i){return '<div class="tile" data-a="open" data-id="'+i.id+'">'+(EMOJI[String(i.category).toLowerCase()]||'💎')+(i.cover?'<img draggable="false" loading="lazy" src="'+esc(i.cover)+'" alt="" onerror="this.remove()">':'')+'</div>'}
-function countLine(n){return '<p class="meta" style="text-align:center;margin:16px 0 0">'+n+' piece'+(n===1?'':'s')+(anyFilter()?' (filtered)':'')+'</p>'}
-function DV(n){return '<div class="dv"><span>✦ '+['💍','💎','📿','⭕'][n]+' ✦</span></div>'}
-function gicon(n){var w=(28-(n-1)*2)/n,r='';for(var k=0;k<n;k++)r+='<rect x="'+(k*(w+2))+'" y="0" width="'+w+'" height="14" rx="2" fill="currentColor"/>';return '<svg role="img" aria-label="'+n+' across" width="28" height="14" viewBox="0 0 28 14">'+r+'</svg>'}
-function vtoggle(){return '<span class="tgl">'+[['thumbs','▦ Grid'],['table','▤ Table']].map(function(o){return '<button data-a="vm" data-v="'+o[0]+'"'+(o[0]===vmode?' class="on"':'')+'>'+o[1]+'</button>'}).join('')+'</span>'}
-function viewControls(){
- var h='<h3 style="margin:0 0 8px">View</h3>'+vtoggle();
- if(vmode==='thumbs')h+='<div class="meta" style="margin-top:12px">Grid size</div><div class="seg" style="margin-top:4px">'+[1,2,3,4].map(function(n){return '<button data-a="cols" data-v="'+n+'"'+(n===cols?' class="on"':'')+'>'+gicon(n)+'</button>'}).join('')+'</div><div class="seg" style="margin-top:8px"><button data-a="ro"'+(ro?' class="on"':'')+'>'+(ro?'Done reordering':'✥ Reorder Grid')+'</button></div>';
- return h;
-}
+function toggleFilter(k,v){fsel[k]=fsel[k]||[];var n=fsel[k].indexOf(v);if(n>-1)fsel[k].splice(n,1);else fsel[k].push(v);if(!fsel[k].length)delete fsel[k]}
 function wholeMoney(v){return '$'+Math.round(v).toLocaleString('en-US')}
 function rangeBlock(k,l,nums,fmt){
  if(!nums.length)return '<fieldset class="facet"><legend>'+l+'</legend><p class="meta">Add a '+l.toLowerCase()+' to a piece to use this slider.</p></fieldset>';
@@ -324,34 +428,22 @@ function rangeBlock(k,l,nums,fmt){
   +'<input type="range" data-a="rng" data-k="'+k+'" min="'+mn+'" max="'+mx+'" step="1" value="'+r[0]+'">'
   +'<input type="range" data-a="rng" data-k="'+k+'" min="'+mn+'" max="'+mx+'" step="1" value="'+r[1]+'"></div></fieldset>';
 }
-function filtersHTMLLegacy(){
- var h='<h3 style="margin:0 0 8px">Filters &amp; sort</h3>'
-  +'<label>Sort by<select data-a="sort" id="sort">'+SORTS.map(function(o){return '<option value="'+esc(o[0])+'"'+(o[0]===sortBy?' selected':'')+'>'+esc(o[1])+'</option>'}).join('')+'</select></label>'
-  +'<label class="swl"><input type="checkbox" data-a="hidesold"'+(hideSold?' checked':'')+'> Hide Sold items</label>';
- FACETS.forEach(function(F){
-   var vals=F.v();if(!vals.length)return;
-   h+='<fieldset class="facet"><legend>'+F.l+'</legend>'+vals.map(function(v){
-     return '<label><input type="checkbox" data-a="f" data-k="'+F.k+'" data-val="'+esc(v)+'"'+(fsel[F.k]&&fsel[F.k].indexOf(v)>-1?' checked':'')+'>'+(F.sw?sw(v):'')+esc(v)+'</label>';
-   }).join('')+'</fieldset>';
- });
- h+=rangeBlock('year','Year',items.map(function(i){return num(i.yearMade)}).filter(function(n){return n!=null}),function(v){return String(Math.round(v))});
- h+=rangeBlock('cost','Cost',items.map(function(i){return num(i.cost)}).filter(function(n){return n!=null}),fmtMoney);
- if(anyFilter())h+='<p><button data-a="clear">Clear all filters</button></p>';
- return h;
-}
-function toggleFilter(k,v){fsel[k]=fsel[k]||[];var n=fsel[k].indexOf(v);if(n>-1)fsel[k].splice(n,1);else fsel[k].push(v);if(!fsel[k].length)delete fsel[k]}
 function filtersHTML(){
  var h='<h3 style="margin:0 0 8px">Filters &amp; sort</h3>'
   +'<label>Sort by<select data-a="sort" id="sort">'+SORTS.map(function(o){return '<option value="'+esc(o[0])+'"'+(o[0]===sortBy?' selected':'')+'>'+esc(o[1])+'</option>'}).join('')+'</select></label>'
-  +'<label class="swl"><input type="checkbox" data-a="hidesold"'+(hideSold?' checked':'')+'> Hide Sold items</label>';
+  +'<label class="swl"><input type="checkbox" data-a="hidesold"'+(hideSold?' checked':'')+'> Show Waiting and PC Only</label>';
  FACETS.forEach(function(F){
-   var vals=F.v(),sel=fsel[F.k]||[];
+   var vals=facetVals(F);
    if(vals.length){
-     if(F.cloud){
-       h+='<fieldset class="facet"><legend>'+F.l+'</legend><div class="cloud">'+vals.map(function(v){return '<button data-a="f" data-k="'+F.k+'" data-val="'+esc(v)+'"'+(sel.indexOf(v)>-1?' class="on"':'')+'>'+esc(v)+'</button>'}).join('')+'</div></fieldset>';
-     }else{
-       h+='<fieldset class="facet"><legend>'+F.l+'</legend>'+vals.map(function(v){return '<label><input type="checkbox" data-a="fc" data-k="'+F.k+'" data-val="'+esc(v)+'"'+(sel.indexOf(v)>-1?' checked':'')+'>'+(F.sw?(HEARTS[v]||'')+' ':'')+esc(v)+'</label>'}).join('')+'</fieldset>';
-     }
+     var sel=fsel[F.k]||[],open=!!showAllF[F.k],shown=open?vals:vals.slice(0,6);
+     var chips=shown.map(function(v){
+       var on=sel.indexOf(v)>-1;
+       if(F.cloud)return '<button data-a="f" data-k="'+F.k+'" data-val="'+esc(v)+'"'+(on?' class="on"':'')+'>'+esc(v)+'</button>';
+       var lbl=F.sw?(HEARTS[v]||'')+' '+v+' ('+cntColor(v)+')':v;
+       return '<label><input type="checkbox" data-a="fc" data-k="'+F.k+'" data-val="'+esc(v)+'"'+(on?' checked':'')+'>'+esc(lbl)+'</label>';
+     }).join('');
+     h+='<fieldset class="facet"><legend>'+F.l+'</legend>'+(F.cloud?'<div class="cloud">'+chips+'</div>':chips)
+       +(vals.length>6?'<button class="link" data-a="showall" data-k="'+F.k+'">'+(open?'Show less':'Show all ('+vals.length+')')+'</button>':'')+'</fieldset>';
    }
    if(F.k==='era')h+=rangeBlock('year','Year',items.map(function(i){return num(i.yearMade)}).filter(function(n){return n!=null}),function(v){return String(Math.round(v))});
  });
@@ -369,26 +461,29 @@ function ioHTML(){
   +'<h4 class="side">Records Maintenance</h4>'
   +'<div class="seg"><button data-a="csvup">⬆ Upload</button><button data-a="csvdown">⬇ Download</button></div>'
   +'<p class="meta">Upload backfills records without photos. Download exports every record without photos as CSV.</p>'
-  +'<details class="tpl"><summary>CSV template fields</summary><p class="meta" style="word-break:break-word;margin:0 0 8px">'+CSV_COLS.map(function(c){return c[0]}).join(', ')+'</p><p class="meta" style="margin:0 0 8px">Lists separate values with ; or commas. Dates use YYYY-MM-DD. Hearts is 0 to 5. Leave a cell empty to keep the existing value when updating by id.</p></details>'
+  +'<details class="tpl"><summary>CSV template fields</summary><p class="meta" style="word-break:break-word;margin:0 0 8px">'+CSV_COLS.map(function(c){return c[0]==='tags'?'motifs':c[0]}).join(', ')+'</p><p class="meta" style="margin:0 0 8px">Lists separate values with ; or commas. Dates use YYYY-MM-DD. Rating is 0 to 5. Photoshoot is true or false. Leave a cell empty to keep the existing value when updating by id.</p></details>'
   +'<h4 class="side">Data Backup</h4>'
   +'<div class="bar" style="flex-direction:column;align-items:stretch;margin:0"><button data-a="export">⬇ Export (JSON)</button><button data-a="import">⬆ Import (JSON)</button><button class="dan" data-a="delete">Delete All</button></div>'
   +'<p class="meta">Export saves everything, including photos. Import restores a backup on a new device or after browser data is cleared.</p>'
   +'</details>';
 }
+function viewControls(){
+ var h='<h3 style="margin:0 0 8px">View</h3>'+'<span class="tgl">'+[['thumbs','▦ Grid'],['table','▤ Table']].map(function(o){return '<button data-a="vm" data-v="'+o[0]+'"'+(o[0]===vmode?' class="on"':'')+'>'+o[1]+'</button>'}).join('')+'</span>';
+ if(vmode==='thumbs')h+='<div class="meta" style="margin-top:12px">Grid size</div><div class="seg" style="margin-top:4px">'+[1,2,3,4].map(function(n){return '<button data-a="cols" data-v="'+n+'"'+(n===cols?' class="on"':'')+'>'+n+'</button>'}).join('')+'</div><div class="seg" style="margin-top:8px"><button data-a="ro"'+(ro?' class="on"':'')+'>'+(ro?'Done reordering':'✥ Reorder Grid')+'</button></div>';
+ return h;
+}
 function renderDrawer(){
- document.getElementById('drawer').innerHTML='<div class="bar" style="justify-content:space-between"><h3 style="margin:0">Menu</h3><button data-a="dclose">Close</button></div>'
-  +'<nav class="bar" style="flex-direction:column;align-items:stretch"><button data-a="nav" data-v="box"'+(view==='box'?' class="on"':'')+'>Jewelry box</button><button data-a="nav" data-v="edit" data-new="1">+ Add a piece</button></nav>'
-  +DV(0)+(view==='box'?viewControls():'<h3 style="margin:0 0 8px">View</h3>')+themeHTML()+DV(1)+filtersHTML()+DV(2)+ioHTML();
+ document.getElementById('drawer').innerHTML=(view==='box'?viewControls():'<h3 style="margin:0 0 8px">View</h3>')+themeHTML()+'<div class="dv"><span>✦ 💍 ✦</span></div>'+filtersHTML()+'<div class="dv"><span>✦ 💎 ✦</span></div>'+ioHTML();
 }
 function drawer(o){document.getElementById('drawer').classList.toggle('open',o);document.getElementById('scrim').classList.toggle('open',o)}
+
+/* ---------- rendering ---------- */
+function thumb(i){return '<div class="tile" data-a="open" data-id="'+i.id+'">'+(EMOJI[String(i.category).toLowerCase()]||'💎')+(i.cover?'<img draggable="false" loading="lazy" src="'+esc(i.cover)+'" alt="" onerror="this.remove()">':'')+'</div>'}
+function countLine(n){return '<p class="meta" style="text-align:center;margin:16px 0 0">'+n+' piece'+(n===1?'':'s')+(anyFilter()?' (filtered)':'')+'</p>'}
 var TC={
- Item:[['Description',function(i){return esc(i.description||'—')}],['Category',function(i){return esc(i.category)}],['Period',function(i){return esc(i.period)}],['Era',function(i){return esc(i.era||'—')}],['Year',function(i){return esc(i.yearMade==null?'—':i.yearMade)}],['Country of origin',function(i){return esc(i.country||'—')}],['Stones',function(i){return esc((i.stones||[]).join(', ')||'—')}],['Metals',function(i){return esc((i.metals||[]).join(', ')||'—')}],['Hallmarks',function(i){return esc(i.hallmarks||'—')}],['Measurements',function(i){return esc(i.measurements||'—')}],['Weight',function(i){return esc(i.weight||'—')}],['Size',function(i){return esc(i.size||'—')}],['Cut',function(i){return esc((i.cut||[]).join(', ')||'—')}],['Main color',function(i){return i.mainColor?sw(i.mainColor)+' '+esc(i.mainColor):'—'}],['Secondary color',function(i){return i.secondaryColor?sw(i.secondaryColor)+' '+esc(i.secondaryColor):'—'}],['Motifs',function(i){return esc((i.tags||[]).join(', ')||'—')}],['Notes',function(i){return esc(i.notes||'—')}]],
- Transaction:[['Status',function(i){return esc(i.status)}],['Purchase date',function(i){return esc(fmtDate(i.pdate)||'—')}],['Seller',function(i){return esc(i.seller||'—')}],['Platform',function(i){return esc(i.platform||'—')}],['Cost',function(i){return money(num(i.cost))}],['Sales channel',function(i){return esc(i.channel||'—')}],['Date listed',function(i){return esc(fmtDate(i.dListed)||'—')}],['Listing link',function(i){return i.link?'<a href="'+esc(i.link)+'" target="_blank" rel="noopener">open</a>':'—'}],['Platform fee',function(i){return fees(i)?money(fees(i)):'—'}],['Date sold',function(i){return esc(fmtDate(i.dSold)||'—')}],['Shipping',function(i){return money(num(i.ship))}],['Final payout',function(i){return money(num(i.final))}],['Turnover',function(i){return days(i)==null?'—':days(i)+' days'}],['Net profit',function(i){return money(net(i))}]],
- Stats:[['Last worn',function(i){return esc(fmtDate(i.lastWorn)||'—')}],['Times worn',function(i){return esc(i.wornCount==null||i.wornCount===''?'—':i.wornCount)}],['Worn Status',function(i){return hearts(i.hearts)||'—'}]]
-};
-var TCOld={
- Item:[['Category',function(i){return esc(i.category)}],['Period',function(i){return esc(i.period)}],['Era',function(i){return esc(i.era||'—')}],['Year',function(i){return esc(i.yearMade==null?'—':i.yearMade)}],['Status',function(i){return esc(i.status)}],['Country',function(i){return esc(i.country||'—')}],['Stones',function(i){return esc((i.stones||[]).join(', ')||'—')}],['Metals',function(i){return esc((i.metals||[]).join(', ')||'—')}],['Measurements',function(i){return esc(i.measurements||'—')}],['Weight',function(i){return esc(i.weight||'—')}],['Size',function(i){return esc(i.size||'—')}],['Cut',function(i){return esc((i.cut||[]).join(', ')||'—')}],['Worn Status',function(i){return hearts(i.hearts)||'—'}],['Main color',function(i){return i.mainColor?sw(i.mainColor)+' '+esc(i.mainColor):'—'}],['Secondary color',function(i){return i.secondaryColor?sw(i.secondaryColor)+' '+esc(i.secondaryColor):'—'}],['Motifs',function(i){return esc((i.tags||[]).join(', ')||'—')}],['Notes',function(i){return esc(i.notes||'—')}],['Last worn',function(i){return esc(fmtDate(i.lastWorn)||'—')}],['Times worn',function(i){return esc(i.wornCount==null||i.wornCount===''?'—':i.wornCount)}]],
- Transaction:[['Purchase date',function(i){return esc(fmtDate(i.pdate)||'—')}],['Seller',function(i){return esc(i.seller||'—')}],['Platform',function(i){return esc(i.platform||'—')}],['Cost',function(i){return money(num(i.cost))}],['Channel',function(i){return esc(i.channel||'—')}],['Listed',function(i){return esc(fmtDate(i.dListed)||'—')}],['Platform fee',function(i){return fees(i)?money(fees(i)):'—'}],['Sold',function(i){return esc(fmtDate(i.dSold)||'—')}],['Shipping',function(i){return money(num(i.ship))}],['Final payout',function(i){return money(num(i.final))}],['Turnover',function(i){return days(i)==null?'—':days(i)+' days'}],['Net profit',function(i){return money(net(i))}]]
+ Piece:[['Category',function(i){return esc(i.category)}],['Period',function(i){return esc(i.period)}],['Era/Movement',function(i){return esc(i.era||'—')}],['Year',function(i){return esc(i.yearMade==null?'—':i.yearMade)}],['Country of origin',function(i){return esc(i.country||'—')}],['Stones',function(i){return esc((i.stones||[]).join(', ')||'—')}],['Metals',function(i){return esc((i.metals||[]).join(', ')||'—')}],['Hallmarks',function(i){return esc(i.hallmarks||'—')}],['Measurements',function(i){return esc(i.measurements||'—')}],['Weight',function(i){return esc(i.weight||'—')}],['Ring size',function(i){return esc(i.ringSize==null||i.ringSize===''?'—':i.ringSize)}],['Cut',function(i){return esc((i.cut||[]).join(', ')||'—')}],['Main color',function(i){return i.colorMain?sw(i.colorMain)+' '+esc(i.colorMain):'—'}],['Secondary color',function(i){return i.colorSecondary?sw(i.colorSecondary)+' '+esc(i.colorSecondary):'—'}],['Motifs',function(i){return esc((i.tags||[]).join(', ')||'—')}],['Notes',function(i){return esc(i.notes||'—')}]],
+ Transaction:[['Status',function(i){return esc(i.status)}],['Purchase date',function(i){return esc(fmtDate(i.purchaseDate)||'—')}],['Seller',function(i){return esc(i.seller||'—')}],['Platform',function(i){return esc(i.purchasePlatform||'—')}],['Cost',function(i){return money(num(i.cost))}],['Selling Platform',function(i){return esc(i.sellPlatform||'—')}],['Date listed',function(i){return esc(fmtDate(i.dateListed)||'—')}],['Listing link',function(i){return i.linkSale?'<a href="'+esc(i.linkSale)+'" target="_blank" rel="noopener">open</a>':'—'}],['Date sold',function(i){return esc(fmtDate(i.dateSold)||'—')}],['Turnover',function(i){return days(i)==null?'—':days(i)+' days'}],['Platform fee',function(i){return fees(i)?money(fees(i)):'—'}],['Shipping',function(i){return money(num(i.shipActual))}],['Final payout',function(i){return money(num(i.payout))}],['Net profit',function(i){return calcs(i)['c-net']}]],
+ Stats:[['Last worn',function(i){return esc(fmtDate(i.wornLast)||'—')}],['Times worn',function(i){return esc(i.wornCount==null||i.wornCount===''?'—':i.wornCount)}],['Rating',function(i){return stars(i.rating)||'—'}],['Photoshoot?',function(i){return i.photoshoot?'Yes':'No'}]]
 };
 function renderTable(){
  var cols=TC[ctab],list=items.filter(pass).sort(groupCmp),n=Math.max(1,Math.ceil(list.length/PER));if(page>n)page=n;
@@ -398,7 +493,7 @@ function renderTable(){
    if(gk!==last){body+='<tr class="grp"><td colspan="'+(cols.length+2)+'"><span style="position:sticky;left:0;display:inline-block">'+esc(i.category)+' · '+esc(i.period)+'</span></td></tr>';last=gk}
    body+='<tr><td class="stk"><div style="display:flex;gap:6px;align-items:flex-start">'+(i.cover?'<img class="ph" src="'+esc(i.cover)+'" alt="">':'<span class="phe">'+(EMOJI[String(i.category).toLowerCase()]||'💎')+'</span>')+'<span>'+esc(i.title||'—')+'</span></div></td>'+cols.map(function(c){return '<td>'+c[1](i)+'</td>'}).join('')+'<td><button data-a="edit" data-id="'+i.id+'" aria-label="Edit" style="padding:6px 10px">✏️</button></td></tr>';
  });
- return '<div class="bar"><button data-a="ct" data-v="Item"'+(ctab==='Item'?' class="on"':'')+'>Piece</button><button data-a="ct" data-v="Transaction"'+(ctab==='Transaction'?' class="on"':'')+'>Transaction</button><button data-a="ct" data-v="Stats"'+(ctab==='Stats'?' class="on"':'')+'>Stats</button><span class="meta">'+list.length+' pieces</span></div>'
+ return '<div class="bar"><button data-a="ct" data-v="Piece"'+(ctab==='Piece'?' class="on"':'')+'>Piece</button><button data-a="ct" data-v="Transaction"'+(ctab==='Transaction'?' class="on"':'')+'>Transaction</button><button data-a="ct" data-v="Stats"'+(ctab==='Stats'?' class="on"':'')+'>Stats</button><span class="meta">'+list.length+' pieces</span></div>'
   +'<div class="tw"><table><thead><tr><th class="stk">Title</th>'+cols.map(function(c){return '<th>'+c[0]+'</th>'}).join('')+'<th></th></tr></thead><tbody>'+body+'</tbody></table></div>'
   +(rows.length?'':'<p class="meta">No pieces match these filters.</p>')
   +'<div class="pager"><button data-a="pg" data-v="-1"'+(page<=1?' disabled':'')+'>Prev</button><span>Page '+page+' of '+n+'</span><button data-a="pg" data-v="1"'+(page>=n?' disabled':'')+'>Next</button></div>';
@@ -411,97 +506,153 @@ function renderBox(){
   +(list.length?'':'<p class="meta">No pieces match.</p>')+countLine(list.length);
 }
 function fieldHTML(k,v){
- var s=FS[k],t=s[2],c,val=LISTS.indexOf(k)>-1?(v||[]).join(', '):(v==null?'':v);
- if(t==='sel')c='<select name="'+k+'">'+s[3].map(function(o){return '<option value="'+esc(o)+'"'+(o===val?' selected':'')+'>'+esc(o||'—')+'</option>'}).join('')+'</select>';
+ var s=FS[k],t=s[1],val=LISTS.indexOf(k)>-1?(v||[]).join(', '):(v==null?'':v),c;
+ if(t==='check')return '<label class="swl"><input type="checkbox" name="'+k+'"'+(v?' checked':'')+'> '+s[0]+'</label>';
+ if(t==='calc')return '<label>'+s[0]+'<div class="calc" id="'+s[2]+'">'+esc(calcs(editing)[s[2]])+'</div></label>';
+ if(t==='pct')return '<label>'+s[0]+'<input name="'+k+'" type="number" step="0.1" inputmode="decimal" value="'+(k==='ebayPct'?PS.eb:PS.ig)+'"></label>';
+ if(t==='sel')c='<select name="'+k+'">'+s[2].map(function(o){return '<option value="'+esc(o)+'"'+(o===val?' selected':'')+'>'+esc(o||'—')+'</option>'}).join('')+'</select>';
+ else if(t==='ringsz')c='<select name="ringSize"><option value="">—</option>'+ringOpts(val)+'</select>';
  else if(t==='textarea')c='<textarea name="'+k+'" rows="3">'+esc(val)+'</textarea>';
- else if(t==='hearts')c='<select name="hearts">'+[0,1,2,3,4,5].map(function(n){return '<option value="'+n+'"'+(Number(val)===n?' selected':'')+'>'+(n?hearts(n):'No hearts')+'</option>'}).join('')+'</select>';
+ else if(t==='rating')c='<select name="'+k+'">'+[0,1,2,3,4,5].map(function(n){return '<option value="'+n+'"'+(Number(val)===n?' selected':'')+'>'+(n?stars(n):'No rating')+'</option>'}).join('')+'</select>';
  else if(t==='money')c='<input name="'+k+'" type="text" inputmode="decimal" data-money="1" value="'+esc(fmtMoney(v))+'" placeholder="$0.00">';
  else if(t==='date')c='<input name="'+k+'" type="date" value="'+esc(v||'')+'">';
- else if(t==='number')c='<input name="'+k+'" type="number" step="1" inputmode="numeric" value="'+esc(val)+'">';
+ else if(t==='number')c='<input name="'+k+'" type="number" step="'+(k==='buffer'?'0.5':'1')+'" inputmode="decimal" value="'+esc(val)+'">';
  else c='<input name="'+k+'" type="'+(t==='url'?'url':'text')+'" value="'+esc(val)+'">';
- return '<label>'+s[1]+c+'</label>';
+ return '<label>'+(k==='ringSize'?'<span>'+s[0]+' <button type="button" class="link" data-a="ringref" style="font-size:.8rem">size chart</button></span>':s[0])+c+'</label>';
 }
-function calcLabel(id,label,val){return '<label>'+label+'<div class="calc" id="'+id+'">'+val+'</div></label>'}
+function sec(keys){return keys.map(function(k){return fieldHTML(k,editing[k])}).join('')}
 function imagesHTML(){
- var refs=editing.refs||[],lib=coverLibrary();
+ var refs=editing.refs||[];
  return '<div class="f"><h4 class="sub">Reference screenshots</h4><div class="seg" style="grid-column:1/-1"><button type="button" data-a="refadd">+ Add images</button></div>'
-  +'<div style="grid-column:1/-1">'+(refs.length?'<div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(90px,1fr))">'+refs.map(function(r,n){return '<div style="position:relative"><img src="'+esc(r)+'" style="width:100%;aspect-ratio:1;object-fit:cover;border-radius:8px;display:block" alt=""><span class="dim" style="position:absolute;left:4px;bottom:4px;font-size:.65rem;background:rgba(0,0,0,.6);color:#fff;padding:1px 4px;border-radius:4px">'+sizeOf(r)+'</span><button type="button" data-a="rmref" data-i="'+n+'" style="position:absolute;top:4px;right:4px;padding:2px 8px;min-height:0">✕</button></div>'}).join('')+'</div>':'<p class="meta">No reference screenshots yet.</p>')+'</div>'
-  +'<input type="file" id="cvfile" accept="image/*" hidden><input type="file" id="reffile" accept="image/*" multiple hidden><h4 class="sub">Cover photo</h4>'
-  +'<div style="grid-column:1/-1">'+(editing.cover?'<img class="cvimg" src="'+esc(editing.cover)+'" alt=""><div class="meta dim">'+sizeOf(editing.cover)+'</div>':'<p class="meta">No cover yet.</p>')
-  +'<div class="seg"><button type="button" data-a="covadd">⬆ Upload new cover</button>'+(editing.cover?'<button type="button" data-a="cvadj">Pan &amp; Zoom</button><button type="button" data-a="cvrm">Remove cover</button>':'')+'</div>'
+  +'<div style="grid-column:1/-1">'+(refs.length?'<div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(90px,1fr))">'+refs.map(function(r,n){return '<div style="position:relative"><img src="'+esc(r)+'" style="width:100%;aspect-ratio:1;object-fit:cover;border-radius:8px;display:block;cursor:zoom-in" alt="" data-a="preview" data-i="'+n+'"><span class="meta" style="position:absolute;left:4px;bottom:4px;background:rgba(0,0,0,.6);color:#fff;padding:1px 4px;border-radius:4px;font-size:.65rem">'+sizeOf(r)+'</span><button type="button" data-a="rmref" data-i="'+n+'" style="position:absolute;top:4px;right:4px;padding:2px 8px;min-height:0">✕</button></div>'}).join('')+'</div>':'<p class="meta">No reference screenshots yet.</p>')+'</div>'
+  +'<h4 class="sub">Cover photo</h4>'
+  +'<input type="file" id="cvfile" accept="image/*" hidden><input type="file" id="reffile" accept="image/*" multiple hidden>'
+  +'<div style="grid-column:1/-1">'+(editing.cover?'<img class="cvimg" src="'+esc(editing.cover)+'" alt=""><div class="meta">'+sizeOf(editing.cover)+'</div>':'<p class="meta">No cover yet.</p>')
+  +'<div class="seg"><button type="button" data-a="covadd">⬆ Upload new cover</button><button type="button" data-a="galpick">Add from gallery</button>'+(editing.cover?'<button type="button" data-a="cvadj">Pan &amp; Zoom</button><button type="button" data-a="cvrm">Remove cover</button>':'')+'</div>'
   +'<div id="crop" hidden><div id="cropv"><img id="cropimg" alt="" draggable="false"></div><input type="range" id="cropz" min="1" max="4" step="0.01" value="1" aria-label="Zoom"><p class="seg"><button type="button" class="pri" data-a="cvok">Use this crop</button><button type="button" data-a="cvcancel">Cancel</button></p><p class="meta">Drag to pan. Use the slider (or pinch) to zoom. The square is your thumbnail.</p></div></div>'
   +(refs.length?'<div style="grid-column:1/-1"><p class="meta">Use one of this piece’s reference images</p><div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(70px,1fr))">'+refs.map(function(src,n){return '<button type="button" data-a="pickref" data-i="'+n+'" style="padding:0;border-radius:8px;aspect-ratio:1;overflow:hidden;min-height:0;border:2px solid '+(src===editing.cover?'var(--acc)':'transparent')+'"><img src="'+esc(src)+'" alt="" style="width:100%;height:100%;object-fit:cover;display:block"></button>'}).join('')+'</div></div>':'')
-  +(lib.length?'<div style="grid-column:1/-1"><p class="meta">Or use a previously uploaded image</p><div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(70px,1fr))">'+lib.slice(0,30).map(function(src,n){return '<button type="button" data-a="pickcover" data-i="'+n+'" style="padding:0;border-radius:8px;aspect-ratio:1;overflow:hidden;min-height:0;border:2px solid '+(src===editing.cover?'var(--acc)':'transparent')+'"><img src="'+esc(src)+'" alt="" style="width:100%;height:100%;object-fit:cover;display:block"></button>'}).join('')+'</div></div>':'')
   +'</div></div>';
 }
-function coverLibrary(){
- var seen={},out=[];
- items.forEach(function(i){
-   if(i.cover&&!seen[i.cover]){seen[i.cover]=1;out.push(i.cover)}
-   (i.refs||[]).forEach(function(r){if(!seen[r]){seen[r]=1;out.push(r)}});
+function valOf(v){return v==null?'':Array.isArray(v)?v.join(', '):String(v)}
+function listingTexts(g){
+ var place=[g('period'),g('era'),g('title')].filter(function(x){return x}).join(' ');
+ var metals=g('metals'),ring=g('ringSize'),meas=g('measurements'),wt=g('weight'),hm=g('hallmarks'),c=g('country').trim();
+ var d=[];if(place)d.push(place);if(metals)d.push('Metals: '+metals);if(ring)d.push('Ring size US '+ring);
+ var L=[];if(place)L.push('• '+place);if(metals)L.push('• Metals: '+metals);
+ if(ring)L.push('• Ring size US '+ring);else if(meas)L.push('• Measurements: '+meas);
+ if(wt)L.push('• Weight: '+wt);
+ var uk={england:'UK',scotland:'UK',wales:'UK','northern ireland':'UK','great britain':'UK','united kingdom':'UK',uk:'UK'};
+ var us=['us','usa','u.s.','u.s.a.','united states','united states of america','america'];
+ if(c&&us.indexOf(c.toLowerCase())<0)L.push('• Sourced from '+(uk[c.toLowerCase()]||c));
+ if(hm)L.push('• Hallmarks: '+hm);
+ return [d.join('\n'),L.join('\n')];
+}
+function listingBlock(it){
+ var LT=listingTexts(function(k){return valOf(it[k])});
+ return '<div class="f"><div style="grid-column:1/-1"><div class="seg" style="justify-content:space-between"><span class="meta">Description</span><button type="button" class="link" data-a="copy" data-id="lhDesc">Copy</button></div><textarea id="lhDesc" rows="4" style="height:auto">'+esc(LT[0])+'</textarea></div>'
+  +'<div style="grid-column:1/-1"><div class="seg" style="justify-content:space-between"><span class="meta">Listing details</span><button type="button" class="link" data-a="copy" data-id="lhList">Copy</button></div><textarea id="lhList" rows="6" style="height:auto">'+esc(LT[1])+'</textarea></div></div>';
+}
+function copyText(id,btn){
+ var ta=document.getElementById(id);if(!ta)return;
+ var done=function(){btn.textContent='Copied ✓';setTimeout(function(){btn.textContent='Copy'},1500)};
+ var fallback=function(){ta.focus();ta.select();try{document.execCommand('copy')}catch(e){}done()};
+ if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(ta.value).then(done,fallback);else fallback();
+}
+var QA_KEYS=['title','category','period','era','yearMade','country','stones','metals','hallmarks','measurements','weight','ringSize','cut','colorMain','colorSecondary','tags','notes','purchaseDate','seller','purchasePlatform','cost','sellPlatform','dateListed','linkSale'];
+function quickPrompt(){
+ var lines=QA_KEYS.map(function(k){var s=FS[k],t=s[1],hint=t==='sel'?'one of: '+s[2].filter(Boolean).join(', '):t==='list'?'array of strings':t==='money'?'number, no $':t==='date'?'YYYY-MM-DD':t==='ringsz'?'number 0 to 13 in steps of 0.25':t==='number'?'number':t==='url'?'URL':'text';return '"'+k+'": '+hint+' ('+s[0]+')'});
+ return 'Read the attached jewelry listing screenshots and output ONLY a JSON object with these keys. Omit any key you cannot find. No commentary.\n'+lines.join('\n');
+}
+function quickHTML(){
+ return '<div class="modal" data-a="backdrop"><div style="max-width:520px;width:94vw"><h3 style="margin:0 0 6px">Quick add</h3><p class="meta">1. Copy the prompt and send it with your listing screenshots to Claude.<br>2. Paste Claude’s JSON reply below and tap Apply.</p>'
+  +'<div class="seg" style="justify-content:space-between"><span class="meta">Prompt</span><button type="button" class="link" data-a="copy" data-id="qaPrompt">Copy</button></div><textarea id="qaPrompt" rows="6" readonly style="height:auto">'+esc(quickPrompt())+'</textarea>'
+  +'<label style="margin-top:12px">Claude’s output<textarea id="qaIn" rows="6" placeholder="Paste output here" style="height:auto"></textarea></label>'
+  +'<div class="bar" style="justify-content:center;margin:12px 0 0"><button class="pri" data-a="qaapply">Apply</button><button data-a="x">Cancel</button></div></div></div>';
+}
+function applyQuick(d){
+ var n=0;
+ Object.keys(d||{}).forEach(function(k){
+   var key=ALIAS[k]||k;
+   var s=FS[key];if(!s||s[1]==='calc'||s[1]==='pct')return;
+   var v=d[k],t=s[1],out;
+   if(t==='sel'){var m=s[2].filter(function(o){return String(o).toLowerCase()===String(v==null?'':v).trim().toLowerCase()})[0];if(m===undefined)return;out=m}
+   else if(t==='list'){out=Array.isArray(v)?v.map(function(x){return String(x).trim()}).filter(Boolean):String(v||'').split(/[;,]/).map(function(x){return x.trim()}).filter(Boolean)}
+   else if(t==='money'){out=parseMoney(v);if(out==='')return}
+   else if(t==='date'){out=parseDate(v);if(!out)return}
+   else if(t==='number'){out=Number(v);if(v===''||v==null||isNaN(out))return}
+   else if(t==='ringsz'){out=Number(v);if(isNaN(out)||out<0||out>13)return;out=Math.round(out*4)/4}
+   else if(t==='check'){out=!!v&&String(v).toLowerCase()!=='false'}
+   else{out=String(v==null?'':v).trim();if(!out)return}
+   editing[key]=out;n++;
  });
- return out;
+ return n;
 }
 function renderEdit(){
- var it=editing,shipVal=it.shipEst!=null&&it.shipEst!==''?it.shipEst:shipDefault(it.cost);
+ var it=editing;
+ var pr=it.shipEstimate!=null&&it.shipEstimate!==''?it.shipEstimate:shipDefault(it.cost);
  shipTouched=false;
- var h='<h2>Add/edit a piece</h2><form id="form" autocomplete="off">';
- h+='<details open><summary>Piece</summary><div class="f">'+['title','category','period','era','yearMade','country','stones','metals','hallmarks','measurements','weight','size','cut','mainColor','secondaryColor','tags','description','notes'].map(function(k){return fieldHTML(k,it[k])}).join('')
-  +'<h4 class="sub">Stats</h4>'+['lastWorn','wornCount','hearts'].map(function(k){return fieldHTML(k,it[k])}).join('')+'</div></details>';
- h+='<details open><summary>Transaction</summary><div class="f">'+fieldHTML('status',it.status)+'<h4 class="sub">Purchase</h4>'+['pdate','seller','platform','cost'].map(function(k){return fieldHTML(k,it[k])}).join('')+'</div>'
-  +'<details><summary>Sale</summary><div class="f">'+['channel','dListed','link','feeFinal'].map(function(k){return fieldHTML(k,it[k])}).join('')+calcLabel('c-fees','Total fees',money(fees(it)))+'</div>'
-  +'<div class="f"><h4 class="sub">Price helper</h4>'
-  +'<label>eBay fee %<input data-ps="eb" type="number" step="0.1" value="'+PS.eb+'"></label>'
-  +'<label>Instagram %<input data-ps="ig" type="number" step="0.1" value="'+PS.ig+'"></label>'
-  +fieldHTML('shipEst',shipVal)
-  +calcLabel('sugE','Suggested eBay price',suggestTxt('eb',it))
-  +calcLabel('sugI','Suggested Instagram price',suggestTxt('ig',it))
-  +'</div>'
-  +'<div class="f"><h4 class="sub">Sold details</h4>'+['dSold','ship','final'].map(function(k){return fieldHTML(k,it[k])}).join('')
-  +calcLabel('c-days','Turnover (days listed → sold)',days(it)==null?'—':days(it)+' days')+calcLabel('c-net','Net profit',money(net(it)))+'</div>'
-  +'</details></details>';
+ var h='<h2>Add/edit a piece</h2><div class="bar"><button type="button" data-a="quickadd">⚡ Quick add</button></div><form id="form" autocomplete="off">';
+ h+='<details open><summary>Piece</summary><div class="f">'+sec(ORDER_PIECE)+'<h4 class="sub">Stats</h4>'+sec(ORDER_STATS)+'</div></details>';
+ h+='<details open><summary>Transaction</summary><div class="f">'+fieldHTML('status',it.status)+'<h4 class="sub">Purchase</h4>'+sec(ORDER_PURCH)+'</div>'
+  +'<details><summary>Sale</summary><details><summary>Listing helper</summary>'+listingBlock(it)+'<div class="f"><h4 class="sub">Pricing</h4>'+ORDER_PRICE.map(function(k){return fieldHTML(k,k==='shipEstimate'?pr:it[k])}).join('')+'</div></details>'
+  +'<div class="f"><h4 class="sub">Sold details</h4>'+sec(ORDER_SOLD)+'</div></details></details>';
+ 
  h+='<details open><summary>Images</summary>'+imagesHTML()+'</details>';
+ h+='<details><summary>Summary</summary><table style="width:100%;font-size:.88rem;border-collapse:collapse"><tbody id="sumtb"></tbody></table></details>';
  h+='<div class="sticky"><button type="submit" class="pri">Save</button><button type="button" data-a="dup">Duplicate</button><button type="button" class="dan" data-a="del">Delete</button><button type="button" data-a="cancel">Cancel</button></div></form>';
  return h;
-}
-function suggestTxt(which,o){
- var cost=num(o.cost);if(cost==null)return '—';
- var ship=num(o.shipEst);if(ship==null)ship=shipDefault(cost);
- var pct=which==='eb'?PS.eb:PS.ig;
- return money(Math.round(((1+pct/100)*cost+ship)*100)/100);
-}
-function soldAvgTxt(o){
- var s=items.filter(function(i){return i.status==='Sold'&&i.final&&i.id!==o.id&&i.category===o.category});
- if(!s.length)return '—';
- return money(Math.round(s.reduce(function(a,i){return a+Number(i.final)},0)/s.length*100)/100)+' ('+s.length+' sold)';
 }
 function readForm(){
  var o=JSON.parse(JSON.stringify(editing)),fd=new FormData(document.getElementById('form'));
  Object.keys(FS).forEach(function(k){
+   var t=FS[k][1];if(t==='calc'||t==='pct')return;
+   if(t==='check'){o[k]=!!fd.get(k);return}
    var raw=fd.get(k);if(raw==null)return;
-   var t=FS[k][2];
    if(LISTS.indexOf(k)>-1)o[k]=String(raw).split(',').map(function(x){return x.trim()}).filter(Boolean);
    else if(t==='money')o[k]=parseMoney(raw);
    else if(t==='date')o[k]=parseDate(raw);
    else if(t==='number')o[k]=raw===''?'':Number(raw);
-   else if(t==='hearts')o[k]=Number(raw);
+   else if(t==='rating')o[k]=Number(raw);
+   else if(t==='ringsz')o[k]=raw===''?'':Number(raw);
    else o[k]=raw;
  });
- if(o.wornCount!=='' && o.wornCount!=null)o.wornCount=Math.max(0,Math.floor(o.wornCount));
+ if(o.wornCount!==''&&o.wornCount!=null)o.wornCount=Math.max(0,Math.floor(o.wornCount));
  return o;
 }
 function syncForm(){editing=readForm();return editing}
-function sizeOf(u){if(!u)return '';var b=u.split(',')[1]||'';var n=Math.floor(b.length*3/4)-(b.slice(-2)==='=='?2:b.slice(-1)==='='?1:0);return n<1048576?Math.round(n/1024)+' KB':(n/1048576).toFixed(1)+' MB'}
-function dimLabels(){document.querySelectorAll('#app img[data-dim]').forEach(function(im){var s=im.parentNode.querySelector('.dim');function f(){if(s)s.textContent=im.naturalWidth+' × '+im.naturalHeight+' px'}if(im.complete&&im.naturalWidth)f();else im.addEventListener('load',f)})}
+function updateSummary(){
+ var tb=document.getElementById('sumtb'),f=document.getElementById('form');if(!tb||!f)return;
+ var td1='<td style="color:var(--mute);width:42%;padding:6px 8px;border-bottom:1px solid var(--line)">',td2='<td style="padding:6px 8px;border-bottom:1px solid var(--line)">';
+ var rows=FORM_ORDER.filter(function(k){return SUM_SKIP.indexOf(k)<0}).map(function(k){
+   var s=FS[k],v='';
+   if(s[1]==='calc'){var el=document.getElementById(s[2]);v=el?el.textContent:''}
+   else{var el2=f.querySelector('[name="'+k+'"]');if(el2){if(el2.type==='checkbox')v=el2.checked?'Yes':'No';else if(el2.tagName==='SELECT')v=el2.options[el2.selectedIndex]?el2.options[el2.selectedIndex].text:'';else v=el2.value}}
+   return '<tr>'+td1+esc(s[0])+'</td>'+td2+esc(v||'—')+'</td></tr>';
+ });
+ rows.push('<tr>'+td1+'Cover photo</td>'+td2+(editing.cover?'Added':'—')+'</td></tr>');
+ rows.push('<tr>'+td1+'Reference screenshots</td>'+td2+(editing.refs||[]).length+'</td></tr>');
+ tb.innerHTML=rows.join('');
+}
+function refreshCalc(){
+ var g=function(k){var el=document.querySelector('#form [name="'+k+'"]');return el?el.value:''};
+ var o={cost:parseMoney(g('cost')),shipEstimate:parseMoney(g('shipEstimate')),buffer:num(g('buffer')),payout:parseMoney(g('payout')),shipActual:parseMoney(g('shipActual')),feeFinal:parseMoney(g('feeFinal')),dateListed:parseDate(g('dateListed')),dateSold:parseDate(g('dateSold'))};
+ var c=calcs(o);
+ Object.keys(c).forEach(function(id){var el=document.getElementById(id);if(el)el.textContent=c[id]});
+ var LT=listingTexts(g);var dEl=document.getElementById('lhDesc'),lEl=document.getElementById('lhList');if(dEl)dEl.value=LT[0];if(lEl)lEl.value=LT[1];
+ updateSummary();
+}
+function dimLabels(){}
 function renderMain(){
- document.getElementById('searchbar').style.display=view==='box'?'block':'none';
- document.getElementById('app').innerHTML=view==='box'?renderBox():renderEdit();dimLabels();
+ document.getElementById('app').innerHTML=view==='box'?renderBox():view==='gallery'?renderGallery():view==='secret'?'<h2>Secret Compartment</h2><p class="meta">Coming soon.</p>':renderEdit();
+ updateSummary();setTabs();
 }
 function render(){renderMain();renderDrawer()}
 function show(v){view=v;ro=false;drawer(false);render();window.scrollTo(0,0)}
+function setTabs(){document.querySelectorAll('#tabbar button').forEach(function(x){x.classList.toggle('on',x.dataset.v===view)})}
 
 /* ---------- images ---------- */
-function compress(file,max){max=max||800;
+function compress(file,max){
+ max=max||800;
  return new Promise(function(res,rej){
    var r=new FileReader();
    r.onload=function(){var img=new Image();img.onload=function(){var s=Math.min(1,max/Math.max(img.width,img.height)),c=document.createElement('canvas');c.width=Math.round(img.width*s);c.height=Math.round(img.height*s);c.getContext('2d').drawImage(img,0,0,c.width,c.height);res(c.toDataURL('image/jpeg',.72))};img.onerror=rej;img.src=r.result};
@@ -528,42 +679,43 @@ function cropApply(){
  if(!CR)return;var V=cropV().clientWidth,s=CR.s0*CR.z,c=document.createElement('canvas');c.width=c.height=800;
  c.getContext('2d').drawImage(CR.img,-CR.x/s,-CR.y/s,V/s,V/s,0,0,800,800);
  var url=c.toDataURL('image/jpeg',.72),src=CR.img.src;CR=null;
+ gal.covers.push({id:uid(),src:url});saveGallery();
  syncForm();editing.cover=url;editing.coverSrc=src;renderMain();
 }
 
 /* ---------- JOTD & wear ---------- */
-function wt(i){return i.lastWorn?Math.min(365,Math.max(0,Math.round((new Date(today())-new Date(i.lastWorn))/864e5)))+1:365}
+function wt(i){return i.wornLast?Math.min(365,Math.max(0,Math.round((new Date(today())-new Date(i.wornLast))/864e5)))+1:365}
 function pickJ(pool){var p=pool.length>1?pool.filter(function(i){return i.id!==lastJ}):pool,t=p.reduce(function(s,i){return s+wt(i)},0),r=Math.random()*t;for(var k=0;k<p.length;k++){r-=wt(p[k]);if(r<=0)return p[k]}return p[p.length-1]}
 function wear(id){
  var i=items.filter(function(x){return x.id===id})[0];if(!i)return;
- if(i.lastWorn!==today())i.wornCount=(Number(i.wornCount)||0)+1;
- i.lastWorn=today();saveItems();
- document.getElementById('modal').innerHTML='<div class="modal" data-a="backdrop"><div style="text-align:center"><p style="font-size:3rem;margin:0">✨</p><h3>Today’s jewelry is chosen</h3><p>'+esc(title(i))+'</p><p class="meta">Saved as worn on '+esc(fmtDate(i.lastWorn))+' · '+(Number(i.wornCount)||0)+' time'+(Number(i.wornCount)===1?'':'s')+' worn in total</p><div class="bar" style="justify-content:center"><button class="pri" data-a="x">Done</button></div></div></div>';
+ if(i.wornLast!==today())i.wornCount=(Number(i.wornCount)||0)+1;
+ i.wornLast=today();saveItems();
+ document.getElementById('modal').innerHTML='<div class="modal" data-a="backdrop"><div style="text-align:center"><p style="font-size:3rem;margin:0">✨</p><h3>Today’s jewelry is chosen</h3><p>'+esc(title(i))+'</p><p class="meta">Saved as worn on '+esc(fmtDate(i.wornLast))+' · '+(Number(i.wornCount)||0)+' time'+(Number(i.wornCount)===1?'':'s')+' worn in total</p><div class="bar" style="justify-content:center"><button class="pri" data-a="x">Done</button></div></div></div>';
 }
 function jotd(){
  var pool=items.filter(pass);if(!pool.length)pool=items;if(!pool.length)return;
  var i=pickJ(pool);lastJ=i.id;
- document.getElementById('modal').innerHTML='<div class="modal" data-a="backdrop"><div><p class="meta" style="text-align:center">✨ Jewelry of the Day</p>'+(i.cover?'<img class="cvimg" style="max-width:100%;max-height:260px;margin:0 auto 10px" src="'+esc(i.cover)+'" alt="" onerror="this.remove()">':'<div style="font-size:4rem;text-align:center">'+(EMOJI[String(i.category).toLowerCase()]||'💎')+'</div>')+'<h3>'+esc(title(i))+'</h3><p class="meta">'+esc([i.category,i.period,i.era,i.country,(i.metals||[]).join('/'),(i.stones||[]).join('/')].filter(Boolean).join(' · '))+'</p><p class="meta">'+(hearts(i.hearts)||'')+'</p><p class="meta">'+(i.lastWorn?'Last worn '+esc(fmtDate(i.lastWorn))+(Number(i.wornCount)?' · worn '+Number(i.wornCount)+'×':''):'Not worn yet')+'</p><div class="bar" style="justify-content:center"><button class="pri" data-a="wear" data-id="'+i.id+'">✓ I’m wearing this</button><button data-a="jotd">Shuffle again</button><button data-a="edit" data-id="'+i.id+'">Edit</button><button data-a="x">Close</button></div></div></div>';
+ document.getElementById('modal').innerHTML='<div class="modal" data-a="backdrop"><div><p class="meta" style="text-align:center">✨ Jewelry of the Day</p>'+(i.cover?'<img class="cvimg" style="max-width:100%;max-height:260px;margin:0 auto 10px" src="'+esc(i.cover)+'" alt="" onerror="this.remove()">':'<div style="font-size:4rem;text-align:center">'+(EMOJI[String(i.category).toLowerCase()]||'💎')+'</div>')+'<h3>'+esc(title(i))+'</h3><p class="meta">'+esc([i.category,i.period,i.era,i.country,(i.metals||[]).join('/'),(i.stones||[]).join('/')].filter(Boolean).join(' · '))+'</p><p class="meta">'+(stars(i.rating)||'')+'</p><p class="meta">'+(i.wornLast?'Last worn '+esc(fmtDate(i.wornLast))+(Number(i.wornCount)?' · worn '+Number(i.wornCount)+'×':''):'Not worn yet')+'</p><div class="bar" style="justify-content:center"><button class="pri" data-a="wear" data-id="'+i.id+'">✓ I’m wearing this</button><button data-a="jotd">Shuffle again</button></div><div class="bar" style="justify-content:center;margin-top:8px"><button data-a="edit" data-id="'+i.id+'">Edit</button><button data-a="x">Close</button></div></div></div>';
 }
 function popup(i){
- document.getElementById('modal').innerHTML='<div class="modal" data-a="backdrop"><div>'+(i.cover?'<img class="cvimg" style="max-width:100%;max-height:260px;margin:0 auto 10px" src="'+esc(i.cover)+'" alt="" onerror="this.remove()">':'')+'<h3>'+esc(title(i))+'</h3><p>'+esc(i.description)+'</p>'+(i.notes?'<p class="meta">'+esc(i.notes)+'</p>':'')+'<p class="meta">'+esc([i.category,i.period,i.era,i.country,(i.metals||[]).join('/'),(i.stones||[]).join('/')].filter(Boolean).join(' · '))+'</p><p class="meta">'+(i.mainColor?sw(i.mainColor)+' '+esc(i.mainColor)+' · ':'')+(i.secondaryColor?'2nd: '+sw(i.secondaryColor)+' '+esc(i.secondaryColor)+' · ':'')+(hearts(i.hearts)?hearts(i.hearts)+' · ':'')+esc((i.tags||[]).join(', '))+'</p><div class="bar" style="justify-content:center"><button class="pri" data-a="edit" data-id="'+i.id+'">Edit</button><button data-a="x">Close</button></div></div></div>';
+ document.getElementById('modal').innerHTML='<div class="modal" data-a="backdrop"><div>'+(i.cover?'<img class="cvimg" style="max-width:100%;max-height:260px;margin:0 auto 10px" src="'+esc(i.cover)+'" alt="" onerror="this.remove()">':'')+'<h3>'+esc(title(i))+'</h3>'+(i.notes?'<p class="meta">'+esc(i.notes)+'</p>':'')+'<p class="meta">'+esc([i.category,i.period,i.era,i.country,(i.metals||[]).join('/'),(i.stones||[]).join('/')].filter(Boolean).join(' · '))+'</p><p class="meta">'+(i.colorMain?sw(i.colorMain)+' '+esc(i.colorMain)+' · ':'')+(i.colorSecondary?'2nd: '+sw(i.colorSecondary)+' '+esc(i.colorSecondary)+' · ':'')+(stars(i.rating)?stars(i.rating)+' · ':'')+esc((i.tags||[]).join(', '))+'</p><div class="bar" style="justify-content:center"><button class="pri" data-a="edit" data-id="'+i.id+'">Edit</button><button data-a="x">Close</button></div></div></div>';
 }
 
-/* ---------- CSV / JSON import & export ---------- */
+/* ---------- CSV / JSON ---------- */
 function download(name,mime,text){var b=new Blob([text],{type:mime}),u=URL.createObjectURL(b),a=document.createElement('a');a.href=u;a.download=name;document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(u);a.remove()},1000)}
 function readFile(f,cb){var r=new FileReader();r.onload=function(){cb(String(r.result))};r.readAsText(f)}
-function csvCell(v){v=v==null?'':Array.isArray(v)?v.join('; '):String(v);return /[",\r\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v}
+function csvCell(v){v=v==null?'':Array.isArray(v)?v.join('; '):typeof v==='boolean'?(v?'true':'false'):String(v);return /[",\r\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v}
 function exportCSV(){
- var head=CSV_COLS.map(function(c){return c[0]}).join(',');
+ var head=CSV_COLS.map(function(c){return c[0]==='tags'?'motifs':c[0]}).join(',');
  var body=items.map(function(i){return CSV_COLS.map(function(c){return csvCell(i[c[0]])}).join(',')});
  download('ntts-records-'+today()+'.csv','text/csv',[head].concat(body).join('\r\n'));
 }
 function parseCSV(t){
- var rows=[],row=[],f='',q2=false;
+ var rows=[],row=[],f='',inq=false;
  for(var i=0;i<t.length;i++){
    var c=t[i];
-   if(q2){if(c==='"'){if(t[i+1]==='"'){f+='"';i++}else q2=false}else f+=c}
-   else if(c==='"')q2=true;
+   if(inq){if(c==='"'){if(t[i+1]==='"'){f+='"';i++}else inq=false}else f+=c}
+   else if(c==='"')inq=true;
    else if(c===','){row.push(f);f=''}
    else if(c==='\n'||c==='\r'){if(c==='\r'&&t[i+1]==='\n')i++;row.push(f);rows.push(row);row=[];f=''}
    else f+=c;
@@ -573,13 +725,15 @@ function parseCSV(t){
 }
 function coerce(k,v){
  if(LISTS.indexOf(k)>-1)return v.split(/[;,]/).map(function(s){return s.trim()}).filter(Boolean);
- if(['yearMade','wornCount','cost','feeFinal','shipEst','ship','final'].indexOf(k)>-1){var n=Number(String(v).replace(/[$,]/g,''));return isNaN(n)?'':n}
- if(k==='hearts'){var h=Number(v);return isNaN(h)?0:Math.min(5,Math.max(0,Math.floor(h)))}
- if(['lastWorn','pdate','dListed','dSold'].indexOf(k)>-1)return parseDate(v)||String(v);
+ if(['yearMade','wornCount','cost','feeFinal','shipActual','payout','shipEstimate','buffer'].indexOf(k)>-1){var n=Number(String(v).replace(/[$,]/g,''));return isNaN(n)?'':n}
+ if(k==='ringSize'){var rz=Number(v);return isNaN(rz)?'':rz}
+ if(k==='rating'){var r=Number(v);return isNaN(r)?0:Math.min(5,Math.max(0,Math.floor(r)))}
+ if(k==='photoshoot')return /^(yes|true|1|y)$/i.test(v);
+ if(['wornLast','purchaseDate','dateListed','dateSold'].indexOf(k)>-1)return parseDate(v)||String(v);
  if(k==='category')return CATS.filter(function(c){return c.toLowerCase()===v.toLowerCase()})[0]||'Other';
  if(k==='status')return STAT.filter(function(s){return s.toLowerCase()===v.toLowerCase()||(v.toUpperCase()==='PC'&&s==='Private Collection')})[0]||'Private Collection';
  if(k==='period')return PERIODS.filter(function(p){return p.toLowerCase()===v.toLowerCase()})[0]||'Antique';
- if(k==='mainColor'||k==='secondaryColor')return capColor(v);
+ if(k==='colorMain'||k==='colorSecondary')return capColor(v);
  return v;
 }
 function importCSV(text){
@@ -588,25 +742,28 @@ function importCSV(text){
  var head=rows[0].map(function(h){return h.trim()}),idx={};
  CSV_COLS.forEach(function(c){
    var j=-1;
-   head.forEach(function(h,n){if(j<0&&(h===c[0]||h.toLowerCase()===c[1]||h.toLowerCase()===c[0].toLowerCase()))j=n});
+   head.forEach(function(h,n){
+     var hk=ALIAS[h]||h;
+     if(j<0&&((hk===c[0]&&c[0]!=='tags')||h.toLowerCase()===c[1]||(c[0]!=='tags'&&h.toLowerCase()===c[0].toLowerCase())))j=n;
+   });
    idx[c[0]]=j;
  });
  var added=0,updated=0,skipped=0,nid=Date.now();
  rows.slice(1).forEach(function(r){
    var rec={};
    CSV_COLS.forEach(function(c){var j=idx[c[0]];if(j<0)return;var v=(r[j]||'').trim();if(v!=='')rec[c[0]]=v});
-   if(!rec.title&&!rec.description){skipped++;return}
+   if(!rec.title){skipped++;return}
    var existing=rec.id?items.filter(function(i){return String(i.id)===rec.id})[0]:null;
-   var out=existing?JSON.parse(JSON.stringify(existing)):{id:nid++,status:'Waiting',category:'Other',period:'Antique',tags:[],stones:[],metals:[],cut:[],hearts:0,refs:[]};
+   var out=existing?JSON.parse(JSON.stringify(existing)):{id:nid++,status:'Waiting',category:'Other',period:'Antique',tags:[],stones:[],metals:[],cut:[],rating:0,refs:[]};
    Object.keys(rec).forEach(function(k){if(k!=='id')out[k]=coerce(k,rec[k])});
    out=mig(out);
    if(existing){items[items.indexOf(existing)]=out;updated++}else{items.push(out);added++}
  });
  saveItems();render();
- alert('Added '+added+', updated '+updated+(skipped?', skipped '+skipped+' (no title or description)':'')+'.');
+ alert('Added '+added+', updated '+updated+(skipped?', skipped '+skipped+' (no title)':'')+'.');
 }
 function exportJSON(){
- download('ntts-backup-'+today()+'.json','application/json',JSON.stringify({app:'never-twice-the-same',version:4,exported:new Date().toISOString(),items:items,order:order,theme:theme,hideSold:hideSold}));
+ download('ntts-backup-'+today()+'.json','application/json',JSON.stringify({app:'never-twice-the-same',version:5,exported:new Date().toISOString(),items:items,order:order,theme:theme,hideSold:hideSold,gallery:gal}));
 }
 function importJSON(text){
  var d;try{d=JSON.parse(text)}catch(e){alert('That file is not a valid backup.');return}
@@ -615,17 +772,39 @@ function importJSON(text){
  if(!confirm('Replace everything on this device with this backup ('+arr.length+' pieces)?'))return;
  items=arr.map(mig);
  order=Array.isArray(d.order)?d.order:[];
+ gal=d.gallery||galFromItems();
  if(d.theme&&THEMES[d.theme])theme=d.theme;
  if(typeof d.hideSold==='boolean')hideSold=d.hideSold;
- saveItems();saveOrder();saveSettings();applyTheme();render();
+ saveItems();saveOrder();saveSettings();saveGallery();applyTheme();render();
  alert('Backup restored.');
 }
 function deleteAll(){
  var t=prompt('This erases every piece, photo, and setting on this device. Type DELETE to confirm.');
  if(t!=='DELETE')return;
- items=[];order=[];theme='ruby';hideSold=true;fsel={};rng={};q='';document.getElementById('q').value='';sortBy='new';ro=false;view='box';
- kclear().then(function(){return Promise.all([saveItems(),saveOrder(),saveSettings()])}).then(function(){applyTheme();render();alert('Everything has been reset.')});
+ items=[];gal={refs:[],covers:[]};galSel={refs:{},covers:{}};order=[];theme='ruby';hideSold=true;fsel={};rng={};q='';document.getElementById('q').value='';sortBy='new';ro=false;view='box';
+ kclear().then(function(){return Promise.all([saveItems(),saveOrder(),saveSettings(),saveGallery()])}).then(function(){applyTheme();render();alert('Everything has been reset.')});
 }
+
+/* ---------- live calculations ---------- */
+document.addEventListener('input',function(e){
+ var t=e.target,a=t.getAttribute('data-a');
+ if(a==='rng'){
+   var k=t.getAttribute('data-k'),all=t.parentNode.querySelectorAll('input[data-k="'+k+'"]');
+   var x=Number(all[0].value),y=Number(all[1].value),lo=Math.min(x,y),hi=Math.max(x,y),mn=Number(all[0].min),mx=Number(all[0].max);
+   if(lo<=mn&&hi>=mx)delete rng[k];else rng[k]=[lo,hi];
+   var lab=document.getElementById('rl-'+k);if(lab)lab.textContent=(k==='cost'?wholeMoney(lo)+' – '+wholeMoney(hi):lo+' – '+hi);
+   renderMain();return;
+ }
+ if(t.id==='cropz'){cropZoom(Number(t.value));return}
+ var f=document.getElementById('form');
+ if(f&&f.contains(t)){
+   if(t.name==='ebayPct')PS.eb=Number(t.value)||0;
+   if(t.name==='igPct')PS.ig=Number(t.value)||0;
+   if(t.name==='shipEstimate')shipTouched=true;
+   if(t.name==='cost'&&!shipTouched){var sh=document.querySelector('#form input[name="shipEstimate"]');if(sh)sh.value=fmtMoney(shipDefault(parseMoney(t.value)))}
+   refreshCalc();
+ }
+});
 
 /* ---------- events ---------- */
 document.addEventListener('click',function(e){
@@ -637,6 +816,7 @@ document.addEventListener('click',function(e){
   case 'dclose':drawer(false);break;
   case 'nav':if(d.new)editing=newItem();show(d.v);break;
   case 'jotd':drawer(false);jotd();break;
+  case 'showall':showAllF[d.k]=!showAllF[d.k];renderDrawer();break;
   case 'f':toggleFilter(d.k,d.val);render();break;
   case 'clear':fsel={};rng={};render();break;
   case 'cols':cols=Number(d.v);drawer(false);render();break;
@@ -649,23 +829,38 @@ document.addEventListener('click',function(e){
   case 'wear':wear(Number(d.id));break;
   case 'x':M.innerHTML='';break;
   case 'backdrop':if(e.target===b)M.innerHTML='';break;
+  case 'reload':location.reload();break;
+  case 'updx':document.getElementById('upd').hidden=true;break;
   case 'theme':theme=d.v;applyTheme();saveSettings();renderDrawer();break;
   case 'export':exportJSON();break;
   case 'import':document.getElementById('fjson').click();break;
   case 'delete':deleteAll();break;
   case 'csvup':document.getElementById('fcsv').click();break;
   case 'csvdown':exportCSV();break;
+  case 'gadd':galKind=d.kind;document.getElementById('gfile').click();break;
+  case 'gview':M.innerHTML=previewHTML(gal[d.kind].filter(function(x){return x.id===d.id})[0].src);break;
+  case 'gtog':galSel[d.kind][d.id]=!galSel[d.kind][d.id];renderMain();break;
+  case 'gall':gal[d.kind].forEach(function(g){galSel[d.kind][g.id]=true});renderMain();break;
+  case 'gnone':galSel[d.kind]={};renderMain();break;
+  case 'gdel':if(confirm('Delete this image from the gallery?'))galRemove(d.kind,[d.id]);break;
+  case 'gdelsel':var gids=Object.keys(galSel[d.kind]).filter(function(k){return galSel[d.kind][k]});if(gids.length&&confirm('Delete '+gids.length+' selected image(s) from the gallery?'))galRemove(d.kind,gids);break;
+  case 'preview':M.innerHTML=previewHTML(editing.refs[Number(d.i)]);break;
+  case 'galpick':M.innerHTML=galPickHTML();break;
+  case 'galuse':var gs=null;gal[d.kind].forEach(function(g){if(g.id===d.id)gs=g.src});if(gs){M.innerHTML='';syncForm();editing.cover=gs;editing.coverSrc=gs;renderMain()}break;
+  case 'ringref':M.innerHTML='<div class="modal" data-a="backdrop"><div style="max-width:94vw"><h3 style="margin:0 0 8px">Ring Size Reference</h3>'+ringTableHTML()+'<div class="bar" style="justify-content:center;margin-top:12px"><button data-a="x">Close</button></div></div></div>';break;
+  case 'quickadd':syncForm();M.innerHTML=quickHTML();break;
+  case 'qaapply':var raw=document.getElementById('qaIn').value.trim();var za=raw.indexOf('{'),zb=raw.lastIndexOf('}');var txt=za>=0&&zb>za?raw.slice(za,zb+1):raw;var data=null;try{data=JSON.parse(txt)}catch(err){alert('That does not look like JSON. Paste the output exactly as Claude returns it.');break}syncForm();var cnt=applyQuick(data);M.innerHTML='';renderMain();alert('Filled '+cnt+' field'+(cnt===1?'':'s')+'. Review, then Save.');break;
+  case 'copy':copyText(d.id,b);break;
   case 'covadd':document.getElementById('cvfile').click();break;
   case 'refadd':document.getElementById('reffile').click();break;
   case 'rmref':syncForm();editing.refs.splice(Number(d.i),1);renderMain();break;
   case 'pickref':syncForm();editing.cover=editing.refs[Number(d.i)];editing.coverSrc=editing.cover;renderMain();break;
-  case 'pickcover':syncForm();editing.cover=coverLibrary()[Number(d.i)];editing.coverSrc=editing.cover;renderMain();break;
-  case 'cvrm':syncForm();editing.cover='';editing.coverSrc='';renderMain();break;
   case 'cvadj':var cv=editing.coverSrc||editing.cover;if(cv&&cv.indexOf('data:')===0){var im=new Image();im.onload=function(){openCrop(im)};im.src=cv}else alert('Upload a photo first, then you can zoom and pan it.');break;
   case 'cvok':cropApply();break;
   case 'cvcancel':CR=null;document.getElementById('crop').hidden=true;break;
+  case 'cvrm':syncForm();editing.cover='';editing.coverSrc='';renderMain();break;
   case 'cancel':show('box');break;
-  case 'dup':var c=syncForm();['channel','dListed','dSold','feeFinal','ship','final','link','lastWorn'].forEach(function(k){delete c[k]});delete c.wornCount;c.status='Waiting';c.id=Date.now();c._new=1;c.title=(c.title||'')+(c.title?' (copy)':'');c.description=(c.description||'')+' (copy)';editing=c;renderMain();renderDrawer();window.scrollTo(0,0);break;
+  case 'dup':var c=syncForm();['sellPlatform','dateListed','dateSold','feeFinal','shipActual','payout','linkSale','wornLast'].forEach(function(k){delete c[k]});delete c.wornCount;c.status='Waiting';c.id=Date.now();c._new=1;c.title=(c.title||'')+(c.title?' (copy)':'');editing=c;renderMain();window.scrollTo(0,0);break;
   case 'del':if(confirm('Delete this piece?')){items=items.filter(function(i){return i.id!==editing.id});saveItems();show('box')}break;
  }
 });
@@ -677,43 +872,15 @@ document.addEventListener('change',function(e){
  if(t.id==='fcsv'&&t.files[0]){readFile(t.files[0],importCSV);t.value='';return}
  if(t.id==='fjson'&&t.files[0]){readFile(t.files[0],importJSON);t.value='';return}
  if(t.id==='cvfile'&&t.files[0]){compress(t.files[0],1200).then(function(url){var img=new Image();img.onload=function(){openCrop(img)};img.src=url});t.value='';return}
+ if(t.id==='gfile'&&t.files.length){var gf=Array.prototype.slice.call(t.files);t.value='';Promise.all(gf.map(function(f){return compress(f)})).then(function(urls){urls.forEach(function(u){gal[galKind].push({id:uid(),src:u})});saveGallery();renderMain()});return}
  if(t.id==='reffile'&&t.files.length){
    var files=Array.prototype.slice.call(t.files);t.value='';
-   Promise.all(files.map(function(f){return compress(f)})).then(function(urls){syncForm();editing.refs=(editing.refs||[]).concat(urls);renderMain()});
+   Promise.all(files.map(function(f){return compress(f)})).then(function(urls){urls.forEach(function(u){gal.refs.push({id:uid(),src:u})});saveGallery();syncForm();editing.refs=(editing.refs||[]).concat(urls);renderMain()});
    return;
  }
  if(t.dataset&&t.dataset.money){t.value=fmtMoney(parseMoney(t.value));return}
  if(t.dataset&&t.dataset.date){var p=parseDate(t.value);if(p)t.value=fmtDate(p);return}
 });
-document.addEventListener('input',function(e){
- var t=e.target,a=t.getAttribute('data-a');
- if(a==='rng'){
-   var k=t.getAttribute('data-k'),all=t.parentNode.querySelectorAll('input[data-k="'+k+'"]');
-   var x=Number(all[0].value),y=Number(all[1].value),lo=Math.min(x,y),hi=Math.max(x,y),mn=Number(all[0].min),mx=Number(all[0].max);
-   if(lo<=mn&&hi>=mx)delete rng[k];else rng[k]=[lo,hi];
-   var lab=document.getElementById('rl-'+k);if(lab)lab.textContent=(k==='cost'?wholeMoney(lo)+' – '+wholeMoney(hi):lo+' – '+hi);
-   renderMain();return;
- }
- if(t.id==='cropz'){cropZoom(Number(t.value));return}
- if(t.dataset&&t.dataset.ps){PS[t.dataset.ps]=Number(t.value)||0;refreshCalc();return}
- var f=document.getElementById('form');
- if(f&&f.contains(t)){
-   if(t.name==='shipEst')shipTouched=true;
-   if(t.name==='cost'&&!shipTouched){var sh=document.querySelector('#form input[name="shipEst"]');if(sh)sh.value=fmtMoney(shipDefault(parseMoney(t.value)))}
-   refreshCalc();
- }
-});
-function refreshCalc(){
- var g=function(k){var el=document.querySelector('#form [name="'+k+'"]');return el?el.value:''};
- var o={cost:parseMoney(g('cost')),shipEst:parseMoney(g('shipEst')),dListed:parseDate(g('dListed')),dSold:parseDate(g('dSold')),final:parseMoney(g('final')),ship:parseMoney(g('ship')),feeFinal:parseMoney(g('feeFinal')),id:editing.id,category:editing.category};
- var set=function(id,v){var el=document.getElementById(id);if(el)el.textContent=v};
- set('c-days',days(o)==null?'—':days(o)+' days');
- set('c-net',money(net(o)));
- set('c-fees',money(fees(o)));
- set('sugE',suggestTxt('eb',o));
- set('sugI',suggestTxt('ig',o));
-}
-document.addEventListener('toggle',function(e){if(e.target.classList&&e.target.classList.contains('io'))ioOpen=e.target.open},true);
 document.addEventListener('submit',function(e){
  e.preventDefault();
  var o=mig(syncForm()),idx=items.findIndex(function(i){return i.id===o.id});
@@ -721,6 +888,7 @@ document.addEventListener('submit',function(e){
  idx>-1?items[idx]=o:items.push(o);
  saveItems();show('box');
 });
+document.addEventListener('toggle',function(e){if(e.target.classList&&e.target.classList.contains('io'))ioOpen=e.target.open},true);
 document.addEventListener('pointerdown',function(e){
  var v=e.target.closest('#cropv');
  if(v&&CR){CR.p[e.pointerId]={x:e.clientX,y:e.clientY};v.setPointerCapture(e.pointerId);return}
@@ -752,12 +920,27 @@ function endDrag(e){
  }
  render();
 }
+var dragEl2=null,overEl2=null;
 document.addEventListener('pointerup',endDrag);
 document.addEventListener('pointercancel',endDrag);
 document.addEventListener('wheel',function(e){if(CR&&e.target.closest&&e.target.closest('#cropv')){e.preventDefault();cropZoom(Math.min(4,Math.max(1,CR.z*(1-e.deltaY/500))))}},{passive:false});
+document.addEventListener('touchstart',function(e){if(e.touches.length!==1)return;var t=e.touches[0],open=document.getElementById('drawer').classList.contains('open');swS=(t.clientX<40||open)?{x:t.clientX,y:t.clientY,t:Date.now(),open:open}:null},{passive:true});
+document.addEventListener('touchend',function(e){if(!swS)return;var s=swS;swS=null;var t=e.changedTouches[0],dx=t.clientX-s.x,dy=Math.abs(t.clientY-s.y),dt=Date.now()-s.t;if(dy>50||dt>800)return;if(!s.open&&dx>70&&document.getElementById('modal').innerHTML==='')drawer(true);else if(s.open&&dx<-70)drawer(false)},{passive:true});
+function qtoggle(open){var h=document.querySelector('header'),i=document.getElementById('q');h.classList.toggle('sq',open);document.getElementById('qb').textContent=open?'✕':'🔍';if(open)i.focus();else if(q){i.value='';q='';page=1;renderMain()}}
+document.getElementById('qb').addEventListener('click',function(){qtoggle(!document.querySelector('header').classList.contains('sq'))});
 document.getElementById('q').addEventListener('input',function(e){q=e.target.value.trim().toLowerCase();page=1;renderMain()});
-
-init().then(function(){applyTheme();try{matchMedia('(prefers-color-scheme: dark)').addEventListener('change',applyTheme)}catch(e){}render()})
+function checkUpdate(){
+ if(!UPDATE_URL||!navigator.onLine)return;
+ fetch(UPDATE_URL,{cache:'no-store'}).then(function(r){return r.json()}).then(function(d){
+   if(!d||!d.version||d.version===APP_VERSION)return;
+   var b=document.getElementById('upd');
+   b.innerHTML='<span>A new version ('+esc(d.version)+') is available.</span><button class="pri" data-a="reload">Refresh</button>'+(d.url?'<a href="'+esc(d.url)+'" target="_blank" rel="noopener">Get update</a>':'')+'<button data-a="updx">Later</button>';
+   b.hidden=false;
+ }).catch(function(){});
+}
+function renderFooter(){document.getElementById('ver').textContent='Never Twice the Same · v'+APP_VERSION+' · '+APP_DATE}
+document.querySelector('header').insertAdjacentElement('afterend',document.getElementById('tabbar'));
+init().then(function(){renderFooter();checkUpdate();setInterval(checkUpdate,3600000);document.addEventListener('visibilitychange',function(){if(!document.hidden)checkUpdate()});applyTheme();try{matchMedia('(prefers-color-scheme: dark)').addEventListener('change',applyTheme)}catch(e){}render()})
  .catch(function(e){document.getElementById('app').innerHTML='<p class="meta">Could not start storage: '+esc(e&&e.message||e)+'</p>'});
 </script>
 </body>
