@@ -864,6 +864,7 @@ document.addEventListener('click',function(e){
   case 'wear':wear(Number(d.id));break;
   case 'x':M.innerHTML='';break;
   case 'backdrop':if(e.target===b)M.innerHTML='';break;
+  case 'checkupd':manualCheck();break;
   case 'reload':location.reload();break;
   case 'updx':document.getElementById('upd').hidden=true;break;
   case 'theme':theme=d.v;applyTheme();saveSettings();renderDrawer();break;
@@ -967,15 +968,21 @@ function qtoggle(open){var h=document.querySelector('header'),i=document.getElem
 document.getElementById('qb').addEventListener('click',function(){qtoggle(!document.querySelector('header').classList.contains('sq'))});
 document.getElementById('q').addEventListener('input',function(e){q=e.target.value.trim().toLowerCase();page=1;renderMain()});
 function checkUpdate(){
- if(!UPDATE_URL||!navigator.onLine)return;
- fetch(UPDATE_URL,{cache:'no-store'}).then(function(r){return r.json()}).then(function(d){
+ if(!navigator.onLine)return;
+ fetch(new URL(UPDATE_URL||'version.json',location.href).href,{cache:'no-store'}).then(function(r){return r.json()}).then(function(d){
    if(!d||!d.version||d.version===APP_VERSION)return;
    var b=document.getElementById('upd');
    b.innerHTML='<span>A new version ('+esc(d.version)+') is available.</span><button class="pri" data-a="reload">Refresh</button>'+(d.url?'<a href="'+esc(d.url)+'" target="_blank" rel="noopener">Get update</a>':'')+'<button data-a="updx">Later</button>';
    b.hidden=false;
  }).catch(function(){});
 }
-function renderFooter(){document.getElementById('ver').textContent='Never Twice the Same · v'+APP_VERSION+' · '+APP_DATE}
+function manualCheck(){
+ fetch(new URL(UPDATE_URL||'version.json',location.href).href,{cache:'no-store'}).then(function(r){if(!r.ok)throw new Error('http');return r.json()}).then(function(d){
+   if(d&&d.version&&d.version!==APP_VERSION){alert('A new version ('+d.version+') is available. Use the Refresh banner or reload the page.');checkUpdate()}
+   else alert('You have the latest version (v'+APP_VERSION+').');
+ }).catch(function(){alert('Could not check for updates. Make sure version.json is published in the same folder as index.html.')});
+}
+function renderFooter(){document.getElementById('ver').innerHTML='Never Twice the Same · v'+APP_VERSION+' · '+APP_DATE+' <button class="link" data-a="checkupd">Check for update</button>'}
 document.querySelector('header').insertAdjacentElement('afterend',document.getElementById('tabbar'));
 init().then(function(){renderFooter();checkUpdate();setInterval(checkUpdate,3600000);document.addEventListener('visibilitychange',function(){if(!document.hidden)checkUpdate()});applyTheme();try{matchMedia('(prefers-color-scheme: dark)').addEventListener('change',applyTheme)}catch(e){}render()})
  .catch(function(e){document.getElementById('app').innerHTML='<p class="meta">Could not start storage: '+esc(e&&e.message||e)+'</p>'});
