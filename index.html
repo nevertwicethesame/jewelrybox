@@ -52,6 +52,11 @@ input,select,textarea{border:1px solid var(--line);border-radius:8px;padding:9px
 h4.sub{margin:14px 0 6px;font-size:.95rem;letter-spacing:.03em;grid-column:1/-1}
 .sticky{position:sticky;bottom:0;background:var(--bg);padding:10px 0;display:flex;gap:8px;flex-wrap:wrap;justify-content:center;border-top:1px solid var(--line)}
 .pager{display:flex;justify-content:center;gap:12px;align-items:center;margin-top:16px}
+.sg{position:absolute;left:0;right:0;top:100%;z-index:30;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:6px;display:flex;flex-wrap:wrap;gap:6px;box-shadow:0 6px 18px rgba(0,0,0,.18)}
+.sg[hidden]{display:none}
+.sgi{min-height:0;padding:4px 10px;border-radius:999px;font-size:.85rem}
+.kwm{align-items:flex-start;padding-top:12vh}
+.kwm>div{max-height:70vh}
 .modal{position:fixed;inset:0;background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;padding:20px;z-index:40}
 .modal>div{background:var(--card);border-radius:14px;padding:16px;max-width:420px;width:100%;max-height:85vh;overflow:auto}
 .drawer{position:fixed;top:0;bottom:0;left:0;width:min(86vw,320px);background:var(--card);border-right:1px solid var(--line);transform:translateX(-102%);transition:transform .25s;z-index:30;overflow:auto;padding:calc(14px + env(safe-area-inset-top,0px)) 16px calc(16px + env(safe-area-inset-bottom,0px))}
@@ -143,20 +148,20 @@ footer#ver{text-align:center;padding:24px 14px calc(36px + env(safe-area-inset-b
 <input type="file" id="gfile" accept="image/*" multiple hidden>
 <script>
 var K='ntts_items_v2',OK='ntts_order_v1',PER=25,MAX_UPLOAD=300*1024;
-var APP_VERSION='1.5.14',APP_DATE='2026-11-02',UPDATE_URL='';
+var APP_VERSION='1.5.16',APP_DATE='2026-11-02 · 2:00 PM ET',UPDATE_URL='';
 var EMOJI={ring:'💍',earring:'✨',necklace:'📿',bracelet:'⭕',watch:'⌚',other:'💎'};
 var CATS=['Ring','Earring','Necklace','Bracelet','Watch','Other'];
 var STAT=['Waiting','Private Collection','To List','Listed','Sold'];
 var PERIODS=['Ancient','Antique','Mid-Century','Vintage','New'];
 var FINGERS=['Index finger','Middle finger','Ring finger','Pinky'];
-var COLOR_ORDER=['Pink','Red','Orange','Brown','Yellow','Green','Light blue','Blue','Purple','Black','Gray','White','Multi'];
+var COLOR_ORDER=['Red','Pink','Orange','Brown','Yellow','Green','Light blue','Blue','Purple','Black','Gray','White','Multi'];
 var COLOR_SEL=[''].concat(COLOR_ORDER);
 var COLORS={pink:'#f4a7c1',red:'#d03a3a',orange:'#f0892b',brown:'#7b4a2a',yellow:'#f4d03f',green:'#3f9d5a','light blue':'#8fd3f4',blue:'#3d6fd0',purple:'#8a4fc0',black:'#1a1a1a',gray:'#8d8d8d',white:'#ffffff',multi:'conic-gradient(#d03a3a,#f4d03f,#3f9d5a,#3d6fd0,#8a4fc0,#d03a3a)'};
 var HEARTS={Pink:'🩷',Red:'❤️',Orange:'🧡',Brown:'🤎',Yellow:'💛',Green:'💚','Light blue':'🩵',Blue:'💙',Purple:'💜',Black:'🖤',Gray:'🩶',White:'🤍',Multi:'🌈'};
 var THEMES={ruby:{n:'Ruby',l:'#7b2d3b',d:'#d98a9b',v1:'#4d2036',v2:'#26101c'},sapphire:{n:'Sapphire',l:'#2e5aa8',d:'#8fb3ff',v1:'#1f2f5a',v2:'#0c1530'},emerald:{n:'Emerald',l:'#1f6b4a',d:'#7fd1a8',v1:'#1d4a37',v2:'#0a2118'}};
 var SORTS=[['new','Newest First (Purchase Date)'],['worn','Most Worn'],['rest','Least Recently Worn'],['era','Era'],['status','Status'],['grp:colorMain','Group by Color'],['grp:category','Group by Type'],['grp:period','Group by Period'],['custom','My Ordering']];
-var ALIAS={mainColor:'colorMain',secondaryColor:'colorSecondary',pdate:'purchaseDate',platform:'purchasePlatform',dListed:'dateListed',link:'linkSale',shipEst:'shipEstimate',dSold:'dateSold',ship:'shipActual',final:'payout',lastWorn:'wornLast',hearts:'rating',size:'ringSize',channel:'sellPlatform'};
-var CSV_COLS=[['id','id'],['title','title'],['category','category'],['period','period'],['era','era'],['yearMade','year'],['country','country'],['stones','stones'],['metals','metals'],['hallmarks','hallmarks'],['measurements','measurements'],['weight','weight'],['ringSize','ring size'],['cut','cut'],['colorMain','main color'],['colorSecondary','secondary color'],['tags','motifs'],['notes','notes'],['wornLast','last worn'],['wornCount','times worn'],['rating','rating'],['photoshoot','photoshoot'],['status','status'],['purchaseDate','purchase date'],['seller','seller'],['purchasePlatform','platform'],['cost','cost'],['sellPlatform','selling platform'],['dateListed','date listed'],['linkSale','listing link'],['dateSold','date sold'],['feeFinal','platform fee'],['shipActual','shipping'],['payout','final payout'],['shipEstimate','shipping estimate'],['buffer','buffer']];
+var ALIAS={mainColor:'colorMain',pdate:'purchaseDate',platform:'purchasePlatform',dListed:'dateListed',link:'linkSale',shipEst:'shipEstimate',dSold:'dateSold',ship:'shipActual',final:'payout',lastWorn:'wornLast',hearts:'rating',size:'ringSize',channel:'sellPlatform'};
+var CSV_COLS=[['id','id'],['title','title'],['category','category'],['period','period'],['era','era'],['yearMade','year'],['country','country'],['stones','stones'],['metals','metals'],['hallmarks','hallmarks'],['measurements','measurements'],['weight','weight'],['ringSize','ring size'],['cut','cut'],['colorMain','main color'],['tags','motifs'],['notes','notes'],['wornLast','last worn'],['wornCount','times worn'],['rating','rating'],['photoshoot','photoshoot'],['status','status'],['purchaseDate','purchase date'],['seller','seller'],['purchasePlatform','platform'],['cost','cost'],['sellPlatform','selling platform'],['dateListed','date listed'],['linkSale','listing link'],['dateSold','date sold'],['feeFinal','platform fee'],['shipActual','shipping'],['payout','final payout'],['shipEstimate','shipping estimate'],['buffer','buffer']];
 var FS={
  title:['Title','text'],
  category:['Category','sel',CATS],
@@ -171,8 +176,7 @@ var FS={
  weight:['Weight','text'],
  ringSize:['Ring Size','ringsz'],
  cut:['Cut','list'],
- colorMain:['Main Color','sel',COLOR_SEL],
- colorSecondary:['Secondary Color','sel',COLOR_SEL],
+ colorMain:['Color','list'],
  tags:['Motifs','list'],
  notes:['Notes','textarea'],
  wornLast:['Last Worn','date'],
@@ -202,9 +206,11 @@ var FS={
  payout:['Final Payout','money'],
  netProfit:['Net Profit','calc','c-net']
 };
-var LISTS=['stones','metals','tags','cut'];
-var ORDER_PIECE=['title','category','period','era','yearMade','country','stones','metals','hallmarks','measurements','weight','ringSize','cut','colorMain','colorSecondary','tags','notes'];
-var ORDER_STATS=['wornLast','wornCount','rating','photoshoot'];
+var LISTS=['stones','metals','tags','cut','colorMain'];
+var SUGG_KEYS=['era','country','stones','metals','cut','tags','colorMain'];
+var LOWER_KEYS=['stones','cut','tags','colorMain'];
+var ORDER_PIECE=['title','category','period','era','yearMade','country','stones','metals','hallmarks','measurements','weight','ringSize','cut','colorMain','tags','notes'];
+var ORDER_STATS=['wornLast','wornCount','rating'];
 var ORDER_PURCH=['purchaseDate','seller','purchasePlatform','cost'];
 var ORDER_PRICE=['shipEstimate','buffer','ebayPct','igPct','suggestedEbay','suggestedIG','potentialEbay','potentialIG'];
 var ORDER_SOLD=['sellPlatform','dateListed','linkSale','dateSold','turnover','feeFinal','shipActual','payout','netProfit'];
@@ -221,7 +227,7 @@ var seed=[
 ];
 
 /* ---------- state ---------- */
-var items=[],order=[],theme='ruby',hideSold=true,view='box',page=1,editing=null,fsel={category:['Ring']},rng={},sortBy='new',cols=4,ctab='Piece',vmode='thumbs',q='',ro=false,dragEl=null,overEl=null,ioOpen=false,lastJ=null,CR=null,DB=null,MEM={},shipTouched=false,PS={eb:13,ig:0},showAllF={},gal={imgs:{},refs:[],covers:[]},galSel={refs:{},covers:{}},galKind='refs',swS=null;
+var items=[],order=[],theme='ruby',hideSold=true,view='box',page=1,editing=null,fsel={category:['Ring']},rng={},sortBy='new',cols=3,ctab='Piece',vmode='thumbs',q='',ro=false,dragEl=null,overEl=null,ioOpen=false,lastJ=null,CR=null,DB=null,MEM={},shipTouched=false,PS={eb:13,ig:0},showAllF={},gal={imgs:{},refs:[],covers:[]},galSel={refs:{},covers:{}},galKind='refs',swS=null;
 
 /* ---------- storage ---------- */
 function openDB(){return new Promise(function(res,rej){if(!window.indexedDB)return rej('no indexedDB');var r=indexedDB.open('ntts',1);r.onupgradeneeded=function(){r.result.createObjectStore('kv')};r.onsuccess=function(){res(r.result)};r.onerror=function(){rej(r.error)}})}
@@ -291,6 +297,8 @@ function days(i){return i.dateListed&&i.dateSold?Math.round((new Date(i.dateSold
 function fees(i){return num(i.feeFinal)||0}
 function sw(n){var c=COLORS[String(n).toLowerCase()];return c?'<span class="sw" style="background:'+c+'"></span>':''}
 function stars(n){return n?'❤️'.repeat(n):''}
+function uniqArr(a){return a.filter(function(x,n){return a.indexOf(x)===n})}
+function colorsHTML(a){a=Array.isArray(a)?a:(a?[a]:[]);return a.length?a.map(function(c){return sw(c)+' '+esc(c)}).join(', '):'—'}
 function distinct(arr){var m={};arr.forEach(function(v){if(v===''||v==null)return;var s=String(v).trim();if(!s)return;var k=s.toLowerCase();if(!m[k]||(s.charAt(0)===s.charAt(0).toUpperCase()&&m[k].charAt(0)!==m[k].charAt(0).toUpperCase()))m[k]=s});return Object.keys(m).sort().map(function(k){return m[k]})}
 function allOf(fn){return distinct(vis().reduce(function(a,i){return a.concat(fn(i)||[])},[]))}
 function finger(i){
@@ -345,8 +353,9 @@ function mig(i){
    t.push(x.replace(/^motifs?:/i,''));
  });
  i.tags=t;
- i.colorMain=capColor(i.colorMain);
- i.colorSecondary=capColor(i.colorSecondary);
+ ['stones','cut','tags'].forEach(function(k){i[k]=uniqArr((i[k]||[]).map(function(x){return String(x).trim().toLowerCase()}).filter(Boolean))});
+ var cmv=Array.isArray(i.colorMain)?i.colorMain:String(i.colorMain||'').split(/[,;]/);
+ i.colorMain=uniqArr(cmv.map(function(x){return capColor(x)}).filter(Boolean));
  i.category=CATS.filter(function(c){return c.toLowerCase()===String(i.category||'').toLowerCase()})[0]||'Other';
  i.rating=Math.min(5,Math.max(0,Number(i.rating)||0));
  i.photoshoot=!!i.photoshoot;
@@ -456,12 +465,12 @@ var FACETS=[
  {k:'era',l:'Era/Movement',counted:1,v:function(){return allOf(function(i){return [i.era]})},g:function(i){return [i.era]}},
  {k:'tags',l:'Motifs',cloud:1,cnt:1,v:function(){return allOf(function(i){return i.tags})},g:function(i){return i.tags||[]}},
  {k:'stones',l:'Stones',cloud:1,counted:1,v:function(){return allOf(function(i){return i.stones})},g:function(i){return i.stones||[]}},
- {k:'colorMain',l:'Color',sw:1,v:function(){return COLOR_ORDER.filter(function(c){return vis().some(function(i){return i.colorMain===c})})},g:function(i){return [i.colorMain]}},
+ {k:'colorMain',l:'Color',sw:1,v:function(){return COLOR_ORDER.filter(function(c){return vis().some(function(i){return (i.colorMain||[]).indexOf(c)>-1})})},g:function(i){return i.colorMain||[]}},
  {k:'finger',l:'Ring Size by Finger',cnt:1,v:function(){return FINGERS},g:function(i){return [finger(i)]}}
 ];
 function facetOf(k){return FACETS.filter(function(F){return F.k===k})[0]}
 function vis(){return secretCfg.on?items.filter(function(i){return !isHidden(i)}):items}
-function cntColor(c){return vis().filter(function(i){return i.colorMain===c}).length}
+function cntColor(c){return vis().filter(function(i){return (i.colorMain||[]).indexOf(c)>-1}).length}
 function cntF(F,v){var lv=String(v).toLowerCase();return vis().filter(function(i){return F.g(i).map(function(x){return String(x==null?'':x).toLowerCase()}).indexOf(lv)>-1}).length}
 function facetVals(F){var v=F.v();if(F.counted)v=v.map(function(x){return {x:x,c:cntF(F,x)}}).sort(function(a,b){return b.c-a.c||String(a.x).localeCompare(String(b.x))}).map(function(o){return o.x});if(F.k==='colorMain')v=v.slice().sort(function(a,b){return cntColor(b)-cntColor(a)||COLOR_ORDER.indexOf(a)-COLOR_ORDER.indexOf(b)});return v}
 function matchQ(i){
@@ -541,14 +550,15 @@ function themeHTML(){
 }
 function renderManage(){
  var card=function(t,body){return '<div style="border:1px solid var(--line);border-radius:12px;padding:12px"><h4 class="sub" style="margin:0 0 8px">'+t+'</h4>'+body+'</div>'};
- var csvBody='<div class="bar" style="flex-direction:column;align-items:stretch;margin:0"><button data-a="csvup">⬆ Import (CSV)</button><button data-a="csvdown">⬇ Export (CSV)</button></div><p class="meta">Import backfills records without photos. Export downloads every record without photos as CSV.</p><details class="tpl"><summary>CSV Template Fields</summary><p class="meta" style="word-break:break-word;margin:0 0 8px">'+CSV_COLS.map(function(c){return c[0]==='tags'?'motifs':c[0]}).join(', ')+'</p><p class="meta" style="margin:0 0 8px">Lists separate values with ; or commas. Dates use YYYY-MM-DD. Rating is 0 to 5. Photoshoot is true or false. Leave a cell empty to keep the existing value when updating by id.</p></details>';
+ var csvBody='<div class="bar" style="flex-direction:column;align-items:stretch;margin:0"><button data-a="csvup">⬆ Import (CSV)</button><button data-a="csvdown">⬇ Export (CSV)</button></div><p class="meta">Import adds new pieces and updates existing ones by ID. Blank cells keep the existing value. Photos are not included.</p><p class="meta">Export includes '+items.length+' piece'+(items.length===1?'':'s')+' as one CSV file, one row per piece with its details, cost and sale info. Photos are not included.</p><details class="tpl"><summary>CSV Template Fields</summary><p class="meta" style="word-break:break-word;margin:0 0 8px">'+CSV_COLS.map(function(c){return c[0]==='tags'?'motifs':c[0]}).join(', ')+'</p><p class="meta" style="margin:0 0 8px">Lists separate values with ; or commas. Dates use YYYY-MM-DD. Rating is 0 to 5. Photoshoot is true or false. Leave a cell empty to keep the existing value when updating by id.</p></details>';
  var nfiles=planChunks().length;
- var jsonBody='<div class="bar" style="flex-direction:column;align-items:stretch;margin:0"><button data-a="import">⬆ Import (JSON)</button><button data-a="export">⬇ Export (JSON)</button></div><p class="meta">Estimated export: '+nfiles+' file'+(nfiles===1?'':'s')+'.</p><p class="meta">Export saves everything, including photos, in numbered parts. Import restores a backup on a new device or after browser data is cleared.</p>';
+ var imgCount=Object.keys(gal.imgs).length;
+ var jsonBody='<div class="bar" style="flex-direction:column;align-items:stretch;margin:0"><button data-a="import">⬆ Import JSON</button><button data-a="export">⬇ Export JSON</button></div><p class="meta">Export includes '+items.length+' piece'+(items.length===1?'':'s')+' with their details, '+imgCount+' photo'+(imgCount===1?'':'s')+' (covers and reference screenshots), '+wish.length+' wishlist item'+(wish.length===1?'':'s')+', your order, theme and settings. It saves as '+nfiles+' file'+(nfiles===1?'':'s')+'.</p>'+expPanelHTML();
  return '<h2>I/O</h2><h3 class="side">Manage Images</h3>'
   +gallerySection('refs','Reference Screenshots')+gallerySection('covers','Cover Photos')+wishGalHTML()
   +'<h3 class="side">Data Backup</h3><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px">'+card('CSV Backup',csvBody)+card('JSON Backup',jsonBody)+'</div>'
   +'<div style="margin-top:12px;border:1px solid var(--line);border-radius:12px;padding:12px"><h4 class="sub" style="margin:0 0 6px;text-align:left">App Stats</h4><div id="stormeter" class="meta" style="text-align:left"></div></div>'
-  +'<h3 class="side">Reset</h3><div style="border:1px solid var(--line);border-radius:12px;padding:12px"><p class="meta" style="margin:0 0 8px">Current Version: v'+APP_VERSION+' · '+APP_DATE+'</p><button class="dan" data-a="delete">Delete All</button><p class="meta" style="margin:6px 0 0">Erases every piece, photo, and setting on this device. This cannot be undone.</p></div>';
+  +'<h3 class="side">Reset</h3><div style="border:1px solid var(--line);border-radius:12px;padding:12px"><p class="meta" style="margin:0 0 8px">Current Version: v'+APP_VERSION+' · '+APP_DATE+'</p><button class="dan" data-a="delete">Delete All</button><p class="meta" style="margin:6px 0 0">Erases every piece, photo, and setting on this device. This cannot be undone.</p></div>'+'<p class="meta" style="text-align:center;margin-top:18px">This project first started on November 1, 2026.<br>Thank you for inspiring me, Koala-Chan 🐨</p>';
 }
 function gicon(n){var w=(28-(n-1)*2)/n,r='';for(var k=0;k<n;k++)r+='<rect x="'+(k*(w+2))+'" y="0" width="'+w+'" height="14" rx="2" fill="currentColor"/>';return '<svg role="img" aria-label="'+n+' across" width="28" height="14" viewBox="0 0 28 14">'+r+'</svg>'}
 function wishCover(w){return w.cover||{id:w.img,l:null,t:null,w:null,h:null}}
@@ -594,7 +604,7 @@ function drawer(o){document.getElementById('drawer').classList.toggle('open',o);
 function thumb(i){return '<div class="tile" data-a="open" data-id="'+i.id+'">'+(EMOJI[String(i.category).toLowerCase()]||'💎')+coverImg(i.cover)+'</div>'}
 function countLine(n){return '<p class="meta" style="text-align:center;margin:16px 0 0">'+n+' piece'+(n===1?'':'s')+(anyFilter()?' (filtered)':'')+'</p>'}
 var TC={
- Piece:[['Category',function(i){return esc(i.category)}],['Period',function(i){return esc(i.period)}],['Era/Movement',function(i){return esc(i.era||'—')}],['Year',function(i){return esc(i.yearMade==null?'—':i.yearMade)}],['Country of Origin',function(i){return esc(i.country||'—')}],['Stones',function(i){return esc((i.stones||[]).join(', ')||'—')}],['Metals',function(i){return esc((i.metals||[]).join(', ')||'—')}],['Hallmarks',function(i){return esc(i.hallmarks||'—')}],['Measurements',function(i){return esc(i.measurements||'—')}],['Weight',function(i){return esc(i.weight||'—')}],['Ring Size',function(i){return esc(i.ringSize==null||i.ringSize===''?'—':i.ringSize)}],['Cut',function(i){return esc((i.cut||[]).join(', ')||'—')}],['Main Color',function(i){return i.colorMain?sw(i.colorMain)+' '+esc(i.colorMain):'—'}],['Secondary Color',function(i){return i.colorSecondary?sw(i.colorSecondary)+' '+esc(i.colorSecondary):'—'}],['Motifs',function(i){return esc((i.tags||[]).join(', ')||'—')}],['Notes',function(i){return esc(i.notes||'—')}]],
+ Piece:[['Category',function(i){return esc(i.category)}],['Period',function(i){return esc(i.period)}],['Era/Movement',function(i){return esc(i.era||'—')}],['Year',function(i){return esc(i.yearMade==null?'—':i.yearMade)}],['Country of Origin',function(i){return esc(i.country||'—')}],['Stones',function(i){return esc((i.stones||[]).join(', ')||'—')}],['Metals',function(i){return esc((i.metals||[]).join(', ')||'—')}],['Hallmarks',function(i){return esc(i.hallmarks||'—')}],['Measurements',function(i){return esc(i.measurements||'—')}],['Weight',function(i){return esc(i.weight||'—')}],['Ring Size',function(i){return esc(i.ringSize==null||i.ringSize===''?'—':i.ringSize)}],['Cut',function(i){return esc((i.cut||[]).join(', ')||'—')}],['Color',function(i){return colorsHTML(i.colorMain)}],['Motifs',function(i){return esc((i.tags||[]).join(', ')||'—')}],['Notes',function(i){return esc(i.notes||'—')}]],
  Transaction:[['Status',function(i){return esc(i.status)}],['Purchase Date',function(i){return esc(fmtDate(i.purchaseDate)||'—')}],['Seller',function(i){return esc(i.seller||'—')}],['Purchase Platform',function(i){return esc(i.purchasePlatform||'—')}],['Cost',function(i){return money(num(i.cost))}],['Selling Platform',function(i){return esc(i.sellPlatform||'—')}],['Date Listed',function(i){return esc(fmtDate(i.dateListed)||'—')}],['Listing Link',function(i){return i.linkSale?'<a href="'+esc(i.linkSale)+'" target="_blank" rel="noopener">open</a>':'—'}],['Date Sold',function(i){return esc(fmtDate(i.dateSold)||'—')}],['Turnover',function(i){return days(i)==null?'—':days(i)+' days'}],['Platform Fee',function(i){return fees(i)?money(fees(i)):'—'}],['Shipping',function(i){return money(num(i.shipActual))}],['Final Payout',function(i){return money(num(i.payout))}],['Net Profit',function(i){return calcs(i)['c-net']}]],
  Stats:[['Last Worn',function(i){return esc(fmtDate(i.wornLast)||'—')}],['Times Worn',function(i){return esc(i.wornCount==null||i.wornCount===''?'—':i.wornCount)}],['Rating',function(i){return stars(i.rating)||'—'}],['Photoshoot?',function(i){return i.photoshoot?'Yes':'No'}]]
 };
@@ -621,6 +631,7 @@ function renderBox(){
 function valOf(v){return v==null?'':Array.isArray(v)?v.join(', '):String(v)}
 function fieldHTML(k,v){
  var s=FS[k],t=s[1],val=LISTS.indexOf(k)>-1?(v||[]).join(', '):(v==null?'':v),c;
+ if(LOWER_KEYS.indexOf(k)>-1)val=String(val).toLowerCase();
  if(t==='check')return '<label class="swl"><input type="checkbox" name="'+k+'"'+(v?' checked':'')+'> '+s[0]+'</label>';
  if(t==='calc')return '<label>'+s[0]+'<div class="calc" id="'+s[2]+'">'+esc(calcs(editing)[s[2]])+'</div></label>';
  if(t==='pct')return '<label>'+s[0]+'<input name="'+k+'" type="number" step="0.1" inputmode="decimal" value="'+(k==='ebayPct'?PS.eb:PS.ig)+'"></label>';
@@ -631,8 +642,29 @@ function fieldHTML(k,v){
  else if(t==='money')c='<input name="'+k+'" type="text" inputmode="decimal" data-money="1" value="'+esc(fmtMoney(v))+'" placeholder="$0.00">';
  else if(t==='date')c='<input name="'+k+'" type="date" value="'+esc(v||'')+'">';
  else if(t==='number')c='<input name="'+k+'" type="number" step="'+(k==='buffer'?'0.5':'1')+'" inputmode="decimal" value="'+esc(val)+'">';
- else c='<input name="'+k+'" type="'+(t==='url'?'url':'text')+'" value="'+esc(val)+'"'+(t==='list'?' placeholder="comma separated"':'')+'>';
- return '<label>'+(k==='ringSize'?'<span style="display:flex;justify-content:space-between;align-items:center;gap:8px;line-height:1.2"><span>'+s[0]+'</span><button type="button" data-a="ringref" style="border:0;background:none;padding:0;margin:0;min-height:0;font-size:.8rem;line-height:1.2;color:var(--acc);text-decoration:underline;border-radius:0">view chart</button></span>':s[0])+c+'</label>';
+ else c='<input name="'+k+'" type="'+(t==='url'?'url':'text')+'" value="'+esc(val)+'"'+(t==='list'?' placeholder="comma separated"':'')+(SUGG_KEYS.indexOf(k)>-1?' data-sugg="'+k+'" autocomplete="off"':'')+'>';
+ var sg=SUGG_KEYS.indexOf(k)>-1;
+ return '<label'+(sg?' style="position:relative"':'')+'>'+(k==='ringSize'?'<span style="display:flex;justify-content:space-between;align-items:center;gap:8px;line-height:1.2"><span>'+s[0]+'</span><button type="button" data-a="ringref" style="border:0;background:none;padding:0;margin:0;min-height:0;font-size:.8rem;line-height:1.2;color:var(--acc);text-decoration:underline;border-radius:0">view chart</button></span>':s[0])+c+(sg?'<div class="sg" hidden></div>':'')+'</label>';
+}
+function suggPool(k){
+ if(k==='colorMain')return COLOR_ORDER.map(function(c){return {v:c,l:(HEARTS[c]||'')+' '+c}});
+ var seen={},out=[];
+ items.forEach(function(i){var vals=LISTS.indexOf(k)>-1?(i[k]||[]):[i[k]];vals.forEach(function(x){var v=String(x==null?'':x).trim();if(!v)return;var lk=v.toLowerCase();if(seen[lk])return;seen[lk]=1;out.push({v:v,l:v})})});
+ return out.sort(function(a,b){return a.v.localeCompare(b.v)});
+}
+function suggShow(t){
+ var k=t.getAttribute('data-sugg'),box=t.parentNode.querySelector('.sg');if(!box)return;
+ var parts=LISTS.indexOf(k)>-1?t.value.split(','):[t.value];
+ var tok=parts[parts.length-1].trim().toLowerCase();
+ var used=parts.slice(0,-1).map(function(x){return x.trim().toLowerCase()});
+ if(!tok){box.hidden=true;return}
+ var m=suggPool(k).filter(function(o){var lv=o.v.toLowerCase();return lv.indexOf(tok)===0&&lv!==tok&&used.indexOf(lv)<0}).slice(0,6);
+ box.innerHTML=m.map(function(o){return '<button type="button" class="sgi" data-sgv="'+esc(o.v)+'">'+esc(o.l)+'</button>'}).join('');
+ box.hidden=!m.length;
+}
+function autoUnlock(t){
+ var v=t.value;if(!v)return;
+ hashKW(v).then(function(h){if(h===secretCfg.hash&&t.value===v){secretUnlocked=true;document.getElementById('modal').innerHTML='';show('secret')}});
 }
 function sec(keys){return keys.map(function(k){return fieldHTML(k,editing[k])}).join('')}
 function listingTexts(g){
@@ -671,6 +703,7 @@ function imagesHTML(){
   +'<div id="crop" style="grid-column:1/-1" hidden><div id="cropv"><img id="cropimg" alt="" draggable="false"></div><input type="range" id="cropz" min="1" max="4" step="0.01" value="1" aria-label="Zoom"><p class="seg"><button type="button" class="pri" data-a="cvok">Use this crop</button><button type="button" data-a="cvcancel">Cancel</button></p><p class="meta">Drag to pan. Use the slider (or pinch) to zoom. The square is your thumbnail.</p></div>'
   +(refs.length&&!c?'<div style="grid-column:1/-1"><p class="meta">Use a reference screenshot as the cover</p><div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(70px,1fr))">'+refs.map(function(id,n){return '<button type="button" data-a="pickref" data-i="'+n+'" style="padding:0;border-radius:8px;aspect-ratio:1;overflow:hidden;min-height:0;border:2px solid '+(c&&c.id===id?'var(--acc)':'transparent')+'"><img src="'+esc(gal.imgs[id])+'" alt="" style="width:100%;height:100%;object-fit:cover;display:block"></button>'}).join('')+'</div></div>':'')
   +'</div>';
+ var pst='<div style="grid-column:1/-1">'+fieldHTML('photoshoot',editing.photoshoot)+'</div>';var ci=coverBlock.lastIndexOf('</div>');coverBlock=coverBlock.slice(0,ci)+pst+coverBlock.slice(ci);
  return refBlock+divider+coverBlock;
 }
 function renderEdit(){
@@ -729,7 +762,7 @@ function refreshCalc(){
  updateSummary();
 }
 function renderMain(){
- document.getElementById('app').innerHTML=view==='box'?renderBox():view==='manage'?renderManage():view==='wishlist'?renderWishlist():view==='secret'?renderSecret():renderEdit();
+ document.getElementById('app').innerHTML=backupBanner()+(view==='box'?renderBox():view==='manage'?renderManage():view==='wishlist'?renderWishlist():view==='secret'?renderSecret():renderEdit());
  updateSummary();setTabs();updateStorage();
 }
 function render(){renderMain();renderDrawer()}
@@ -777,7 +810,7 @@ function jotd(){
  document.getElementById('modal').innerHTML='<div class="modal" data-a="backdrop"><div><p class="meta" style="text-align:center">✨ Jewelry of the Day</p>'+(i.cover?'<div style="position:relative;width:100%;max-width:260px;aspect-ratio:1;overflow:hidden;border-radius:10px;margin:0 auto 10px">'+coverImg(i.cover)+'</div>':'<div style="font-size:4rem;text-align:center">'+(EMOJI[String(i.category).toLowerCase()]||'💎')+'</div>')+'<h3>'+esc(title(i))+'</h3><p class="meta">'+esc([i.category,i.period,i.era,i.country,(i.metals||[]).join('/'),(i.stones||[]).join('/')].filter(Boolean).join(' · '))+'</p><p class="meta">'+(stars(i.rating)||'')+'</p><p class="meta">'+(i.wornLast?'Last worn '+esc(fmtDate(i.wornLast))+(Number(i.wornCount)?' · worn '+Number(i.wornCount)+'×':''):'Not worn yet')+'</p><div class="bar" style="justify-content:center"><button class="pri" data-a="wear" data-id="'+i.id+'">✓ I’m wearing this</button><button data-a="jotd">Shuffle again</button></div><div class="bar" style="justify-content:center;margin-top:8px"><button data-a="edit" data-id="'+i.id+'">Edit</button><button data-a="x">Close</button></div></div></div>';
 }
 function popup(i){
- document.getElementById('modal').innerHTML='<div class="modal" data-a="backdrop"><div>'+(i.cover?'<div style="position:relative;width:100%;max-width:260px;aspect-ratio:1;overflow:hidden;border-radius:10px;margin:0 auto 10px">'+coverImg(i.cover)+'</div>':'')+'<h3>'+esc(title(i))+'</h3>'+(i.notes?'<p class="meta">'+esc(i.notes)+'</p>':'')+'<p class="meta">'+esc([i.category,i.period,i.era,i.country,(i.metals||[]).join('/'),(i.stones||[]).join('/')].filter(Boolean).join(' · '))+'</p><p class="meta">'+(i.colorMain?sw(i.colorMain)+' '+esc(i.colorMain)+' · ':'')+(i.colorSecondary?'2nd: '+sw(i.colorSecondary)+' '+esc(i.colorSecondary)+' · ':'')+(stars(i.rating)?stars(i.rating)+' · ':'')+esc((i.tags||[]).join(', '))+'</p><div class="bar" style="justify-content:center"><button class="pri" data-a="edit" data-id="'+i.id+'">Edit</button><button data-a="x">Close</button></div></div></div>';
+ document.getElementById('modal').innerHTML='<div class="modal" data-a="backdrop"><div>'+(i.cover?'<div style="position:relative;width:100%;max-width:260px;aspect-ratio:1;overflow:hidden;border-radius:10px;margin:0 auto 10px">'+coverImg(i.cover)+'</div>':'')+'<h3>'+esc(title(i))+'</h3>'+(i.notes?'<p class="meta">'+esc(i.notes)+'</p>':'')+'<p class="meta">'+esc([i.category,i.period,i.era,i.country,(i.metals||[]).join('/'),(i.stones||[]).join('/')].filter(Boolean).join(' · '))+'</p><p class="meta">'+(i.colorMain?sw(i.colorMain)+' '+esc(i.colorMain)+' · ':'')+(stars(i.rating)?stars(i.rating)+' · ':'')+esc((i.tags||[]).join(', '))+'</p><div class="bar" style="justify-content:center"><button class="pri" data-a="edit" data-id="'+i.id+'">Edit</button><button data-a="x">Close</button></div></div></div>';
 }
 
 /* ---------- secret compartment ---------- */
@@ -793,9 +826,9 @@ function secretGate(){
  if(secretUnlocked){show('secret');return}
  var user='<input type="text" name="username" autocomplete="username" value="Never Twice the Same" style="position:absolute;left:-9999px" tabindex="-1" aria-hidden="true">';
  if(!secretCfg.hash){
-   M.innerHTML='<div class="modal" data-a="backdrop"><div><h3 style="margin:0 0 6px">Set a Keyword</h3><p class="meta">Choose a keyword to open the Secret Compartment. There is no reset, so remember it.</p><form id="kwform" data-mode="set" autocomplete="on">'+user+'<input type="password" name="keyword" autocomplete="new-password" placeholder="Set a keyword"><div class="bar" style="justify-content:center;margin:12px 0 0"><button type="submit" class="pri">Save</button><button type="button" data-a="x">Cancel</button></div></form></div></div>';
+   M.innerHTML='<div class="modal kwm" data-a="backdrop"><div><h3 style="margin:0 0 6px">Set a Keyword</h3><p class="meta">Choose a keyword to open the Secret Compartment. There is no reset, so remember it.</p><form id="kwform" data-mode="set" autocomplete="on">'+user+'<input type="password" name="keyword" autocomplete="new-password" placeholder="Set a keyword"><div class="bar" style="justify-content:center;margin:12px 0 0"><button type="submit" class="pri">Save</button><button type="button" data-a="x">Cancel</button></div></form></div></div>';
  }else{
-   M.innerHTML='<div class="modal" data-a="backdrop"><div><h3 style="margin:0 0 6px">Secret Compartment</h3><form id="kwform" data-mode="unlock" autocomplete="on">'+user+'<input type="password" name="keyword" autocomplete="current-password" placeholder="unlock"><div class="bar" style="justify-content:center;margin:12px 0 0"><button type="submit" class="pri">Open</button><button type="button" data-a="x">Cancel</button></div></form></div></div>';
+   M.innerHTML='<div class="modal kwm" data-a="backdrop"><div><h3 style="margin:0 0 6px">Secret Compartment</h3><form id="kwform" data-mode="unlock" autocomplete="on">'+user+'<input type="password" name="keyword" autocomplete="current-password" placeholder="unlock"><div class="bar" style="justify-content:center;margin:12px 0 0"><button type="submit" class="pri">Open</button><button type="button" data-a="x">Cancel</button></div></form></div></div>';
  }
 }
 function handleKeywordForm(form){
@@ -816,7 +849,8 @@ function handleSecretForm(form){
  var finish=function(){saveSecret();secretUnlocked=false;show('box')};
  if(kw.trim()){hashKW(kw).then(function(h){secretCfg.hash=h;finish()})}else finish();
 }
-var dashAll=false;
+var dashAll=false,dashYrsAll=false,dashSort='count';
+function compactMoney(n){n=Number(n)||0;return n>=1000?'$'+(n/1000).toFixed(n>=10000?0:1).replace(/\.0$/,'')+'k':'$'+Math.round(n)}
 function dashHTML(){
  var yrs={};
  items.forEach(function(i){
@@ -824,22 +858,29 @@ function dashHTML(){
    if(/^\d{4}$/.test(py)&&num(i.cost)!=null){yrs[py]=yrs[py]||{spend:0,sales:0};yrs[py].spend+=num(i.cost)}
    if(/^\d{4}$/.test(sy)&&num(i.payout)!=null){yrs[sy]=yrs[sy]||{spend:0,sales:0};yrs[sy].sales+=num(i.payout)}
  });
- var years=Object.keys(yrs).sort(),max=1;
- years.forEach(function(y){max=Math.max(max,yrs[y].spend,yrs[y].sales)});
- var W=Math.max(320,years.length*90),H=180,base=H-30,bw=24,bars='';
- years.forEach(function(y,n){var x=n*90+16,hs=yrs[y].spend/max*(base-10),ha=yrs[y].sales/max*(base-10);
-   bars+='<rect x="'+x+'" y="'+(base-hs)+'" width="'+bw+'" height="'+hs+'" style="fill:#e07a9b"><title>Spend '+esc(fmtMoney(yrs[y].spend))+'</title></rect>'
-    +'<rect x="'+(x+bw+4)+'" y="'+(base-ha)+'" width="'+bw+'" height="'+ha+'" style="fill:#3f9d5a"><title>Sales '+esc(fmtMoney(yrs[y].sales))+'</title></rect>'
-    +'<text x="'+(x+bw+2)+'" y="'+(H-8)+'" text-anchor="middle" style="font-size:11px;fill:var(--mute)">'+y+'</text>';
- });
- var chart=years.length?'<svg viewBox="0 0 '+W+' '+H+'" width="100%" role="img" aria-label="Total spend and total sales per year">'+bars+'</svg><p class="meta"><span style="color:#e07a9b">■</span> Total spend (by purchase year) · <span style="color:#3f9d5a">■</span> Total sales (by year sold)</p>':'<p class="meta">No dated purchases or sales yet.</p>';
+ var years=Object.keys(yrs).sort(),shownYrs=dashYrsAll?years:years.slice(-3),max=1;
+ shownYrs.forEach(function(y){max=Math.max(max,yrs[y].spend,yrs[y].sales)});
+ var bars=shownYrs.map(function(y){
+   var hs=Math.round(yrs[y].spend/max*100),ha=Math.round(yrs[y].sales/max*100);
+   var lab='position:absolute;bottom:100%;left:50%;transform:translateX(-50%);font-size:.7rem;white-space:nowrap;color:var(--mute)';
+   return '<div style="flex:1;min-width:0;display:flex;flex-direction:column;align-items:center">'
+    +'<div style="display:flex;align-items:flex-end;gap:6px;height:140px;width:100%;justify-content:center">'
+    +'<div title="Spend '+esc(fmtMoney(yrs[y].spend))+'" style="width:34%;max-width:34px;height:'+hs+'%;background:#e07a9b;border-radius:4px 4px 0 0;position:relative"><span style="'+lab+'">'+compactMoney(yrs[y].spend)+'</span></div>'
+    +'<div title="Sales '+esc(fmtMoney(yrs[y].sales))+'" style="width:34%;max-width:34px;height:'+ha+'%;background:#3f9d5a;border-radius:4px 4px 0 0;position:relative"><span style="'+lab+'">'+compactMoney(yrs[y].sales)+'</span></div>'
+    +'</div><div class="meta" style="margin-top:4px">'+y+'</div></div>';
+ }).join('');
+ var chart=years.length
+  ?'<div style="display:flex;gap:10px;align-items:stretch;padding-top:20px">'+bars+'</div>'+(years.length>3?'<button class="link" data-a="dashyrs">'+(dashYrsAll?'Show recent 3 years':'Show all time ('+years.length+' years)')+'</button>':'')
+  :'<p class="meta">No dated purchases or sales yet.</p>';
  var sel={};
  items.forEach(function(i){var s=(i.seller||'').trim()||'Unknown';sel[s]=sel[s]||{count:0,spend:0};sel[s].count++;sel[s].spend+=num(i.cost)||0});
- var rows=Object.keys(sel).map(function(k){return {name:k,count:sel[k].count,spend:sel[k].spend}}).sort(function(a,b){return b.count-a.count||b.spend-a.spend});
- var shown=dashAll?rows:rows.slice(0,10),mx=rows.length?rows[0].count:1;
- var sellers=shown.map(function(r){return '<div style="display:grid;grid-template-columns:minmax(90px,140px) 1fr auto;gap:8px;align-items:center;margin:6px 0"><span>'+esc(r.name)+'</span><span style="background:var(--line);border-radius:6px;height:12px;display:block;overflow:hidden"><span style="display:block;height:100%;width:'+(r.count/mx*100)+'%;background:var(--acc)"></span></span><span class="meta">'+r.count+' · '+esc(fmtMoney(r.spend))+'</span></div>'}).join('');
+ var rows=Object.keys(sel).map(function(k){return {name:k,count:sel[k].count,spend:sel[k].spend}}).sort(function(a,b){return dashSort==='spend'?(b.spend-a.spend||b.count-a.count):(b.count-a.count||b.spend-a.spend)});
+ var metric=function(r){return dashSort==='spend'?r.spend:r.count};
+ var shown=dashAll?rows:rows.slice(0,10),mx=rows.length?Math.max.apply(null,rows.map(metric)):1;if(!mx)mx=1;
+ var sellers=shown.map(function(r){return '<div style="display:grid;grid-template-columns:minmax(90px,140px) 1fr auto;gap:8px;align-items:center;margin:6px 0"><span>'+esc(r.name)+'</span><span style="background:var(--line);border-radius:6px;height:12px;display:block;overflow:hidden"><span style="display:block;height:100%;width:'+(metric(r)/mx*100)+'%;background:var(--acc)"></span></span><span class="meta">'+r.count+' · '+esc(fmtMoney(r.spend))+'</span></div>'}).join('');
+ var toggle='<div class="seg" style="margin:6px 0 4px"><button data-a="dashsort" data-v="count"'+(dashSort==='count'?' class="on"':'')+'>Count</button><button data-a="dashsort" data-v="spend"'+(dashSort==='spend'?' class="on"':'')+'>Spend</button></div>';
  return '<h4 class="sub" style="margin:0 0 6px">Spend vs. Sales by Year</h4>'+chart
-  +'<h4 class="sub" style="margin:14px 0 6px">Sellers by Count</h4>'+(rows.length?sellers:'<p class="meta">No pieces yet.</p>')
+  +'<h4 class="sub" style="margin:14px 0 6px">Sellers by Count and Spend</h4>'+toggle+(rows.length?sellers:'<p class="meta">No pieces yet.</p>')
   +(rows.length>10?'<button class="link" data-a="dashall">'+(dashAll?'Show top 10':'View all ('+rows.length+')')+'</button>':'');
 }
 function renderSecret(){
@@ -848,11 +889,11 @@ function renderSecret(){
  return '<h2>Secret Compartment</h2>'
   +'<form id="secretform" autocomplete="on"><input type="text" name="username" autocomplete="username" value="Never Twice the Same" style="position:absolute;left:-9999px" tabindex="-1" aria-hidden="true">'
   +'<div class="f"><label>Keyword<input type="password" name="keyword" autocomplete="new-password" placeholder="'+(secretCfg.hash?'••••••••':'Set a keyword')+'"></label>'
-  +'<label>Threshold (hide pieces above this cost)<input type="text" inputmode="decimal" name="threshold" data-a="sthr" data-money="1" value="'+esc(secretCfg.threshold==null?'':fmtMoney(secretCfg.threshold))+'" placeholder="$0.00"></label></div>'
+  +'<label><span style="display:flex;justify-content:space-between;align-items:center;gap:8px;line-height:1.2"><span>Threshold (hide pieces above this cost)</span><button type="button" data-a="sclear" style="border:0;background:none;padding:0;margin:0;min-height:0;font-size:.8rem;color:var(--acc);text-decoration:underline;border-radius:0">clear</button></span><input type="text" inputmode="decimal" name="threshold" data-a="sthr" data-money="1" value="'+esc(secretCfg.threshold==null?'':fmtMoney(secretCfg.threshold))+'" placeholder="$0.00"></label></div>'
   +'<div class="bar"><button type="submit" class="pri">Lock</button></div>'
   +'<p class="meta">'+hidden.length+' piece'+(hidden.length===1?'':'s')+' over the threshold'+(secretCfg.on?' (hidden from the Jewelry Box)':' (not hidden yet)')+'.</p>'
   +'<div class="grid" style="grid-template-columns:repeat('+cols+',1fr)">'+hidden.map(function(i){return '<div>'+thumb(i)+'<div class="meta">'+esc(title(i))+' · '+money(num(i.cost))+'</div></div>'}).join('')+'</div></form>'
-  +'<details data-sec="dash"'+dOpen('dash',false)+'><summary>Dashboard</summary>'+dashHTML()+'</details>';
+  +'<details data-sec="dash" style="margin-top:22px"'+dOpen('dash',false)+'><summary>Dashboard</summary>'+dashHTML()+'</details>';
 }
 
 /* ---------- CSV / JSON ---------- */
@@ -862,7 +903,7 @@ function csvCell(v){v=v==null?'':Array.isArray(v)?v.join('; '):typeof v==='boole
 function exportCSV(){
  var head=CSV_COLS.map(function(c){return c[0]==='tags'?'motifs':c[0]}).join(',');
  var body=items.map(function(i){return CSV_COLS.map(function(c){return csvCell(i[c[0]])}).join(',')});
- download('ntts-records-'+today()+'.csv','text/csv',[head].concat(body).join('\r\n'));
+ saveFile('ntts-records-'+stampNow()+'.csv','text/csv',[head].concat(body).join('\r\n'));
 }
 function parseCSV(t){
  var rows=[],row=[],f='',inq=false;
@@ -887,7 +928,7 @@ function coerce(k,v){
  if(k==='category')return CATS.filter(function(c){return c.toLowerCase()===v.toLowerCase()})[0]||'Other';
  if(k==='status')return STAT.filter(function(s){return s.toLowerCase()===v.toLowerCase()||(v.toUpperCase()==='PC'&&s==='Private Collection')})[0]||'Private Collection';
  if(k==='period')return PERIODS.filter(function(p){return p.toLowerCase()===v.toLowerCase()})[0]||'Antique';
- if(k==='colorMain'||k==='colorSecondary')return capColor(v);
+ if(k==='colorMain')return String(v).split(/[,;]/).map(function(x){return capColor(x)}).filter(Boolean);
  return v;
 }
 function importCSV(text){
@@ -930,14 +971,36 @@ function planChunks(){
  chunks.push({items:[],imgs:rest});
  return chunks;
 }
+var expParts=null,expDone={};
+function docForPart(c,n,N){var doc={app:'never-twice-the-same',format:2,part:n+1,of:N,exported:new Date().toISOString(),items:c.items,images:c.imgs};if(n===N-1){doc.gallery={refs:gal.refs,covers:gal.covers};doc.order=order;doc.theme=theme;doc.hideSold=hideSold;doc.wishlist=wish}return doc}
+function stampNow(){var d=new Date();return today()+'-'+('0'+d.getHours()).slice(-2)+('0'+d.getMinutes()).slice(-2)}
+function saveFile(name,mime,text){
+ var mobile=/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)||navigator.maxTouchPoints>1;
+ if(mobile&&navigator.canShare&&typeof File==='function'){
+   try{var f=new File([text],name,{type:mime});if(navigator.canShare({files:[f]}))return navigator.share({files:[f],title:name}).then(function(){return true},function(e){if(e&&e.name==='AbortError')return false;download(name,mime,text);return true})}catch(e){}
+ }
+ download(name,mime,text);return Promise.resolve(true);
+}
 function exportJSON(){
- lastExport=new Date().toISOString();kset('lastExport',lastExport);
- var chunks=planChunks(),N=chunks.length,D=today();
- chunks.forEach(function(c,n){
-   var doc={app:'never-twice-the-same',format:2,part:n+1,of:N,exported:new Date().toISOString(),items:c.items,images:c.imgs};
-   if(n===N-1){doc.gallery={refs:gal.refs,covers:gal.covers};doc.order=order;doc.theme=theme;doc.hideSold=hideSold;doc.wishlist=wish}
-   setTimeout(function(){download('ntts-backup-'+D+'-part'+(n+1)+'of'+N+'.json','application/json',JSON.stringify(doc))},n*800);
- });
+ var chunks=planChunks(),N=chunks.length,S=stampNow();
+ expParts=chunks.map(function(c,n){return {name:'ntts-backup-'+S+'-part'+(n+1)+'of'+N+'.json',chunk:c,n:n,N:N}});
+ expDone={};
+ renderMain();
+ var pe=document.getElementById('expPanel');if(pe&&pe.scrollIntoView)pe.scrollIntoView({behavior:'smooth',block:'center'});
+}
+function expPanelHTML(){
+ if(!expParts)return '';
+ var N=expParts.length,done=Object.keys(expDone).length;
+ return '<div id="expPanel" style="margin-top:10px;border:1px solid var(--acc);border-radius:12px;padding:12px"><h4 class="sub" style="margin:0 0 6px">Save your backup</h4><p class="meta" style="margin:0 0 8px">Tap each file to save it. You stay on this page.</p><div class="bar" style="flex-direction:column;align-items:stretch;margin:0">'
+  +expParts.map(function(p){var ok=!!expDone[p.n];var lbl=N===1?'Save backup file':'Save file '+(p.n+1)+' of '+N;return '<button data-a="expsave" data-n="'+p.n+'">'+(ok?'✓ Saved · ':'')+lbl+'</button>'}).join('')
+  +'</div><p class="meta" style="margin:8px 0 0">'+done+' of '+N+' saved</p></div>';
+}
+function agoText(iso){if(!iso)return 'never';var d=Math.floor((Date.now()-new Date(iso).getTime())/864e5);return d<=0?'today':d===1?'yesterday':d+' days ago'}
+function backupBanner(){
+ var days=lastExport?(Date.now()-new Date(lastExport).getTime())/864e5:Infinity;
+ if(days<=7)return '';
+ var n=planChunks().length;
+ return '<div style="border:1px solid var(--acc);border-radius:12px;padding:10px 12px;margin-bottom:12px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between"><span>Last JSON backup: '+agoText(lastExport)+'. Estimated backup: '+n+' file'+(n===1?'':'s')+'.</span><button class="pri" data-a="backupnow">Backup Now</button></div>';
 }
 function readFileP(f){return new Promise(function(res){var r=new FileReader();r.onload=function(){res(String(r.result))};r.readAsText(f)})}
 function importJSON(texts){
@@ -976,15 +1039,14 @@ function fmtBytes(b){return b<1048576?Math.round(b/1024)+' KB':b<1073741824?(b/1
 function updateStorage(){
  var el=document.getElementById('stormeter');if(!el)return;
  var st=storageBytes();
- var lines=['App data: '+fmtBytes(st.total)+' ('+items.length+' pieces, '+st.imgs+' images, '+wish.length+' wishlist items).'];
+ var lines=['App data: '+fmtBytes(st.total)+' ('+items.length+' pieces, '+st.imgs+' images, '+wish.length+' wishlist items)'];
  if(st.total/1048576>150)lines.push('Large library: consider separate image storage soon.');
- lines.push('Persistent storage: '+(persistOK===true?'granted (the browser is asked not to clear it)':persistOK===false?'not granted (the browser may clear it when space is low)':'checking'));
- lines.push(lastExport?'Last JSON export: '+fmtDate(lastExport.slice(0,10))+'.':'No JSON export yet. Export a backup regularly.');
- var days=lastExport?(Date.now()-new Date(lastExport).getTime())/864e5:Infinity;
- if(days>7)lines.push('It has been over 7 days since your last backup. Export a JSON backup.');
+ var bi=lines.length;lines.push('Browser data: checking');
+ lines.push('Persistent storage: '+(persistOK===true?'granted':persistOK===false?'not granted':'checking'));
+ lines.push('Last JSON backup: '+agoText(lastExport));
  var show=function(){el.innerHTML=lines.map(esc).join('<br>')};
- if(navigator.storage&&navigator.storage.estimate){navigator.storage.estimate().then(function(e){lines.push('Browser: '+fmtBytes(e.usage||0)+' used of about '+fmtBytes(e.quota||0)+' allowed.');show()}).catch(show)}
- else show();
+ if(navigator.storage&&navigator.storage.estimate){navigator.storage.estimate().then(function(e){lines[bi]='Browser data: '+fmtBytes(e.usage||0)+' used of about '+fmtBytes(e.quota||0)+' allowed';show()}).catch(function(){lines[bi]='Browser data: unavailable';show()})}
+ else{lines[bi]='Browser data: unavailable';show()}
 }
 function deleteAll(){
  var t=prompt('This erases every piece, photo, and setting on this device. Type DELETE to confirm.');
@@ -1089,6 +1151,12 @@ document.addEventListener('click',function(e){
   case 'sset':var kwa=document.getElementById('skw').value.trim();if(!kwa){alert('Enter a keyword');break}hashKW(kwa).then(function(h){secretCfg.hash=h;secretUnlocked=true;saveSecret();document.getElementById('modal').innerHTML='';show('secret')});break;
   case 'skwchg':var kwb=document.getElementById('skw2').value.trim();if(!kwb){alert('Enter a new keyword');break}hashKW(kwb).then(function(h){secretCfg.hash=h;saveSecret();document.getElementById('skw2').value='';alert('Keyword saved.')});break;
   case 'slock':secretUnlocked=false;show('box');break;
+  case 'sclear':secretCfg.threshold=null;saveSecret();render();break;
+  case 'dashyrs':dashYrsAll=!dashYrsAll;renderMain();break;
+  case 'dashsort':dashSort=d.v;renderMain();break;
+  case 'backupnow':view='manage';exportJSON();window.scrollTo(0,0);break;
+  case 'expsave':var ep=expParts&&expParts[Number(d.n)];if(!ep)break;saveFile(ep.name,'application/json',JSON.stringify(docForPart(ep.chunk,ep.n,ep.N))).then(function(ok){if(!ok)return;expDone[ep.n]=true;if(Object.keys(expDone).length===expParts.length){lastExport=new Date().toISOString();kset('lastExport',lastExport)}renderMain()});break;
+  case 'expclose':expParts=null;expDone={};renderMain();break;
  }
 });
 document.addEventListener('change',function(e){
@@ -1173,17 +1241,23 @@ function checkUpdate(){
  fetch(new URL(UPDATE_URL||'version.json',location.href).href,{cache:'no-store'}).then(function(r){return r.json()}).then(function(d){
    if(!d||!d.version||d.version===APP_VERSION)return;
    var b=document.getElementById('upd');
-   b.innerHTML='<span>A new version ('+esc(d.version)+') is available.</span><button class="pri" data-a="reload">Refresh</button>'+(d.url?'<a href="'+esc(d.url)+'" target="_blank" rel="noopener">Get update</a>':'')+'<button data-a="updx">Later</button>';
+   b.innerHTML='<span>A new version ('+esc(d.version)+') is available.</span><button data-a="updx">Later</button><button class="pri" data-a="reload">Update</button>';
    b.hidden=false;
  }).catch(function(){});
 }
 function manualCheck(){
  fetch(new URL(UPDATE_URL||'version.json',location.href).href,{cache:'no-store'}).then(function(r){if(!r.ok)throw new Error('http');return r.json()}).then(function(d){
-   if(d&&d.version&&d.version!==APP_VERSION){alert('A new version ('+d.version+') is available. Use the Refresh banner or reload the page.');checkUpdate()}
+   if(d&&d.version&&d.version!==APP_VERSION){alert('A new version ('+d.version+') is available. Use the Update button in the banner.');checkUpdate()}
    else alert('You have the latest version (v'+APP_VERSION+').');
  }).catch(function(){alert('Could not check for updates. Make sure version.json is published in the same folder as index.html.')});
 }
 function renderFooter(){document.getElementById('ver').innerHTML='<button class="link" data-a="io" style="font-size:inherit;margin:0">Never Twice the Same</button> · <button class="link" data-a="checkupd" style="font-size:inherit;margin:0">v'+APP_VERSION+'</button>'}
+document.addEventListener('input',function(e){var t=e.target;if(!t||!t.getAttribute)return;if(t.getAttribute('data-sugg')){suggShow(t);return}
+ if(t.name==='keyword'&&t.closest&&t.closest('#kwform')&&t.closest('#kwform').getAttribute('data-mode')==='unlock')autoUnlock(t)});
+document.addEventListener('focusout',function(e){var t=e.target;if(t&&t.getAttribute&&t.getAttribute('data-sugg')){var box=t.parentNode.querySelector('.sg');setTimeout(function(){if(box)box.hidden=true},300)}});
+document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('.sgi');if(!b)return;e.preventDefault();var box=b.parentNode,t=box.parentNode.querySelector('[data-sugg]');if(!t)return;var k=t.getAttribute('data-sugg'),v=b.getAttribute('data-sgv');
+ if(LISTS.indexOf(k)>-1){var parts=t.value.split(',');parts[parts.length-1]=' '+v;t.value=parts.map(function(x){return x.trim()}).filter(Boolean).join(', ')+', '}else t.value=v;
+ box.hidden=true;t.focus()});
 document.querySelector('header').insertAdjacentElement('afterend',document.getElementById('tabbar'));
 init().then(function(){renderFooter();checkUpdate();setInterval(checkUpdate,3600000);document.addEventListener('visibilitychange',function(){if(!document.hidden)checkUpdate()});applyTheme();try{matchMedia('(prefers-color-scheme: dark)').addEventListener('change',applyTheme)}catch(e){}render()})
  .catch(function(e){document.getElementById('app').innerHTML='<p class="meta">Could not start storage: '+esc(e&&e.message||e)+'</p>'});
