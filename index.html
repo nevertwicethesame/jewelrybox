@@ -142,7 +142,7 @@ footer#ver{text-align:center;padding:24px 14px calc(36px + env(safe-area-inset-b
 <input type="file" id="gfile" accept="image/*" multiple hidden>
 <script>
 var K='ntts_items_v2',OK='ntts_order_v1',PER=25,MAX_UPLOAD=300*1024;
-var APP_VERSION='1.5.7',APP_DATE='2026-11-01',UPDATE_URL='';
+var APP_VERSION='1.5.10',APP_DATE='2026-11-01',UPDATE_URL='';
 var EMOJI={ring:'💍',earring:'✨',necklace:'📿',bracelet:'⭕',watch:'⌚',other:'💎'};
 var CATS=['Ring','Earring','Necklace','Bracelet','Watch','Other'];
 var STAT=['Wishlist','Waiting','Private Collection','To List','Listed','Sold'];
@@ -153,7 +153,7 @@ var COLOR_SEL=[''].concat(COLOR_ORDER);
 var COLORS={pink:'#f4a7c1',red:'#d03a3a',orange:'#f0892b',brown:'#7b4a2a',yellow:'#f4d03f',green:'#3f9d5a','light blue':'#8fd3f4',blue:'#3d6fd0',purple:'#8a4fc0',black:'#1a1a1a',gray:'#8d8d8d',white:'#ffffff',multi:'conic-gradient(#d03a3a,#f4d03f,#3f9d5a,#3d6fd0,#8a4fc0,#d03a3a)'};
 var HEARTS={Pink:'🩷',Red:'❤️',Orange:'🧡',Brown:'🤎',Yellow:'💛',Green:'💚','Light blue':'🩵',Blue:'💙',Purple:'💜',Black:'🖤',Gray:'🩶',White:'🤍',Multi:'🌈'};
 var THEMES={ruby:{n:'Ruby',l:'#7b2d3b',d:'#d98a9b',v1:'#4d2036',v2:'#26101c'},sapphire:{n:'Sapphire',l:'#2e5aa8',d:'#8fb3ff',v1:'#1f2f5a',v2:'#0c1530'},emerald:{n:'Emerald',l:'#1f6b4a',d:'#7fd1a8',v1:'#1d4a37',v2:'#0a2118'}};
-var SORTS=[['new','Newest first (purchase date)'],['worn','Most worn'],['rest','Least recently worn'],['era','Era'],['status','Status'],['grp:colorMain','Group by Color'],['grp:category','Group by Type'],['grp:period','Group by Period'],['custom','My ordering']];
+var SORTS=[['new','Newest First (Purchase Date)'],['worn','Most Worn'],['rest','Least Recently Worn'],['era','Era'],['status','Status'],['grp:colorMain','Group by Color'],['grp:category','Group by Type'],['grp:period','Group by Period'],['custom','My Ordering']];
 var ALIAS={mainColor:'colorMain',secondaryColor:'colorSecondary',pdate:'purchaseDate',platform:'purchasePlatform',dListed:'dateListed',link:'linkSale',shipEst:'shipEstimate',dSold:'dateSold',ship:'shipActual',final:'payout',lastWorn:'wornLast',hearts:'rating',size:'ringSize',channel:'sellPlatform'};
 var CSV_COLS=[['id','id'],['title','title'],['category','category'],['period','period'],['era','era'],['yearMade','year'],['country','country'],['stones','stones'],['metals','metals'],['hallmarks','hallmarks'],['measurements','measurements'],['weight','weight'],['ringSize','ring size'],['cut','cut'],['colorMain','main color'],['colorSecondary','secondary color'],['tags','motifs'],['notes','notes'],['wornLast','last worn'],['wornCount','times worn'],['rating','rating'],['photoshoot','photoshoot'],['status','status'],['purchaseDate','purchase date'],['seller','seller'],['purchasePlatform','platform'],['cost','cost'],['sellPlatform','selling platform'],['dateListed','date listed'],['linkSale','listing link'],['dateSold','date sold'],['feeFinal','platform fee'],['shipActual','shipping'],['payout','final payout'],['shipEstimate','shipping estimate'],['buffer','buffer']];
 var FS={
@@ -162,44 +162,44 @@ var FS={
  period:['Period','sel',PERIODS],
  era:['Era/Movement','text'],
  yearMade:['Year','number'],
- country:['Country of origin','text'],
- stones:['Stones (separate with commas)','list'],
- metals:['Metals (separate with commas)','list'],
+ country:['Country of Origin','text'],
+ stones:['Stones','list'],
+ metals:['Metals','list'],
  hallmarks:['Hallmarks','text'],
  measurements:['Measurements','text'],
  weight:['Weight','text'],
- ringSize:['Ring size','ringsz'],
- cut:['Cut (separate with commas)','list'],
- colorMain:['Main color','sel',COLOR_SEL],
- colorSecondary:['Secondary color','sel',COLOR_SEL],
- tags:['Motifs (separate with commas)','list'],
+ ringSize:['Ring Size','ringsz'],
+ cut:['Cut','list'],
+ colorMain:['Main Color','sel',COLOR_SEL],
+ colorSecondary:['Secondary Color','sel',COLOR_SEL],
+ tags:['Motifs','list'],
  notes:['Notes','textarea'],
- wornLast:['Last worn','date'],
- wornCount:['Times worn','number'],
+ wornLast:['Last Worn','date'],
+ wornCount:['Times Worn','number'],
  rating:['Rating','rating'],
  photoshoot:['Photoshoot?','check'],
  status:['Status','sel',STAT],
- purchaseDate:['Purchase date','date'],
+ purchaseDate:['Purchase Date','date'],
  seller:['Seller','text'],
- purchasePlatform:['Platform','text'],
+ purchasePlatform:['Purchase Platform','text'],
  cost:['Cost','money'],
- shipEstimate:['Shipping estimate','money'],
+ shipEstimate:['Shipping Estimate','money'],
  buffer:['Buffer (%)','number'],
- ebayPct:['eBay fee %','pct'],
+ ebayPct:['eBay Fee %','pct'],
  igPct:['Instagram %','pct'],
- suggestedEbay:['Suggested eBay price','calc','sugE'],
- suggestedIG:['Suggested Instagram price','calc','sugI'],
- potentialEbay:['Potential eBay profit','calc','potE'],
- potentialIG:['Potential Instagram price','calc','potI'],
+ suggestedEbay:['Suggested eBay Price','calc','sugE'],
+ suggestedIG:['Suggested Instagram Price','calc','sugI'],
+ potentialEbay:['Potential eBay Profit','calc','potE'],
+ potentialIG:['Potential Instagram Price','calc','potI'],
  sellPlatform:['Selling Platform','sel',['','eBay','Instagram']],
- dateListed:['Date listed','date'],
- linkSale:['Listing link','url'],
- dateSold:['Date sold','date'],
- turnover:['Turnover (days listed → sold)','calc','c-days'],
- feeFinal:['Platform fee','money'],
+ dateListed:['Date Listed','date'],
+ linkSale:['Listing Link','url'],
+ dateSold:['Date Sold','date'],
+ turnover:['Turnover (Days Listed → Sold)','calc','c-days'],
+ feeFinal:['Platform Fee','money'],
  shipActual:['Shipping','money'],
- payout:['Final payout','money'],
- netProfit:['Net profit','calc','c-net']
+ payout:['Final Payout','money'],
+ netProfit:['Net Profit','calc','c-net']
 };
 var LISTS=['stones','metals','tags','cut'];
 var ORDER_PIECE=['title','category','period','era','yearMade','country','stones','metals','hallmarks','measurements','weight','ringSize','cut','colorMain','colorSecondary','tags','notes'];
@@ -409,16 +409,18 @@ function galRemove(kind,ids){
  if(blocked.length)document.getElementById('modal').innerHTML=blockedHTML(blocked);
 }
 function blockedHTML(list){
- return '<div class="modal" data-a="backdrop"><div><h3 style="margin:0 0 6px">Some images are still in use</h3><p class="meta">These images are linked to pieces, so they were not deleted. Remove each image from the piece first, then delete it here.</p>'
+ return '<div class="modal" data-a="backdrop"><div><h3 style="margin:0 0 6px">Some Images Are Still in Use</h3><p class="meta">These images are linked to pieces, so they were not deleted. Remove each image from the piece first, then delete it here.</p>'
   +list.map(function(b){return '<div style="display:flex;gap:10px;align-items:flex-start;margin:10px 0;border-top:1px solid var(--line);padding-top:10px"><img src="'+esc(b.g.src)+'" alt="" style="width:64px;height:64px;object-fit:cover;border-radius:8px;flex:none"><div style="display:flex;flex-direction:column;gap:6px;align-items:flex-start"><span class="meta">Used by</span>'+b.pieces.map(function(p){return '<button data-a="edit" data-id="'+p.id+'">'+esc(title(p))+'</button>'}).join('')+'</div></div>'}).join('')
   +'<div class="bar" style="justify-content:center;margin:12px 0 0"><button data-a="x">OK</button></div></div></div>';
 }
 function previewHTML(src){return '<div class="modal" data-a="backdrop"><div style="max-width:94vw;text-align:center"><img src="'+esc(src)+'" alt="" style="max-width:100%;max-height:78vh;display:block;margin:0 auto;border-radius:10px"><p class="meta">'+sizeOf(src)+'</p><div class="bar" style="justify-content:center"><button data-a="x">Close</button></div></div></div>'}
-var galUnl={refs:false,covers:false};
+var galUnl={refs:false,covers:false},galOpen={refs:false,covers:false};
+var secOpen={};
+function dOpen(k,d){return secOpen[k]===undefined?(d?' open':''):(secOpen[k]?' open':'')}
 function avail(kind){return gal[kind].filter(function(id){return usedBy(id).length===0})}
 function gallerySection(kind,label){
  var all=gal[kind],list=galUnl[kind]?all.filter(function(id){return usedBy(id).length===0}):all,sel=galSel[kind],n=Object.keys(sel).filter(function(k){return sel[k]}).length;
- return '<details><summary>'+label+' ('+all.length+')</summary>'
+ return '<details data-gsec="'+kind+'"'+(galOpen[kind]?' open':'')+'><summary>'+label+' ('+all.length+')</summary>'
   +'<div class="bar"><button data-a="gadd" data-kind="'+kind+'">+ Add images</button><button data-a="gunl" data-kind="'+kind+'"'+(galUnl[kind]?' class="on"':'')+'>Unlinked only</button><button data-a="gall" data-kind="'+kind+'">Select all</button><button data-a="gnone" data-kind="'+kind+'">Clear selection</button><button class="dan" data-a="gdelsel" data-kind="'+kind+'"'+(n?'':' disabled')+'>Delete selected ('+n+')</button></div>'
   +(list.length?'<div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(110px,1fr))">'+list.map(function(id){var on=!!sel[id],src=gal.imgs[id];return '<div style="position:relative"><img src="'+esc(src)+'" alt="" data-a="gview" data-kind="'+kind+'" data-id="'+id+'" style="width:100%;aspect-ratio:1;object-fit:cover;border-radius:8px;display:block;cursor:zoom-in;'+(on?'outline:3px solid var(--acc);':'')+'"><button data-a="gtog" data-kind="'+kind+'" data-id="'+id+'" style="position:absolute;top:4px;left:4px;padding:2px 7px;min-height:0">'+(on?'☑':'☐')+'</button><button data-a="gdel" data-kind="'+kind+'" data-id="'+id+'" style="position:absolute;top:4px;right:4px;padding:2px 7px;min-height:0">✕</button><span class="meta" style="position:absolute;left:4px;bottom:4px;background:rgba(0,0,0,.6);color:#fff;padding:1px 4px;border-radius:4px;font-size:.65rem">'+sizeOf(src)+'</span></div>'}).join('')+'</div>':'<p class="meta">No images yet.</p>')
   +'</details>';
@@ -429,7 +431,7 @@ function renderGallery(){return '<h2>Gallery</h2>'+gallerySection('refs','Refere
 function galPickHTML(act){
  act=act||'galuse';
  var sec=function(kind,label){return '<p class="meta" style="margin:10px 0 4px">'+label+'</p><div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(80px,1fr))">'+(avail(kind).length?avail(kind).map(function(id){return '<button type="button" data-a="'+act+'" data-id="'+id+'" style="padding:0;aspect-ratio:1;overflow:hidden;border-radius:8px;min-height:0;border:2px solid transparent"><img src="'+esc(gal.imgs[id])+'" alt="" style="width:100%;height:100%;object-fit:cover;display:block"></button>'}).join(''):'<p class="meta">None yet.</p>')+'</div>'};
- return '<div class="modal" data-a="backdrop"><div><h3 style="margin:0 0 6px">'+(act==='galaddref'?'Add reference from gallery':'Add cover from gallery')+'</h3>'+sec('covers','Cover Photo Thumbnails')+sec('refs','Reference Screenshots')+'<div class="bar" style="justify-content:center;margin:12px 0 0"><button data-a="x">Cancel</button></div></div></div>';
+ return '<div class="modal" data-a="backdrop"><div><h3 style="margin:0 0 6px">'+(act==='galaddref'?'Add Reference From Gallery':'Add Cover From Gallery')+'</h3>'+sec('covers','Cover Photo Thumbnails')+sec('refs','Reference Screenshots')+'<div class="bar" style="justify-content:center;margin:12px 0 0"><button data-a="x">Cancel</button></div></div></div>';
 }
 
 /* ---------- filters ---------- */
@@ -442,7 +444,7 @@ var FACETS=[
  {k:'tags',l:'Motifs',cloud:1,v:function(){return allOf(function(i){return i.tags})},g:function(i){return i.tags||[]}},
  {k:'stones',l:'Stones',cloud:1,counted:1,v:function(){return allOf(function(i){return i.stones})},g:function(i){return i.stones||[]}},
  {k:'colorMain',l:'Color',sw:1,v:function(){return COLOR_ORDER.filter(function(c){return vis().some(function(i){return i.colorMain===c})})},g:function(i){return [i.colorMain]}},
- {k:'finger',l:'Finger (rings, by size)',v:function(){return FINGERS},g:function(i){return [finger(i)]}}
+ {k:'finger',l:'Finger (Rings, by Size)',v:function(){return FINGERS},g:function(i){return [finger(i)]}}
 ];
 function facetOf(k){return FACETS.filter(function(F){return F.k===k})[0]}
 function vis(){return secretCfg.on?items.filter(function(i){return !isHidden(i)}):items}
@@ -497,7 +499,7 @@ function rangeBlock(k,l,nums,fmt){
   +'<input type="range" data-a="rng" data-k="'+k+'" min="'+mn+'" max="'+mx+'" step="1" value="'+r[1]+'"></div></fieldset>';
 }
 function filtersHTML(){
- var h='<h3 style="margin:0 0 8px">Filters &amp; sort</h3>'
+ var h='<h3 style="margin:0 0 8px">Filters &amp; Sort</h3>'
   +'<label>Sort by<select data-a="sort" id="sort">'+SORTS.map(function(o){return '<option value="'+esc(o[0])+'"'+(o[0]===sortBy?' selected':'')+'>'+esc(o[1])+'</option>'}).join('')+'</select></label>'
   +'<label class="swl"><input type="checkbox" data-a="hidesold"'+(hideSold?' checked':'')+'> Show Waiting and PC Only</label>';
  FACETS.forEach(function(F){
@@ -531,7 +533,7 @@ function ioModalHTML(){
   +'<div style="border:1px solid var(--line);border-radius:12px;padding:12px"><h4 class="sub" style="margin:0 0 8px">CSV Backup</h4>'
   +'<div class="bar" style="flex-direction:column;align-items:stretch;margin:0"><button data-a="csvup">⬆ Upload (CSV)</button><button data-a="csvdown">⬇ Download (CSV)</button></div>'
   +'<p class="meta">Upload backfills records without photos. Download exports every record without photos as CSV.</p>'
-  +'<details class="tpl"><summary>CSV template fields</summary><p class="meta" style="word-break:break-word;margin:0 0 8px">'+tpl+'</p><p class="meta" style="margin:0 0 8px">Lists separate values with ; or commas. Dates use YYYY-MM-DD. Rating is 0 to 5. Photoshoot is true or false. Leave a cell empty to keep the existing value when updating by id.</p></details></div>'
+  +'<details class="tpl"><summary>CSV Template Fields</summary><p class="meta" style="word-break:break-word;margin:0 0 8px">'+tpl+'</p><p class="meta" style="margin:0 0 8px">Lists separate values with ; or commas. Dates use YYYY-MM-DD. Rating is 0 to 5. Photoshoot is true or false. Leave a cell empty to keep the existing value when updating by id.</p></details></div>'
   +'<div style="border:1px solid var(--line);border-radius:12px;padding:12px"><h4 class="sub" style="margin:0 0 8px">JSON Backup</h4>'
   +'<div class="bar" style="flex-direction:column;align-items:stretch;margin:0"><button data-a="export">⬇ Export (JSON)</button><button data-a="import">⬆ Import (JSON)</button></div>'
   +'<p class="meta">Export saves everything, including photos, in numbered parts. Import restores a backup on a new device or after browser data is cleared.</p></div>'
@@ -542,7 +544,7 @@ function ioModalHTML(){
 }
 function viewControls(){
  var h='<h3 style="margin:0 0 8px">View</h3>'+'<span class="tgl">'+[['thumbs','▦ Grid'],['table','▤ Table']].map(function(o){return '<button data-a="vm" data-v="'+o[0]+'"'+(o[0]===vmode?' class="on"':'')+'>'+o[1]+'</button>'}).join('')+'</span>';
- if(vmode==='thumbs')h+='<div class="meta" style="margin-top:12px">Grid size</div><div class="seg" style="margin-top:4px">'+[1,2,3,4].map(function(n){return '<button data-a="cols" data-v="'+n+'"'+(n===cols?' class="on"':'')+'>'+n+'</button>'}).join('')+'</div><div class="seg" style="margin-top:8px"><button data-a="ro"'+(ro?' class="on"':'')+'>'+(ro?'Done reordering':'✥ Reorder Grid')+'</button></div>';
+ if(vmode==='thumbs')h+='<div class="meta" style="margin-top:12px">Grid Size</div><div class="seg" style="margin-top:4px">'+[1,2,3,4].map(function(n){return '<button data-a="cols" data-v="'+n+'"'+(n===cols?' class="on"':'')+'>'+n+'</button>'}).join('')+'</div><div class="seg" style="margin-top:8px"><button data-a="ro"'+(ro?' class="on"':'')+'>'+(ro?'Done reordering':'✥ Reorder Grid')+'</button></div>';
  return h;
 }
 function renderDrawer(){
@@ -554,9 +556,9 @@ function drawer(o){document.getElementById('drawer').classList.toggle('open',o);
 function thumb(i){return '<div class="tile" data-a="open" data-id="'+i.id+'">'+(EMOJI[String(i.category).toLowerCase()]||'💎')+coverImg(i.cover)+'</div>'}
 function countLine(n){return '<p class="meta" style="text-align:center;margin:16px 0 0">'+n+' piece'+(n===1?'':'s')+(anyFilter()?' (filtered)':'')+'</p>'}
 var TC={
- Piece:[['Category',function(i){return esc(i.category)}],['Period',function(i){return esc(i.period)}],['Era/Movement',function(i){return esc(i.era||'—')}],['Year',function(i){return esc(i.yearMade==null?'—':i.yearMade)}],['Country of origin',function(i){return esc(i.country||'—')}],['Stones',function(i){return esc((i.stones||[]).join(', ')||'—')}],['Metals',function(i){return esc((i.metals||[]).join(', ')||'—')}],['Hallmarks',function(i){return esc(i.hallmarks||'—')}],['Measurements',function(i){return esc(i.measurements||'—')}],['Weight',function(i){return esc(i.weight||'—')}],['Ring size',function(i){return esc(i.ringSize==null||i.ringSize===''?'—':i.ringSize)}],['Cut',function(i){return esc((i.cut||[]).join(', ')||'—')}],['Main color',function(i){return i.colorMain?sw(i.colorMain)+' '+esc(i.colorMain):'—'}],['Secondary color',function(i){return i.colorSecondary?sw(i.colorSecondary)+' '+esc(i.colorSecondary):'—'}],['Motifs',function(i){return esc((i.tags||[]).join(', ')||'—')}],['Notes',function(i){return esc(i.notes||'—')}]],
- Transaction:[['Status',function(i){return esc(i.status)}],['Purchase date',function(i){return esc(fmtDate(i.purchaseDate)||'—')}],['Seller',function(i){return esc(i.seller||'—')}],['Platform',function(i){return esc(i.purchasePlatform||'—')}],['Cost',function(i){return money(num(i.cost))}],['Selling Platform',function(i){return esc(i.sellPlatform||'—')}],['Date listed',function(i){return esc(fmtDate(i.dateListed)||'—')}],['Listing link',function(i){return i.linkSale?'<a href="'+esc(i.linkSale)+'" target="_blank" rel="noopener">open</a>':'—'}],['Date sold',function(i){return esc(fmtDate(i.dateSold)||'—')}],['Turnover',function(i){return days(i)==null?'—':days(i)+' days'}],['Platform fee',function(i){return fees(i)?money(fees(i)):'—'}],['Shipping',function(i){return money(num(i.shipActual))}],['Final payout',function(i){return money(num(i.payout))}],['Net profit',function(i){return calcs(i)['c-net']}]],
- Stats:[['Last worn',function(i){return esc(fmtDate(i.wornLast)||'—')}],['Times worn',function(i){return esc(i.wornCount==null||i.wornCount===''?'—':i.wornCount)}],['Rating',function(i){return stars(i.rating)||'—'}],['Photoshoot?',function(i){return i.photoshoot?'Yes':'No'}]]
+ Piece:[['Category',function(i){return esc(i.category)}],['Period',function(i){return esc(i.period)}],['Era/Movement',function(i){return esc(i.era||'—')}],['Year',function(i){return esc(i.yearMade==null?'—':i.yearMade)}],['Country of Origin',function(i){return esc(i.country||'—')}],['Stones',function(i){return esc((i.stones||[]).join(', ')||'—')}],['Metals',function(i){return esc((i.metals||[]).join(', ')||'—')}],['Hallmarks',function(i){return esc(i.hallmarks||'—')}],['Measurements',function(i){return esc(i.measurements||'—')}],['Weight',function(i){return esc(i.weight||'—')}],['Ring Size',function(i){return esc(i.ringSize==null||i.ringSize===''?'—':i.ringSize)}],['Cut',function(i){return esc((i.cut||[]).join(', ')||'—')}],['Main Color',function(i){return i.colorMain?sw(i.colorMain)+' '+esc(i.colorMain):'—'}],['Secondary Color',function(i){return i.colorSecondary?sw(i.colorSecondary)+' '+esc(i.colorSecondary):'—'}],['Motifs',function(i){return esc((i.tags||[]).join(', ')||'—')}],['Notes',function(i){return esc(i.notes||'—')}]],
+ Transaction:[['Status',function(i){return esc(i.status)}],['Purchase Date',function(i){return esc(fmtDate(i.purchaseDate)||'—')}],['Seller',function(i){return esc(i.seller||'—')}],['Purchase Platform',function(i){return esc(i.purchasePlatform||'—')}],['Cost',function(i){return money(num(i.cost))}],['Selling Platform',function(i){return esc(i.sellPlatform||'—')}],['Date Listed',function(i){return esc(fmtDate(i.dateListed)||'—')}],['Listing Link',function(i){return i.linkSale?'<a href="'+esc(i.linkSale)+'" target="_blank" rel="noopener">open</a>':'—'}],['Date Sold',function(i){return esc(fmtDate(i.dateSold)||'—')}],['Turnover',function(i){return days(i)==null?'—':days(i)+' days'}],['Platform Fee',function(i){return fees(i)?money(fees(i)):'—'}],['Shipping',function(i){return money(num(i.shipActual))}],['Final Payout',function(i){return money(num(i.payout))}],['Net Profit',function(i){return calcs(i)['c-net']}]],
+ Stats:[['Last Worn',function(i){return esc(fmtDate(i.wornLast)||'—')}],['Times Worn',function(i){return esc(i.wornCount==null||i.wornCount===''?'—':i.wornCount)}],['Rating',function(i){return stars(i.rating)||'—'}],['Photoshoot?',function(i){return i.photoshoot?'Yes':'No'}]]
 };
 function renderTable(){
  var cols=TC[ctab],list=items.filter(pass).sort(groupCmp),n=Math.max(1,Math.ceil(list.length/PER));if(page>n)page=n;
@@ -591,8 +593,8 @@ function fieldHTML(k,v){
  else if(t==='money')c='<input name="'+k+'" type="text" inputmode="decimal" data-money="1" value="'+esc(fmtMoney(v))+'" placeholder="$0.00">';
  else if(t==='date')c='<input name="'+k+'" type="date" value="'+esc(v||'')+'">';
  else if(t==='number')c='<input name="'+k+'" type="number" step="'+(k==='buffer'?'0.5':'1')+'" inputmode="decimal" value="'+esc(val)+'">';
- else c='<input name="'+k+'" type="'+(t==='url'?'url':'text')+'" value="'+esc(val)+'">';
- return '<label>'+(k==='ringSize'?'<span>'+s[0]+' <button type="button" class="link" data-a="ringref" style="font-size:.8rem">size chart</button></span>':s[0])+c+'</label>';
+ else c='<input name="'+k+'" type="'+(t==='url'?'url':'text')+'" value="'+esc(val)+'"'+(t==='list'?' placeholder="Separate with commas"':'')+'>';
+ return '<label>'+(k==='ringSize'?'<span style="display:flex;justify-content:space-between;align-items:center;gap:8px;line-height:1.2"><span>'+s[0]+'</span><button type="button" data-a="ringref" style="border:0;background:none;padding:0;margin:0;min-height:0;font-size:.8rem;line-height:1.2;color:var(--acc);text-decoration:underline;border-radius:0">View size chart</button></span>':s[0])+c+'</label>';
 }
 function sec(keys){return keys.map(function(k){return fieldHTML(k,editing[k])}).join('')}
 function listingTexts(g){
@@ -611,7 +613,7 @@ function listingTexts(g){
 function listingBlock(it){
  var LT=listingTexts(function(k){return valOf(it[k])});
  return '<div class="f"><div style="grid-column:1/-1"><div class="seg" style="justify-content:space-between"><span class="meta">Description</span><button type="button" class="link" data-a="copy" data-id="lhDesc">Copy</button></div><textarea id="lhDesc" rows="4" style="height:auto">'+esc(LT[0])+'</textarea></div>'
-  +'<div style="grid-column:1/-1"><div class="seg" style="justify-content:space-between"><span class="meta">Listing details</span><button type="button" class="link" data-a="copy" data-id="lhList">Copy</button></div><textarea id="lhList" rows="6" style="height:auto">'+esc(LT[1])+'</textarea></div></div>';
+  +'<div style="grid-column:1/-1"><div class="seg" style="justify-content:space-between"><span class="meta">Listing Details</span><button type="button" class="link" data-a="copy" data-id="lhList">Copy</button></div><textarea id="lhList" rows="6" style="height:auto">'+esc(LT[1])+'</textarea></div></div>';
 }
 function copyText(id,btn){
  var ta=document.getElementById(id);if(!ta)return;
@@ -621,56 +623,30 @@ function copyText(id,btn){
 }
 function imagesHTML(){
  var refs=editing.refs||[],c=editing.cover;
- return '<div class="f"><h4 class="sub">Reference screenshots</h4><div class="seg" style="grid-column:1/-1"><button type="button" data-a="refadd">+ Add images</button><button type="button" data-a="galref">Add from gallery</button></div>'
-  +'<div style="grid-column:1/-1">'+(refs.length?'<div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(90px,1fr))">'+refs.map(function(id,n){var src=gal.imgs[id];return '<div style="position:relative"><img src="'+esc(src)+'" style="width:100%;aspect-ratio:1;object-fit:cover;border-radius:8px;display:block;cursor:zoom-in" alt="" data-a="preview" data-i="'+n+'"><span class="meta" style="position:absolute;left:4px;bottom:4px;background:rgba(0,0,0,.6);color:#fff;padding:1px 4px;border-radius:4px;font-size:.65rem">'+sizeOf(src)+'</span><button type="button" data-a="rmref" data-i="'+n+'" style="position:absolute;top:4px;right:4px;padding:2px 8px;min-height:0">✕</button></div>'}).join('')+'</div>':'<p class="meta">No reference screenshots yet.</p>')+'</div></div>'
-  +'<div class="f"><h4 class="sub">Cover photo</h4>'
-  +'<input type="file" id="cvfile" accept="image/*" hidden><input type="file" id="reffile" accept="image/*" multiple hidden>'
-  +'<div style="grid-column:1/-1">'+(c&&gal.imgs[c.id]?'<div style="position:relative;width:160px;height:160px;border-radius:10px;overflow:hidden;margin:6px 0">'+coverImg(c)+'</div><div class="meta">'+sizeOf(gal.imgs[c.id])+'</div>':'<p class="meta">No cover yet.</p>')
-  +'<div class="seg"><button type="button" data-a="covadd">⬆ Upload new cover</button><button type="button" data-a="galpick">Add from gallery</button>'+(c?'<button type="button" data-a="cvadj">Pan &amp; Zoom</button><button type="button" data-a="cvrm">Remove cover</button>':'')+'</div>'
-  +'<div id="crop" hidden><div id="cropv"><img id="cropimg" alt="" draggable="false"></div><input type="range" id="cropz" min="1" max="4" step="0.01" value="1" aria-label="Zoom"><p class="seg"><button type="button" class="pri" data-a="cvok">Use this crop</button><button type="button" data-a="cvcancel">Cancel</button></p><p class="meta">Drag to pan. Use the slider (or pinch) to zoom. The square is your thumbnail.</p></div></div>'
+ var refBlock='<div class="f"><h4 class="sub">Reference Screenshots</h4><input type="file" id="reffile" accept="image/*" multiple hidden>'
+  +'<div class="seg" style="grid-column:1/-1"><button type="button" data-a="refadd">+ Add images</button><button type="button" data-a="galref">Add from gallery</button></div>'
+  +'<div style="grid-column:1/-1">'+(refs.length?'<div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(90px,1fr))">'+refs.map(function(id,n){var src=gal.imgs[id];return '<div style="position:relative"><img src="'+esc(src)+'" style="width:100%;aspect-ratio:1;object-fit:cover;border-radius:8px;display:block;cursor:zoom-in" alt="" data-a="preview" data-i="'+n+'"><span class="meta" style="position:absolute;left:4px;bottom:4px;background:rgba(0,0,0,.6);color:#fff;padding:1px 4px;border-radius:4px;font-size:.65rem">'+sizeOf(src)+'</span><button type="button" data-a="rmref" data-i="'+n+'" style="position:absolute;top:4px;right:4px;padding:2px 8px;min-height:0">✕</button></div>'}).join('')+'</div>':'<p class="meta">No reference screenshots yet.</p>')+'</div></div>';
+ var divider='<hr style="grid-column:1/-1;border:0;border-top:1px solid var(--line);margin:14px 0">';
+ var coverBlock='<div class="f"><h4 class="sub">Cover Photo</h4><input type="file" id="cvfile" accept="image/*" hidden>'
+  +'<div class="seg" style="grid-column:1/-1"><button type="button" data-a="covadd">⬆ Upload new cover</button><button type="button" data-a="galpick">Add from gallery</button>'+(c?'<button type="button" data-a="cvadj">Crop</button><button type="button" data-a="cvrm">Remove cover</button>':'')+'</div>'
+  +'<div style="grid-column:1/-1">'+(c&&gal.imgs[c.id]?'<div data-a="previewcover" style="position:relative;width:160px;height:160px;border-radius:10px;overflow:hidden;margin:6px 0;cursor:zoom-in">'+coverImg(c)+'</div><div class="meta">'+sizeOf(gal.imgs[c.id])+'</div>':'<p class="meta">No cover yet.</p>')+'</div>'
+  +'<div id="crop" style="grid-column:1/-1" hidden><div id="cropv"><img id="cropimg" alt="" draggable="false"></div><input type="range" id="cropz" min="1" max="4" step="0.01" value="1" aria-label="Zoom"><p class="seg"><button type="button" class="pri" data-a="cvok">Use this crop</button><button type="button" data-a="cvcancel">Cancel</button></p><p class="meta">Drag to pan. Use the slider (or pinch) to zoom. The square is your thumbnail.</p></div>'
   +(refs.length?'<div style="grid-column:1/-1"><p class="meta">Use one of this piece’s reference images</p><div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(70px,1fr))">'+refs.map(function(id,n){return '<button type="button" data-a="pickref" data-i="'+n+'" style="padding:0;border-radius:8px;aspect-ratio:1;overflow:hidden;min-height:0;border:2px solid '+(c&&c.id===id?'var(--acc)':'transparent')+'"><img src="'+esc(gal.imgs[id])+'" alt="" style="width:100%;height:100%;object-fit:cover;display:block"></button>'}).join('')+'</div></div>':'')
   +'</div>';
-}
-function quickPrompt(){
- var lines=QA_KEYS.map(function(k){var s=FS[k],t=s[1],hint=t==='sel'?'one of: '+s[2].filter(Boolean).join(', '):t==='list'?'array of strings':t==='money'?'number, no $':t==='date'?'YYYY-MM-DD':t==='ringsz'?'number 0 to 13 in steps of 0.25':t==='number'?'number':t==='url'?'URL':'text';return '"'+k+'": '+hint+' ('+s[0]+')'});
- return 'Read the attached jewelry listing screenshots and output ONLY a JSON object with these keys. Omit any key you cannot find. No commentary.\n'+lines.join('\n');
-}
-function quickHTML(){
- return '<div class="modal" data-a="backdrop"><div style="max-width:520px;width:94vw"><h3 style="margin:0 0 6px">Quick add</h3><p class="meta">1. Copy the prompt and send it with your listing screenshots to Claude.<br>2. Paste Claude’s JSON reply below and tap Apply.</p>'
-  +'<div class="seg" style="justify-content:space-between"><span class="meta">Prompt</span><button type="button" class="link" data-a="copy" data-id="qaPrompt">Copy</button></div><textarea id="qaPrompt" rows="6" readonly style="height:auto">'+esc(quickPrompt())+'</textarea>'
-  +'<label style="margin-top:12px">Claude’s output<textarea id="qaIn" rows="6" placeholder="Paste output here" style="height:auto"></textarea></label>'
-  +'<div class="bar" style="justify-content:center;margin:12px 0 0"><button class="pri" data-a="qaapply">Apply</button><button data-a="x">Cancel</button></div></div></div>';
-}
-function applyQuick(d){
- var n=0;
- Object.keys(d||{}).forEach(function(k){
-   var key=ALIAS[k]||k;
-   var s=FS[key];if(!s||s[1]==='calc'||s[1]==='pct')return;
-   var v=d[k],t=s[1],out;
-   if(t==='sel'){var m=s[2].filter(function(o){return String(o).toLowerCase()===String(v==null?'':v).trim().toLowerCase()})[0];if(m===undefined)return;out=m}
-   else if(t==='list'){out=Array.isArray(v)?v.map(function(x){return String(x).trim()}).filter(Boolean):String(v||'').split(/[;,]/).map(function(x){return x.trim()}).filter(Boolean)}
-   else if(t==='money'){out=parseMoney(v);if(out==='')return}
-   else if(t==='date'){out=parseDate(v);if(!out)return}
-   else if(t==='number'){out=Number(v);if(v===''||v==null||isNaN(out))return}
-   else if(t==='ringsz'){out=Number(v);if(isNaN(out)||out<0||out>13)return;out=Math.round(out*4)/4}
-   else if(t==='check'){out=!!v&&String(v).toLowerCase()!=='false'}
-   else{out=String(v==null?'':v).trim();if(!out)return}
-   editing[key]=out;n++;
- });
- return n;
+ return refBlock+divider+coverBlock;
 }
 function renderEdit(){
  var it=editing;
  var pr=it.shipEstimate!=null&&it.shipEstimate!==''?it.shipEstimate:shipDefault(it.cost);
  shipTouched=false;
- var h='<h2>Add/edit a piece</h2><div class="bar"><button type="button" data-a="quickadd">⚡ Quick add</button></div><form id="form" autocomplete="off">';
- h+='<details open><summary>Piece</summary><div class="f">'+sec(ORDER_PIECE)+'<h4 class="sub">Stats</h4>'+sec(ORDER_STATS)+'</div></details>';
- h+='<details open><summary>Transaction</summary><div class="f">'+fieldHTML('status',it.status)+'<h4 class="sub">Purchase</h4>'+sec(ORDER_PURCH)+'</div>'
-  +'<details><summary>Sale</summary>'
-  +'<details><summary>Listing helper</summary>'+listingBlock(it)+'<div class="f"><h4 class="sub">Pricing</h4>'+ORDER_PRICE.map(function(k){return fieldHTML(k,k==='shipEstimate'?pr:it[k])}).join('')+'</div></details>'
-  +'<div class="f"><h4 class="sub">Sold details</h4>'+sec(ORDER_SOLD)+'</div></details></details>';
- h+='<details open><summary>Images</summary>'+imagesHTML()+'</details>';
- h+='<details><summary>Summary</summary><table style="width:100%;font-size:.88rem;border-collapse:collapse"><tbody id="sumtb"></tbody></table></details>';
+ var h='<h2>Add/Edit a Piece</h2><div class="bar"><button type="button" data-a="quickadd">⚡ Quick add</button></div><form id="form" autocomplete="off">';
+ h+='<details data-sec="piece"'+dOpen('piece',true)+'><summary>Piece</summary><div class="f">'+sec(ORDER_PIECE)+'<h4 class="sub">Stats</h4>'+sec(ORDER_STATS)+'</div></details>';
+ h+='<details data-sec="transaction"'+dOpen('transaction',true)+'><summary>Transaction</summary><div class="f">'+fieldHTML('status',it.status)+'<h4 class="sub">Purchase</h4>'+sec(ORDER_PURCH)+'</div>'
+  +'<details data-sec="sale"'+dOpen('sale',false)+'><summary>Sale</summary>'
+  +'<details data-sec="listing"'+dOpen('listing',false)+'><summary>Listing Helper</summary>'+listingBlock(it)+'<div class="f"><h4 class="sub">Pricing</h4>'+ORDER_PRICE.map(function(k){return fieldHTML(k,k==='shipEstimate'?pr:it[k])}).join('')+'</div></details>'
+  +'<div class="f"><h4 class="sub">Sold Details</h4>'+sec(ORDER_SOLD)+'</div></details></details>';
+ h+='<details data-sec="images"'+dOpen('images',true)+'><summary>Images</summary>'+imagesHTML()+'</details>';
+ h+='<details data-sec="summary"'+dOpen('summary',false)+'><summary>Summary</summary><table style="width:100%;font-size:.88rem;border-collapse:collapse"><tbody id="sumtb"></tbody></table></details>';
  h+='<div class="sticky"><button type="submit" class="pri">Save</button><button type="button" data-a="dup">Duplicate</button><button type="button" class="dan" data-a="del">Delete</button><button type="button" data-a="cancel">Cancel</button></div></form>';
  return h;
 }
@@ -754,7 +730,7 @@ function wear(id){
  var i=items.filter(function(x){return x.id===id})[0];if(!i)return;
  if(i.wornLast!==today())i.wornCount=(Number(i.wornCount)||0)+1;
  i.wornLast=today();saveItems();
- document.getElementById('modal').innerHTML='<div class="modal" data-a="backdrop"><div style="text-align:center"><p style="font-size:3rem;margin:0">✨</p><h3>Today’s jewelry is chosen</h3><p>'+esc(title(i))+'</p><p class="meta">Saved as worn on '+esc(fmtDate(i.wornLast))+' · '+(Number(i.wornCount)||0)+' time'+(Number(i.wornCount)===1?'':'s')+' worn in total</p><div class="bar" style="justify-content:center"><button class="pri" data-a="x">Done</button></div></div></div>';
+ document.getElementById('modal').innerHTML='<div class="modal" data-a="backdrop"><div style="text-align:center"><p style="font-size:3rem;margin:0">✨</p><h3>Today’s Jewelry Is Chosen</h3><p>'+esc(title(i))+'</p><p class="meta">Saved as worn on '+esc(fmtDate(i.wornLast))+' · '+(Number(i.wornCount)||0)+' time'+(Number(i.wornCount)===1?'':'s')+' worn in total</p><div class="bar" style="justify-content:center"><button class="pri" data-a="x">Done</button></div></div></div>';
 }
 function jotd(){
  var pool=items.filter(pass);if(!pool.length)pool=vis();if(!pool.length)return;
@@ -776,16 +752,16 @@ function hashKW(kw){
 function secretGate(){
  var M=document.getElementById('modal');
  if(secretUnlocked){show('secret');return}
- if(!secretCfg.hash){M.innerHTML='<div class="modal" data-a="backdrop"><div><h3 style="margin:0 0 6px">Set a keyword</h3><p class="meta">Choose a keyword to open the Secret Compartment. There is no reset, so remember it.</p><input type="password" id="skw" placeholder="Keyword"><div class="bar" style="justify-content:center;margin:12px 0 0"><button class="pri" data-a="sset">Save</button><button data-a="x">Cancel</button></div></div></div>';return}
+ if(!secretCfg.hash){M.innerHTML='<div class="modal" data-a="backdrop"><div><h3 style="margin:0 0 6px">Set a Keyword</h3><p class="meta">Choose a keyword to open the Secret Compartment. There is no reset, so remember it.</p><input type="password" id="skw" placeholder="Keyword"><div class="bar" style="justify-content:center;margin:12px 0 0"><button class="pri" data-a="sset">Save</button><button data-a="x">Cancel</button></div></div></div>';return}
  M.innerHTML='<div class="modal" data-a="backdrop"><div><h3 style="margin:0 0 6px">Secret Compartment</h3><input type="password" id="skw" placeholder="Keyword"><div class="bar" style="justify-content:center;margin:12px 0 0"><button class="pri" data-a="slogin">Open</button><button data-a="x">Cancel</button></div></div></div>';
 }
 function renderSecret(){
  if(!secretUnlocked)return '<h2>Secret Compartment</h2><p class="meta">Locked.</p>';
  var hidden=items.filter(isHidden);
  return '<h2>Secret Compartment</h2>'
-  +'<div class="bar"><label class="swl" style="margin:0"><input type="checkbox" data-a="smode"'+(secretCfg.on?' checked':'')+'> Hide these pieces in the Jewelry Box</label></div>'
-  +'<div class="f"><label>Cost threshold (hide pieces above this)<input type="text" inputmode="decimal" data-a="sthr" data-money="1" value="'+esc(secretCfg.threshold==null?'':fmtMoney(secretCfg.threshold))+'" placeholder="$0.00"></label>'
-  +'<label>Change keyword<input type="password" id="skw2" placeholder="New keyword"></label></div>'
+  +'<div class="bar"><label class="swl" style="margin:0"><input type="checkbox" data-a="smode"'+(secretCfg.on?' checked':'')+'> Hide These Pieces in the Jewelry Box</label></div>'
+  +'<div class="f"><label>Cost Threshold (Hide Pieces Above This)<input type="text" inputmode="decimal" data-a="sthr" data-money="1" value="'+esc(secretCfg.threshold==null?'':fmtMoney(secretCfg.threshold))+'" placeholder="$0.00"></label>'
+  +'<label>Change Keyword<input type="password" id="skw2" placeholder="New keyword"></label></div>'
   +'<div class="bar"><button data-a="skwchg">Save keyword</button><button data-a="slock">Lock</button></div>'
   +'<p class="meta">'+hidden.length+' piece'+(hidden.length===1?'':'s')+' over the threshold'+(secretCfg.on?' (hidden from the Jewelry Box)':' (mode is off, so they show)')+'.</p>'
   +'<div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(120px,1fr))">'+hidden.map(function(i){return '<div>'+thumb(i)+'<div class="meta">'+esc(title(i))+' · '+money(num(i.cost))+'</div></div>'}).join('')+'</div>';
@@ -989,6 +965,7 @@ document.addEventListener('click',function(e){
   case 'galref':M.innerHTML=galPickHTML('galaddref');break;
   case 'galuse':M.innerHTML='';syncForm();editing.cover={id:d.id,l:null,t:null,w:null,h:null};renderMain();break;
   case 'galaddref':M.innerHTML='';syncForm();if((editing.refs||[]).indexOf(d.id)<0)editing.refs=(editing.refs||[]).concat([d.id]);renderMain();break;
+  case 'previewcover':if(editing.cover&&gal.imgs[editing.cover.id])M.innerHTML=previewHTML(gal.imgs[editing.cover.id]);break;
   case 'covadd':document.getElementById('cvfile').click();break;
   case 'refadd':document.getElementById('reffile').click();break;
   case 'rmref':syncForm();editing.refs.splice(Number(d.i),1);renderMain();break;
@@ -1039,7 +1016,7 @@ document.addEventListener('submit',function(e){
  idx>-1?items[idx]=o:items.push(o);
  saveItems();show('box');
 });
-document.addEventListener('toggle',function(e){if(e.target.classList&&e.target.classList.contains('io'))ioOpen=e.target.open},true);
+document.addEventListener('toggle',function(e){if(e.target.classList&&e.target.classList.contains('io'))ioOpen=e.target.open;if(e.target.dataset&&e.target.dataset.gsec)galOpen[e.target.dataset.gsec]=e.target.open;if(e.target.dataset&&e.target.dataset.sec)secOpen[e.target.dataset.sec]=e.target.open},true);
 document.addEventListener('pointerdown',function(e){
  var v=e.target.closest('#cropv');
  if(v&&CR){CR.p[e.pointerId]={x:e.clientX,y:e.clientY};v.setPointerCapture(e.pointerId);return}
