@@ -148,7 +148,7 @@ footer#ver{text-align:center;padding:24px 14px calc(36px + env(safe-area-inset-b
 <input type="file" id="gfile" accept="image/*" multiple hidden>
 <script>
 var K='ntts_items_v2',OK='ntts_order_v1',PER=25,MAX_UPLOAD=300*1024;
-var APP_VERSION='1.6.2',APP_DATE='2026-11-02 · 3:50 PM ET',UPDATE_URL='';
+var APP_VERSION='1.6.3',APP_DATE='2026-11-02 · 3:50 PM ET',UPDATE_URL='';
 var EMOJI={ring:'💍',earrings:'✨',necklace:'📿',bracelet:'⭕',watch:'⌚',other:'💎'};
 var CATS=['Ring','Earrings','Necklace','Bracelet','Watch','Other'];
 var STAT=['Waiting','Private Collection','To List','Listed','Sold'];
@@ -644,9 +644,9 @@ function fieldHTML(k,v){
  else if(t==='money')c='<input name="'+k+'" type="text" inputmode="decimal" data-money="1" value="'+esc(fmtMoney(v))+'" placeholder="$0.00">';
  else if(t==='date')c='<input name="'+k+'" type="date" value="'+esc(v||'')+'">';
  else if(t==='number')c='<input name="'+k+'" type="number" step="'+(k==='buffer'?'0.5':'1')+'" inputmode="decimal" value="'+esc(val)+'">';
- else c='<input name="'+k+'" type="'+(t==='url'?'url':'text')+'" value="'+esc(val)+'"'+(t==='list'?' placeholder="comma separated"':'')+(SUGG_KEYS.indexOf(k)>-1?' data-sugg="'+k+'" autocomplete="off"':'')+'>';
+ else c='<input name="'+k+'" type="'+(t==='url'?'url':'text')+'" value="'+esc(val)+'"'+''+(SUGG_KEYS.indexOf(k)>-1?' data-sugg="'+k+'" autocomplete="off"':'')+'>';
  var sg=SUGG_KEYS.indexOf(k)>-1;
- return '<label'+(sg?' style="position:relative"':'')+'>'+(k==='ringSize'?'<span style="display:flex;justify-content:space-between;align-items:center;gap:8px;line-height:1.2"><span>'+s[0]+'</span><button type="button" data-a="ringref" style="border:0;background:none;padding:0;margin:0;min-height:0;font-size:.8rem;line-height:1.2;color:var(--acc);text-decoration:underline;border-radius:0">view chart</button></span>':s[0])+c+(sg?'<div class="sg" hidden></div>':'')+'</label>';
+ return '<label'+(sg?' style="position:relative"':'')+'>'+(k==='ringSize'?'<span style="display:flex;justify-content:space-between;align-items:center;gap:8px;line-height:1.2"><span>'+s[0]+'</span><button type="button" data-a="ringref" style="border:0;background:none;padding:0;margin:0;min-height:0;font-size:.8rem;line-height:1.2;color:var(--acc);text-decoration:underline;border-radius:0">view chart</button></span>':(t==='list'?s[0]+' (comma separated)':s[0]))+c+(sg?'<div class="sg" hidden></div>':'')+'</label>';
 }
 function suggPool(k){
  if(k==='colorMain')return COLOR_ORDER.map(function(c){return {v:c,l:(HEARTS[c]||'')+' '+c}});
@@ -712,15 +712,15 @@ function renderEdit(){
  var it=editing;
  var pr=it.shipEstimate!=null&&it.shipEstimate!==''?it.shipEstimate:shipDefault(it.cost);
  shipTouched=false;
- var h='<h2>Add/Edit a Piece</h2><div class="bar"><button type="button" data-a="quickadd">⚡ Quick add</button></div><form id="form" autocomplete="off">';
- h+='<details data-sec="piece"'+dOpen('piece',true)+'><summary>Piece</summary><div class="f">'+sec(ORDER_PIECE)+'<h4 class="sub">Stats</h4>'+sec(ORDER_STATS)+'</div></details>';
+ var h='<div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><h2 style="margin:0">Add/Edit a Piece</h2><button type="button" data-a="quickadd">⚡ Quick add</button></div><form id="form" autocomplete="off"><div id="editbar" class="bar" style="position:sticky;top:0;z-index:4;background:var(--bg);padding:8px 0;margin:0 0 12px"><button type="submit" class="pri">Save</button><button type="button" class="dan" data-a="del">Delete</button><button type="button" data-a="cancel">Cancel</button></div>';
+ h+='<details data-sec="images"'+dOpen('images',true)+'><summary>Images</summary>'+imagesHTML()+'</details>';
+h+='<details data-sec="piece"'+dOpen('piece',true)+'><summary>Piece</summary><div class="f">'+sec(ORDER_PIECE)+'<h4 class="sub">Stats</h4>'+sec(ORDER_STATS)+'</div></details>';
  h+='<details data-sec="transaction"'+dOpen('transaction',true)+'><summary>Transaction</summary><div class="f">'+fieldHTML('status',it.status)+'<h4 class="sub">Purchase</h4>'+sec(ORDER_PURCH)+'</div>'
   +'<details data-sec="sale"'+dOpen('sale',false)+'><summary>Sale</summary>'
   +'<details data-sec="listing"'+dOpen('listing',false)+'><summary>Listing Helper</summary>'+listingBlock(it)+'<div class="f"><h4 class="sub">Pricing</h4>'+ORDER_PRICE.map(function(k){return fieldHTML(k,k==='shipEstimate'?pr:it[k])}).join('')+'</div></details>'
   +'<div class="f"><h4 class="sub">Sold Details</h4>'+sec(ORDER_SOLD)+'</div></details></details>';
- h+='<details data-sec="images"'+dOpen('images',true)+'><summary>Images</summary>'+imagesHTML()+'</details>';
- h+='<details data-sec="summary"'+dOpen('summary',false)+'><summary>Summary</summary><table style="width:100%;font-size:.88rem;border-collapse:collapse"><tbody id="sumtb"></tbody></table></details>';
- h+='<div class="sticky"><button type="submit" class="pri">Save</button><button type="button" data-a="dup">Duplicate</button><button type="button" class="dan" data-a="del">Delete</button><button type="button" data-a="cancel">Cancel</button></div></form>';
+  h+='<details data-sec="summary"'+dOpen('summary',false)+'><summary>Summary</summary><table style="width:100%;font-size:.88rem;border-collapse:collapse"><tbody id="sumtb"></tbody></table></details>';
+ h+='</form>';
  return h;
 }
 function readForm(){
@@ -765,6 +765,7 @@ function refreshCalc(){
 }
 function renderMain(){
  document.getElementById('app').innerHTML=backupBanner()+(view==='box'?renderBox():view==='manage'?renderManage():view==='wishlist'?renderWishlist():view==='secret'?renderSecret():view==='jotd'?renderJotd():renderEdit());
+ var eb=document.getElementById('editbar'),hd=document.querySelector('header');if(eb&&hd)eb.style.top=hd.offsetHeight+'px';
  updateSummary();setTabs();updateStorage();
 }
 function render(){renderMain();renderDrawer()}
@@ -805,7 +806,7 @@ function wearMany(ids){
  items.forEach(function(i){if(ids.indexOf(i.id)<0)return;if(i.wornLast!==today()){i.wornCount=(Number(i.wornCount)||0)+1;i.wornLast=today();n++}});
  saveItems();return n;
 }
-var jotdSel=null,jotdMsg='';
+var jotdSel=null,jotdMsg='',jotdLock={ring1:false,ring2:false,earring:false,necklace:false};
 function jotdPool(cat){return vis().filter(function(i){return i.category===cat&&(i.status==='Waiting'||i.status==='Private Collection')})}
 function jotdPickOther(pool,cur){var c=cur?pool.filter(function(i){return i.id!==cur.id}):pool;if(!c.length)c=pool;return c.length?pickJ(c):null}
 function jotdRing2Pick(r1){
@@ -814,45 +815,51 @@ function jotdRing2Pick(r1){
  return c.length?pickJ(c):null;
 }
 function jotdRoll(k){
- var s=jotdSel;jotdMsg='';
+ var s=jotdSel;if(!s||jotdLock[k])return;jotdMsg='';
  if(k==='ring1'){
-   var cur=s.ring1,rings=jotdPool('Ring'),fs=['Index finger','Middle finger'].sort(function(){return Math.random()-0.5}),pick=null;
-   for(var n=0;n<fs.length&&!pick;n++){var c=rings.filter(function(i){return finger(i)===fs[n]&&(!cur||i.id!==cur.id)});if(c.length)pick=pickJ(c)}
-   if(!pick&&cur)pick=cur;
+   var cur=s.ring1,rings=jotdPool('Ring');
+   var fs=['Index finger','Middle finger'].filter(function(f){return !(jotdLock.ring2&&s.ring2&&finger(s.ring2)===f)}).sort(function(){return Math.random()-0.5});
+   var pick=null;
+   for(var n=0;n<fs.length&&!pick;n++){var fn=fs[n];var c=rings.filter(function(i){return finger(i)===fn&&(!cur||i.id!==cur.id)});if(c.length)pick=pickJ(c)}
+   if(!pick)pick=cur;
    s.ring1=pick;
-   s.ring2=jotdRing2Pick(pick);
+   if(!jotdLock.ring2)s.ring2=jotdRing2Pick(pick);
  }
  else if(k==='ring2'){s.ring2=jotdRing2Pick(s.ring1)}
  else if(k==='earring'){s.earring=jotdPickOther(jotdPool('Earrings'),s.earring)}
  else if(k==='necklace'){s.necklace=jotdPickOther(jotdPool('Necklace'),s.necklace)}
 }
-function jotdShuffleAll(){
- jotdSel={ring1:null,ring2:null,earring:null,necklace:null};
+function jotdLuck(){
+ if(!jotdSel)jotdSel={ring1:null,ring2:null,earring:null,necklace:null};
  jotdRoll('ring1');jotdRoll('ring2');jotdRoll('earring');jotdRoll('necklace');jotdMsg='';
 }
-function jotdCard(label,i,emptyMsg,k,skippable){
- var btn='font-size:.8rem;padding:4px 8px;min-height:0;';
- var acts='<span style="display:flex;gap:4px;flex:none">'+(skippable&&i?'<button data-a="jskip" data-k="'+k+'" style="'+btn+'">Skip</button>':'')+'<button data-a="jroll" data-k="'+k+'" style="'+btn+'">🔀 Shuffle</button></span>';
+function jotdStart(){
+ jotdSel={ring1:null,ring2:null,earring:null,necklace:null};
+ jotdLock={ring1:false,ring2:false,earring:false,necklace:false};jotdMsg='';
+}
+function jotdCard(label,i,emptyMsg,k){
+ var locked=!!jotdLock[k],btn='font-size:.8rem;padding:4px 8px;min-height:0;';
+ var lockBtn='<button data-a="jlock" data-k="'+k+'" aria-pressed="'+locked+'"'+(i?'':' disabled')+' style="'+btn+'">'+(locked?'🔒 Locked':'🔓 Lock')+'</button>';
  var pic=i?(i.cover?coverImg(i.cover):'<div style="font-size:3.5rem;text-align:center;padding-top:30%">'+(EMOJI[String(i.category).toLowerCase()]||'💎')+'</div>')
   :'<div class="meta" style="padding:10px;text-align:center;display:flex;align-items:center;justify-content:center;height:100%">'+esc(emptyMsg)+'</div>';
  var picWrap='<div '+(i?'data-a="open" data-id="'+i.id+'" style="cursor:zoom-in;':'style="')+'position:relative;width:100%;aspect-ratio:1;overflow:hidden;border-radius:10px;margin:0 0 6px;background:var(--acc)">'+pic+'</div>';
- return '<div style="border:1px solid var(--line);border-radius:12px;padding:8px;display:flex;flex-direction:column;min-width:0">'
-  +'<div style="display:flex;align-items:center;justify-content:space-between;gap:4px;margin-bottom:4px"><span class="meta">'+label+'</span>'+acts+'</div>'
+ return '<div style="border:1px solid '+(locked?'var(--acc)':'var(--line)')+';border-radius:12px;padding:8px;display:flex;flex-direction:column;min-width:0">'
+  +'<div style="display:flex;align-items:center;justify-content:space-between;gap:4px;margin-bottom:4px"><span class="meta">'+label+'</span>'+lockBtn+'</div>'
   +picWrap
   +'<div class="meta" style="display:flex;flex-wrap:wrap;column-gap:8px;margin:0"><span>'+(i?(stars(i.rating)||'Not rated'):'—')+'</span><span>'+(i?keycap(Number(i.wornCount)||0)+' • '+esc(agoText(i.wornLast)):'—')+'</span></div></div>';
 }
 function renderJotd(){
- if(!jotdSel)jotdShuffleAll();
+ if(!jotdSel)jotdLuck();
  var s=jotdSel,ids=[s.ring1,s.ring2,s.earring,s.necklace].filter(Boolean).map(function(i){return i.id});
  var cards='<div class="grid" style="grid-template-columns:repeat(2,minmax(0,1fr))">'
-  +jotdCard('Primary Ring',s.ring1,'No ring is saved for the index or middle finger yet. Add a ring size to a ring.','ring1',false)
-  +jotdCard('Secondary Ring',s.ring2,s.ring1?'No other ring on a different finger is available.':'Pick the Primary Ring first.','ring2',false)
-  +jotdCard('Earrings',s.earring,'Not wearing earrings today.','earring',false)
-  +jotdCard('Necklace',s.necklace,'Not wearing a necklace today.','necklace',false)
+  +jotdCard('Primary Ring',s.ring1,'No ring is saved for the index or middle finger yet. Add a ring size to a ring.','ring1')
+  +jotdCard('Secondary Ring',s.ring2,s.ring1?'No other ring on a different finger is available.':'Pick the Primary Ring first.','ring2')
+  +jotdCard('Earrings',s.earring,'Not wearing earrings today.','earring')
+  +jotdCard('Necklace',s.necklace,'Not wearing a necklace today.','necklace')
   +'</div>';
  return '<h2>Jewelry of the Day</h2>'
   +cards
-  +'<div class="bar" style="margin-top:12px"><button data-a="jreset">🔄 Start over</button><button data-a="jlucky">🍀 Feelin’ lucky</button><button class="pri" data-a="jwear"'+(ids.length?'':' disabled')+'>✓ Wearing these today</button></div>'
+  +'<div class="bar" style="margin-top:12px"><button data-a="jlucky">🍀 Feelin’ lucky</button><button data-a="jreset">🔄 Start over</button><button class="pri" data-a="jwear"'+(ids.length?'':' disabled')+'>✓ Say Yes!</button></div>'
   +(jotdMsg?'<p class="meta">'+esc(jotdMsg)+'</p>':'');
 }
 function popup(i){
@@ -1134,10 +1141,9 @@ document.addEventListener('click',function(e){
   case 'dclose':drawer(false);break;
   case 'nav':if(d.new)editing=newItem();if(d.v==='secret'){secretGate();break}show(d.v);break;
   case 'jotd':show('jotd');break;
-  case 'jroll':jotdRoll(d.k);renderMain();break;
-  case 'jlucky':jotdShuffleAll();renderMain();break;
-  case 'jreset':jotdSel={ring1:null,ring2:null,earring:null,necklace:null};jotdMsg='';renderMain();break;
-  case 'jskip':jotdSel[d.k]=null;jotdMsg='';renderMain();break;
+  case 'jlock':if(jotdSel&&jotdSel[d.k]){jotdLock[d.k]=!jotdLock[d.k];renderMain()}break;
+  case 'jlucky':jotdLuck();renderMain();break;
+  case 'jreset':jotdStart();renderMain();break;
   case 'jwear':var wn=wearMany([jotdSel.ring1,jotdSel.ring2,jotdSel.earring,jotdSel.necklace].filter(Boolean).map(function(i){return i.id}));jotdMsg=wn?'Saved as worn today ('+wn+' piece'+(wn===1?'':'s')+').':'Already saved as worn today.';renderMain();break;
   case 'showall':showAllF[d.k]=!showAllF[d.k];renderDrawer();break;
   case 'f':toggleFilter(d.k,d.val);render();break;
