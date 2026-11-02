@@ -42,6 +42,7 @@ details details{margin:8px 0;background:transparent}
 .f{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(220px,100%),1fr));gap:10px;padding-bottom:12px}
 .f>*{min-width:0}
 label{display:flex;flex-direction:column;font-size:.82rem;color:var(--mute);gap:3px}
+input::placeholder,textarea::placeholder{color:var(--mute);opacity:1}
 input,select,textarea{border:1px solid var(--line);border-radius:8px;padding:9px;background:var(--bg);font-size:16px;width:100%;text-align:left}
 .f input,.f select,.f textarea{height:44px;min-height:44px;min-width:0;max-width:100%;line-height:1.2}
 .f textarea{height:auto;min-height:44px;resize:vertical}
@@ -133,7 +134,7 @@ footer#ver{text-align:center;padding:24px 14px calc(36px + env(safe-area-inset-b
 <main id="app"><p class="meta">Loading…</p></main>
 <footer id="ver" class="meta"></footer>
 <div id="upd" class="upd" hidden></div>
-<nav id="tabbar" class="tabbar"><button data-a="nav" data-v="box" class="big"><span>💍</span><span>My Jewelry Box</span></button><button data-a="nav" data-v="secret"><span>🗝️</span><span>Secret Compartment</span></button><button data-a="nav" data-v="gallery"><span>🖼️</span><span>Gallery</span></button><button data-a="nav" data-v="edit" data-new="1"><span>＋</span><span>Add to Collection</span></button><button data-a="jotd"><span>✨</span><span>JOTD</span></button></nav>
+<nav id="tabbar" class="tabbar"><button data-a="nav" data-v="box" class="big"><span>💍</span><span>My Jewelry Box</span></button><button data-a="nav" data-v="secret"><span>🗝️</span><span>Secret Compartment</span></button><button data-a="nav" data-v="wishlist"><span>🛍️</span><span>Wishlist</span></button><button data-a="nav" data-v="edit" data-new="1"><span>＋</span><span>Add to Collection</span></button><button data-a="jotd"><span>✨</span><span>JOTD</span></button></nav>
 <div class="scrim" id="scrim" data-a="dclose"></div>
 <aside class="drawer" id="drawer"></aside>
 <div id="modal"></div>
@@ -142,10 +143,10 @@ footer#ver{text-align:center;padding:24px 14px calc(36px + env(safe-area-inset-b
 <input type="file" id="gfile" accept="image/*" multiple hidden>
 <script>
 var K='ntts_items_v2',OK='ntts_order_v1',PER=25,MAX_UPLOAD=300*1024;
-var APP_VERSION='1.5.10',APP_DATE='2026-11-01',UPDATE_URL='';
+var APP_VERSION='1.5.11',APP_DATE='2026-11-01',UPDATE_URL='';
 var EMOJI={ring:'💍',earring:'✨',necklace:'📿',bracelet:'⭕',watch:'⌚',other:'💎'};
 var CATS=['Ring','Earring','Necklace','Bracelet','Watch','Other'];
-var STAT=['Wishlist','Waiting','Private Collection','To List','Listed','Sold'];
+var STAT=['Waiting','Private Collection','To List','Listed','Sold'];
 var PERIODS=['Ancient','Antique','Mid-Century','Vintage','New'];
 var FINGERS=['Index finger','Middle finger','Ring finger','Pinky'];
 var COLOR_ORDER=['Pink','Red','Orange','Brown','Yellow','Green','Light blue','Blue','Purple','Black','Gray','White','Multi'];
@@ -236,6 +237,8 @@ function healGallery(){
  gal.covers=gal.covers.filter(function(id){return !!gal.imgs[id]});
 }
 function saveGallery(){healGallery();return kset('gallery',gal)}
+function saveWish(){return kset('wishlist',wish)}
+function isUsed(id){return usedBy(id).length>0||wish.some(function(w){return w.img===id})}
 function normGal(g){
  if(!g)return {imgs:{},refs:[],covers:[]};
  if(g.imgs)return {imgs:g.imgs,refs:g.refs||[],covers:g.covers||[]};
@@ -248,6 +251,7 @@ async function init(){
  var it=await kget('items');
  gal=normGal(await kget('gallery'));
  secretCfg=(await kget('secret'))||secretCfg;
+ wish=(await kget('wishlist'))||[];
  if(it===undefined){
    var legacy=null,lo=null;
    try{legacy=JSON.parse(localStorage.getItem(K)||localStorage.getItem('ntts_items_v1')||'null')}catch(e){}
@@ -311,6 +315,7 @@ function putImg(src){
 
 /* ---------- migration ---------- */
 var secretCfg={on:false,hash:'',threshold:null},secretUnlocked=false;
+var wish=[];
 function mig(i){
  Object.keys(ALIAS).forEach(function(old){if(old in i){if(i[ALIAS[old]]===undefined)i[ALIAS[old]]=i[old];delete i[old]}});
  if(!i.title&&i.description)i.title=String(i.description).split('.')[0].slice(0,60);
@@ -402,7 +407,7 @@ function usedBy(id){return items.filter(function(i){return (i.cover&&i.cover.id=
 function galAdd(kind,src){var id=uid();gal.imgs[id]=src;gal[kind].push(id);return id}
 function galRemove(kind,ids){
  var ok=[],blocked=[];
- ids.forEach(function(id){if(gal[kind].indexOf(id)<0)return;var u=usedBy(id);if(u.length)blocked.push({g:{src:gal.imgs[id]},pieces:u});else ok.push(id)});
+ ids.forEach(function(id){if(gal[kind].indexOf(id)<0)return;if(isUsed(id))blocked.push({g:{src:gal.imgs[id]},pieces:usedBy(id).concat(wish.some(function(w){return w.img===id})?[{id:null,title:'Wishlist'}]:[])});else ok.push(id)});
  gal[kind]=gal[kind].filter(function(x){return ok.indexOf(x)<0});
  ok.forEach(function(id){delete galSel[kind][id];if(gal.refs.indexOf(id)<0&&gal.covers.indexOf(id)<0)delete gal.imgs[id]});
  saveGallery();renderMain();
@@ -410,16 +415,16 @@ function galRemove(kind,ids){
 }
 function blockedHTML(list){
  return '<div class="modal" data-a="backdrop"><div><h3 style="margin:0 0 6px">Some Images Are Still in Use</h3><p class="meta">These images are linked to pieces, so they were not deleted. Remove each image from the piece first, then delete it here.</p>'
-  +list.map(function(b){return '<div style="display:flex;gap:10px;align-items:flex-start;margin:10px 0;border-top:1px solid var(--line);padding-top:10px"><img src="'+esc(b.g.src)+'" alt="" style="width:64px;height:64px;object-fit:cover;border-radius:8px;flex:none"><div style="display:flex;flex-direction:column;gap:6px;align-items:flex-start"><span class="meta">Used by</span>'+b.pieces.map(function(p){return '<button data-a="edit" data-id="'+p.id+'">'+esc(title(p))+'</button>'}).join('')+'</div></div>'}).join('')
+  +list.map(function(b){return '<div style="display:flex;gap:10px;align-items:flex-start;margin:10px 0;border-top:1px solid var(--line);padding-top:10px"><img src="'+esc(b.g.src)+'" alt="" style="width:64px;height:64px;object-fit:cover;border-radius:8px;flex:none"><div style="display:flex;flex-direction:column;gap:6px;align-items:flex-start"><span class="meta">Used by</span>'+b.pieces.map(function(p){return p.id==null?'<span class="meta">'+esc(p.title)+'</span>':'<button data-a="edit" data-id="'+p.id+'">'+esc(title(p))+'</button>'}).join('')+'</div></div>'}).join('')
   +'<div class="bar" style="justify-content:center;margin:12px 0 0"><button data-a="x">OK</button></div></div></div>';
 }
 function previewHTML(src){return '<div class="modal" data-a="backdrop"><div style="max-width:94vw;text-align:center"><img src="'+esc(src)+'" alt="" style="max-width:100%;max-height:78vh;display:block;margin:0 auto;border-radius:10px"><p class="meta">'+sizeOf(src)+'</p><div class="bar" style="justify-content:center"><button data-a="x">Close</button></div></div></div>'}
 var galUnl={refs:false,covers:false},galOpen={refs:false,covers:false};
 var secOpen={};
 function dOpen(k,d){return secOpen[k]===undefined?(d?' open':''):(secOpen[k]?' open':'')}
-function avail(kind){return gal[kind].filter(function(id){return usedBy(id).length===0})}
+function avail(kind){return gal[kind].filter(function(id){return !isUsed(id)})}
 function gallerySection(kind,label){
- var all=gal[kind],list=galUnl[kind]?all.filter(function(id){return usedBy(id).length===0}):all,sel=galSel[kind],n=Object.keys(sel).filter(function(k){return sel[k]}).length;
+ var all=gal[kind],list=galUnl[kind]?all.filter(function(id){return !isUsed(id)}):all,sel=galSel[kind],n=Object.keys(sel).filter(function(k){return sel[k]}).length;
  return '<details data-gsec="'+kind+'"'+(galOpen[kind]?' open':'')+'><summary>'+label+' ('+all.length+')</summary>'
   +'<div class="bar"><button data-a="gadd" data-kind="'+kind+'">+ Add images</button><button data-a="gunl" data-kind="'+kind+'"'+(galUnl[kind]?' class="on"':'')+'>Unlinked only</button><button data-a="gall" data-kind="'+kind+'">Select all</button><button data-a="gnone" data-kind="'+kind+'">Clear selection</button><button class="dan" data-a="gdelsel" data-kind="'+kind+'"'+(n?'':' disabled')+'>Delete selected ('+n+')</button></div>'
   +(list.length?'<div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(110px,1fr))">'+list.map(function(id){var on=!!sel[id],src=gal.imgs[id];return '<div style="position:relative"><img src="'+esc(src)+'" alt="" data-a="gview" data-kind="'+kind+'" data-id="'+id+'" style="width:100%;aspect-ratio:1;object-fit:cover;border-radius:8px;display:block;cursor:zoom-in;'+(on?'outline:3px solid var(--acc);':'')+'"><button data-a="gtog" data-kind="'+kind+'" data-id="'+id+'" style="position:absolute;top:4px;left:4px;padding:2px 7px;min-height:0">'+(on?'☑':'☐')+'</button><button data-a="gdel" data-kind="'+kind+'" data-id="'+id+'" style="position:absolute;top:4px;right:4px;padding:2px 7px;min-height:0">✕</button><span class="meta" style="position:absolute;left:4px;bottom:4px;background:rgba(0,0,0,.6);color:#fff;padding:1px 4px;border-radius:4px;font-size:.65rem">'+sizeOf(src)+'</span></div>'}).join('')+'</div>':'<p class="meta">No images yet.</p>')
@@ -427,11 +432,10 @@ function gallerySection(kind,label){
 }
 function ringTableHTML(){return '<div class="tw"><table class="ringtbl"><thead><tr>'+RING_HEAD.map(function(h,n){return '<th class="'+(n===2?'us':'')+'">'+esc(h)+'</th>'}).join('')+'</tr></thead><tbody>'+RING_TXT.map(function(r){return '<tr>'+r.split(';').map(function(c,n){return '<td class="'+(n===2?'us':'')+'">'+esc(c)+'</td>'}).join('')+'</tr>'}).join('')+'</tbody></table></div>'}
 function ringOpts(val){var o='';for(var z=0;z<=52;z++){var n=z/4;o+='<option value="'+n+'"'+(val!==''&&val!=null&&Number(val)===n?' selected':'')+'>'+n+'</option>'}return o}
-function renderGallery(){return '<h2>Gallery</h2>'+gallerySection('refs','Reference Screenshots')+gallerySection('covers','Cover Photos')+'<details open><summary>Ring Size Reference</summary>'+ringTableHTML()+'</details>'}
 function galPickHTML(act){
  act=act||'galuse';
  var sec=function(kind,label){return '<p class="meta" style="margin:10px 0 4px">'+label+'</p><div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(80px,1fr))">'+(avail(kind).length?avail(kind).map(function(id){return '<button type="button" data-a="'+act+'" data-id="'+id+'" style="padding:0;aspect-ratio:1;overflow:hidden;border-radius:8px;min-height:0;border:2px solid transparent"><img src="'+esc(gal.imgs[id])+'" alt="" style="width:100%;height:100%;object-fit:cover;display:block"></button>'}).join(''):'<p class="meta">None yet.</p>')+'</div>'};
- return '<div class="modal" data-a="backdrop"><div><h3 style="margin:0 0 6px">'+(act==='galaddref'?'Add Reference From Gallery':'Add Cover From Gallery')+'</h3>'+sec('covers','Cover Photo Thumbnails')+sec('refs','Reference Screenshots')+'<div class="bar" style="justify-content:center;margin:12px 0 0"><button data-a="x">Cancel</button></div></div></div>';
+ return '<div class="modal" data-a="backdrop"><div><h3 style="margin:0 0 6px">'+(act==='galaddref'?'Add Reference From Gallery':'Add Cover From Gallery')+'</h3>'+sec('refs','Reference Screenshots')+sec('covers','Cover Photos')+'<div class="bar" style="justify-content:center;margin:12px 0 0"><button data-a="x">Cancel</button></div></div></div>';
 }
 
 /* ---------- filters ---------- */
@@ -526,21 +530,27 @@ function themeHTML(){
    return '<button data-a="theme" data-v="'+k+'"'+(theme===k?' class="on"':'')+'><span class="sw" style="background:'+THEMES[k].l+'"></span> '+THEMES[k].n+'</button>';
  }).join('')+'</div>';
 }
-function ioModalHTML(){
- var tpl=CSV_COLS.map(function(c){return c[0]==='tags'?'motifs':c[0]}).join(', ');
- return '<div class="modal" data-a="backdrop"><div style="max-width:720px;width:94vw"><h3 style="margin:0 0 10px;text-align:center">I/O</h3>'
-  +'<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px">'
-  +'<div style="border:1px solid var(--line);border-radius:12px;padding:12px"><h4 class="sub" style="margin:0 0 8px">CSV Backup</h4>'
-  +'<div class="bar" style="flex-direction:column;align-items:stretch;margin:0"><button data-a="csvup">⬆ Upload (CSV)</button><button data-a="csvdown">⬇ Download (CSV)</button></div>'
-  +'<p class="meta">Upload backfills records without photos. Download exports every record without photos as CSV.</p>'
-  +'<details class="tpl"><summary>CSV Template Fields</summary><p class="meta" style="word-break:break-word;margin:0 0 8px">'+tpl+'</p><p class="meta" style="margin:0 0 8px">Lists separate values with ; or commas. Dates use YYYY-MM-DD. Rating is 0 to 5. Photoshoot is true or false. Leave a cell empty to keep the existing value when updating by id.</p></details></div>'
-  +'<div style="border:1px solid var(--line);border-radius:12px;padding:12px"><h4 class="sub" style="margin:0 0 8px">JSON Backup</h4>'
-  +'<div class="bar" style="flex-direction:column;align-items:stretch;margin:0"><button data-a="export">⬇ Export (JSON)</button><button data-a="import">⬆ Import (JSON)</button></div>'
-  +'<p class="meta">Export saves everything, including photos, in numbered parts. Import restores a backup on a new device or after browser data is cleared.</p></div>'
-  +'</div>'
-  +'<div style="margin-top:14px;border-top:1px solid var(--line);padding-top:10px;text-align:center"><h4 class="sub" style="margin:0 0 6px;text-align:center">App Stats</h4><div id="stormeter" class="meta"></div></div>'
-  +'<div style="margin-top:14px;border-top:1px solid var(--line);padding-top:10px;text-align:center"><h4 class="sub" style="margin:0 0 6px;text-align:center">Reset</h4><button class="dan" data-a="delete">Delete All</button><p class="meta" style="margin:6px 0 0">Erases every piece, photo, and setting on this device. This cannot be undone.</p></div>'
-  +'<div class="bar" style="justify-content:center;margin:12px 0 0"><button data-a="x">Close</button></div></div></div>';
+function renderManage(){
+ var card=function(t,body){return '<div style="border:1px solid var(--line);border-radius:12px;padding:12px"><h4 class="sub" style="margin:0 0 8px">'+t+'</h4>'+body+'</div>'};
+ var csvBody='<div class="bar" style="flex-direction:column;align-items:stretch;margin:0"><button data-a="csvup">⬆ Import (CSV)</button><button data-a="csvdown">⬇ Export (CSV)</button></div><p class="meta">Import backfills records without photos. Export downloads every record without photos as CSV.</p><details class="tpl"><summary>CSV Template Fields</summary><p class="meta" style="word-break:break-word;margin:0 0 8px">'+CSV_COLS.map(function(c){return c[0]==='tags'?'motifs':c[0]}).join(', ')+'</p><p class="meta" style="margin:0 0 8px">Lists separate values with ; or commas. Dates use YYYY-MM-DD. Rating is 0 to 5. Photoshoot is true or false. Leave a cell empty to keep the existing value when updating by id.</p></details>';
+ var jsonBody='<div class="bar" style="flex-direction:column;align-items:stretch;margin:0"><button data-a="export">⬇ Export (JSON)</button><button data-a="import">⬆ Import (JSON)</button></div><p class="meta">Export saves everything, including photos, in numbered parts. Import restores a backup on a new device or after browser data is cleared.</p>';
+ return '<h2>Manage Images</h2>'
+  +gallerySection('refs','Reference Screenshots')+gallerySection('covers','Cover Photos')
+  +'<h3 class="side">Data Backup</h3><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px">'+card('CSV Backup',csvBody)+card('JSON Backup',jsonBody)+'</div>'
+  +'<div style="margin-top:12px;border:1px solid var(--line);border-radius:12px;padding:12px"><h4 class="sub" style="margin:0 0 6px;text-align:left">App Stats</h4><div id="stormeter" class="meta" style="text-align:left"></div></div>'
+  +'<h3 class="side">Reset</h3><div style="border:1px solid var(--line);border-radius:12px;padding:12px"><p class="meta" style="margin:0 0 8px">Current Version: v'+APP_VERSION+' · '+APP_DATE+'</p><button class="dan" data-a="delete">Delete All</button><p class="meta" style="margin:6px 0 0">Erases every piece, photo, and setting on this device. This cannot be undone.</p></div>';
+}
+function renderWishlist(){
+ var tiles=wish.map(function(w){var src=gal.imgs[w.img]||'';return '<div style="position:relative"><button type="button" data-a="wopen" data-id="'+w.id+'" style="padding:0;border:0;border-radius:10px;overflow:hidden;aspect-ratio:1;width:100%;display:block;min-height:0;background:var(--card)"><img src="'+esc(src)+'" alt="" style="width:100%;height:100%;object-fit:cover;display:block"></button><button type="button" data-a="wdel" data-id="'+w.id+'" style="position:absolute;top:4px;right:4px;padding:2px 8px;min-height:0">✕</button></div>'}).join('');
+ return '<h2>Wishlist</h2><div class="bar"><button class="pri" data-a="wadd">+ Add to Wishlist</button></div>'
+  +(wish.length?'<div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(150px,1fr))">'+tiles+'</div>':'<p class="meta">Nothing on your wishlist yet.</p>')
+  +'<h3 class="side" style="margin-top:18px">Ring Size Chart</h3>'+ringTableHTML();
+}
+function wishAddHTML(){
+ return '<div class="modal" data-a="backdrop"><div><h3 style="margin:0 0 6px">Add to Wishlist</h3><label>Photo<input type="file" id="wfile" accept="image/*"></label><label style="margin-top:10px">Link<input type="url" id="wlink" placeholder="https://"></label><div class="bar" style="justify-content:center;margin:12px 0 0"><button class="pri" data-a="wsave">Save</button><button data-a="x">Cancel</button></div></div></div>';
+}
+function wishPreviewHTML(href){
+ return '<div class="modal" data-a="backdrop"><div style="max-width:94vw;width:94vw;max-height:90vh"><iframe src="'+esc(href)+'" style="width:100%;height:60vh;border:0;border-radius:10px;background:#fff" referrerpolicy="no-referrer"></iframe><p class="meta" style="margin:8px 0">Some sites block previews. If the page is blank, open it in Safari.</p><div class="bar" style="justify-content:center"><a href="'+esc(href)+'" target="_blank" rel="noopener" class="pri" style="display:inline-flex;align-items:center;padding:8px 14px;border-radius:999px;border:1px solid var(--acc);text-decoration:none">Open in Safari</a><button data-a="x">Close</button></div></div></div>';
 }
 function viewControls(){
  var h='<h3 style="margin:0 0 8px">View</h3>'+'<span class="tgl">'+[['thumbs','▦ Grid'],['table','▤ Table']].map(function(o){return '<button data-a="vm" data-v="'+o[0]+'"'+(o[0]===vmode?' class="on"':'')+'>'+o[1]+'</button>'}).join('')+'</span>';
@@ -548,7 +558,7 @@ function viewControls(){
  return h;
 }
 function renderDrawer(){
- document.getElementById('drawer').innerHTML=(view==='box'?viewControls():'<h3 style="margin:0 0 8px">View</h3>')+themeHTML()+'<div class="dv"><span>✦ 💍 ✦</span></div>'+filtersHTML();
+ document.getElementById('drawer').innerHTML='<div class="bar" style="flex-direction:column;align-items:stretch"><button data-a="nav" data-v="manage">Manage Images</button></div><div class="dv"><span>✦ 💍 ✦</span></div>'+(view==='box'?viewControls():'<h3 style="margin:0 0 8px">View</h3>')+themeHTML()+'<div class="dv"><span>✦ 💍 ✦</span></div>'+filtersHTML();
 }
 function drawer(o){document.getElementById('drawer').classList.toggle('open',o);document.getElementById('scrim').classList.toggle('open',o)}
 
@@ -593,8 +603,8 @@ function fieldHTML(k,v){
  else if(t==='money')c='<input name="'+k+'" type="text" inputmode="decimal" data-money="1" value="'+esc(fmtMoney(v))+'" placeholder="$0.00">';
  else if(t==='date')c='<input name="'+k+'" type="date" value="'+esc(v||'')+'">';
  else if(t==='number')c='<input name="'+k+'" type="number" step="'+(k==='buffer'?'0.5':'1')+'" inputmode="decimal" value="'+esc(val)+'">';
- else c='<input name="'+k+'" type="'+(t==='url'?'url':'text')+'" value="'+esc(val)+'"'+(t==='list'?' placeholder="Separate with commas"':'')+'>';
- return '<label>'+(k==='ringSize'?'<span style="display:flex;justify-content:space-between;align-items:center;gap:8px;line-height:1.2"><span>'+s[0]+'</span><button type="button" data-a="ringref" style="border:0;background:none;padding:0;margin:0;min-height:0;font-size:.8rem;line-height:1.2;color:var(--acc);text-decoration:underline;border-radius:0">View size chart</button></span>':s[0])+c+'</label>';
+ else c='<input name="'+k+'" type="'+(t==='url'?'url':'text')+'" value="'+esc(val)+'"'+(t==='list'?' placeholder="comma separated"':'')+'>';
+ return '<label>'+(k==='ringSize'?'<span style="display:flex;justify-content:space-between;align-items:center;gap:8px;line-height:1.2"><span>'+s[0]+'</span><button type="button" data-a="ringref" style="border:0;background:none;padding:0;margin:0;min-height:0;font-size:.8rem;line-height:1.2;color:var(--acc);text-decoration:underline;border-radius:0">view chart</button></span>':s[0])+c+'</label>';
 }
 function sec(keys){return keys.map(function(k){return fieldHTML(k,editing[k])}).join('')}
 function listingTexts(g){
@@ -631,7 +641,7 @@ function imagesHTML(){
   +'<div class="seg" style="grid-column:1/-1"><button type="button" data-a="covadd">⬆ Upload new cover</button><button type="button" data-a="galpick">Add from gallery</button>'+(c?'<button type="button" data-a="cvadj">Crop</button><button type="button" data-a="cvrm">Remove cover</button>':'')+'</div>'
   +'<div style="grid-column:1/-1">'+(c&&gal.imgs[c.id]?'<div data-a="previewcover" style="position:relative;width:160px;height:160px;border-radius:10px;overflow:hidden;margin:6px 0;cursor:zoom-in">'+coverImg(c)+'</div><div class="meta">'+sizeOf(gal.imgs[c.id])+'</div>':'<p class="meta">No cover yet.</p>')+'</div>'
   +'<div id="crop" style="grid-column:1/-1" hidden><div id="cropv"><img id="cropimg" alt="" draggable="false"></div><input type="range" id="cropz" min="1" max="4" step="0.01" value="1" aria-label="Zoom"><p class="seg"><button type="button" class="pri" data-a="cvok">Use this crop</button><button type="button" data-a="cvcancel">Cancel</button></p><p class="meta">Drag to pan. Use the slider (or pinch) to zoom. The square is your thumbnail.</p></div>'
-  +(refs.length?'<div style="grid-column:1/-1"><p class="meta">Use one of this piece’s reference images</p><div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(70px,1fr))">'+refs.map(function(id,n){return '<button type="button" data-a="pickref" data-i="'+n+'" style="padding:0;border-radius:8px;aspect-ratio:1;overflow:hidden;min-height:0;border:2px solid '+(c&&c.id===id?'var(--acc)':'transparent')+'"><img src="'+esc(gal.imgs[id])+'" alt="" style="width:100%;height:100%;object-fit:cover;display:block"></button>'}).join('')+'</div></div>':'')
+  +(refs.length&&!c?'<div style="grid-column:1/-1"><p class="meta">Use a reference screenshot as the cover</p><div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(70px,1fr))">'+refs.map(function(id,n){return '<button type="button" data-a="pickref" data-i="'+n+'" style="padding:0;border-radius:8px;aspect-ratio:1;overflow:hidden;min-height:0;border:2px solid '+(c&&c.id===id?'var(--acc)':'transparent')+'"><img src="'+esc(gal.imgs[id])+'" alt="" style="width:100%;height:100%;object-fit:cover;display:block"></button>'}).join('')+'</div></div>':'')
   +'</div>';
  return refBlock+divider+coverBlock;
 }
@@ -690,8 +700,8 @@ function refreshCalc(){
  updateSummary();
 }
 function renderMain(){
- document.getElementById('app').innerHTML=view==='box'?renderBox():view==='gallery'?renderGallery():view==='secret'?renderSecret():renderEdit();
- updateSummary();setTabs();
+ document.getElementById('app').innerHTML=view==='box'?renderBox():view==='manage'?renderManage():view==='wishlist'?renderWishlist():view==='secret'?renderSecret():renderEdit();
+ updateSummary();setTabs();updateStorage();
 }
 function render(){renderMain();renderDrawer()}
 function show(v){view=v;ro=false;drawer(false);render();window.scrollTo(0,0)}
@@ -843,7 +853,7 @@ function exportJSON(){
  var N=chunks.length,D=today();
  chunks.forEach(function(c,n){
    var doc={app:'never-twice-the-same',format:2,part:n+1,of:N,exported:new Date().toISOString(),items:c.items,images:c.imgs};
-   if(n===N-1){doc.gallery={refs:gal.refs,covers:gal.covers};doc.order=order;doc.theme=theme;doc.hideSold=hideSold}
+   if(n===N-1){doc.gallery={refs:gal.refs,covers:gal.covers};doc.order=order;doc.theme=theme;doc.hideSold=hideSold;doc.wishlist=wish}
    setTimeout(function(){download('ntts-backup-'+D+'-part'+(n+1)+'of'+N+'.json','application/json',JSON.stringify(doc))},n*800);
  });
 }
@@ -851,19 +861,19 @@ function readFileP(f){return new Promise(function(res){var r=new FileReader();r.
 function importJSON(texts){
  var docs=[];
  try{texts.forEach(function(t){docs.push(JSON.parse(t))})}catch(e){alert('One of the selected files is not a valid backup.');return}
- var allItems=[],imgs={},lists={refs:[],covers:[]},ord=null,th=null,hs=null;
+ var allItems=[],imgs={},lists={refs:[],covers:[]},ord=null,th=null,hs=null,wl=null;
  docs.forEach(function(d){
    if(d.format===2){
      (d.items||[]).forEach(function(i){allItems.push(i)});
      Object.keys(d.images||{}).forEach(function(k){imgs[k]=d.images[k]});
      if(d.gallery){lists.refs=lists.refs.concat(d.gallery.refs||[]);lists.covers=lists.covers.concat(d.gallery.covers||[])}
-     if(d.order)ord=d.order;if(d.theme)th=d.theme;if(typeof d.hideSold==='boolean')hs=d.hideSold;
+     if(d.order)ord=d.order;if(d.theme)th=d.theme;if(typeof d.hideSold==='boolean')hs=d.hideSold;if(d.wishlist)wl=d.wishlist;
    }else{
      var arr=Array.isArray(d)?d:(d.items||[]);
      arr.forEach(function(i){allItems.push(i)});
      var g=normGal(d.gallery||null);Object.keys(g.imgs).forEach(function(k){imgs[k]=g.imgs[k]});
      lists.refs=lists.refs.concat(g.refs);lists.covers=lists.covers.concat(g.covers);
-     if(d.order)ord=d.order;if(d.theme)th=d.theme;if(typeof d.hideSold==='boolean')hs=d.hideSold;
+     if(d.order)ord=d.order;if(d.theme)th=d.theme;if(typeof d.hideSold==='boolean')hs=d.hideSold;if(d.wishlist)wl=d.wishlist;
    }
  });
  if(!confirm('Replace everything on this device with this backup ('+allItems.length+' pieces, '+Object.keys(imgs).length+' images)?'))return;
@@ -872,6 +882,7 @@ function importJSON(texts){
  order=ord||[];
  if(th&&THEMES[th])theme=th;
  if(hs!==null)hideSold=hs;
+ if(wl)wish=wl;saveWish();
  saveItems();saveOrder();saveSettings();saveGallery();applyTheme();render();
  alert('Backup restored: '+items.length+' pieces.');
 }
@@ -890,7 +901,7 @@ function updateStorage(){
 function deleteAll(){
  var t=prompt('This erases every piece, photo, and setting on this device. Type DELETE to confirm.');
  if(t!=='DELETE')return;
- items=[];gal={imgs:{},refs:[],covers:[]};galSel={refs:{},covers:{}};secretCfg={on:false,hash:'',threshold:null};secretUnlocked=false;order=[];theme='ruby';hideSold=true;fsel={};rng={};q='';document.getElementById('q').value='';sortBy='new';ro=false;view='box';
+ items=[];gal={imgs:{},refs:[],covers:[]};galSel={refs:{},covers:{}};secretCfg={on:false,hash:'',threshold:null};secretUnlocked=false;wish=[];order=[];theme='ruby';hideSold=true;fsel={};rng={};q='';document.getElementById('q').value='';sortBy='new';ro=false;view='box';
  kclear().then(function(){return Promise.all([saveItems(),saveOrder(),saveSettings(),saveGallery()])}).then(function(){applyTheme();render();alert('Everything has been reset.')});
 }
 
@@ -938,7 +949,7 @@ document.addEventListener('click',function(e){
   case 'wear':wear(Number(d.id));break;
   case 'x':M.innerHTML='';break;
   case 'backdrop':if(e.target===b)M.innerHTML='';break;
-  case 'io':M.innerHTML=ioModalHTML();updateStorage();break;
+  case 'io':show('manage');break;
   case 'checkupd':manualCheck();break;
   case 'reload':location.reload();break;
   case 'updx':document.getElementById('upd').hidden=true;break;
@@ -951,7 +962,7 @@ document.addEventListener('click',function(e){
   case 'quickadd':syncForm();M.innerHTML=quickHTML();break;
   case 'qaapply':var raw=document.getElementById('qaIn').value.trim();var za=raw.indexOf('{'),zb=raw.lastIndexOf('}');var txt=za>=0&&zb>za?raw.slice(za,zb+1):raw;var data=null;try{data=JSON.parse(txt)}catch(err){alert('That does not look like JSON. Paste the output exactly as Claude returns it.');break}syncForm();var cnt=applyQuick(data);M.innerHTML='';renderMain();alert('Filled '+cnt+' field'+(cnt===1?'':'s')+'. Review, then Save.');break;
   case 'copy':copyText(d.id,b);break;
-  case 'ringref':M.innerHTML='<div class="modal" data-a="backdrop"><div style="max-width:94vw"><h3 style="margin:0 0 8px">Ring Size Reference</h3>'+ringTableHTML()+'<div class="bar" style="justify-content:center;margin-top:12px"><button data-a="x">Close</button></div></div></div>';break;
+  case 'ringref':M.innerHTML='<div class="modal" data-a="backdrop"><div style="max-width:94vw"><h3 style="margin:0 0 8px">Ring Size Chart</h3>'+ringTableHTML()+'<div class="bar" style="justify-content:center;margin-top:12px"><button data-a="x">Close</button></div></div></div>';break;
   case 'gunl':galUnl[d.kind]=!galUnl[d.kind];renderMain();break;
   case 'gadd':galKind=d.kind;document.getElementById('gfile').click();break;
   case 'gview':M.innerHTML=previewHTML(gal.imgs[d.id]);break;
@@ -966,6 +977,10 @@ document.addEventListener('click',function(e){
   case 'galuse':M.innerHTML='';syncForm();editing.cover={id:d.id,l:null,t:null,w:null,h:null};renderMain();break;
   case 'galaddref':M.innerHTML='';syncForm();if((editing.refs||[]).indexOf(d.id)<0)editing.refs=(editing.refs||[]).concat([d.id]);renderMain();break;
   case 'previewcover':if(editing.cover&&gal.imgs[editing.cover.id])M.innerHTML=previewHTML(gal.imgs[editing.cover.id]);break;
+  case 'wadd':M.innerHTML=wishAddHTML();break;
+  case 'wsave':var wf=document.getElementById('wfile').files[0],wlk=(document.getElementById('wlink').value||'').trim();if(!wf){alert('Choose a photo.');break}if(!wlk){alert('Enter the link.');break}var href=/^https?:\/\//i.test(wlk)?wlk:'https://'+wlk;readRaw(wf).then(function(url){var imgId=galAdd('refs',url);wish.push({id:uid(),img:imgId,link:href});saveWish();saveGallery();M.innerHTML='';renderMain()},function(){});break;
+  case 'wopen':var wo=wish.filter(function(x){return x.id===d.id})[0];if(wo)M.innerHTML=wishPreviewHTML(wo.link);break;
+  case 'wdel':if(!confirm('Remove this from the wishlist?'))break;var wd=wish.filter(function(x){return x.id===d.id})[0];wish=wish.filter(function(x){return x.id!==d.id});if(wd&&!isUsed(wd.img)){gal.refs=gal.refs.filter(function(x){return x!==wd.img});gal.covers=gal.covers.filter(function(x){return x!==wd.img});delete gal.imgs[wd.img]}saveWish();saveGallery();renderMain();break;
   case 'covadd':document.getElementById('cvfile').click();break;
   case 'refadd':document.getElementById('reffile').click();break;
   case 'rmref':syncForm();editing.refs.splice(Number(d.i),1);renderMain();break;
