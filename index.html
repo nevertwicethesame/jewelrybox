@@ -141,8 +141,8 @@ footer#ver{text-align:center;padding:24px 14px calc(36px + env(safe-area-inset-b
 <input type="file" id="fjson" accept=".json,application/json" hidden>
 <input type="file" id="gfile" accept="image/*" multiple hidden>
 <script>
-var K='ntts_items_v2',OK='ntts_order_v1',PER=25,MAX_UPLOAD=125*1024;
-var APP_VERSION='1.5.2',APP_DATE='2026-11-01',UPDATE_URL='';
+var K='ntts_items_v2',OK='ntts_order_v1',PER=25,MAX_UPLOAD=300*1024;
+var APP_VERSION='1.5.3',APP_DATE='2026-11-01',UPDATE_URL='';
 var EMOJI={ring:'💍',earring:'✨',necklace:'📿',bracelet:'⭕',watch:'⌚',other:'💎'};
 var CATS=['Ring','Earring','Necklace','Bracelet','Watch','Other'];
 var STAT=['Wishlist','Waiting','Private Collection','To List','Listed','Sold'];
@@ -366,7 +366,7 @@ function readRaw(file){
          var bytes=Math.floor(url.split(',')[1].length*3/4);last=bytes;
          if(bytes<=MAX_UPLOAD)return res(url);
        }
-       alert('That image is still '+Math.round(last/1024)+' KB after compressing. The limit is 125 KB. Please use a smaller or simpler image.');
+       alert('That image is still '+Math.round(last/1024)+' KB after compressing. The limit is 300 KB. Please use a smaller or simpler image.');
        rej(new Error('too large'));
      };
      img.src=r.result;
