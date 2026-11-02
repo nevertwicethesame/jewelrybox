@@ -148,9 +148,9 @@ footer#ver{text-align:center;padding:24px 14px calc(36px + env(safe-area-inset-b
 <input type="file" id="gfile" accept="image/*" multiple hidden>
 <script>
 var K='ntts_items_v2',OK='ntts_order_v1',PER=25,MAX_UPLOAD=300*1024;
-var APP_VERSION='1.6.0',APP_DATE='2026-11-02 · 3:50 PM ET',UPDATE_URL='';
-var EMOJI={ring:'💍',earring:'✨',necklace:'📿',bracelet:'⭕',watch:'⌚',other:'💎'};
-var CATS=['Ring','Earring','Necklace','Bracelet','Watch','Other'];
+var APP_VERSION='1.6.1',APP_DATE='2026-11-02 · 3:50 PM ET',UPDATE_URL='';
+var EMOJI={ring:'💍',earrings:'✨',necklace:'📿',bracelet:'⭕',watch:'⌚',other:'💎'};
+var CATS=['Ring','Earrings','Necklace','Bracelet','Watch','Other'];
 var STAT=['Waiting','Private Collection','To List','Listed','Sold'];
 var PERIODS=['Ancient','Antique','Mid-Century','Vintage','New'];
 var FINGERS=['Index finger','Middle finger','Ring finger','Pinky'];
@@ -223,7 +223,7 @@ var seed=[
  {id:1,title:'Georgian paste ring',description:'Georgian paste ring. Closed-back setting.',category:'Ring',status:'Listed',period:'Antique',era:'1790s',yearMade:1795,country:'England',stones:['paste'],metals:['silver','gold'],rating:3,cost:120,sellPlatform:'eBay',purchaseDate:'2026-08-15',dateListed:'2026-09-01'},
  {id:2,title:'Snake bracelet',description:'Snake bracelet with garnet eyes.',category:'Bracelet',status:'Sold',period:'Antique',era:'1870s',yearMade:1870,country:'France',stones:['garnet'],metals:['gold'],tags:['snake'],colorMain:'Red',rating:4,cost:210,payout:480,feeFinal:40,shipActual:12,sellPlatform:'Instagram',purchaseDate:'2026-06-10',dateListed:'2026-07-02',dateSold:'2026-07-20'},
  {id:3,title:'Roman intaglio ring',description:'Roman intaglio ring, carnelian.',category:'Ring',status:'Private Collection',period:'Ancient',era:'Roman',country:'Italy',stones:['carnelian'],metals:['gold'],colorMain:'Orange',rating:5,cost:650,purchaseDate:'2026-03-02'},
- {id:4,title:'Emerald-cut drop earrings',description:'Emerald-cut drop earrings.',category:'Earring',status:'Private Collection',period:'Antique',era:'1905',yearMade:1905,country:'USA',stones:['emerald','diamond'],metals:['platinum'],colorMain:'Green',rating:5,cost:380,purchaseDate:'2026-05-20'}
+ {id:4,title:'Emerald-cut drop earrings',description:'Emerald-cut drop earrings.',category:'Earrings',status:'Private Collection',period:'Antique',era:'1905',yearMade:1905,country:'USA',stones:['emerald','diamond'],metals:['platinum'],colorMain:'Green',rating:5,cost:380,purchaseDate:'2026-05-20'}
 ];
 
 /* ---------- state ---------- */
@@ -356,6 +356,7 @@ function mig(i){
  ['stones','cut','tags'].forEach(function(k){i[k]=uniqArr((i[k]||[]).map(function(x){return String(x).trim().toLowerCase()}).filter(Boolean))});
  var cmv=Array.isArray(i.colorMain)?i.colorMain:String(i.colorMain||'').split(/[,;]/);
  i.colorMain=uniqArr(cmv.map(function(x){return capColor(x)}).filter(Boolean));
+ if(String(i.category||'').toLowerCase()==='earring')i.category='Earrings';
  i.category=CATS.filter(function(c){return c.toLowerCase()===String(i.category||'').toLowerCase()})[0]||'Other';
  i.rating=Math.min(5,Math.max(0,Number(i.rating)||0));
  i.photoshoot=!!i.photoshoot;
@@ -822,7 +823,7 @@ function jotdRoll(k){
    s.ring2=jotdRing2Pick(pick);
  }
  else if(k==='ring2'){s.ring2=jotdRing2Pick(s.ring1)}
- else if(k==='earring'){s.earring=jotdPickOther(jotdPool('Earring'),s.earring)}
+ else if(k==='earring'){s.earring=jotdPickOther(jotdPool('Earrings'),s.earring)}
  else if(k==='necklace'){s.necklace=jotdPickOther(jotdPool('Necklace'),s.necklace)}
 }
 function jotdShuffleAll(){
@@ -833,15 +834,12 @@ function jotdCard(label,i,emptyMsg,k,skippable){
  var roll='<button data-a="jroll" data-k="'+k+'">🔀 Shuffle</button>';
  var skip=skippable&&i?'<button data-a="jskip" data-k="'+k+'">Skip</button>':'';
  var pic=i?(i.cover?coverImg(i.cover):'<div style="font-size:3.5rem;text-align:center;padding-top:30%">'+(EMOJI[String(i.category).toLowerCase()]||'💎')+'</div>')
-  :'<div class="meta" style="padding:12px;text-align:center;display:flex;align-items:center;justify-content:center;height:100%">'+esc(emptyMsg)+'</div>';
- return '<div style="border:1px solid var(--line);border-radius:12px;padding:10px;display:flex;flex-direction:column"><div class="meta">'+label+'</div>'
-  +'<h3 class="sub" style="margin:4px 0 6px;min-height:1.4em">'+(i?esc(title(i)):'&nbsp;')+'</h3>'
-  +'<div style="position:relative;width:100%;aspect-ratio:1;overflow:hidden;border-radius:10px;margin:0 0 6px;background:var(--acc)">'+pic+'</div>'
-  +'<p class="meta" style="margin:0">Rating: '+(i?(stars(i.rating)||'Not rated'):'—')+'</p>'
-  +'<p class="meta" style="margin:0">Times worn: '+(i?(Number(i.wornCount)||0):'—')+'</p>'
-  +'<p class="meta" style="margin:0">'+(i?(i.wornLast?'Last worn: '+esc(fmtDate(i.wornLast)):'Last worn: never'):'Last worn: —')+'</p>'
-  +'<div class="bar" style="margin-top:auto;padding-top:8px">'+roll+skip+'</div>'
-  +'<div style="min-height:1.6em">'+(i?'<button class="link" data-a="edit" data-id="'+i.id+'">Edit</button>':'')+'</div></div>';
+  :'<div class="meta" style="padding:10px;text-align:center;display:flex;align-items:center;justify-content:center;height:100%">'+esc(emptyMsg)+'</div>';
+ var picWrap='<div '+(i?'data-a="open" data-id="'+i.id+'" style="cursor:zoom-in;':'style="')+'position:relative;width:100%;aspect-ratio:1;overflow:hidden;border-radius:10px;margin:0 0 6px;background:var(--acc)">'+pic+'</div>';
+ return '<div style="border:1px solid var(--line);border-radius:12px;padding:8px;display:flex;flex-direction:column;min-width:0"><div class="meta">'+label+'</div>'
+  +picWrap
+  +'<div class="meta" style="display:flex;flex-wrap:wrap;column-gap:8px;margin:0"><span>'+(i?(stars(i.rating)||'Not rated'):'—')+'</span><span>'+(i?keycap(Number(i.wornCount)||0)+' • '+esc(agoText(i.wornLast)):'—')+'</span></div>'
+  +'<div class="bar" style="margin-top:auto;padding-top:8px;gap:6px">'+roll+skip+'</div></div>';
 }
 function renderJotd(){
  if(!jotdSel)jotdShuffleAll();
@@ -853,9 +851,8 @@ function renderJotd(){
   +jotdCard('Necklace',s.necklace,'Not wearing a necklace today.','necklace',true)
   +'</div>';
  return '<h2>Jewelry of the Day</h2>'
-  +'<p class="meta">Shuffle each piece on its own. Skip earrings or a necklace if you are not wearing them. Pieces you have worn least recently are more likely to be picked.</p>'
   +cards
-  +'<div class="bar" style="margin-top:12px"><button class="pri" data-a="jwear"'+(ids.length?'':' disabled')+'>✓ Wearing these today</button></div>'
+  +'<div class="bar" style="margin-top:12px"><button data-a="jreset">🔄 Start over</button><button data-a="jlucky">🍀 Feelin’ lucky</button><button class="pri" data-a="jwear"'+(ids.length?'':' disabled')+'>✓ Wearing these today</button></div>'
   +(jotdMsg?'<p class="meta">'+esc(jotdMsg)+'</p>':'');
 }
 function popup(i){
@@ -1044,6 +1041,7 @@ function expPanelHTML(){
   +expParts.map(function(p){var ok=!!expDone[p.n];var lbl=N===1?'Save backup file':'Save file '+(p.n+1)+' of '+N;return '<button data-a="expsave" data-n="'+p.n+'">'+(ok?'✓ Saved · ':'')+lbl+'</button>'}).join('')
   +'</div><p class="meta" style="margin:8px 0 0">'+done+' of '+N+' saved</p></div>';
 }
+function keycap(n){return String(n).split('').map(function(d){return d+'\uFE0F\u20E3'}).join('')}
 function agoText(iso){if(!iso)return 'never';var d=Math.floor((Date.now()-new Date(iso).getTime())/864e5);return d<=0?'today':d===1?'yesterday':d+' days ago'}
 function backupBanner(){
  var days=lastExport?(Date.now()-new Date(lastExport).getTime())/864e5:Infinity;
@@ -1137,6 +1135,8 @@ document.addEventListener('click',function(e){
   case 'nav':if(d.new)editing=newItem();if(d.v==='secret'){secretGate();break}show(d.v);break;
   case 'jotd':show('jotd');break;
   case 'jroll':jotdRoll(d.k);renderMain();break;
+  case 'jlucky':jotdShuffleAll();renderMain();break;
+  case 'jreset':jotdSel={ring1:null,ring2:null,earring:null,necklace:null};jotdMsg='';renderMain();break;
   case 'jskip':jotdSel[d.k]=null;jotdMsg='';renderMain();break;
   case 'jwear':var wn=wearMany([jotdSel.ring1,jotdSel.ring2,jotdSel.earring,jotdSel.necklace].filter(Boolean).map(function(i){return i.id}));jotdMsg=wn?'Saved as worn today ('+wn+' piece'+(wn===1?'':'s')+').':'Already saved as worn today.';renderMain();break;
   case 'showall':showAllF[d.k]=!showAllF[d.k];renderDrawer();break;
