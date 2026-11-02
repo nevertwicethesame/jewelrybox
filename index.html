@@ -143,7 +143,7 @@ footer#ver{text-align:center;padding:24px 14px calc(36px + env(safe-area-inset-b
 <input type="file" id="gfile" accept="image/*" multiple hidden>
 <script>
 var K='ntts_items_v2',OK='ntts_order_v1',PER=25,MAX_UPLOAD=300*1024;
-var APP_VERSION='1.5.11',APP_DATE='2026-11-01',UPDATE_URL='';
+var APP_VERSION='1.5.12',APP_DATE='2026-11-01',UPDATE_URL='';
 var EMOJI={ring:'💍',earring:'✨',necklace:'📿',bracelet:'⭕',watch:'⌚',other:'💎'};
 var CATS=['Ring','Earring','Necklace','Bracelet','Watch','Other'];
 var STAT=['Waiting','Private Collection','To List','Listed','Sold'];
@@ -248,10 +248,13 @@ function normGal(g){
 }
 async function init(){
  try{DB=await openDB()}catch(e){DB=null}
+ if(!DB)alert('Browser storage is unavailable. Changes will not be kept after you close the app.');
  var it=await kget('items');
  gal=normGal(await kget('gallery'));
  secretCfg=(await kget('secret'))||secretCfg;
  wish=(await kget('wishlist'))||[];
+ lastExport=(await kget('lastExport'))||'';
+ try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist().then(function(ok){persistOK=ok;updateStorage()})}catch(e){}
  if(it===undefined){
    var legacy=null,lo=null;
    try{legacy=JSON.parse(localStorage.getItem(K)||localStorage.getItem('ntts_items_v1')||'null')}catch(e){}
@@ -267,7 +270,7 @@ async function init(){
    await saveItems();
  }
  renumberIds();
- await saveGallery();
+ if(Object.keys(gal.imgs).length||!items.length)await saveGallery();
  if(!THEMES[theme])theme='ruby';
 }
 
@@ -315,7 +318,7 @@ function putImg(src){
 
 /* ---------- migration ---------- */
 var secretCfg={on:false,hash:'',threshold:null},secretUnlocked=false;
-var wish=[];
+var wish=[],wishCols=4,wishType=[],wishPending=null,persistOK=null,lastExport='';
 function mig(i){
  Object.keys(ALIAS).forEach(function(old){if(old in i){if(i[ALIAS[old]]===undefined)i[ALIAS[old]]=i[old];delete i[old]}});
  if(!i.title&&i.description)i.title=String(i.description).split('.')[0].slice(0,60);
@@ -440,15 +443,15 @@ function galPickHTML(act){
 
 /* ---------- filters ---------- */
 var FACETS=[
- {k:'photoshoot',l:'Photoshoot',v:function(){return ['Yes','No']},g:function(i){return [i.photoshoot?'Yes':'No']}},
- {k:'status',l:'Status',v:function(){return STAT},g:function(i){return [i.status]}},
- {k:'category',l:'Type',v:function(){return CATS},g:function(i){return [i.category]}},
- {k:'period',l:'Period',v:function(){return PERIODS},g:function(i){return [i.period]}},
+ {k:'photoshoot',l:'Photoshoot',cnt:1,v:function(){return ['Yes','No']},g:function(i){return [i.photoshoot?'Yes':'No']}},
+ {k:'status',l:'Status',cnt:1,v:function(){return STAT},g:function(i){return [i.status]}},
+ {k:'category',l:'Type',cnt:1,v:function(){return CATS},g:function(i){return [i.category]}},
+ {k:'period',l:'Period',cnt:1,v:function(){return PERIODS},g:function(i){return [i.period]}},
  {k:'era',l:'Era/Movement',counted:1,v:function(){return allOf(function(i){return [i.era]})},g:function(i){return [i.era]}},
- {k:'tags',l:'Motifs',cloud:1,v:function(){return allOf(function(i){return i.tags})},g:function(i){return i.tags||[]}},
+ {k:'tags',l:'Motifs',cloud:1,cnt:1,v:function(){return allOf(function(i){return i.tags})},g:function(i){return i.tags||[]}},
  {k:'stones',l:'Stones',cloud:1,counted:1,v:function(){return allOf(function(i){return i.stones})},g:function(i){return i.stones||[]}},
  {k:'colorMain',l:'Color',sw:1,v:function(){return COLOR_ORDER.filter(function(c){return vis().some(function(i){return i.colorMain===c})})},g:function(i){return [i.colorMain]}},
- {k:'finger',l:'Finger (Rings, by Size)',v:function(){return FINGERS},g:function(i){return [finger(i)]}}
+ {k:'finger',l:'Ring Size by Finger',cnt:1,v:function(){return FINGERS},g:function(i){return [finger(i)]}}
 ];
 function facetOf(k){return FACETS.filter(function(F){return F.k===k})[0]}
 function vis(){return secretCfg.on?items.filter(function(i){return !isHidden(i)}):items}
@@ -512,8 +515,8 @@ function filtersHTML(){
      var sel=fsel[F.k]||[],open=!!showAllF[F.k],shown=open?vals:vals.slice(0,6);
      var chips=shown.map(function(v){
        var on=sel.indexOf(v)>-1;
-       if(F.cloud)return '<button data-a="f" data-k="'+F.k+'" data-val="'+esc(v)+'"'+(on?' class="on"':'')+'>'+esc(v)+(F.counted?' ('+cntF(F,v)+')':'')+'</button>';
-       var lbl=F.sw?(HEARTS[v]||'')+' '+v+' ('+cntColor(v)+')':(F.counted?v+' ('+cntF(F,v)+')':v);
+       if(F.cloud)return '<button data-a="f" data-k="'+F.k+'" data-val="'+esc(v)+'"'+(on?' class="on"':'')+'>'+esc(v)+((F.counted||F.cnt)?' ('+cntF(F,v)+')':'')+'</button>';
+       var lbl=F.sw?(HEARTS[v]||'')+' '+v+' ('+cntColor(v)+')':((F.counted||F.cnt)?v+' ('+cntF(F,v)+')':v);
        return '<label><input type="checkbox" data-a="fc" data-k="'+F.k+'" data-val="'+esc(v)+'"'+(on?' checked':'')+'>'+esc(lbl)+'</label>';
      }).join('');
      h+='<fieldset class="facet"><legend>'+F.l+'</legend>'+(F.cloud?'<div class="cloud">'+chips+'</div>':chips)
@@ -533,21 +536,35 @@ function themeHTML(){
 function renderManage(){
  var card=function(t,body){return '<div style="border:1px solid var(--line);border-radius:12px;padding:12px"><h4 class="sub" style="margin:0 0 8px">'+t+'</h4>'+body+'</div>'};
  var csvBody='<div class="bar" style="flex-direction:column;align-items:stretch;margin:0"><button data-a="csvup">⬆ Import (CSV)</button><button data-a="csvdown">⬇ Export (CSV)</button></div><p class="meta">Import backfills records without photos. Export downloads every record without photos as CSV.</p><details class="tpl"><summary>CSV Template Fields</summary><p class="meta" style="word-break:break-word;margin:0 0 8px">'+CSV_COLS.map(function(c){return c[0]==='tags'?'motifs':c[0]}).join(', ')+'</p><p class="meta" style="margin:0 0 8px">Lists separate values with ; or commas. Dates use YYYY-MM-DD. Rating is 0 to 5. Photoshoot is true or false. Leave a cell empty to keep the existing value when updating by id.</p></details>';
- var jsonBody='<div class="bar" style="flex-direction:column;align-items:stretch;margin:0"><button data-a="export">⬇ Export (JSON)</button><button data-a="import">⬆ Import (JSON)</button></div><p class="meta">Export saves everything, including photos, in numbered parts. Import restores a backup on a new device or after browser data is cleared.</p>';
- return '<h2>Manage Images</h2>'
+ var nfiles=planChunks().length;
+ var jsonBody='<div class="bar" style="flex-direction:column;align-items:stretch;margin:0"><button data-a="import">⬆ Import (JSON)</button><button data-a="export">⬇ Export (JSON)</button></div><p class="meta">Estimated export: '+nfiles+' file'+(nfiles===1?'':'s')+'.</p><p class="meta">Export saves everything, including photos, in numbered parts. Import restores a backup on a new device or after browser data is cleared.</p>';
+ return '<h2>I/O</h2><h3 class="side">Manage Images</h3>'
   +gallerySection('refs','Reference Screenshots')+gallerySection('covers','Cover Photos')
   +'<h3 class="side">Data Backup</h3><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px">'+card('CSV Backup',csvBody)+card('JSON Backup',jsonBody)+'</div>'
   +'<div style="margin-top:12px;border:1px solid var(--line);border-radius:12px;padding:12px"><h4 class="sub" style="margin:0 0 6px;text-align:left">App Stats</h4><div id="stormeter" class="meta" style="text-align:left"></div></div>'
   +'<h3 class="side">Reset</h3><div style="border:1px solid var(--line);border-radius:12px;padding:12px"><p class="meta" style="margin:0 0 8px">Current Version: v'+APP_VERSION+' · '+APP_DATE+'</p><button class="dan" data-a="delete">Delete All</button><p class="meta" style="margin:6px 0 0">Erases every piece, photo, and setting on this device. This cannot be undone.</p></div>';
 }
+function wishCover(w){return w.cover||{id:w.img,l:null,t:null,w:null,h:null}}
 function renderWishlist(){
- var tiles=wish.map(function(w){var src=gal.imgs[w.img]||'';return '<div style="position:relative"><button type="button" data-a="wopen" data-id="'+w.id+'" style="padding:0;border:0;border-radius:10px;overflow:hidden;aspect-ratio:1;width:100%;display:block;min-height:0;background:var(--card)"><img src="'+esc(src)+'" alt="" style="width:100%;height:100%;object-fit:cover;display:block"></button><button type="button" data-a="wdel" data-id="'+w.id+'" style="position:absolute;top:4px;right:4px;padding:2px 8px;min-height:0">✕</button></div>'}).join('');
+ var list=wish.filter(function(w){return (!wishType.length||wishType.indexOf(w.category)>-1)&&(!q||((w.category||'')+' '+(w.link||'')).toLowerCase().indexOf(q)>-1)});
+ var chips=CATS.filter(function(c){return wish.some(function(w){return w.category===c})}).map(function(c){return '<button data-a="wtype" data-v="'+c+'"'+(wishType.indexOf(c)>-1?' class="on"':'')+'>'+c+'</button>'}).join('');
+ var tiles=list.map(function(w){return '<div style="position:relative"><button type="button" data-a="wopen" data-id="'+w.id+'" style="padding:0;border:0;border-radius:10px;overflow:hidden;aspect-ratio:1;width:100%;display:block;min-height:0;background:var(--acc);position:relative">'+coverImg(wishCover(w))+'</button><button type="button" data-a="wdel" data-id="'+w.id+'" style="position:absolute;top:4px;right:4px;padding:2px 8px;min-height:0">✕</button><div class="meta" style="margin-top:4px">'+esc(w.category||'')+'</div></div>'}).join('');
  return '<h2>Wishlist</h2><div class="bar"><button class="pri" data-a="wadd">+ Add to Wishlist</button></div>'
-  +(wish.length?'<div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(150px,1fr))">'+tiles+'</div>':'<p class="meta">Nothing on your wishlist yet.</p>')
+  +'<div class="bar" style="justify-content:space-between"><div class="seg">'+chips+'</div><div class="seg">'+[1,2,3,4].map(function(n){return '<button data-a="wcols" data-v="'+n+'"'+(n===wishCols?' class="on"':'')+'>'+gicon(n)+'</button>'}).join('')+'</div></div>'
+  +(list.length?'<div class="grid" style="grid-template-columns:repeat('+wishCols+',1fr)">'+tiles+'</div>':'<p class="meta">'+(wish.length?'No wishlist items match this type.':'Nothing on your wishlist yet.')+'</p>')
   +'<h3 class="side" style="margin-top:18px">Ring Size Chart</h3>'+ringTableHTML();
 }
 function wishAddHTML(){
- return '<div class="modal" data-a="backdrop"><div><h3 style="margin:0 0 6px">Add to Wishlist</h3><label>Photo<input type="file" id="wfile" accept="image/*"></label><label style="margin-top:10px">Link<input type="url" id="wlink" placeholder="https://"></label><div class="bar" style="justify-content:center;margin:12px 0 0"><button class="pri" data-a="wsave">Save</button><button data-a="x">Cancel</button></div></div></div>';
+ return '<div class="modal" data-a="backdrop"><div style="max-width:520px;width:94vw"><h3 style="margin:0 0 6px">Add to Wishlist</h3>'
+  +'<label>Photo<input type="file" id="wfile" accept="image/*"></label>'
+  +'<div id="crop" style="margin-top:10px" hidden><div id="cropv"><img id="cropimg" alt="" draggable="false"></div><input type="range" id="cropz" min="1" max="4" step="0.01" value="1" aria-label="Zoom"><p class="meta">Drag to pan. Use the slider (or pinch) to zoom. The square is your thumbnail.</p></div>'
+  +'<label style="margin-top:10px">Type<select id="wcat">'+CATS.map(function(c){return '<option>'+c+'</option>'}).join('')+'</select></label>'
+  +'<label style="margin-top:10px">Link<input type="url" id="wlink" placeholder="https://"></label>'
+  +'<div class="bar" style="justify-content:center;margin:12px 0 0"><button class="pri" data-a="wsave">Save</button><button data-a="x">Cancel</button></div></div></div>';
+}
+function wishCropFrac(){
+ if(CR&&CR.id===wishPending){var V=cropV().clientWidth;return {l:CR.x/V,t:CR.y/V,w:CR.img.width*CR.s0*CR.z/V,h:CR.img.height*CR.s0*CR.z/V}}
+ return {l:null,t:null,w:null,h:null};
 }
 function wishPreviewHTML(href){
  return '<div class="modal" data-a="backdrop"><div style="max-width:94vw;width:94vw;max-height:90vh"><iframe src="'+esc(href)+'" style="width:100%;height:60vh;border:0;border-radius:10px;background:#fff" referrerpolicy="no-referrer"></iframe><p class="meta" style="margin:8px 0">Some sites block previews. If the page is blank, open it in Safari.</p><div class="bar" style="justify-content:center"><a href="'+esc(href)+'" target="_blank" rel="noopener" class="pri" style="display:inline-flex;align-items:center;padding:8px 14px;border-radius:999px;border:1px solid var(--acc);text-decoration:none">Open in Safari</a><button data-a="x">Close</button></div></div></div>';
@@ -558,7 +575,7 @@ function viewControls(){
  return h;
 }
 function renderDrawer(){
- document.getElementById('drawer').innerHTML='<div class="bar" style="flex-direction:column;align-items:stretch"><button data-a="nav" data-v="manage">Manage Images</button></div><div class="dv"><span>✦ 💍 ✦</span></div>'+(view==='box'?viewControls():'<h3 style="margin:0 0 8px">View</h3>')+themeHTML()+'<div class="dv"><span>✦ 💍 ✦</span></div>'+filtersHTML();
+ document.getElementById('drawer').innerHTML='<div class="bar" style="flex-direction:column;align-items:stretch"><button data-a="nav" data-v="manage">I/O</button></div><div class="dv"><span>✦ 💍 ✦</span></div>'+(view==='box'?viewControls():'<h3 style="margin:0 0 8px">View</h3>')+themeHTML()+'<div class="dv"><span>✦ 💍 ✦</span></div>'+filtersHTML();
 }
 function drawer(o){document.getElementById('drawer').classList.toggle('open',o);document.getElementById('scrim').classList.toggle('open',o)}
 
@@ -762,19 +779,68 @@ function hashKW(kw){
 function secretGate(){
  var M=document.getElementById('modal');
  if(secretUnlocked){show('secret');return}
- if(!secretCfg.hash){M.innerHTML='<div class="modal" data-a="backdrop"><div><h3 style="margin:0 0 6px">Set a Keyword</h3><p class="meta">Choose a keyword to open the Secret Compartment. There is no reset, so remember it.</p><input type="password" id="skw" placeholder="Keyword"><div class="bar" style="justify-content:center;margin:12px 0 0"><button class="pri" data-a="sset">Save</button><button data-a="x">Cancel</button></div></div></div>';return}
- M.innerHTML='<div class="modal" data-a="backdrop"><div><h3 style="margin:0 0 6px">Secret Compartment</h3><input type="password" id="skw" placeholder="Keyword"><div class="bar" style="justify-content:center;margin:12px 0 0"><button class="pri" data-a="slogin">Open</button><button data-a="x">Cancel</button></div></div></div>';
+ var user='<input type="text" name="username" autocomplete="username" value="Never Twice the Same" style="position:absolute;left:-9999px" tabindex="-1" aria-hidden="true">';
+ if(!secretCfg.hash){
+   M.innerHTML='<div class="modal" data-a="backdrop"><div><h3 style="margin:0 0 6px">Set a Keyword</h3><p class="meta">Choose a keyword to open the Secret Compartment. There is no reset, so remember it.</p><form id="kwform" data-mode="set" autocomplete="on">'+user+'<input type="password" name="keyword" autocomplete="new-password" placeholder="Set a keyword"><div class="bar" style="justify-content:center;margin:12px 0 0"><button type="submit" class="pri">Save</button><button type="button" data-a="x">Cancel</button></div></form></div></div>';
+ }else{
+   M.innerHTML='<div class="modal" data-a="backdrop"><div><h3 style="margin:0 0 6px">Secret Compartment</h3><form id="kwform" data-mode="unlock" autocomplete="on">'+user+'<input type="password" name="keyword" autocomplete="current-password" placeholder="unlock"><div class="bar" style="justify-content:center;margin:12px 0 0"><button type="submit" class="pri">Open</button><button type="button" data-a="x">Cancel</button></div></form></div></div>';
+ }
+}
+function handleKeywordForm(form){
+ var pw=form.querySelector('input[name=keyword]').value;
+ var M=document.getElementById('modal');
+ if(form.dataset.mode==='unlock'){
+   hashKW(pw).then(function(h){if(h===secretCfg.hash){secretUnlocked=true;M.innerHTML='';show('secret')}else alert('Incorrect keyword')});
+ }else{
+   if(!pw.trim()){alert('Enter a keyword.');return}
+   hashKW(pw).then(function(h){secretCfg.hash=h;secretUnlocked=true;saveSecret();M.innerHTML='';show('secret')});
+ }
+}
+function handleSecretForm(form){
+ var kw=form.querySelector('input[name=keyword]').value;
+ var thr=form.querySelector('input[name=threshold]').value;
+ secretCfg.threshold=num(parseMoney(thr));
+ secretCfg.on=secretCfg.threshold!=null;
+ var finish=function(){saveSecret();secretUnlocked=false;show('box')};
+ if(kw.trim()){hashKW(kw).then(function(h){secretCfg.hash=h;finish()})}else finish();
+}
+var dashAll=false;
+function dashHTML(){
+ var yrs={};
+ items.forEach(function(i){
+   var py=(i.purchaseDate||'').slice(0,4),sy=(i.dateSold||'').slice(0,4);
+   if(/^\d{4}$/.test(py)&&num(i.cost)!=null){yrs[py]=yrs[py]||{spend:0,sales:0};yrs[py].spend+=num(i.cost)}
+   if(/^\d{4}$/.test(sy)&&num(i.payout)!=null){yrs[sy]=yrs[sy]||{spend:0,sales:0};yrs[sy].sales+=num(i.payout)}
+ });
+ var years=Object.keys(yrs).sort(),max=1;
+ years.forEach(function(y){max=Math.max(max,yrs[y].spend,yrs[y].sales)});
+ var W=Math.max(320,years.length*90),H=180,base=H-30,bw=24,bars='';
+ years.forEach(function(y,n){var x=n*90+16,hs=yrs[y].spend/max*(base-10),ha=yrs[y].sales/max*(base-10);
+   bars+='<rect x="'+x+'" y="'+(base-hs)+'" width="'+bw+'" height="'+hs+'" style="fill:#e07a9b"><title>Spend '+esc(fmtMoney(yrs[y].spend))+'</title></rect>'
+    +'<rect x="'+(x+bw+4)+'" y="'+(base-ha)+'" width="'+bw+'" height="'+ha+'" style="fill:#3f9d5a"><title>Sales '+esc(fmtMoney(yrs[y].sales))+'</title></rect>'
+    +'<text x="'+(x+bw+2)+'" y="'+(H-8)+'" text-anchor="middle" style="font-size:11px;fill:var(--mute)">'+y+'</text>';
+ });
+ var chart=years.length?'<svg viewBox="0 0 '+W+' '+H+'" width="100%" role="img" aria-label="Total spend and total sales per year">'+bars+'</svg><p class="meta"><span style="color:#e07a9b">■</span> Total spend (by purchase year) · <span style="color:#3f9d5a">■</span> Total sales (by year sold)</p>':'<p class="meta">No dated purchases or sales yet.</p>';
+ var sel={};
+ items.forEach(function(i){var s=(i.seller||'').trim()||'Unknown';sel[s]=sel[s]||{count:0,spend:0};sel[s].count++;sel[s].spend+=num(i.cost)||0});
+ var rows=Object.keys(sel).map(function(k){return {name:k,count:sel[k].count,spend:sel[k].spend}}).sort(function(a,b){return b.count-a.count||b.spend-a.spend});
+ var shown=dashAll?rows:rows.slice(0,10),mx=rows.length?rows[0].count:1;
+ var sellers=shown.map(function(r){return '<div style="display:grid;grid-template-columns:minmax(90px,140px) 1fr auto;gap:8px;align-items:center;margin:6px 0"><span>'+esc(r.name)+'</span><span style="background:var(--line);border-radius:6px;height:12px;display:block;overflow:hidden"><span style="display:block;height:100%;width:'+(r.count/mx*100)+'%;background:var(--acc)"></span></span><span class="meta">'+r.count+' · '+esc(fmtMoney(r.spend))+'</span></div>'}).join('');
+ return '<h4 class="sub" style="margin:0 0 6px">Spend vs. Sales by Year</h4>'+chart
+  +'<h4 class="sub" style="margin:14px 0 6px">Sellers by Count</h4>'+(rows.length?sellers:'<p class="meta">No pieces yet.</p>')
+  +(rows.length>10?'<button class="link" data-a="dashall">'+(dashAll?'Show top 10':'View all ('+rows.length+')')+'</button>':'');
 }
 function renderSecret(){
  if(!secretUnlocked)return '<h2>Secret Compartment</h2><p class="meta">Locked.</p>';
- var hidden=items.filter(isHidden);
+ var hidden=items.filter(isHidden).sort(function(a,b){return num(b.cost)-num(a.cost)});
  return '<h2>Secret Compartment</h2>'
-  +'<div class="bar"><label class="swl" style="margin:0"><input type="checkbox" data-a="smode"'+(secretCfg.on?' checked':'')+'> Hide These Pieces in the Jewelry Box</label></div>'
-  +'<div class="f"><label>Cost Threshold (Hide Pieces Above This)<input type="text" inputmode="decimal" data-a="sthr" data-money="1" value="'+esc(secretCfg.threshold==null?'':fmtMoney(secretCfg.threshold))+'" placeholder="$0.00"></label>'
-  +'<label>Change Keyword<input type="password" id="skw2" placeholder="New keyword"></label></div>'
-  +'<div class="bar"><button data-a="skwchg">Save keyword</button><button data-a="slock">Lock</button></div>'
-  +'<p class="meta">'+hidden.length+' piece'+(hidden.length===1?'':'s')+' over the threshold'+(secretCfg.on?' (hidden from the Jewelry Box)':' (mode is off, so they show)')+'.</p>'
-  +'<div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(120px,1fr))">'+hidden.map(function(i){return '<div>'+thumb(i)+'<div class="meta">'+esc(title(i))+' · '+money(num(i.cost))+'</div></div>'}).join('')+'</div>';
+  +'<form id="secretform" autocomplete="on"><input type="text" name="username" autocomplete="username" value="Never Twice the Same" style="position:absolute;left:-9999px" tabindex="-1" aria-hidden="true">'
+  +'<div class="f"><label>Keyword<input type="password" name="keyword" autocomplete="new-password" placeholder="'+(secretCfg.hash?'••••••••':'Set a keyword')+'"></label>'
+  +'<label>Threshold (hide pieces above this cost)<input type="text" inputmode="decimal" name="threshold" data-a="sthr" data-money="1" value="'+esc(secretCfg.threshold==null?'':fmtMoney(secretCfg.threshold))+'" placeholder="$0.00"></label></div>'
+  +'<div class="bar"><button type="submit" class="pri">Lock</button></div>'
+  +'<p class="meta">'+hidden.length+' piece'+(hidden.length===1?'':'s')+' over the threshold'+(secretCfg.on?' (hidden from the Jewelry Box)':' (not hidden yet)')+'.</p>'
+  +'<div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(120px,1fr))">'+hidden.map(function(i){return '<div>'+thumb(i)+'<div class="meta">'+esc(title(i))+' · '+money(num(i.cost))+'</div></div>'}).join('')+'</div></form>'
+  +'<details data-sec="dash"'+dOpen('dash',false)+'><summary>Dashboard</summary>'+dashHTML()+'</details>';
 }
 
 /* ---------- CSV / JSON ---------- */
@@ -838,7 +904,7 @@ function importCSV(text){
  saveItems();render();
  alert('Added '+added+', updated '+updated+(skipped?', skipped '+skipped+' (no title)':'')+'.');
 }
-function exportJSON(){
+function planChunks(){
  var LIMIT=20*1024*1024,chunks=[],cur={items:[],imgs:{}},curSize=0,used={};
  items.forEach(function(i){
    var ids=[];if(i.cover&&i.cover.id)ids.push(i.cover.id);(i.refs||[]).forEach(function(r){ids.push(r)});
@@ -850,7 +916,11 @@ function exportJSON(){
  chunks.push(cur);
  var rest={};Object.keys(gal.imgs).forEach(function(k){if(!used[k])rest[k]=gal.imgs[k]});
  chunks.push({items:[],imgs:rest});
- var N=chunks.length,D=today();
+ return chunks;
+}
+function exportJSON(){
+ lastExport=new Date().toISOString();kset('lastExport',lastExport);
+ var chunks=planChunks(),N=chunks.length,D=today();
  chunks.forEach(function(c,n){
    var doc={app:'never-twice-the-same',format:2,part:n+1,of:N,exported:new Date().toISOString(),items:c.items,images:c.imgs};
    if(n===N-1){doc.gallery={refs:gal.refs,covers:gal.covers};doc.order=order;doc.theme=theme;doc.hideSold=hideSold;doc.wishlist=wish}
@@ -893,10 +963,16 @@ function storageBytes(){
 function fmtBytes(b){return b<1048576?Math.round(b/1024)+' KB':b<1073741824?(b/1048576).toFixed(1)+' MB':(b/1073741824).toFixed(2)+' GB'}
 function updateStorage(){
  var el=document.getElementById('stormeter');if(!el)return;
- var s=storageBytes(),mb=s.total/1048576;
- var txt='App data: '+fmtBytes(s.total)+' ('+items.length+' pieces, '+s.imgs+' images).'+(mb>150?' Large library: consider separate image storage soon.':'');
- if(navigator.storage&&navigator.storage.estimate){navigator.storage.estimate().then(function(e){el.innerHTML=txt+'<br>Browser: '+fmtBytes(e.usage||0)+' used of about '+fmtBytes(e.quota||0)+' allowed.'}).catch(function(){el.textContent=txt})}
- else el.textContent=txt;
+ var st=storageBytes();
+ var lines=['App data: '+fmtBytes(st.total)+' ('+items.length+' pieces, '+st.imgs+' images, '+wish.length+' wishlist items).'];
+ if(st.total/1048576>150)lines.push('Large library: consider separate image storage soon.');
+ lines.push('Persistent storage: '+(persistOK===true?'granted (the browser is asked not to clear it)':persistOK===false?'not granted (the browser may clear it when space is low)':'checking'));
+ lines.push(lastExport?'Last JSON export: '+fmtDate(lastExport.slice(0,10))+'.':'No JSON export yet. Export a backup regularly.');
+ var days=lastExport?(Date.now()-new Date(lastExport).getTime())/864e5:Infinity;
+ if(days>7)lines.push('It has been over 7 days since your last backup. Export a JSON backup.');
+ var show=function(){el.innerHTML=lines.map(esc).join('<br>')};
+ if(navigator.storage&&navigator.storage.estimate){navigator.storage.estimate().then(function(e){lines.push('Browser: '+fmtBytes(e.usage||0)+' used of about '+fmtBytes(e.quota||0)+' allowed.');show()}).catch(show)}
+ else show();
 }
 function deleteAll(){
  var t=prompt('This erases every piece, photo, and setting on this device. Type DELETE to confirm.');
@@ -915,6 +991,7 @@ document.addEventListener('input',function(e){
    var lab=document.getElementById('rl-'+k);if(lab)lab.textContent=(k==='cost'?wholeMoney(lo)+' – '+wholeMoney(hi):lo+' – '+hi);
    renderMain();return;
  }
+ if(t.getAttribute('data-a')==='sthr'){var tv=num(parseMoney(t.value));if(tv!==secretCfg.threshold){secretCfg.threshold=tv;saveSecret()}return}
  if(t.id==='cropz'){cropZoom(Number(t.value));return}
  var f=document.getElementById('form');
  if(f&&f.contains(t)){
@@ -961,6 +1038,7 @@ document.addEventListener('click',function(e){
   case 'csvdown':exportCSV();break;
   case 'quickadd':syncForm();M.innerHTML=quickHTML();break;
   case 'qaapply':var raw=document.getElementById('qaIn').value.trim();var za=raw.indexOf('{'),zb=raw.lastIndexOf('}');var txt=za>=0&&zb>za?raw.slice(za,zb+1):raw;var data=null;try{data=JSON.parse(txt)}catch(err){alert('That does not look like JSON. Paste the output exactly as Claude returns it.');break}syncForm();var cnt=applyQuick(data);M.innerHTML='';renderMain();alert('Filled '+cnt+' field'+(cnt===1?'':'s')+'. Review, then Save.');break;
+  case 'dashall':dashAll=!dashAll;renderMain();break;
   case 'copy':copyText(d.id,b);break;
   case 'ringref':M.innerHTML='<div class="modal" data-a="backdrop"><div style="max-width:94vw"><h3 style="margin:0 0 8px">Ring Size Chart</h3>'+ringTableHTML()+'<div class="bar" style="justify-content:center;margin-top:12px"><button data-a="x">Close</button></div></div></div>';break;
   case 'gunl':galUnl[d.kind]=!galUnl[d.kind];renderMain();break;
@@ -977,9 +1055,11 @@ document.addEventListener('click',function(e){
   case 'galuse':M.innerHTML='';syncForm();editing.cover={id:d.id,l:null,t:null,w:null,h:null};renderMain();break;
   case 'galaddref':M.innerHTML='';syncForm();if((editing.refs||[]).indexOf(d.id)<0)editing.refs=(editing.refs||[]).concat([d.id]);renderMain();break;
   case 'previewcover':if(editing.cover&&gal.imgs[editing.cover.id])M.innerHTML=previewHTML(gal.imgs[editing.cover.id]);break;
-  case 'wadd':M.innerHTML=wishAddHTML();break;
-  case 'wsave':var wf=document.getElementById('wfile').files[0],wlk=(document.getElementById('wlink').value||'').trim();if(!wf){alert('Choose a photo.');break}if(!wlk){alert('Enter the link.');break}var href=/^https?:\/\//i.test(wlk)?wlk:'https://'+wlk;readRaw(wf).then(function(url){var imgId=galAdd('refs',url);wish.push({id:uid(),img:imgId,link:href});saveWish();saveGallery();M.innerHTML='';renderMain()},function(){});break;
-  case 'wopen':var wo=wish.filter(function(x){return x.id===d.id})[0];if(wo)M.innerHTML=wishPreviewHTML(wo.link);break;
+  case 'wadd':wishPending=null;CR=null;M.innerHTML=wishAddHTML();break;
+  case 'wsave':var wcat=document.getElementById('wcat').value;var wlk=(document.getElementById('wlink').value||'').trim();if(!wishPending){alert('Choose a photo.');break}if(!wlk){alert('Enter the link.');break}var href=/^https?:\/\//i.test(wlk)?wlk:'https://'+wlk;var cf=wishCropFrac();wish.push({id:uid(),img:wishPending,cover:{id:wishPending,l:cf.l,t:cf.t,w:cf.w,h:cf.h},category:wcat,link:href});wishPending=null;CR=null;saveWish();saveGallery();M.innerHTML='';renderMain();break;
+  case 'wtype':var wti=wishType.indexOf(d.v);if(wti>-1)wishType.splice(wti,1);else wishType.push(d.v);renderMain();break;
+  case 'wcols':wishCols=Number(d.v);renderMain();break;
+  case 'wopen':var wo=wish.filter(function(x){return x.id===d.id})[0];if(wo){var wa=document.createElement('a');wa.href=wo.link;wa.target='_blank';wa.rel='noopener';document.body.appendChild(wa);wa.click();wa.remove()}break;
   case 'wdel':if(!confirm('Remove this from the wishlist?'))break;var wd=wish.filter(function(x){return x.id===d.id})[0];wish=wish.filter(function(x){return x.id!==d.id});if(wd&&!isUsed(wd.img)){gal.refs=gal.refs.filter(function(x){return x!==wd.img});gal.covers=gal.covers.filter(function(x){return x!==wd.img});delete gal.imgs[wd.img]}saveWish();saveGallery();renderMain();break;
   case 'covadd':document.getElementById('cvfile').click();break;
   case 'refadd':document.getElementById('reffile').click();break;
@@ -1016,6 +1096,7 @@ document.addEventListener('change',function(e){
    },function(){});
    return;
  }
+ if(t.id==='wfile'&&t.files[0]){var wf2=t.files[0];t.value='';readRaw(wf2).then(function(url){var imgId=galAdd('refs',url);wishPending=imgId;CR=null;var wim=new Image();wim.onload=function(){openCrop(wim,imgId,null)};wim.src=url;saveGallery()},function(){});return}
  if(t.id==='gfile'&&t.files.length){var gf=Array.prototype.slice.call(t.files);t.value='';Promise.all(gf.map(readRaw)).then(function(urls){urls.forEach(function(u){galAdd(galKind,u)});saveGallery();renderMain()},function(){});return}
  if(t.id==='reffile'&&t.files.length){
    var files=Array.prototype.slice.call(t.files);t.value='';
@@ -1025,6 +1106,8 @@ document.addEventListener('change',function(e){
  if(t.dataset&&t.dataset.money){t.value=fmtMoney(parseMoney(t.value));return}
 });
 document.addEventListener('submit',function(e){
+ if(e.target.id==='kwform'){e.preventDefault();handleKeywordForm(e.target);return}
+ if(e.target.id==='secretform'){e.preventDefault();handleSecretForm(e.target);return}
  e.preventDefault();
  var o=mig(syncForm()),idx=items.findIndex(function(i){return i.id===o.id});
  delete o._new;
