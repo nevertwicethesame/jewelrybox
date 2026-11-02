@@ -138,11 +138,11 @@ footer#ver{text-align:center;padding:24px 14px calc(36px + env(safe-area-inset-b
 <aside class="drawer" id="drawer"></aside>
 <div id="modal"></div>
 <input type="file" id="fcsv" accept=".csv,text/csv" hidden>
-<input type="file" id="fjson" accept=".json,application/json" hidden>
+<input type="file" id="fjson" accept=".json,application/json" multiple hidden>
 <input type="file" id="gfile" accept="image/*" multiple hidden>
 <script>
 var K='ntts_items_v2',OK='ntts_order_v1',PER=25,MAX_UPLOAD=300*1024;
-var APP_VERSION='1.5.4',APP_DATE='2026-11-01',UPDATE_URL='';
+var APP_VERSION='1.5.5',APP_DATE='2026-11-01',UPDATE_URL='';
 var EMOJI={ring:'💍',earring:'✨',necklace:'📿',bracelet:'⭕',watch:'⌚',other:'💎'};
 var CATS=['Ring','Earring','Necklace','Bracelet','Watch','Other'];
 var STAT=['Wishlist','Waiting','Private Collection','To List','Listed','Sold'];
@@ -509,16 +509,21 @@ function themeHTML(){
    return '<button data-a="theme" data-v="'+k+'"'+(theme===k?' class="on"':'')+'><span class="sw" style="background:'+THEMES[k].l+'"></span> '+THEMES[k].n+'</button>';
  }).join('')+'</div>';
 }
-function ioHTML(){
- return '<details class="io"'+(ioOpen?' open':'')+'><summary>I/O</summary>'
-  +'<h4 class="side">Records Maintenance</h4>'
-  +'<div class="seg"><button data-a="csvup">⬆ Upload</button><button data-a="csvdown">⬇ Download</button></div>'
+function ioModalHTML(){
+ var tpl=CSV_COLS.map(function(c){return c[0]==='tags'?'motifs':c[0]}).join(', ');
+ return '<div class="modal" data-a="backdrop"><div style="max-width:720px;width:94vw"><h3 style="margin:0 0 10px;text-align:center">I/O</h3>'
+  +'<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px">'
+  +'<div style="border:1px solid var(--line);border-radius:12px;padding:12px"><h4 class="sub" style="margin:0 0 8px">CSV Backup</h4>'
+  +'<div class="bar" style="flex-direction:column;align-items:stretch;margin:0"><button data-a="csvup">⬆ Upload (CSV)</button><button data-a="csvdown">⬇ Download (CSV)</button></div>'
   +'<p class="meta">Upload backfills records without photos. Download exports every record without photos as CSV.</p>'
-  +'<details class="tpl"><summary>CSV template fields</summary><p class="meta" style="word-break:break-word;margin:0 0 8px">'+CSV_COLS.map(function(c){return c[0]==='tags'?'motifs':c[0]}).join(', ')+'</p><p class="meta" style="margin:0 0 8px">Lists separate values with ; or commas. Dates use YYYY-MM-DD. Rating is 0 to 5. Photoshoot is true or false. Leave a cell empty to keep the existing value when updating by id.</p></details>'
-  +'<h4 class="side">Data Backup</h4>'
-  +'<div class="bar" style="flex-direction:column;align-items:stretch;margin:0"><button data-a="export">⬇ Export (JSON)</button><button data-a="import">⬆ Import (JSON)</button><button class="dan" data-a="delete">Delete All</button></div>'
-  +'<p class="meta">Export saves everything, including photos. Import restores a backup on a new device or after browser data is cleared.</p>'
-  +'</details>';
+  +'<details class="tpl"><summary>CSV template fields</summary><p class="meta" style="word-break:break-word;margin:0 0 8px">'+tpl+'</p><p class="meta" style="margin:0 0 8px">Lists separate values with ; or commas. Dates use YYYY-MM-DD. Rating is 0 to 5. Photoshoot is true or false. Leave a cell empty to keep the existing value when updating by id.</p></details></div>'
+  +'<div style="border:1px solid var(--line);border-radius:12px;padding:12px"><h4 class="sub" style="margin:0 0 8px">JSON Backup</h4>'
+  +'<div class="bar" style="flex-direction:column;align-items:stretch;margin:0"><button data-a="export">⬇ Export (JSON)</button><button data-a="import">⬆ Import (JSON)</button></div>'
+  +'<p class="meta">Export saves everything, including photos, in numbered parts. Import restores a backup on a new device or after browser data is cleared.</p></div>'
+  +'</div>'
+  +'<div style="margin-top:14px;border-top:1px solid var(--line);padding-top:10px;text-align:center"><h4 class="sub" style="margin:0 0 6px;text-align:center">App Stats</h4><div id="stormeter" class="meta"></div></div>'
+  +'<div style="margin-top:14px;border-top:1px solid var(--line);padding-top:10px;text-align:center"><h4 class="sub" style="margin:0 0 6px;text-align:center">Reset</h4><button class="dan" data-a="delete">Delete All</button><p class="meta" style="margin:6px 0 0">Erases every piece, photo, and setting on this device. This cannot be undone.</p></div>'
+  +'<div class="bar" style="justify-content:center;margin:12px 0 0"><button data-a="x">Close</button></div></div></div>';
 }
 function viewControls(){
  var h='<h3 style="margin:0 0 8px">View</h3>'+'<span class="tgl">'+[['thumbs','▦ Grid'],['table','▤ Table']].map(function(o){return '<button data-a="vm" data-v="'+o[0]+'"'+(o[0]===vmode?' class="on"':'')+'>'+o[1]+'</button>'}).join('')+'</span>';
@@ -526,7 +531,7 @@ function viewControls(){
  return h;
 }
 function renderDrawer(){
- document.getElementById('drawer').innerHTML=(view==='box'?viewControls():'<h3 style="margin:0 0 8px">View</h3>')+themeHTML()+'<div class="dv"><span>✦ 💍 ✦</span></div>'+filtersHTML()+'<div class="dv"><span>✦ 💎 ✦</span></div>'+ioHTML();
+ document.getElementById('drawer').innerHTML=(view==='box'?viewControls():'<h3 style="margin:0 0 8px">View</h3>')+themeHTML()+'<div class="dv"><span>✦ 💍 ✦</span></div>'+filtersHTML();
 }
 function drawer(o){document.getElementById('drawer').classList.toggle('open',o);document.getElementById('scrim').classList.toggle('open',o)}
 
@@ -833,20 +838,63 @@ function importCSV(text){
  alert('Added '+added+', updated '+updated+(skipped?', skipped '+skipped+' (no title)':'')+'.');
 }
 function exportJSON(){
- download('ntts-backup-'+today()+'.json','application/json',JSON.stringify({app:'never-twice-the-same',version:6,exported:new Date().toISOString(),items:items,order:order,theme:theme,hideSold:hideSold,gallery:gal}));
+ var LIMIT=20*1024*1024,chunks=[],cur={items:[],imgs:{}},curSize=0,used={};
+ items.forEach(function(i){
+   var ids=[];if(i.cover&&i.cover.id)ids.push(i.cover.id);(i.refs||[]).forEach(function(r){ids.push(r)});
+   var add={};ids.forEach(function(id){if(gal.imgs[id]&&!used[id])add[id]=gal.imgs[id]});
+   var sz=JSON.stringify(i).length+Object.keys(add).reduce(function(a,k){return a+add[k].length},0);
+   if(curSize+sz>LIMIT&&cur.items.length){chunks.push(cur);cur={items:[],imgs:{}};curSize=0}
+   cur.items.push(i);Object.keys(add).forEach(function(k){cur.imgs[k]=add[k];used[k]=1});curSize+=sz;
+ });
+ chunks.push(cur);
+ var rest={};Object.keys(gal.imgs).forEach(function(k){if(!used[k])rest[k]=gal.imgs[k]});
+ chunks.push({items:[],imgs:rest});
+ var N=chunks.length,D=today();
+ chunks.forEach(function(c,n){
+   var doc={app:'never-twice-the-same',format:2,part:n+1,of:N,exported:new Date().toISOString(),items:c.items,images:c.imgs};
+   if(n===N-1){doc.gallery={refs:gal.refs,covers:gal.covers};doc.order=order;doc.theme=theme;doc.hideSold=hideSold}
+   setTimeout(function(){download('ntts-backup-'+D+'-part'+(n+1)+'of'+N+'.json','application/json',JSON.stringify(doc))},n*800);
+ });
 }
-function importJSON(text){
- var d;try{d=JSON.parse(text)}catch(e){alert('That file is not a valid backup.');return}
- var arr=Array.isArray(d)?d:(d&&d.items);
- if(!Array.isArray(arr)){alert('That file does not contain any pieces.');return}
- if(!confirm('Replace everything on this device with this backup ('+arr.length+' pieces)?'))return;
- gal=normGal(d.gallery||null);
- items=arr.map(mig);
- order=Array.isArray(d.order)?d.order:[];
- if(d.theme&&THEMES[d.theme])theme=d.theme;
- if(typeof d.hideSold==='boolean')hideSold=d.hideSold;
+function readFileP(f){return new Promise(function(res){var r=new FileReader();r.onload=function(){res(String(r.result))};r.readAsText(f)})}
+function importJSON(texts){
+ var docs=[];
+ try{texts.forEach(function(t){docs.push(JSON.parse(t))})}catch(e){alert('One of the selected files is not a valid backup.');return}
+ var allItems=[],imgs={},lists={refs:[],covers:[]},ord=null,th=null,hs=null;
+ docs.forEach(function(d){
+   if(d.format===2){
+     (d.items||[]).forEach(function(i){allItems.push(i)});
+     Object.keys(d.images||{}).forEach(function(k){imgs[k]=d.images[k]});
+     if(d.gallery){lists.refs=lists.refs.concat(d.gallery.refs||[]);lists.covers=lists.covers.concat(d.gallery.covers||[])}
+     if(d.order)ord=d.order;if(d.theme)th=d.theme;if(typeof d.hideSold==='boolean')hs=d.hideSold;
+   }else{
+     var arr=Array.isArray(d)?d:(d.items||[]);
+     arr.forEach(function(i){allItems.push(i)});
+     var g=normGal(d.gallery||null);Object.keys(g.imgs).forEach(function(k){imgs[k]=g.imgs[k]});
+     lists.refs=lists.refs.concat(g.refs);lists.covers=lists.covers.concat(g.covers);
+     if(d.order)ord=d.order;if(d.theme)th=d.theme;if(typeof d.hideSold==='boolean')hs=d.hideSold;
+   }
+ });
+ if(!confirm('Replace everything on this device with this backup ('+allItems.length+' pieces, '+Object.keys(imgs).length+' images)?'))return;
+ gal={imgs:imgs,refs:lists.refs.filter(function(id){return !!imgs[id]}),covers:lists.covers.filter(function(id){return !!imgs[id]})};
+ items=allItems.map(mig);
+ order=ord||[];
+ if(th&&THEMES[th])theme=th;
+ if(hs!==null)hideSold=hs;
  saveItems();saveOrder();saveSettings();saveGallery();applyTheme();render();
- alert('Backup restored.');
+ alert('Backup restored: '+items.length+' pieces.');
+}
+function storageBytes(){
+ var imgB=Object.keys(gal.imgs).reduce(function(a,k){return a+gal.imgs[k].length},0)*0.75;
+ return {total:imgB+JSON.stringify(items).length,imgs:Object.keys(gal.imgs).length};
+}
+function fmtBytes(b){return b<1048576?Math.round(b/1024)+' KB':b<1073741824?(b/1048576).toFixed(1)+' MB':(b/1073741824).toFixed(2)+' GB'}
+function updateStorage(){
+ var el=document.getElementById('stormeter');if(!el)return;
+ var s=storageBytes(),mb=s.total/1048576;
+ var txt='App data: '+fmtBytes(s.total)+' ('+items.length+' pieces, '+s.imgs+' images).'+(mb>150?' Large library: consider separate image storage soon.':'');
+ if(navigator.storage&&navigator.storage.estimate){navigator.storage.estimate().then(function(e){el.innerHTML=txt+'<br>Browser: '+fmtBytes(e.usage||0)+' used of about '+fmtBytes(e.quota||0)+' allowed.'}).catch(function(){el.textContent=txt})}
+ else el.textContent=txt;
 }
 function deleteAll(){
  var t=prompt('This erases every piece, photo, and setting on this device. Type DELETE to confirm.');
@@ -899,6 +947,7 @@ document.addEventListener('click',function(e){
   case 'wear':wear(Number(d.id));break;
   case 'x':M.innerHTML='';break;
   case 'backdrop':if(e.target===b)M.innerHTML='';break;
+  case 'io':M.innerHTML=ioModalHTML();updateStorage();break;
   case 'checkupd':manualCheck();break;
   case 'reload':location.reload();break;
   case 'updx':document.getElementById('upd').hidden=true;break;
@@ -949,7 +998,7 @@ document.addEventListener('change',function(e){
  if(a==='fc'){toggleFilter(t.getAttribute('data-k'),t.getAttribute('data-val'));render();return}
  if(a==='hidesold'){hideSold=t.checked;saveSettings();render();return}
  if(t.id==='fcsv'&&t.files[0]){readFile(t.files[0],importCSV);t.value='';return}
- if(t.id==='fjson'&&t.files[0]){readFile(t.files[0],importJSON);t.value='';return}
+ if(t.id==='fjson'&&t.files.length){var jf=Array.prototype.slice.call(t.files);t.value='';Promise.all(jf.map(readFileP)).then(importJSON);return}
  if(t.id==='cvfile'&&t.files[0]){
    var cf=t.files[0];t.value='';
    readRaw(cf).then(function(url){
@@ -1030,7 +1079,7 @@ function manualCheck(){
    else alert('You have the latest version (v'+APP_VERSION+').');
  }).catch(function(){alert('Could not check for updates. Make sure version.json is published in the same folder as index.html.')});
 }
-function renderFooter(){document.getElementById('ver').innerHTML='Never Twice the Same · v'+APP_VERSION+' · '+APP_DATE+' <button class="link" data-a="checkupd">Check for update</button>'}
+function renderFooter(){document.getElementById('ver').innerHTML='<button class="link" data-a="io" style="font-size:inherit;margin:0">Never Twice the Same</button> · <button class="link" data-a="checkupd" style="font-size:inherit;margin:0">v'+APP_VERSION+'</button>'}
 document.querySelector('header').insertAdjacentElement('afterend',document.getElementById('tabbar'));
 init().then(function(){renderFooter();checkUpdate();setInterval(checkUpdate,3600000);document.addEventListener('visibilitychange',function(){if(!document.hidden)checkUpdate()});applyTheme();try{matchMedia('(prefers-color-scheme: dark)').addEventListener('change',applyTheme)}catch(e){}render()})
  .catch(function(e){document.getElementById('app').innerHTML='<p class="meta">Could not start storage: '+esc(e&&e.message||e)+'</p>'});
