@@ -143,7 +143,7 @@ footer#ver{text-align:center;padding:24px 14px calc(36px + env(safe-area-inset-b
 <input type="file" id="gfile" accept="image/*" multiple hidden>
 <script>
 var K='ntts_items_v2',OK='ntts_order_v1',PER=25,MAX_UPLOAD=300*1024;
-var APP_VERSION='1.5.13',APP_DATE='2026-11-02',UPDATE_URL='';
+var APP_VERSION='1.5.14',APP_DATE='2026-11-02',UPDATE_URL='';
 var EMOJI={ring:'💍',earring:'✨',necklace:'📿',bracelet:'⭕',watch:'⌚',other:'💎'};
 var CATS=['Ring','Earring','Necklace','Bracelet','Watch','Other'];
 var STAT=['Waiting','Private Collection','To List','Listed','Sold'];
@@ -422,12 +422,18 @@ function blockedHTML(list){
   +'<div class="bar" style="justify-content:center;margin:12px 0 0"><button data-a="x">OK</button></div></div></div>';
 }
 function previewHTML(src){return '<div class="modal" data-a="backdrop"><div style="max-width:94vw;text-align:center"><img src="'+esc(src)+'" alt="" style="max-width:100%;max-height:78vh;display:block;margin:0 auto;border-radius:10px"><p class="meta">'+sizeOf(src)+'</p><div class="bar" style="justify-content:center"><button data-a="x">Close</button></div></div></div>'}
-var galUnl={refs:false,covers:false},galOpen={refs:false,covers:false};
+var galUnl={refs:false,covers:false},galOpen={refs:false,covers:false,wish:false};
 var secOpen={};
 function dOpen(k,d){return secOpen[k]===undefined?(d?' open':''):(secOpen[k]?' open':'')}
 function avail(kind){return gal[kind].filter(function(id){return !isUsed(id)})}
+function wishImgIds(){return wish.map(function(w){return w.img})}
+function wishGalHTML(){
+ return '<details data-gsec="wish"'+(galOpen.wish?' open':'')+'><summary>Wishlist Items ('+wish.length+')</summary>'
+  +(wish.length?'<div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(110px,1fr))">'+wish.map(function(w){return '<div><div style="position:relative;aspect-ratio:1;border-radius:8px;overflow:hidden;background:var(--acc)">'+coverImg(wishCover(w))+'</div><div class="meta">'+esc(w.category||'')+'</div></div>'}).join('')+'</div>':'<p class="meta">No wishlist items yet.</p>')
+  +'<p class="meta">Add or remove wishlist items on the Wishlist page.</p></details>';
+}
 function gallerySection(kind,label){
- var all=gal[kind],list=galUnl[kind]?all.filter(function(id){return !isUsed(id)}):all,sel=galSel[kind],n=Object.keys(sel).filter(function(k){return sel[k]}).length;
+ var all=kind==='refs'?gal.refs.filter(function(id){return wishImgIds().indexOf(id)<0}):gal[kind],list=galUnl[kind]?all.filter(function(id){return !isUsed(id)}):all,sel=galSel[kind],n=Object.keys(sel).filter(function(k){return sel[k]}).length;
  return '<details data-gsec="'+kind+'"'+(galOpen[kind]?' open':'')+'><summary>'+label+' ('+all.length+')</summary>'
   +'<div class="bar"><button data-a="gadd" data-kind="'+kind+'">+ Add images</button><button data-a="gunl" data-kind="'+kind+'"'+(galUnl[kind]?' class="on"':'')+'>Unlinked only</button><button data-a="gall" data-kind="'+kind+'">Select all</button><button data-a="gnone" data-kind="'+kind+'">Clear selection</button><button class="dan" data-a="gdelsel" data-kind="'+kind+'"'+(n?'':' disabled')+'>Delete selected ('+n+')</button></div>'
   +(list.length?'<div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(110px,1fr))">'+list.map(function(id){var on=!!sel[id],src=gal.imgs[id];return '<div style="position:relative"><img src="'+esc(src)+'" alt="" data-a="gview" data-kind="'+kind+'" data-id="'+id+'" style="width:100%;aspect-ratio:1;object-fit:cover;border-radius:8px;display:block;cursor:zoom-in;'+(on?'outline:3px solid var(--acc);':'')+'"><button data-a="gtog" data-kind="'+kind+'" data-id="'+id+'" style="position:absolute;top:4px;left:4px;padding:2px 7px;min-height:0">'+(on?'☑':'☐')+'</button><button data-a="gdel" data-kind="'+kind+'" data-id="'+id+'" style="position:absolute;top:4px;right:4px;padding:2px 7px;min-height:0">✕</button><span class="meta" style="position:absolute;left:4px;bottom:4px;background:rgba(0,0,0,.6);color:#fff;padding:1px 4px;border-radius:4px;font-size:.65rem">'+sizeOf(src)+'</span></div>'}).join('')+'</div>':'<p class="meta">No images yet.</p>')
@@ -539,7 +545,7 @@ function renderManage(){
  var nfiles=planChunks().length;
  var jsonBody='<div class="bar" style="flex-direction:column;align-items:stretch;margin:0"><button data-a="import">⬆ Import (JSON)</button><button data-a="export">⬇ Export (JSON)</button></div><p class="meta">Estimated export: '+nfiles+' file'+(nfiles===1?'':'s')+'.</p><p class="meta">Export saves everything, including photos, in numbered parts. Import restores a backup on a new device or after browser data is cleared.</p>';
  return '<h2>I/O</h2><h3 class="side">Manage Images</h3>'
-  +gallerySection('refs','Reference Screenshots')+gallerySection('covers','Cover Photos')
+  +gallerySection('refs','Reference Screenshots')+gallerySection('covers','Cover Photos')+wishGalHTML()
   +'<h3 class="side">Data Backup</h3><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px">'+card('CSV Backup',csvBody)+card('JSON Backup',jsonBody)+'</div>'
   +'<div style="margin-top:12px;border:1px solid var(--line);border-radius:12px;padding:12px"><h4 class="sub" style="margin:0 0 6px;text-align:left">App Stats</h4><div id="stormeter" class="meta" style="text-align:left"></div></div>'
   +'<h3 class="side">Reset</h3><div style="border:1px solid var(--line);border-radius:12px;padding:12px"><p class="meta" style="margin:0 0 8px">Current Version: v'+APP_VERSION+' · '+APP_DATE+'</p><button class="dan" data-a="delete">Delete All</button><p class="meta" style="margin:6px 0 0">Erases every piece, photo, and setting on this device. This cannot be undone.</p></div>';
@@ -548,11 +554,9 @@ function gicon(n){var w=(28-(n-1)*2)/n,r='';for(var k=0;k<n;k++)r+='<rect x="'+(
 function wishCover(w){return w.cover||{id:w.img,l:null,t:null,w:null,h:null}}
 function renderWishlist(){
  var list=wish.filter(function(w){return (!wishType.length||wishType.indexOf(w.category)>-1)&&(!q||((w.category||'')+' '+(w.link||'')).toLowerCase().indexOf(q)>-1)});
- var chips=CATS.filter(function(c){return wish.some(function(w){return w.category===c})}).map(function(c){return '<button data-a="wtype" data-v="'+c+'"'+(wishType.indexOf(c)>-1?' class="on"':'')+'>'+c+'</button>'}).join('');
  var tiles=list.map(function(w){return '<div style="position:relative"><button type="button" data-a="wopen" data-id="'+w.id+'" style="padding:0;border:0;border-radius:10px;overflow:hidden;aspect-ratio:1;width:100%;display:block;min-height:0;background:var(--acc);position:relative">'+coverImg(wishCover(w))+'</button><button type="button" data-a="wdel" data-id="'+w.id+'" style="position:absolute;top:4px;right:4px;padding:2px 8px;min-height:0">✕</button><div class="meta" style="margin-top:4px">'+esc(w.category||'')+'</div></div>'}).join('');
  return '<h2>Wishlist</h2><div class="bar"><button class="pri" data-a="wadd">+ Add to Wishlist</button></div>'
-  +'<div class="bar" style="justify-content:space-between"><div class="seg">'+chips+'</div><div class="seg">'+[1,2,3,4].map(function(n){return '<button data-a="wcols" data-v="'+n+'"'+(n===wishCols?' class="on"':'')+'>'+gicon(n)+'</button>'}).join('')+'</div></div>'
-  +(list.length?'<div class="grid" style="grid-template-columns:repeat('+wishCols+',1fr)">'+tiles+'</div>':'<p class="meta">'+(wish.length?'No wishlist items match this type.':'Nothing on your wishlist yet.')+'</p>')
+  +(list.length?'<div class="grid" style="grid-template-columns:repeat('+cols+',1fr)">'+tiles+'</div>':'<p class="meta">'+(wish.length?'No wishlist items match this type.':'Nothing on your wishlist yet.')+'</p>')
   +'<h3 class="side" style="margin-top:18px">Ring Size Chart</h3>'+ringTableHTML();
 }
 function wishAddHTML(){
@@ -571,12 +575,18 @@ function wishPreviewHTML(href){
  return '<div class="modal" data-a="backdrop"><div style="max-width:94vw;width:94vw;max-height:90vh"><iframe src="'+esc(href)+'" style="width:100%;height:60vh;border:0;border-radius:10px;background:#fff" referrerpolicy="no-referrer"></iframe><p class="meta" style="margin:8px 0">Some sites block previews. If the page is blank, open it in Safari.</p><div class="bar" style="justify-content:center"><a href="'+esc(href)+'" target="_blank" rel="noopener" class="pri" style="display:inline-flex;align-items:center;padding:8px 14px;border-radius:999px;border:1px solid var(--acc);text-decoration:none">Open in Safari</a><button data-a="x">Close</button></div></div></div>';
 }
 function viewControls(){
- var h='<h3 style="margin:0 0 8px">View</h3>'+'<span class="tgl">'+[['thumbs','▦ Grid'],['table','▤ Table']].map(function(o){return '<button data-a="vm" data-v="'+o[0]+'"'+(o[0]===vmode?' class="on"':'')+'>'+o[1]+'</button>'}).join('')+'</span>';
- if(vmode==='thumbs')h+='<div class="meta" style="margin-top:12px">Grid Size</div><div class="seg" style="margin-top:4px">'+[1,2,3,4].map(function(n){return '<button data-a="cols" data-v="'+n+'"'+(n===cols?' class="on"':'')+'>'+n+'</button>'}).join('')+'</div><div class="seg" style="margin-top:8px"><button data-a="ro"'+(ro?' class="on"':'')+'>'+(ro?'Done reordering':'✥ Reorder Grid')+'</button></div>';
+ var box=view==='box',h='<h3 style="margin:0 0 8px">View</h3>';
+ if(box)h+='<span class="tgl">'+[['thumbs','▦ Grid'],['table','▤ Table']].map(function(o){return '<button data-a="vm" data-v="'+o[0]+'"'+(o[0]===vmode?' class="on"':'')+'>'+o[1]+'</button>'}).join('')+'</span>';
+ if(view==='secret'||view==='wishlist'||(box&&vmode==='thumbs'))h+='<div class="meta" style="margin-top:12px">Grid Size</div><div class="seg" style="margin-top:4px">'+[1,2,3,4].map(function(n){return '<button data-a="cols" data-v="'+n+'" aria-label="'+n+' across"'+(n===cols?' class="on"':'')+'>'+gicon(n)+'</button>'}).join('')+'</div>';
+ if(box&&vmode==='thumbs')h+='<div class="seg" style="margin-top:8px"><button data-a="ro"'+(ro?' class="on"':'')+'>'+(ro?'Done reordering':'✥ Reorder Grid')+'</button></div>';
  return h;
 }
+function wishFilterHTML(){
+ var cats=CATS.filter(function(c){return wish.some(function(w){return w.category===c})});
+ return '<fieldset class="facet"><legend>Type</legend><div class="cloud">'+cats.map(function(c){return '<button data-a="wtype" data-v="'+esc(c)+'"'+(wishType.indexOf(c)>-1?' class="on"':'')+'>'+esc(c)+' ('+wish.filter(function(w){return w.category===c}).length+')</button>'}).join('')+'</div></fieldset>'+(wishType.length?'<p><button data-a="wclear">Clear type filter</button></p>':'');
+}
 function renderDrawer(){
- document.getElementById('drawer').innerHTML='<div class="bar" style="flex-direction:column;align-items:stretch"><button data-a="nav" data-v="manage">I/O</button></div><div class="dv"><span>✦ 💍 ✦</span></div>'+(view==='box'?viewControls():'<h3 style="margin:0 0 8px">View</h3>')+themeHTML()+'<div class="dv"><span>✦ 💍 ✦</span></div>'+filtersHTML();
+ document.getElementById('drawer').innerHTML=viewControls()+themeHTML()+'<div class="dv"><span>✦ 💍 ✦</span></div>'+(view==='wishlist'?wishFilterHTML():filtersHTML());
 }
 function drawer(o){document.getElementById('drawer').classList.toggle('open',o);document.getElementById('scrim').classList.toggle('open',o)}
 
@@ -841,7 +851,7 @@ function renderSecret(){
   +'<label>Threshold (hide pieces above this cost)<input type="text" inputmode="decimal" name="threshold" data-a="sthr" data-money="1" value="'+esc(secretCfg.threshold==null?'':fmtMoney(secretCfg.threshold))+'" placeholder="$0.00"></label></div>'
   +'<div class="bar"><button type="submit" class="pri">Lock</button></div>'
   +'<p class="meta">'+hidden.length+' piece'+(hidden.length===1?'':'s')+' over the threshold'+(secretCfg.on?' (hidden from the Jewelry Box)':' (not hidden yet)')+'.</p>'
-  +'<div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(120px,1fr))">'+hidden.map(function(i){return '<div>'+thumb(i)+'<div class="meta">'+esc(title(i))+' · '+money(num(i.cost))+'</div></div>'}).join('')+'</div></form>'
+  +'<div class="grid" style="grid-template-columns:repeat('+cols+',1fr)">'+hidden.map(function(i){return '<div>'+thumb(i)+'<div class="meta">'+esc(title(i))+' · '+money(num(i.cost))+'</div></div>'}).join('')+'</div></form>'
   +'<details data-sec="dash"'+dOpen('dash',false)+'><summary>Dashboard</summary>'+dashHTML()+'</details>';
 }
 
@@ -1059,7 +1069,8 @@ document.addEventListener('click',function(e){
   case 'previewcover':if(editing.cover&&gal.imgs[editing.cover.id])M.innerHTML=previewHTML(gal.imgs[editing.cover.id]);break;
   case 'wadd':wishPending=null;CR=null;M.innerHTML=wishAddHTML();break;
   case 'wsave':var wcat=document.getElementById('wcat').value;var wlk=(document.getElementById('wlink').value||'').trim();if(!wishPending){alert('Choose a photo.');break}if(!wlk){alert('Enter the link.');break}var href=/^https?:\/\//i.test(wlk)?wlk:'https://'+wlk;var cf=wishCropFrac();wish.push({id:uid(),img:wishPending,cover:{id:wishPending,l:cf.l,t:cf.t,w:cf.w,h:cf.h},category:wcat,link:href});wishPending=null;CR=null;saveWish();saveGallery();M.innerHTML='';renderMain();break;
-  case 'wtype':var wti=wishType.indexOf(d.v);if(wti>-1)wishType.splice(wti,1);else wishType.push(d.v);renderMain();break;
+  case 'wtype':var wti=wishType.indexOf(d.v);if(wti>-1)wishType.splice(wti,1);else wishType.push(d.v);render();break;
+  case 'wclear':wishType=[];render();break;
   case 'wcols':wishCols=Number(d.v);renderMain();break;
   case 'wopen':var wo=wish.filter(function(x){return x.id===d.id})[0];if(wo){var wa=document.createElement('a');wa.href=wo.link;wa.target='_blank';wa.rel='noopener';document.body.appendChild(wa);wa.click();wa.remove()}break;
   case 'wdel':if(!confirm('Remove this from the wishlist?'))break;var wd=wish.filter(function(x){return x.id===d.id})[0];wish=wish.filter(function(x){return x.id!==d.id});if(wd&&!isUsed(wd.img)){gal.refs=gal.refs.filter(function(x){return x!==wd.img});gal.covers=gal.covers.filter(function(x){return x!==wd.img});delete gal.imgs[wd.img]}saveWish();saveGallery();renderMain();break;
