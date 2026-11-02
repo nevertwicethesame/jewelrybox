@@ -32,7 +32,6 @@ main{max-width:1100px;margin:0 auto;padding:14px}
 .box .tile{box-shadow:0 3px 9px rgba(0,0,0,.55)}
 .box .grid{gap:8px}
 .tile{aspect-ratio:1;border-radius:10px;overflow:hidden;background:var(--acc);display:flex;align-items:center;justify-content:center;font-size:2rem;cursor:pointer;position:relative}
-.tile img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;pointer-events:none;-webkit-user-drag:none;user-select:none}
 .ro .tile{touch-action:none;cursor:grab;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;outline:2px dashed rgba(255,255,255,.45);outline-offset:-3px}
 .tile.drag{opacity:.45;transform:scale(1.06)}
 .tile.over{outline:3px solid #fff;outline-offset:-3px}
@@ -85,28 +84,25 @@ details.io{margin-top:0}
 details.tpl{margin:8px 0 0;padding:0 10px;border-radius:8px}
 details.tpl summary{font-weight:normal;font-size:.9rem;padding:8px 0}
 h4.side{margin:14px 0 6px;font-size:.95rem;letter-spacing:.03em}
-.cvimg{max-width:160px;max-height:160px;border-radius:10px;display:block;margin:6px 0}
 #cropv{width:100%;max-width:340px;aspect-ratio:1;overflow:hidden;position:relative;touch-action:none;border-radius:12px;background:#000;cursor:grab;outline:2px solid var(--acc)}
 #cropimg{position:absolute;left:0;top:0;max-width:none;user-select:none;-webkit-user-select:none;pointer-events:none;transform-origin:0 0}
 #cropz{max-width:340px;padding:6px 0;margin-top:8px}
-.ph,.phe{width:40px;height:40px;border-radius:6px;flex:none}
-.ph{object-fit:cover;display:block}
-.phe{display:flex;align-items:center;justify-content:center;background:var(--acc)}
+.phe{display:flex;align-items:center;justify-content:center;background:var(--acc);width:40px;height:40px;border-radius:6px;flex:none}
 .tw{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--card)}
 table{border-collapse:collapse;width:max-content;min-width:100%;font-size:.86rem}
 th,td{padding:8px 8px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top;white-space:normal;overflow-wrap:normal;word-break:normal;min-width:96px;max-width:220px}
 th{color:var(--mute);font-weight:normal;font-size:.76rem}
 td.stk,th.stk{position:sticky;left:0;z-index:2;background:var(--card);width:156px;min-width:156px;max-width:156px}
 tr.grp td{background:var(--bg);font-weight:bold;letter-spacing:.03em;color:var(--acc);font-size:.8rem;white-space:nowrap}
+.ringtbl{width:100%;table-layout:fixed}
+.ringtbl th,.ringtbl td{min-width:0;max-width:none;white-space:normal;overflow-wrap:normal;word-break:normal;text-align:center;padding:6px 4px}
+.ringtbl th.us,.ringtbl td.us{font-weight:bold}
 .upd{position:fixed;left:0;right:0;top:env(safe-area-inset-top,0px);z-index:50;background:var(--acc);color:#fff;padding:10px 14px;display:flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap;font-size:.9rem}
 .upd[hidden]{display:none}
 .upd button{border-color:#fff;background:transparent;color:#fff;min-height:36px;padding:6px 12px}
 .upd button.pri{background:#fff;color:var(--acc)}
 .upd a{color:#fff;text-decoration:underline}
 footer#ver{text-align:center;padding:24px 14px calc(36px + env(safe-area-inset-bottom,0px));font-size:.75rem}
-.ringtbl{width:100%;table-layout:fixed}
-.ringtbl th,.ringtbl td{min-width:0;max-width:none;white-space:normal;overflow-wrap:normal;word-break:normal;text-align:center;padding:6px 4px}
-.ringtbl th.us,.ringtbl td.us{font-weight:bold}
 .tabbar{display:none}
 @media (min-width:701px){
  .tabbar{display:flex;justify-content:center;align-items:center;gap:8px;flex-wrap:wrap;padding:8px 14px;background:var(--card);border-bottom:1px solid var(--line)}
@@ -145,8 +141,8 @@ footer#ver{text-align:center;padding:24px 14px calc(36px + env(safe-area-inset-b
 <input type="file" id="fjson" accept=".json,application/json" hidden>
 <input type="file" id="gfile" accept="image/*" multiple hidden>
 <script>
-var K='ntts_items_v2',OK='ntts_order_v1',PER=25;
-var APP_VERSION='5.1.1',APP_DATE='2026-11-01',UPDATE_URL='';
+var K='ntts_items_v2',OK='ntts_order_v1',PER=25,MAX_UPLOAD=125*1024;
+var APP_VERSION='1.5.2',APP_DATE='2026-11-01',UPDATE_URL='';
 var EMOJI={ring:'💍',earring:'✨',necklace:'📿',bracelet:'⭕',watch:'⌚',other:'💎'};
 var CATS=['Ring','Earring','Necklace','Bracelet','Watch','Other'];
 var STAT=['Wishlist','Waiting','Private Collection','To List','Listed','Sold'];
@@ -162,7 +158,6 @@ var ALIAS={mainColor:'colorMain',secondaryColor:'colorSecondary',pdate:'purchase
 var CSV_COLS=[['id','id'],['title','title'],['category','category'],['period','period'],['era','era'],['yearMade','year'],['country','country'],['stones','stones'],['metals','metals'],['hallmarks','hallmarks'],['measurements','measurements'],['weight','weight'],['ringSize','ring size'],['cut','cut'],['colorMain','main color'],['colorSecondary','secondary color'],['tags','motifs'],['notes','notes'],['wornLast','last worn'],['wornCount','times worn'],['rating','rating'],['photoshoot','photoshoot'],['status','status'],['purchaseDate','purchase date'],['seller','seller'],['purchasePlatform','platform'],['cost','cost'],['sellPlatform','selling platform'],['dateListed','date listed'],['linkSale','listing link'],['dateSold','date sold'],['feeFinal','platform fee'],['shipActual','shipping'],['payout','final payout'],['shipEstimate','shipping estimate'],['buffer','buffer']];
 var FS={
  title:['Title','text'],
- 
  category:['Category','sel',CATS],
  period:['Period','sel',PERIODS],
  era:['Era/Movement','text'],
@@ -214,15 +209,18 @@ var ORDER_PRICE=['shipEstimate','buffer','ebayPct','igPct','suggestedEbay','sugg
 var ORDER_SOLD=['sellPlatform','dateListed','linkSale','dateSold','turnover','feeFinal','shipActual','payout','netProfit'];
 var FORM_ORDER=ORDER_PIECE.concat(ORDER_STATS,['status'],ORDER_PURCH,ORDER_PRICE,ORDER_SOLD);
 var SUM_SKIP=['shipEstimate','buffer','ebayPct','igPct','potentialEbay','potentialIG'];
+var QA_KEYS=['title','category','period','era','yearMade','country','stones','metals','hallmarks','measurements','weight','ringSize','cut','colorMain','tags','notes','purchaseDate','seller','purchasePlatform','cost'];
+var RING_HEAD=['Inside Diameter (mm)','Inside Circumference (mm)','U.S. & Canada (LF sizes)','U.K., Europe & Australia','Italy, Spain, & Switzerland','China, Japan, & South America','India'];
+var RING_TXT=['15.9;50;5.25;J.5;10;;10','16.1;50.6;5.5;K;;10;','16.3;51.2;5.75;K.5;11.75;;11','16.5;51.8;6;L;12.75;11;12','16.7;52.5;6.25;L.5;;12;','16.9;53.1;6.5;M;14;13;13','17.1;53.7;6.75;M.5;;;','17.3;54.3;7;N;15.25;14;14','17.5;55;7.25;N.5;;;15','17.7;55.6;7.5;O;16.5;15;','17.9;56.2;7.75;O.5;;;16','18.1;56.9;8;P;17.75;16;17','18.3;57.5;8.25;P.5;;;','18.5;58.1;8.5;Q;;17;18','18.8;59.1;8.75;Q.5;19;;19','19;59.7;9;R;;18;','19.2;60.3;9.25;R.5;20.25;;20'];
 var seed=[
- {id:1,description:'Georgian paste ring. Closed-back setting.',category:'Ring',status:'Listed',period:'Antique',era:'1790s',yearMade:1795,country:'England',stones:['paste'],metals:['silver','gold'],rating:3,cost:120,payout:null,sellPlatform:'eBay',purchaseDate:'2026-08-15',dateListed:'2026-09-01'},
- {id:2,description:'Snake bracelet with garnet eyes.',category:'Bracelet',status:'Sold',period:'Antique',era:'1870s',yearMade:1870,country:'France',stones:['garnet'],metals:['gold'],tags:['snake'],colorMain:'Red',rating:4,cost:210,payout:480,feeFinal:40,shipActual:12,sellPlatform:'Instagram',purchaseDate:'2026-06-10',dateListed:'2026-07-02',dateSold:'2026-07-20'},
- {id:3,description:'Roman intaglio ring, carnelian.',category:'Ring',status:'Private Collection',period:'Ancient',era:'Roman',country:'Italy',stones:['carnelian'],metals:['gold'],colorMain:'Orange',rating:5,cost:650,purchaseDate:'2026-03-02'},
- {id:4,description:'Emerald-cut drop earrings.',category:'Earring',status:'Private Collection',period:'Antique',era:'1905',yearMade:1905,country:'USA',stones:['emerald','diamond'],metals:['platinum'],colorMain:'Green',rating:5,cost:380,purchaseDate:'2026-05-20'}
+ {id:1,title:'Georgian paste ring',description:'Georgian paste ring. Closed-back setting.',category:'Ring',status:'Listed',period:'Antique',era:'1790s',yearMade:1795,country:'England',stones:['paste'],metals:['silver','gold'],rating:3,cost:120,sellPlatform:'eBay',purchaseDate:'2026-08-15',dateListed:'2026-09-01'},
+ {id:2,title:'Snake bracelet',description:'Snake bracelet with garnet eyes.',category:'Bracelet',status:'Sold',period:'Antique',era:'1870s',yearMade:1870,country:'France',stones:['garnet'],metals:['gold'],tags:['snake'],colorMain:'Red',rating:4,cost:210,payout:480,feeFinal:40,shipActual:12,sellPlatform:'Instagram',purchaseDate:'2026-06-10',dateListed:'2026-07-02',dateSold:'2026-07-20'},
+ {id:3,title:'Roman intaglio ring',description:'Roman intaglio ring, carnelian.',category:'Ring',status:'Private Collection',period:'Ancient',era:'Roman',country:'Italy',stones:['carnelian'],metals:['gold'],colorMain:'Orange',rating:5,cost:650,purchaseDate:'2026-03-02'},
+ {id:4,title:'Emerald-cut drop earrings',description:'Emerald-cut drop earrings.',category:'Earring',status:'Private Collection',period:'Antique',era:'1905',yearMade:1905,country:'USA',stones:['emerald','diamond'],metals:['platinum'],colorMain:'Green',rating:5,cost:380,purchaseDate:'2026-05-20'}
 ];
 
 /* ---------- state ---------- */
-var items=[],order=[],theme='ruby',hideSold=true,view='box',page=1,editing=null,fsel={category:['Ring']},rng={},sortBy='new',cols=4,ctab='Piece',vmode='thumbs',q='',ro=false,dragEl=null,overEl=null,ioOpen=false,lastJ=null,CR=null,DB=null,MEM={},shipTouched=false,PS={eb:13,ig:0},showAllF={},gal={refs:[],covers:[]},galSel={refs:{},covers:{}},galKind='refs',swS=null,swp=null;
+var items=[],order=[],theme='ruby',hideSold=true,view='box',page=1,editing=null,fsel={category:['Ring']},rng={},sortBy='new',cols=4,ctab='Piece',vmode='thumbs',q='',ro=false,dragEl=null,overEl=null,ioOpen=false,lastJ=null,CR=null,DB=null,MEM={},shipTouched=false,PS={eb:13,ig:0},showAllF={},gal={imgs:{},refs:[],covers:[]},galSel={refs:{},covers:{}},galKind='refs',swS=null;
 
 /* ---------- storage ---------- */
 function openDB(){return new Promise(function(res,rej){if(!window.indexedDB)return rej('no indexedDB');var r=indexedDB.open('ntts',1);r.onupgradeneeded=function(){r.result.createObjectStore('kv')};r.onsuccess=function(){res(r.result)};r.onerror=function(){rej(r.error)}})}
@@ -233,9 +231,18 @@ function saveItems(){return kset('items',items)}
 function saveOrder(){return kset('order',order)}
 function saveSettings(){kset('theme',theme);return kset('hideSold',hideSold)}
 function saveGallery(){return kset('gallery',gal)}
+function normGal(g){
+ if(!g)return {imgs:{},refs:[],covers:[]};
+ if(g.imgs)return {imgs:g.imgs,refs:g.refs||[],covers:g.covers||[]};
+ var out={imgs:{},refs:[],covers:[]};
+ ['refs','covers'].forEach(function(k){(g[k]||[]).forEach(function(e){if(!e||!e.src)return;var id=e.id||uid();out.imgs[id]=e.src;out[k].push(id)})});
+ return out;
+}
 async function init(){
  try{DB=await openDB()}catch(e){DB=null}
  var it=await kget('items');
+ gal=normGal(await kget('gallery'));
+ secretCfg=(await kget('secret'))||secretCfg;
  if(it===undefined){
    var legacy=null,lo=null;
    try{legacy=JSON.parse(localStorage.getItem(K)||localStorage.getItem('ntts_items_v1')||'null')}catch(e){}
@@ -248,9 +255,9 @@ async function init(){
    order=(await kget('order'))||[];
    theme=(await kget('theme'))||'ruby';
    var hs=await kget('hideSold');hideSold=typeof hs==='boolean'?hs:true;
+   await saveItems();
  }
- secretCfg=(await kget('secret'))||secretCfg;
- gal=await kget('gallery');if(!gal){gal=galFromItems();await saveGallery()}
+ await saveGallery();
  if(!THEMES[theme])theme='ruby';
 }
 
@@ -290,42 +297,19 @@ function calcs(o){
  var d=days(o);
  return {'c-days':d==null?'—':d+' days','c-net':money(net),sugE:money(sE),sugI:money(sI),potE:sE==null?'—':money(sE-cost),potI:sI==null?'—':money(sI-cost)};
 }
-
-/* ---------- secret compartment ---------- */
-var secretCfg={on:false,hash:'',threshold:null},secretUnlocked=false;
-function isHidden(i){return secretCfg.threshold!=null&&num(i.cost)!=null&&num(i.cost)>secretCfg.threshold}
-function vis(){return secretCfg.on?items.filter(function(i){return !isHidden(i)}):items}
-function saveSecret(){return kset('secret',secretCfg)}
-function hashKW(kw){
- var s='ntts-salt-v1|'+String(kw).trim().toLowerCase();
- if(window.crypto&&crypto.subtle){return crypto.subtle.digest('SHA-256',new TextEncoder().encode(s)).then(function(buf){return Array.prototype.map.call(new Uint8Array(buf),function(b){return ('0'+b.toString(16)).slice(-2)}).join('')})}
- var h=5381;for(var n=0;n<s.length;n++)h=((h<<5)+h+s.charCodeAt(n))|0;
- return Promise.resolve('djb2-'+(h>>>0).toString(16));
-}
-function secretGate(){
- var M=document.getElementById('modal');
- if(secretUnlocked){show('secret');return}
- if(!secretCfg.hash){M.innerHTML='<div class="modal" data-a="backdrop"><div><h3 style="margin:0 0 6px">Set a keyword</h3><p class="meta">Choose a keyword to open the Secret Compartment. There is no reset, so remember it.</p><input type="password" id="skw" placeholder="Keyword"><div class="bar" style="justify-content:center;margin:12px 0 0"><button class="pri" data-a="sset">Save</button><button data-a="x">Cancel</button></div></div></div>';return}
- M.innerHTML='<div class="modal" data-a="backdrop"><div><h3 style="margin:0 0 6px">Secret Compartment</h3><input type="password" id="skw" placeholder="Keyword"><div class="bar" style="justify-content:center;margin:12px 0 0"><button class="pri" data-a="slogin">Open</button><button data-a="x">Cancel</button></div></div></div>';
-}
-function renderSecret(){
- if(!secretUnlocked)return '<h2>Secret Compartment</h2><p class="meta">Locked.</p>';
- var hidden=items.filter(isHidden);
- return '<h2>Secret Compartment</h2>'
-  +'<div class="bar"><label class="swl" style="margin:0"><input type="checkbox" data-a="smode"'+(secretCfg.on?' checked':'')+'> Hide these pieces in the Jewelry Box</label></div>'
-  +'<div class="f"><label>Cost threshold (hide pieces above this)<input type="text" inputmode="decimal" data-a="sthr" data-money="1" value="'+esc(secretCfg.threshold==null?'':fmtMoney(secretCfg.threshold))+'" placeholder="$0.00"></label>'
-  +'<label>Change keyword<input type="password" id="skw2" placeholder="New keyword"></label></div>'
-  +'<div class="bar"><button data-a="skwchg">Save keyword</button><button data-a="slock">Lock</button></div>'
-  +'<p class="meta">'+hidden.length+' piece'+(hidden.length===1?'':'s')+' over the threshold'+(secretCfg.on?' (hidden from the Jewelry Box)':' (mode is off, so they show)')+'.</p>'
-  +'<div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(120px,1fr))">'+hidden.map(function(i){return '<div>'+thumb(i)+'<div class="meta">'+esc(title(i))+' · '+money(num(i.cost))+'</div></div>'}).join('')+'</div>';
+function uid(){return 'g'+Date.now().toString(36)+Math.random().toString(36).slice(2,7)}
+function putImg(src){
+ for(var k in gal.imgs)if(gal.imgs[k]===src)return k;
+ var id=uid();gal.imgs[id]=src;return id;
 }
 
 /* ---------- migration ---------- */
+var secretCfg={on:false,hash:'',threshold:null},secretUnlocked=false;
 function mig(i){
- if(!i.title&&i.description)i.title=String(i.description).split('.')[0].slice(0,60);
- delete i.description;
  Object.keys(ALIAS).forEach(function(old){if(old in i){if(i[ALIAS[old]]===undefined)i[ALIAS[old]]=i[old];delete i[old]}});
- ['listPrice','pshots','simg','comps','cover_'].forEach(function(k){delete i[k]});
+ if(!i.title&&i.description)i.title=String(i.description).split('.')[0].slice(0,60);
+ delete i.description;delete i.coverSrc;
+ ['listPrice','pshots','simg','comps'].forEach(function(k){delete i[k]});
  var ex=(num(i.fees)||0)+(num(i.promo)||0)+(num(i.feePay)||0);
  if(ex)i.feeFinal=(num(i.feeFinal)||0)+ex;
  delete i.fees;delete i.promo;delete i.feePay;
@@ -336,7 +320,9 @@ function mig(i){
  if(!Array.isArray(i.cut))i.cut=[];
  if(!Array.isArray(i.stones))i.stones=[];
  if(!Array.isArray(i.metals))i.metals=[];
- if(!Array.isArray(i.refs))i.refs=[];
+ if(typeof i.cover==='string')i.cover={id:putImg(i.cover),l:null,t:null,w:null,h:null};
+ if(i.cover&&!gal.imgs[i.cover.id])i.cover=null;
+ i.refs=(Array.isArray(i.refs)?i.refs:[]).map(function(r){return typeof r==='string'&&r.indexOf('data:')===0?putImg(r):r}).filter(function(id){return !!gal.imgs[id]});
  var t=[];
  (i.tags||[]).forEach(function(x){
    x=String(x);
@@ -355,21 +341,52 @@ function mig(i){
  if(i.buffer==null||i.buffer==='')i.buffer=5;
  return i;
 }
-function newItem(){return {id:Date.now(),_new:1,category:'Ring',period:'Antique',status:'Waiting',purchaseDate:today(),rating:0,buffer:5,photoshoot:false,tags:[],stones:[],metals:[],cut:[],refs:[]}}
+function newItem(){return {id:Date.now(),_new:1,category:'Ring',period:'Antique',status:'Waiting',purchaseDate:today(),rating:0,buffer:5,photoshoot:false,tags:[],stones:[],metals:[],cut:[],refs:[],cover:null}}
 function applyTheme(){
  var t=THEMES[theme]||THEMES.ruby,dk=window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches,s=document.documentElement.style;
  s.setProperty('--acc',dk?t.d:t.l);s.setProperty('--v1',t.v1);s.setProperty('--v2',t.v2);
 }
 
-/* ---------- gallery ---------- */
-function uid(){return 'g'+Date.now().toString(36)+Math.random().toString(36).slice(2,7)}
-function galFromItems(){var g={refs:[],covers:[]},sc={},sr={};items.forEach(function(i){if(i.cover&&!sc[i.cover]){sc[i.cover]=1;g.covers.push({id:uid(),src:i.cover})}(i.refs||[]).forEach(function(r){if(!sr[r]){sr[r]=1;g.refs.push({id:uid(),src:r})}})});return g}
-function usedBy(src){return items.filter(function(i){return i.cover===src||i.coverSrc===src||(i.refs||[]).indexOf(src)>-1})}
+/* ---------- images: one stored copy, crops stored as fractions ---------- */
+function readRaw(file){
+ return new Promise(function(res,rej){
+   var r=new FileReader();
+   r.onerror=rej;
+   r.onload=function(){
+     var img=new Image();
+     img.onerror=function(){alert('Could not read that image.');rej(new Error('read'))};
+     img.onload=function(){
+       var w=Math.max(1,Math.round(img.width*0.5)),h=Math.max(1,Math.round(img.height*0.5));
+       var c=document.createElement('canvas');c.width=w;c.height=h;
+       var ctx=c.getContext('2d');ctx.imageSmoothingEnabled=true;ctx.imageSmoothingQuality='high';ctx.drawImage(img,0,0,w,h);
+       var tries=[['image/webp',0.85],['image/webp',0.75],['image/jpeg',0.85],['image/jpeg',0.7]],last=0;
+       for(var k=0;k<tries.length;k++){
+         var url=c.toDataURL(tries[k][0],tries[k][1]);
+         if(url.indexOf('data:'+tries[k][0])!==0)continue;
+         var bytes=Math.floor(url.split(',')[1].length*3/4);last=bytes;
+         if(bytes<=MAX_UPLOAD)return res(url);
+       }
+       alert('That image is still '+Math.round(last/1024)+' KB after compressing. The limit is 125 KB. Please use a smaller or simpler image.');
+       rej(new Error('too large'));
+     };
+     img.src=r.result;
+   };
+   r.readAsDataURL(file);
+ });
+}
+function coverImg(c){
+ var src=c&&gal.imgs[c.id];if(!src)return '';
+ var st=c.w==null?'inset:0;width:100%;height:100%;object-fit:cover':'left:'+(c.l*100)+'%;top:'+(c.t*100)+'%;width:'+(c.w*100)+'%;height:'+(c.h*100)+'%;max-width:none;right:auto;bottom:auto';
+ return '<img draggable="false" loading="lazy" src="'+esc(src)+'" alt="" style="position:absolute;'+st+';pointer-events:none;user-select:none;-webkit-user-drag:none">';
+}
+function sizeOf(u){if(!u)return '';var b=u.split(',')[1]||'';var n=Math.floor(b.length*3/4)-(b.slice(-2)==='=='?2:b.slice(-1)==='='?1:0);return n<1048576?Math.round(n/1024)+' KB':(n/1048576).toFixed(1)+' MB'}
+function usedBy(id){return items.filter(function(i){return (i.cover&&i.cover.id===id)||(i.refs||[]).indexOf(id)>-1})}
+function galAdd(kind,src){var id=uid();gal.imgs[id]=src;gal[kind].push(id);return id}
 function galRemove(kind,ids){
  var ok=[],blocked=[];
- ids.forEach(function(id){var g=gal[kind].filter(function(x){return x.id===id})[0];if(!g)return;var u=usedBy(g.src);if(u.length)blocked.push({g:g,pieces:u});else ok.push(id)});
- gal[kind]=gal[kind].filter(function(x){return ok.indexOf(x.id)<0});
- ok.forEach(function(id){delete galSel[kind][id]});
+ ids.forEach(function(id){if(gal[kind].indexOf(id)<0)return;var u=usedBy(id);if(u.length)blocked.push({g:{src:gal.imgs[id]},pieces:u});else ok.push(id)});
+ gal[kind]=gal[kind].filter(function(x){return ok.indexOf(x)<0});
+ ok.forEach(function(id){delete galSel[kind][id];if(gal.refs.indexOf(id)<0&&gal.covers.indexOf(id)<0)delete gal.imgs[id]});
  saveGallery();renderMain();
  if(blocked.length)document.getElementById('modal').innerHTML=blockedHTML(blocked);
 }
@@ -383,20 +400,17 @@ function gallerySection(kind,label){
  var list=gal[kind],sel=galSel[kind],n=Object.keys(sel).filter(function(k){return sel[k]}).length;
  return '<details open><summary>'+label+' ('+list.length+')</summary>'
   +'<div class="bar"><button data-a="gadd" data-kind="'+kind+'">+ Add images</button><button data-a="gall" data-kind="'+kind+'">Select all</button><button data-a="gnone" data-kind="'+kind+'">Clear selection</button><button class="dan" data-a="gdelsel" data-kind="'+kind+'"'+(n?'':' disabled')+'>Delete selected ('+n+')</button></div>'
-  +(list.length?'<div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(110px,1fr))">'+list.map(function(g){var on=!!sel[g.id];return '<div style="position:relative"><img src="'+esc(g.src)+'" alt="" data-a="gview" data-kind="'+kind+'" data-id="'+g.id+'" style="width:100%;aspect-ratio:1;object-fit:cover;border-radius:8px;display:block;cursor:zoom-in;'+(on?'outline:3px solid var(--acc);':'')+'"><button data-a="gtog" data-kind="'+kind+'" data-id="'+g.id+'" style="position:absolute;top:4px;left:4px;padding:2px 7px;min-height:0">'+(on?'☑':'☐')+'</button><button data-a="gdel" data-kind="'+kind+'" data-id="'+g.id+'" style="position:absolute;top:4px;right:4px;padding:2px 7px;min-height:0">✕</button><span class="meta" style="position:absolute;left:4px;bottom:4px;background:rgba(0,0,0,.6);color:#fff;padding:1px 4px;border-radius:4px;font-size:.65rem">'+sizeOf(g.src)+'</span></div>'}).join('')+'</div>':'<p class="meta">No images yet.</p>')
+  +(list.length?'<div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(110px,1fr))">'+list.map(function(id){var on=!!sel[id],src=gal.imgs[id];return '<div style="position:relative"><img src="'+esc(src)+'" alt="" data-a="gview" data-kind="'+kind+'" data-id="'+id+'" style="width:100%;aspect-ratio:1;object-fit:cover;border-radius:8px;display:block;cursor:zoom-in;'+(on?'outline:3px solid var(--acc);':'')+'"><button data-a="gtog" data-kind="'+kind+'" data-id="'+id+'" style="position:absolute;top:4px;left:4px;padding:2px 7px;min-height:0">'+(on?'☑':'☐')+'</button><button data-a="gdel" data-kind="'+kind+'" data-id="'+id+'" style="position:absolute;top:4px;right:4px;padding:2px 7px;min-height:0">✕</button><span class="meta" style="position:absolute;left:4px;bottom:4px;background:rgba(0,0,0,.6);color:#fff;padding:1px 4px;border-radius:4px;font-size:.65rem">'+sizeOf(src)+'</span></div>'}).join('')+'</div>':'<p class="meta">No images yet.</p>')
   +'</details>';
 }
-var RING_HEAD=['Inside Diameter (mm)','Inside Circumference (mm)','U.S. & Canada (LF sizes)','U.K., Europe & Australia','Italy, Spain, & Switzerland','China, Japan, & South America','India'];
-var RING_TXT=['15.9;50;5.25;J.5;10;;10','16.1;50.6;5.5;K;;10;','16.3;51.2;5.75;K.5;11.75;;11','16.5;51.8;6;L;12.75;11;12','16.7;52.5;6.25;L.5;;12;','16.9;53.1;6.5;M;14;13;13','17.1;53.7;6.75;M.5;;;','17.3;54.3;7;N;15.25;14;14','17.5;55;7.25;N.5;;;15','17.7;55.6;7.5;O;16.5;15;','17.9;56.2;7.75;O.5;;;16','18.1;56.9;8;P;17.75;16;17','18.3;57.5;8.25;P.5;;;','18.5;58.1;8.5;Q;;17;18','18.8;59.1;8.75;Q.5;19;;19','19;59.7;9;R;;18;','19.2;60.3;9.25;R.5;20.25;;20'];
 function ringTableHTML(){return '<div class="tw"><table class="ringtbl"><thead><tr>'+RING_HEAD.map(function(h,n){return '<th class="'+(n===2?'us':'')+'">'+esc(h)+'</th>'}).join('')+'</tr></thead><tbody>'+RING_TXT.map(function(r){return '<tr>'+r.split(';').map(function(c,n){return '<td class="'+(n===2?'us':'')+'">'+esc(c)+'</td>'}).join('')+'</tr>'}).join('')+'</tbody></table></div>'}
 function ringOpts(val){var o='';for(var z=0;z<=52;z++){var n=z/4;o+='<option value="'+n+'"'+(val!==''&&val!=null&&Number(val)===n?' selected':'')+'>'+n+'</option>'}return o}
 function renderGallery(){return '<h2>Image Gallery</h2>'+gallerySection('refs','Reference Screenshots')+gallerySection('covers','Cover Photo Thumbnails')+'<details open><summary>Ring Size Reference</summary>'+ringTableHTML()+'</details>'}
-function galPickHTML(){
- var sec=function(kind,label){return '<p class="meta" style="margin:10px 0 4px">'+label+'</p><div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(80px,1fr))">'+(gal[kind].length?gal[kind].map(function(g){return '<button type="button" data-a="galuse" data-kind="'+kind+'" data-id="'+g.id+'" style="padding:0;aspect-ratio:1;overflow:hidden;border-radius:8px;min-height:0;border:2px solid transparent"><img src="'+esc(g.src)+'" alt="" style="width:100%;height:100%;object-fit:cover;display:block"></button>'}).join(''):'<p class="meta">None yet.</p>')+'</div>'};
- return '<div class="modal" data-a="backdrop"><div><h3 style="margin:0 0 6px">Add from gallery</h3>'+sec('covers','Cover Photo Thumbnails')+sec('refs','Reference Screenshots')+'<div class="bar" style="justify-content:center;margin:12px 0 0"><button data-a="x">Cancel</button></div></div></div>';
+function galPickHTML(act){
+ act=act||'galuse';
+ var sec=function(kind,label){return '<p class="meta" style="margin:10px 0 4px">'+label+'</p><div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(80px,1fr))">'+(gal[kind].length?gal[kind].map(function(id){return '<button type="button" data-a="'+act+'" data-id="'+id+'" style="padding:0;aspect-ratio:1;overflow:hidden;border-radius:8px;min-height:0;border:2px solid transparent"><img src="'+esc(gal.imgs[id])+'" alt="" style="width:100%;height:100%;object-fit:cover;display:block"></button>'}).join(''):'<p class="meta">None yet.</p>')+'</div>'};
+ return '<div class="modal" data-a="backdrop"><div><h3 style="margin:0 0 6px">'+(act==='galaddref'?'Add reference from gallery':'Add cover from gallery')+'</h3>'+sec('covers','Cover Photo Thumbnails')+sec('refs','Reference Screenshots')+'<div class="bar" style="justify-content:center;margin:12px 0 0"><button data-a="x">Cancel</button></div></div></div>';
 }
-function sizeOf(u){if(!u)return '';var b=u.split(',')[1]||'';var n=Math.floor(b.length*3/4)-(b.slice(-2)==='=='?2:b.slice(-1)==='='?1:0);return n<1048576?Math.round(n/1024)+' KB':(n/1048576).toFixed(1)+' MB'}
-function coverLibrary(){var seen={},out=[];items.forEach(function(i){if(i.cover&&!seen[i.cover]){seen[i.cover]=1;out.push(i.cover)}(i.refs||[]).forEach(function(r){if(!seen[r]){seen[r]=1;out.push(r)}})});return out}
 
 /* ---------- filters ---------- */
 var FACETS=[
@@ -411,6 +425,7 @@ var FACETS=[
  {k:'finger',l:'Finger (rings, by size)',v:function(){return FINGERS},g:function(i){return [finger(i)]}}
 ];
 function facetOf(k){return FACETS.filter(function(F){return F.k===k})[0]}
+function vis(){return secretCfg.on?items.filter(function(i){return !isHidden(i)}):items}
 function cntColor(c){return vis().filter(function(i){return i.colorMain===c}).length}
 function cntF(F,v){var lv=String(v).toLowerCase();return vis().filter(function(i){return F.g(i).map(function(x){return String(x==null?'':x).toLowerCase()}).indexOf(lv)>-1}).length}
 function facetVals(F){var v=F.v();if(F.counted)v=v.map(function(x){return {x:x,c:cntF(F,x)}}).sort(function(a,b){return b.c-a.c||String(a.x).localeCompare(String(b.x))}).map(function(o){return o.x});if(F.k==='colorMain')v=v.slice().sort(function(a,b){return cntColor(b)-cntColor(a)||COLOR_ORDER.indexOf(a)-COLOR_ORDER.indexOf(b)});return v}
@@ -420,7 +435,9 @@ function matchQ(i){
  return q.split(/\s+/).every(function(w){return h.indexOf(w)>-1});
 }
 function inR(k,v){var r=rng[k];if(!r)return true;return v!=null&&v!==''&&Number(v)>=r[0]&&Number(v)<=r[1]}
-function pass(i){if(secretCfg.on&&isHidden(i))return false;
+function isHidden(i){return secretCfg.threshold!=null&&num(i.cost)!=null&&num(i.cost)>secretCfg.threshold}
+function pass(i){
+ if(secretCfg.on&&isHidden(i))return false;
  if(!matchQ(i))return false;
  var pickedStatus=fsel.status&&fsel.status.length;
  if(hideSold&&!pickedStatus&&!(i.status==='Waiting'||i.status==='Private Collection'))return false;
@@ -476,7 +493,7 @@ function filtersHTML(){
      h+='<fieldset class="facet"><legend>'+F.l+'</legend>'+(F.cloud?'<div class="cloud">'+chips+'</div>':chips)
        +(vals.length>6?'<button class="link" data-a="showall" data-k="'+F.k+'">'+(open?'Show less':'Show all ('+vals.length+')')+'</button>':'')+'</fieldset>';
    }
-   if(F.k==='era')h+=rangeBlock('year','Year',items.map(function(i){return num(i.yearMade)}).filter(function(n){return n!=null}),function(v){return String(Math.round(v))});
+   if(F.k==='era')h+=rangeBlock('year','Year',vis().map(function(i){return num(i.yearMade)}).filter(function(n){return n!=null}),function(v){return String(Math.round(v))});
  });
  h+=rangeBlock('cost','Cost',vis().map(function(i){return num(i.cost)}).filter(function(n){return n!=null}),wholeMoney);
  if(anyFilter())h+='<p><button data-a="clear">Clear all filters</button></p>';
@@ -509,7 +526,7 @@ function renderDrawer(){
 function drawer(o){document.getElementById('drawer').classList.toggle('open',o);document.getElementById('scrim').classList.toggle('open',o)}
 
 /* ---------- rendering ---------- */
-function thumb(i){return '<div class="tile" data-a="open" data-id="'+i.id+'">'+(EMOJI[String(i.category).toLowerCase()]||'💎')+(i.cover?'<img draggable="false" loading="lazy" src="'+esc(i.cover)+'" alt="" onerror="this.remove()">':'')+'</div>'}
+function thumb(i){return '<div class="tile" data-a="open" data-id="'+i.id+'">'+(EMOJI[String(i.category).toLowerCase()]||'💎')+coverImg(i.cover)+'</div>'}
 function countLine(n){return '<p class="meta" style="text-align:center;margin:16px 0 0">'+n+' piece'+(n===1?'':'s')+(anyFilter()?' (filtered)':'')+'</p>'}
 var TC={
  Piece:[['Category',function(i){return esc(i.category)}],['Period',function(i){return esc(i.period)}],['Era/Movement',function(i){return esc(i.era||'—')}],['Year',function(i){return esc(i.yearMade==null?'—':i.yearMade)}],['Country of origin',function(i){return esc(i.country||'—')}],['Stones',function(i){return esc((i.stones||[]).join(', ')||'—')}],['Metals',function(i){return esc((i.metals||[]).join(', ')||'—')}],['Hallmarks',function(i){return esc(i.hallmarks||'—')}],['Measurements',function(i){return esc(i.measurements||'—')}],['Weight',function(i){return esc(i.weight||'—')}],['Ring size',function(i){return esc(i.ringSize==null||i.ringSize===''?'—':i.ringSize)}],['Cut',function(i){return esc((i.cut||[]).join(', ')||'—')}],['Main color',function(i){return i.colorMain?sw(i.colorMain)+' '+esc(i.colorMain):'—'}],['Secondary color',function(i){return i.colorSecondary?sw(i.colorSecondary)+' '+esc(i.colorSecondary):'—'}],['Motifs',function(i){return esc((i.tags||[]).join(', ')||'—')}],['Notes',function(i){return esc(i.notes||'—')}]],
@@ -522,7 +539,7 @@ function renderTable(){
  rows.forEach(function(i){
    var gk=i.category+'|'+i.period;
    if(gk!==last){body+='<tr class="grp"><td colspan="'+(cols.length+2)+'"><span style="position:sticky;left:0;display:inline-block">'+esc(i.category)+' · '+esc(i.period)+'</span></td></tr>';last=gk}
-   body+='<tr><td class="stk"><div style="display:flex;gap:6px;align-items:flex-start">'+(i.cover?'<img class="ph" src="'+esc(i.cover)+'" alt="">':'<span class="phe">'+(EMOJI[String(i.category).toLowerCase()]||'💎')+'</span>')+'<span>'+esc(i.title||'—')+'</span></div></td>'+cols.map(function(c){return '<td>'+c[1](i)+'</td>'}).join('')+'<td><button data-a="edit" data-id="'+i.id+'" aria-label="Edit" style="padding:6px 10px">✏️</button></td></tr>';
+   body+='<tr><td class="stk"><div style="display:flex;gap:6px;align-items:flex-start">'+(i.cover?'<div style="position:relative;width:40px;height:40px;border-radius:6px;overflow:hidden;flex:none">'+coverImg(i.cover)+'</div>':'<span class="phe">'+(EMOJI[String(i.category).toLowerCase()]||'💎')+'</span>')+'<span>'+esc(i.title||'—')+'</span></div></td>'+cols.map(function(c){return '<td>'+c[1](i)+'</td>'}).join('')+'<td><button data-a="edit" data-id="'+i.id+'" aria-label="Edit" style="padding:6px 10px">✏️</button></td></tr>';
  });
  return '<div class="bar"><button data-a="ct" data-v="Piece"'+(ctab==='Piece'?' class="on"':'')+'>Piece</button><button data-a="ct" data-v="Transaction"'+(ctab==='Transaction'?' class="on"':'')+'>Transaction</button><button data-a="ct" data-v="Stats"'+(ctab==='Stats'?' class="on"':'')+'>Stats</button><span class="meta">'+list.length+' pieces</span></div>'
   +'<div class="tw"><table><thead><tr><th class="stk">Title</th>'+cols.map(function(c){return '<th>'+c[0]+'</th>'}).join('')+'<th></th></tr></thead><tbody>'+body+'</tbody></table></div>'
@@ -536,6 +553,7 @@ function renderBox(){
   +'<div class="box"><div class="grid'+(ro?' ro':'')+'" style="grid-template-columns:repeat('+cols+',1fr)">'+list.map(thumb).join('')+'</div></div>'
   +(list.length?'':'<p class="meta">No pieces match.</p>')+countLine(list.length);
 }
+function valOf(v){return v==null?'':Array.isArray(v)?v.join(', '):String(v)}
 function fieldHTML(k,v){
  var s=FS[k],t=s[1],val=LISTS.indexOf(k)>-1?(v||[]).join(', '):(v==null?'':v),c;
  if(t==='check')return '<label class="swl"><input type="checkbox" name="'+k+'"'+(v?' checked':'')+'> '+s[0]+'</label>';
@@ -552,19 +570,6 @@ function fieldHTML(k,v){
  return '<label>'+(k==='ringSize'?'<span>'+s[0]+' <button type="button" class="link" data-a="ringref" style="font-size:.8rem">size chart</button></span>':s[0])+c+'</label>';
 }
 function sec(keys){return keys.map(function(k){return fieldHTML(k,editing[k])}).join('')}
-function imagesHTML(){
- var refs=editing.refs||[];
- return '<div class="f"><h4 class="sub">Reference screenshots</h4><div class="seg" style="grid-column:1/-1"><button type="button" data-a="refadd">+ Add images</button></div>'
-  +'<div style="grid-column:1/-1">'+(refs.length?'<div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(90px,1fr))">'+refs.map(function(r,n){return '<div style="position:relative"><img src="'+esc(r)+'" style="width:100%;aspect-ratio:1;object-fit:cover;border-radius:8px;display:block;cursor:zoom-in" alt="" data-a="preview" data-i="'+n+'"><span class="meta" style="position:absolute;left:4px;bottom:4px;background:rgba(0,0,0,.6);color:#fff;padding:1px 4px;border-radius:4px;font-size:.65rem">'+sizeOf(r)+'</span><button type="button" data-a="rmref" data-i="'+n+'" style="position:absolute;top:4px;right:4px;padding:2px 8px;min-height:0">✕</button></div>'}).join('')+'</div>':'<p class="meta">No reference screenshots yet.</p>')+'</div>'
-  +'<h4 class="sub">Cover photo</h4>'
-  +'<input type="file" id="cvfile" accept="image/*" hidden><input type="file" id="reffile" accept="image/*" multiple hidden>'
-  +'<div style="grid-column:1/-1">'+(editing.cover?'<img class="cvimg" src="'+esc(editing.cover)+'" alt=""><div class="meta">'+sizeOf(editing.cover)+'</div>':'<p class="meta">No cover yet.</p>')
-  +'<div class="seg"><button type="button" data-a="covadd">⬆ Upload new cover</button><button type="button" data-a="galpick">Add from gallery</button>'+(editing.cover?'<button type="button" data-a="cvadj">Pan &amp; Zoom</button><button type="button" data-a="cvrm">Remove cover</button>':'')+'</div>'
-  +'<div id="crop" hidden><div id="cropv"><img id="cropimg" alt="" draggable="false"></div><input type="range" id="cropz" min="1" max="4" step="0.01" value="1" aria-label="Zoom"><p class="seg"><button type="button" class="pri" data-a="cvok">Use this crop</button><button type="button" data-a="cvcancel">Cancel</button></p><p class="meta">Drag to pan. Use the slider (or pinch) to zoom. The square is your thumbnail.</p></div></div>'
-  +(refs.length?'<div style="grid-column:1/-1"><p class="meta">Use one of this piece’s reference images</p><div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(70px,1fr))">'+refs.map(function(src,n){return '<button type="button" data-a="pickref" data-i="'+n+'" style="padding:0;border-radius:8px;aspect-ratio:1;overflow:hidden;min-height:0;border:2px solid '+(src===editing.cover?'var(--acc)':'transparent')+'"><img src="'+esc(src)+'" alt="" style="width:100%;height:100%;object-fit:cover;display:block"></button>'}).join('')+'</div></div>':'')
-  +'</div></div>';
-}
-function valOf(v){return v==null?'':Array.isArray(v)?v.join(', '):String(v)}
 function listingTexts(g){
  var place=[g('period'),g('era'),g('title')].filter(function(x){return x}).join(' ');
  var metals=g('metals'),ring=g('ringSize'),meas=g('measurements'),wt=g('weight'),hm=g('hallmarks'),c=g('country').trim();
@@ -589,7 +594,18 @@ function copyText(id,btn){
  var fallback=function(){ta.focus();ta.select();try{document.execCommand('copy')}catch(e){}done()};
  if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(ta.value).then(done,fallback);else fallback();
 }
-var QA_KEYS=['title','category','period','era','yearMade','country','stones','metals','hallmarks','measurements','weight','ringSize','cut','colorMain','tags','notes','purchaseDate','seller','purchasePlatform','cost'];
+function imagesHTML(){
+ var refs=editing.refs||[],c=editing.cover;
+ return '<div class="f"><h4 class="sub">Reference screenshots</h4><div class="seg" style="grid-column:1/-1"><button type="button" data-a="refadd">+ Add images</button><button type="button" data-a="galref">Add from gallery</button></div>'
+  +'<div style="grid-column:1/-1">'+(refs.length?'<div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(90px,1fr))">'+refs.map(function(id,n){var src=gal.imgs[id];return '<div style="position:relative"><img src="'+esc(src)+'" style="width:100%;aspect-ratio:1;object-fit:cover;border-radius:8px;display:block;cursor:zoom-in" alt="" data-a="preview" data-i="'+n+'"><span class="meta" style="position:absolute;left:4px;bottom:4px;background:rgba(0,0,0,.6);color:#fff;padding:1px 4px;border-radius:4px;font-size:.65rem">'+sizeOf(src)+'</span><button type="button" data-a="rmref" data-i="'+n+'" style="position:absolute;top:4px;right:4px;padding:2px 8px;min-height:0">✕</button></div>'}).join('')+'</div>':'<p class="meta">No reference screenshots yet.</p>')+'</div></div>'
+  +'<details open><summary>Cover photo</summary>'
+  +'<input type="file" id="cvfile" accept="image/*" hidden><input type="file" id="reffile" accept="image/*" multiple hidden>'
+  +'<div style="grid-column:1/-1">'+(c&&gal.imgs[c.id]?'<div style="position:relative;width:160px;height:160px;border-radius:10px;overflow:hidden;margin:6px 0">'+coverImg(c)+'</div><div class="meta">'+sizeOf(gal.imgs[c.id])+'</div>':'<p class="meta">No cover yet.</p>')
+  +'<div class="seg"><button type="button" data-a="covadd">⬆ Upload new cover</button><button type="button" data-a="galpick">Add from gallery</button>'+(c?'<button type="button" data-a="cvadj">Pan &amp; Zoom</button><button type="button" data-a="cvrm">Remove cover</button>':'')+'</div>'
+  +'<div id="crop" hidden><div id="cropv"><img id="cropimg" alt="" draggable="false"></div><input type="range" id="cropz" min="1" max="4" step="0.01" value="1" aria-label="Zoom"><p class="seg"><button type="button" class="pri" data-a="cvok">Use this crop</button><button type="button" data-a="cvcancel">Cancel</button></p><p class="meta">Drag to pan. Use the slider (or pinch) to zoom. The square is your thumbnail.</p></div></div>'
+  +(refs.length?'<div style="grid-column:1/-1"><p class="meta">Use one of this piece’s reference images</p><div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(70px,1fr))">'+refs.map(function(id,n){return '<button type="button" data-a="pickref" data-i="'+n+'" style="padding:0;border-radius:8px;aspect-ratio:1;overflow:hidden;min-height:0;border:2px solid '+(c&&c.id===id?'var(--acc)':'transparent')+'"><img src="'+esc(gal.imgs[id])+'" alt="" style="width:100%;height:100%;object-fit:cover;display:block"></button>'}).join('')+'</div></div>':'')
+  +'</details>';
+}
 function quickPrompt(){
  var lines=QA_KEYS.map(function(k){var s=FS[k],t=s[1],hint=t==='sel'?'one of: '+s[2].filter(Boolean).join(', '):t==='list'?'array of strings':t==='money'?'number, no $':t==='date'?'YYYY-MM-DD':t==='ringsz'?'number 0 to 13 in steps of 0.25':t==='number'?'number':t==='url'?'URL':'text';return '"'+k+'": '+hint+' ('+s[0]+')'});
  return 'Read the attached jewelry listing screenshots and output ONLY a JSON object with these keys. Omit any key you cannot find. No commentary.\n'+lines.join('\n');
@@ -625,9 +641,9 @@ function renderEdit(){
  var h='<h2>Add/edit a piece</h2><div class="bar"><button type="button" data-a="quickadd">⚡ Quick add</button></div><form id="form" autocomplete="off">';
  h+='<details open><summary>Piece</summary><div class="f">'+sec(ORDER_PIECE)+'<h4 class="sub">Stats</h4>'+sec(ORDER_STATS)+'</div></details>';
  h+='<details open><summary>Transaction</summary><div class="f">'+fieldHTML('status',it.status)+'<h4 class="sub">Purchase</h4>'+sec(ORDER_PURCH)+'</div>'
-  +'<details><summary>Sale</summary><details><summary>Listing helper</summary>'+listingBlock(it)+'<div class="f"><h4 class="sub">Pricing</h4>'+ORDER_PRICE.map(function(k){return fieldHTML(k,k==='shipEstimate'?pr:it[k])}).join('')+'</div></details>'
+  +'<details><summary>Sale</summary>'
+  +'<details><summary>Listing helper</summary>'+listingBlock(it)+'<div class="f"><h4 class="sub">Pricing</h4>'+ORDER_PRICE.map(function(k){return fieldHTML(k,k==='shipEstimate'?pr:it[k])}).join('')+'</div></details>'
   +'<div class="f"><h4 class="sub">Sold details</h4>'+sec(ORDER_SOLD)+'</div></details></details>';
- 
  h+='<details open><summary>Images</summary>'+imagesHTML()+'</details>';
  h+='<details><summary>Summary</summary><table style="width:100%;font-size:.88rem;border-collapse:collapse"><tbody id="sumtb"></tbody></table></details>';
  h+='<div class="sticky"><button type="submit" class="pri">Save</button><button type="button" data-a="dup">Duplicate</button><button type="button" class="dan" data-a="del">Delete</button><button type="button" data-a="cancel">Cancel</button></div></form>';
@@ -672,7 +688,6 @@ function refreshCalc(){
  var LT=listingTexts(g);var dEl=document.getElementById('lhDesc'),lEl=document.getElementById('lhList');if(dEl)dEl.value=LT[0];if(lEl)lEl.value=LT[1];
  updateSummary();
 }
-function dimLabels(){}
 function renderMain(){
  document.getElementById('app').innerHTML=view==='box'?renderBox():view==='gallery'?renderGallery():view==='secret'?renderSecret():renderEdit();
  updateSummary();setTabs();
@@ -681,37 +696,30 @@ function render(){renderMain();renderDrawer()}
 function show(v){view=v;ro=false;drawer(false);render();window.scrollTo(0,0)}
 function setTabs(){document.querySelectorAll('#tabbar button').forEach(function(x){x.classList.toggle('on',x.dataset.v===view)})}
 
-/* ---------- images ---------- */
-function compress(file,max){
- max=max||800;
- return new Promise(function(res,rej){
-   var r=new FileReader();
-   r.onload=function(){var img=new Image();img.onload=function(){var s=Math.min(1,max/Math.max(img.width,img.height)),c=document.createElement('canvas');c.width=Math.round(img.width*s);c.height=Math.round(img.height*s);c.getContext('2d').drawImage(img,0,0,c.width,c.height);res(c.toDataURL('image/jpeg',.72))};img.onerror=rej;img.src=r.result};
-   r.onerror=rej;r.readAsDataURL(file);
- });
-}
+/* ---------- pan & zoom on the original image ---------- */
 function cropV(){return document.getElementById('cropv')}
 function cropPlace(){
  var V=cropV().clientWidth,s=CR.s0*CR.z,w=CR.img.width*s,h=CR.img.height*s;
  CR.x=Math.min(0,Math.max(V-w,CR.x));CR.y=Math.min(0,Math.max(V-h,CR.y));
  var m=document.getElementById('cropimg');m.style.width=w+'px';m.style.height=h+'px';m.style.transform='translate('+CR.x+'px,'+CR.y+'px)';
 }
-function openCrop(img){
+function openCrop(img,id,crop){
  var box=document.getElementById('crop');box.hidden=false;var V=cropV().clientWidth;
- CR={img:img,s0:V/Math.min(img.width,img.height),z:1,x:0,y:0,p:{}};
- document.getElementById('cropimg').src=img.src;document.getElementById('cropz').value=1;
- CR.x=(V-img.width*CR.s0)/2;CR.y=(V-img.height*CR.s0)/2;cropPlace();box.scrollIntoView({block:'nearest'});
+ CR={img:img,id:id,s0:V/Math.min(img.width,img.height),z:1,x:0,y:0,p:{}};
+ if(crop){CR.z=Math.max(1,Math.min(4,crop.w*V/(img.width*CR.s0)));CR.x=crop.l*V;CR.y=crop.t*V}
+ else{CR.x=(V-img.width*CR.s0)/2;CR.y=(V-img.height*CR.s0)/2}
+ document.getElementById('cropimg').src=img.src;document.getElementById('cropz').value=CR.z;
+ cropPlace();box.scrollIntoView({block:'nearest'});
 }
 function cropZoom(z){
  if(!CR)return;var V=cropV().clientWidth,o=CR.s0*CR.z,cx=(V/2-CR.x)/o,cy=(V/2-CR.y)/o;
  CR.z=z;var n=CR.s0*z;CR.x=V/2-cx*n;CR.y=V/2-cy*n;cropPlace();document.getElementById('cropz').value=z;
 }
 function cropApply(){
- if(!CR)return;var V=cropV().clientWidth,s=CR.s0*CR.z,c=document.createElement('canvas');c.width=c.height=800;
- c.getContext('2d').drawImage(CR.img,-CR.x/s,-CR.y/s,V/s,V/s,0,0,800,800);
- var url=c.toDataURL('image/jpeg',.72),src=CR.img.src;CR=null;
- gal.covers.push({id:uid(),src:url});saveGallery();
- syncForm();editing.cover=url;editing.coverSrc=src;renderMain();
+ if(!CR)return;var V=cropV().clientWidth;
+ var id=CR.id,l=CR.x/V,t=CR.y/V,w=CR.img.width*CR.s0*CR.z/V,h=CR.img.height*CR.s0*CR.z/V;
+ CR=null;
+ syncForm();editing.cover={id:id,l:l,t:t,w:w,h:h};renderMain();
 }
 
 /* ---------- JOTD & wear ---------- */
@@ -724,12 +732,38 @@ function wear(id){
  document.getElementById('modal').innerHTML='<div class="modal" data-a="backdrop"><div style="text-align:center"><p style="font-size:3rem;margin:0">✨</p><h3>Today’s jewelry is chosen</h3><p>'+esc(title(i))+'</p><p class="meta">Saved as worn on '+esc(fmtDate(i.wornLast))+' · '+(Number(i.wornCount)||0)+' time'+(Number(i.wornCount)===1?'':'s')+' worn in total</p><div class="bar" style="justify-content:center"><button class="pri" data-a="x">Done</button></div></div></div>';
 }
 function jotd(){
- var pool=items.filter(pass);if(!pool.length)pool=items;if(!pool.length)return;
+ var pool=items.filter(pass);if(!pool.length)pool=vis();if(!pool.length)return;
  var i=pickJ(pool);lastJ=i.id;
- document.getElementById('modal').innerHTML='<div class="modal" data-a="backdrop"><div><p class="meta" style="text-align:center">✨ Jewelry of the Day</p>'+(i.cover?'<img class="cvimg" style="max-width:100%;max-height:260px;margin:0 auto 10px" src="'+esc(i.cover)+'" alt="" onerror="this.remove()">':'<div style="font-size:4rem;text-align:center">'+(EMOJI[String(i.category).toLowerCase()]||'💎')+'</div>')+'<h3>'+esc(title(i))+'</h3><p class="meta">'+esc([i.category,i.period,i.era,i.country,(i.metals||[]).join('/'),(i.stones||[]).join('/')].filter(Boolean).join(' · '))+'</p><p class="meta">'+(stars(i.rating)||'')+'</p><p class="meta">'+(i.wornLast?'Last worn '+esc(fmtDate(i.wornLast))+(Number(i.wornCount)?' · worn '+Number(i.wornCount)+'×':''):'Not worn yet')+'</p><div class="bar" style="justify-content:center"><button class="pri" data-a="wear" data-id="'+i.id+'">✓ I’m wearing this</button><button data-a="jotd">Shuffle again</button></div><div class="bar" style="justify-content:center;margin-top:8px"><button data-a="edit" data-id="'+i.id+'">Edit</button><button data-a="x">Close</button></div></div></div>';
+ document.getElementById('modal').innerHTML='<div class="modal" data-a="backdrop"><div><p class="meta" style="text-align:center">✨ Jewelry of the Day</p>'+(i.cover?'<div style="position:relative;width:100%;max-width:260px;aspect-ratio:1;overflow:hidden;border-radius:10px;margin:0 auto 10px">'+coverImg(i.cover)+'</div>':'<div style="font-size:4rem;text-align:center">'+(EMOJI[String(i.category).toLowerCase()]||'💎')+'</div>')+'<h3>'+esc(title(i))+'</h3><p class="meta">'+esc([i.category,i.period,i.era,i.country,(i.metals||[]).join('/'),(i.stones||[]).join('/')].filter(Boolean).join(' · '))+'</p><p class="meta">'+(stars(i.rating)||'')+'</p><p class="meta">'+(i.wornLast?'Last worn '+esc(fmtDate(i.wornLast))+(Number(i.wornCount)?' · worn '+Number(i.wornCount)+'×':''):'Not worn yet')+'</p><div class="bar" style="justify-content:center"><button class="pri" data-a="wear" data-id="'+i.id+'">✓ I’m wearing this</button><button data-a="jotd">Shuffle again</button></div><div class="bar" style="justify-content:center;margin-top:8px"><button data-a="edit" data-id="'+i.id+'">Edit</button><button data-a="x">Close</button></div></div></div>';
 }
 function popup(i){
- document.getElementById('modal').innerHTML='<div class="modal" data-a="backdrop"><div>'+(i.cover?'<img class="cvimg" style="max-width:100%;max-height:260px;margin:0 auto 10px" src="'+esc(i.cover)+'" alt="" onerror="this.remove()">':'')+'<h3>'+esc(title(i))+'</h3>'+(i.notes?'<p class="meta">'+esc(i.notes)+'</p>':'')+'<p class="meta">'+esc([i.category,i.period,i.era,i.country,(i.metals||[]).join('/'),(i.stones||[]).join('/')].filter(Boolean).join(' · '))+'</p><p class="meta">'+(i.colorMain?sw(i.colorMain)+' '+esc(i.colorMain)+' · ':'')+(i.colorSecondary?'2nd: '+sw(i.colorSecondary)+' '+esc(i.colorSecondary)+' · ':'')+(stars(i.rating)?stars(i.rating)+' · ':'')+esc((i.tags||[]).join(', '))+'</p><div class="bar" style="justify-content:center"><button class="pri" data-a="edit" data-id="'+i.id+'">Edit</button><button data-a="x">Close</button></div></div></div>';
+ document.getElementById('modal').innerHTML='<div class="modal" data-a="backdrop"><div>'+(i.cover?'<div style="position:relative;width:100%;max-width:260px;aspect-ratio:1;overflow:hidden;border-radius:10px;margin:0 auto 10px">'+coverImg(i.cover)+'</div>':'')+'<h3>'+esc(title(i))+'</h3>'+(i.notes?'<p class="meta">'+esc(i.notes)+'</p>':'')+'<p class="meta">'+esc([i.category,i.period,i.era,i.country,(i.metals||[]).join('/'),(i.stones||[]).join('/')].filter(Boolean).join(' · '))+'</p><p class="meta">'+(i.colorMain?sw(i.colorMain)+' '+esc(i.colorMain)+' · ':'')+(i.colorSecondary?'2nd: '+sw(i.colorSecondary)+' '+esc(i.colorSecondary)+' · ':'')+(stars(i.rating)?stars(i.rating)+' · ':'')+esc((i.tags||[]).join(', '))+'</p><div class="bar" style="justify-content:center"><button class="pri" data-a="edit" data-id="'+i.id+'">Edit</button><button data-a="x">Close</button></div></div></div>';
+}
+
+/* ---------- secret compartment ---------- */
+function saveSecret(){return kset('secret',secretCfg)}
+function hashKW(kw){
+ var s='ntts-salt-v1|'+String(kw).trim().toLowerCase();
+ if(window.crypto&&crypto.subtle){return crypto.subtle.digest('SHA-256',new TextEncoder().encode(s)).then(function(buf){return Array.prototype.map.call(new Uint8Array(buf),function(b){return ('0'+b.toString(16)).slice(-2)}).join('')})}
+ var h=5381;for(var n=0;n<s.length;n++)h=((h<<5)+h+s.charCodeAt(n))|0;
+ return Promise.resolve('djb2-'+(h>>>0).toString(16));
+}
+function secretGate(){
+ var M=document.getElementById('modal');
+ if(secretUnlocked){show('secret');return}
+ if(!secretCfg.hash){M.innerHTML='<div class="modal" data-a="backdrop"><div><h3 style="margin:0 0 6px">Set a keyword</h3><p class="meta">Choose a keyword to open the Secret Compartment. There is no reset, so remember it.</p><input type="password" id="skw" placeholder="Keyword"><div class="bar" style="justify-content:center;margin:12px 0 0"><button class="pri" data-a="sset">Save</button><button data-a="x">Cancel</button></div></div></div>';return}
+ M.innerHTML='<div class="modal" data-a="backdrop"><div><h3 style="margin:0 0 6px">Secret Compartment</h3><input type="password" id="skw" placeholder="Keyword"><div class="bar" style="justify-content:center;margin:12px 0 0"><button class="pri" data-a="slogin">Open</button><button data-a="x">Cancel</button></div></div></div>';
+}
+function renderSecret(){
+ if(!secretUnlocked)return '<h2>Secret Compartment</h2><p class="meta">Locked.</p>';
+ var hidden=items.filter(isHidden);
+ return '<h2>Secret Compartment</h2>'
+  +'<div class="bar"><label class="swl" style="margin:0"><input type="checkbox" data-a="smode"'+(secretCfg.on?' checked':'')+'> Hide these pieces in the Jewelry Box</label></div>'
+  +'<div class="f"><label>Cost threshold (hide pieces above this)<input type="text" inputmode="decimal" data-a="sthr" data-money="1" value="'+esc(secretCfg.threshold==null?'':fmtMoney(secretCfg.threshold))+'" placeholder="$0.00"></label>'
+  +'<label>Change keyword<input type="password" id="skw2" placeholder="New keyword"></label></div>'
+  +'<div class="bar"><button data-a="skwchg">Save keyword</button><button data-a="slock">Lock</button></div>'
+  +'<p class="meta">'+hidden.length+' piece'+(hidden.length===1?'':'s')+' over the threshold'+(secretCfg.on?' (hidden from the Jewelry Box)':' (mode is off, so they show)')+'.</p>'
+  +'<div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(120px,1fr))">'+hidden.map(function(i){return '<div>'+thumb(i)+'<div class="meta">'+esc(title(i))+' · '+money(num(i.cost))+'</div></div>'}).join('')+'</div>';
 }
 
 /* ---------- CSV / JSON ---------- */
@@ -785,7 +819,7 @@ function importCSV(text){
    CSV_COLS.forEach(function(c){var j=idx[c[0]];if(j<0)return;var v=(r[j]||'').trim();if(v!=='')rec[c[0]]=v});
    if(!rec.title){skipped++;return}
    var existing=rec.id?items.filter(function(i){return String(i.id)===rec.id})[0]:null;
-   var out=existing?JSON.parse(JSON.stringify(existing)):{id:nid++,status:'Waiting',category:'Other',period:'Antique',tags:[],stones:[],metals:[],cut:[],rating:0,refs:[]};
+   var out=existing?JSON.parse(JSON.stringify(existing)):{id:nid++,status:'Waiting',category:'Other',period:'Antique',tags:[],stones:[],metals:[],cut:[],rating:0,refs:[],cover:null};
    Object.keys(rec).forEach(function(k){if(k!=='id')out[k]=coerce(k,rec[k])});
    out=mig(out);
    if(existing){items[items.indexOf(existing)]=out;updated++}else{items.push(out);added++}
@@ -794,16 +828,16 @@ function importCSV(text){
  alert('Added '+added+', updated '+updated+(skipped?', skipped '+skipped+' (no title)':'')+'.');
 }
 function exportJSON(){
- download('ntts-backup-'+today()+'.json','application/json',JSON.stringify({app:'never-twice-the-same',version:5,exported:new Date().toISOString(),items:items,order:order,theme:theme,hideSold:hideSold,gallery:gal}));
+ download('ntts-backup-'+today()+'.json','application/json',JSON.stringify({app:'never-twice-the-same',version:6,exported:new Date().toISOString(),items:items,order:order,theme:theme,hideSold:hideSold,gallery:gal}));
 }
 function importJSON(text){
  var d;try{d=JSON.parse(text)}catch(e){alert('That file is not a valid backup.');return}
  var arr=Array.isArray(d)?d:(d&&d.items);
  if(!Array.isArray(arr)){alert('That file does not contain any pieces.');return}
  if(!confirm('Replace everything on this device with this backup ('+arr.length+' pieces)?'))return;
+ gal=normGal(d.gallery||null);
  items=arr.map(mig);
  order=Array.isArray(d.order)?d.order:[];
- gal=d.gallery||galFromItems();
  if(d.theme&&THEMES[d.theme])theme=d.theme;
  if(typeof d.hideSold==='boolean')hideSold=d.hideSold;
  saveItems();saveOrder();saveSettings();saveGallery();applyTheme();render();
@@ -812,7 +846,7 @@ function importJSON(text){
 function deleteAll(){
  var t=prompt('This erases every piece, photo, and setting on this device. Type DELETE to confirm.');
  if(t!=='DELETE')return;
- items=[];gal={refs:[],covers:[]};secretCfg={on:false,hash:'',threshold:null};secretUnlocked=false;galSel={refs:{},covers:{}};order=[];theme='ruby';hideSold=true;fsel={};rng={};q='';document.getElementById('q').value='';sortBy='new';ro=false;view='box';
+ items=[];gal={imgs:{},refs:[],covers:[]};galSel={refs:{},covers:{}};secretCfg={on:false,hash:'',threshold:null};secretUnlocked=false;order=[];theme='ruby';hideSold=true;fsel={};rng={};q='';document.getElementById('q').value='';sortBy='new';ro=false;view='box';
  kclear().then(function(){return Promise.all([saveItems(),saveOrder(),saveSettings(),saveGallery()])}).then(function(){applyTheme();render();alert('Everything has been reset.')});
 }
 
@@ -846,10 +880,6 @@ document.addEventListener('click',function(e){
   case 'drawer':drawer(true);break;
   case 'dclose':drawer(false);break;
   case 'nav':if(d.new)editing=newItem();if(d.v==='secret'){secretGate();break}show(d.v);break;
-  case 'slogin':hashKW(((document.getElementById('skw')||{}).value)||'').then(function(h){if(h===secretCfg.hash){secretUnlocked=true;document.getElementById('modal').innerHTML='';show('secret')}else alert('Incorrect keyword')});break;
-  case 'sset':var kwa=document.getElementById('skw').value.trim();if(!kwa){alert('Enter a keyword');break}hashKW(kwa).then(function(h){secretCfg.hash=h;secretUnlocked=true;saveSecret();document.getElementById('modal').innerHTML='';show('secret')});break;
-  case 'skwchg':var kwb=document.getElementById('skw2').value.trim();if(!kwb){alert('Enter a new keyword');break}hashKW(kwb).then(function(h){secretCfg.hash=h;saveSecret();document.getElementById('skw2').value='';alert('Keyword saved.')});break;
-  case 'slock':secretUnlocked=false;show('box');break;
   case 'jotd':drawer(false);jotd();break;
   case 'showall':showAllF[d.k]=!showAllF[d.k];renderDrawer();break;
   case 'f':toggleFilter(d.k,d.val);render();break;
@@ -858,7 +888,7 @@ document.addEventListener('click',function(e){
   case 'vm':vmode=d.v;page=1;ro=false;drawer(false);render();break;
   case 'ct':ctab=d.v;page=1;renderMain();break;
   case 'pg':page+=Number(d.v);renderMain();break;
-  case 'ro':drawer(false);ro=!ro;if(ro){order=sorted(items).map(function(i){return i.id});sortBy='custom';saveOrder()}render();break;
+  case 'ro':drawer(false);ro=!ro;if(ro){order=sorted(vis()).map(function(i){return i.id});sortBy='custom';saveOrder()}render();break;
   case 'open':if(!ro)popup(items.filter(function(i){return String(i.id)===d.id})[0]);break;
   case 'edit':M.innerHTML='';editing=JSON.parse(JSON.stringify(items.filter(function(i){return String(i.id)===d.id})[0]));show('edit');break;
   case 'wear':wear(Number(d.id));break;
@@ -873,31 +903,37 @@ document.addEventListener('click',function(e){
   case 'delete':deleteAll();break;
   case 'csvup':document.getElementById('fcsv').click();break;
   case 'csvdown':exportCSV();break;
-  case 'gadd':galKind=d.kind;document.getElementById('gfile').click();break;
-  case 'gview':M.innerHTML=previewHTML(gal[d.kind].filter(function(x){return x.id===d.id})[0].src);break;
-  case 'gtog':galSel[d.kind][d.id]=!galSel[d.kind][d.id];renderMain();break;
-  case 'gall':gal[d.kind].forEach(function(g){galSel[d.kind][g.id]=true});renderMain();break;
-  case 'gnone':galSel[d.kind]={};renderMain();break;
-  case 'gdel':if(confirm('Delete this image from the gallery?'))galRemove(d.kind,[d.id]);break;
-  case 'gdelsel':var gids=Object.keys(galSel[d.kind]).filter(function(k){return galSel[d.kind][k]});if(gids.length&&confirm('Delete '+gids.length+' selected image(s) from the gallery?'))galRemove(d.kind,gids);break;
-  case 'preview':M.innerHTML=previewHTML(editing.refs[Number(d.i)]);break;
-  case 'galpick':M.innerHTML=galPickHTML();break;
-  case 'galuse':var gs=null;gal[d.kind].forEach(function(g){if(g.id===d.id)gs=g.src});if(gs){M.innerHTML='';syncForm();editing.cover=gs;editing.coverSrc=gs;renderMain()}break;
-  case 'ringref':M.innerHTML='<div class="modal" data-a="backdrop"><div style="max-width:94vw"><h3 style="margin:0 0 8px">Ring Size Reference</h3>'+ringTableHTML()+'<div class="bar" style="justify-content:center;margin-top:12px"><button data-a="x">Close</button></div></div></div>';break;
   case 'quickadd':syncForm();M.innerHTML=quickHTML();break;
   case 'qaapply':var raw=document.getElementById('qaIn').value.trim();var za=raw.indexOf('{'),zb=raw.lastIndexOf('}');var txt=za>=0&&zb>za?raw.slice(za,zb+1):raw;var data=null;try{data=JSON.parse(txt)}catch(err){alert('That does not look like JSON. Paste the output exactly as Claude returns it.');break}syncForm();var cnt=applyQuick(data);M.innerHTML='';renderMain();alert('Filled '+cnt+' field'+(cnt===1?'':'s')+'. Review, then Save.');break;
   case 'copy':copyText(d.id,b);break;
+  case 'ringref':M.innerHTML='<div class="modal" data-a="backdrop"><div style="max-width:94vw"><h3 style="margin:0 0 8px">Ring Size Reference</h3>'+ringTableHTML()+'<div class="bar" style="justify-content:center;margin-top:12px"><button data-a="x">Close</button></div></div></div>';break;
+  case 'gadd':galKind=d.kind;document.getElementById('gfile').click();break;
+  case 'gview':M.innerHTML=previewHTML(gal.imgs[d.id]);break;
+  case 'gtog':galSel[d.kind][d.id]=!galSel[d.kind][d.id];renderMain();break;
+  case 'gall':gal[d.kind].forEach(function(id){galSel[d.kind][id]=true});renderMain();break;
+  case 'gnone':galSel[d.kind]={};renderMain();break;
+  case 'gdel':if(confirm('Delete this image from the gallery?'))galRemove(d.kind,[d.id]);break;
+  case 'gdelsel':var gids=Object.keys(galSel[d.kind]).filter(function(k){return galSel[d.kind][k]});if(gids.length&&confirm('Delete '+gids.length+' selected image(s) from the gallery?'))galRemove(d.kind,gids);break;
+  case 'preview':M.innerHTML=previewHTML(gal.imgs[editing.refs[Number(d.i)]]);break;
+  case 'galpick':M.innerHTML=galPickHTML('galuse');break;
+  case 'galref':M.innerHTML=galPickHTML('galaddref');break;
+  case 'galuse':M.innerHTML='';syncForm();editing.cover={id:d.id,l:null,t:null,w:null,h:null};renderMain();break;
+  case 'galaddref':M.innerHTML='';syncForm();if((editing.refs||[]).indexOf(d.id)<0)editing.refs=(editing.refs||[]).concat([d.id]);renderMain();break;
   case 'covadd':document.getElementById('cvfile').click();break;
   case 'refadd':document.getElementById('reffile').click();break;
   case 'rmref':syncForm();editing.refs.splice(Number(d.i),1);renderMain();break;
-  case 'pickref':syncForm();editing.cover=editing.refs[Number(d.i)];editing.coverSrc=editing.cover;renderMain();break;
-  case 'cvadj':var cv=editing.coverSrc||editing.cover;if(cv&&cv.indexOf('data:')===0){var im=new Image();im.onload=function(){openCrop(im)};im.src=cv}else alert('Upload a photo first, then you can zoom and pan it.');break;
+  case 'pickref':syncForm();editing.cover={id:editing.refs[Number(d.i)],l:null,t:null,w:null,h:null};renderMain();break;
+  case 'cvadj':var cv=editing.cover;if(cv&&gal.imgs[cv.id]){var im=new Image();im.onload=function(){openCrop(im,cv.id,cv.w!=null?cv:null)};im.src=gal.imgs[cv.id]}break;
   case 'cvok':cropApply();break;
   case 'cvcancel':CR=null;document.getElementById('crop').hidden=true;break;
-  case 'cvrm':syncForm();editing.cover='';editing.coverSrc='';renderMain();break;
+  case 'cvrm':syncForm();editing.cover=null;renderMain();break;
   case 'cancel':show('box');break;
-  case 'dup':var c=syncForm();['sellPlatform','dateListed','dateSold','feeFinal','shipActual','payout','linkSale','wornLast'].forEach(function(k){delete c[k]});delete c.wornCount;c.status='Waiting';c.id=Date.now();c._new=1;c.title=(c.title||'')+(c.title?' (copy)':'');editing=c;renderMain();window.scrollTo(0,0);break;
+  case 'dup':var c=syncForm();['channel','sellPlatform','dateListed','dateSold','feeFinal','shipActual','payout','linkSale','wornLast'].forEach(function(k){delete c[k]});delete c.wornCount;c.status='Waiting';c.id=Date.now();c._new=1;c.title=(c.title||'')+(c.title?' (copy)':'');editing=c;renderMain();window.scrollTo(0,0);break;
   case 'del':if(confirm('Delete this piece?')){items=items.filter(function(i){return i.id!==editing.id});saveItems();show('box')}break;
+  case 'slogin':hashKW(((document.getElementById('skw')||{}).value)||'').then(function(h){if(h===secretCfg.hash){secretUnlocked=true;document.getElementById('modal').innerHTML='';show('secret')}else alert('Incorrect keyword')});break;
+  case 'sset':var kwa=document.getElementById('skw').value.trim();if(!kwa){alert('Enter a keyword');break}hashKW(kwa).then(function(h){secretCfg.hash=h;secretUnlocked=true;saveSecret();document.getElementById('modal').innerHTML='';show('secret')});break;
+  case 'skwchg':var kwb=document.getElementById('skw2').value.trim();if(!kwb){alert('Enter a new keyword');break}hashKW(kwb).then(function(h){secretCfg.hash=h;saveSecret();document.getElementById('skw2').value='';alert('Keyword saved.')});break;
+  case 'slock':secretUnlocked=false;show('box');break;
  }
 });
 document.addEventListener('change',function(e){
@@ -909,15 +945,22 @@ document.addEventListener('change',function(e){
  if(a==='hidesold'){hideSold=t.checked;saveSettings();render();return}
  if(t.id==='fcsv'&&t.files[0]){readFile(t.files[0],importCSV);t.value='';return}
  if(t.id==='fjson'&&t.files[0]){readFile(t.files[0],importJSON);t.value='';return}
- if(t.id==='cvfile'&&t.files[0]){compress(t.files[0],1200).then(function(url){var img=new Image();img.onload=function(){openCrop(img)};img.src=url});t.value='';return}
- if(t.id==='gfile'&&t.files.length){var gf=Array.prototype.slice.call(t.files);t.value='';Promise.all(gf.map(function(f){return compress(f)})).then(function(urls){urls.forEach(function(u){gal[galKind].push({id:uid(),src:u})});saveGallery();renderMain()});return}
+ if(t.id==='cvfile'&&t.files[0]){
+   var cf=t.files[0];t.value='';
+   readRaw(cf).then(function(url){
+     var id=galAdd('covers',url);saveGallery();
+     syncForm();editing.cover={id:id,l:null,t:null,w:null,h:null};renderMain();
+     var img=new Image();img.onload=function(){openCrop(img,id,null)};img.src=url;
+   },function(){});
+   return;
+ }
+ if(t.id==='gfile'&&t.files.length){var gf=Array.prototype.slice.call(t.files);t.value='';Promise.all(gf.map(readRaw)).then(function(urls){urls.forEach(function(u){galAdd(galKind,u)});saveGallery();renderMain()},function(){});return}
  if(t.id==='reffile'&&t.files.length){
    var files=Array.prototype.slice.call(t.files);t.value='';
-   Promise.all(files.map(function(f){return compress(f)})).then(function(urls){urls.forEach(function(u){gal.refs.push({id:uid(),src:u})});saveGallery();syncForm();editing.refs=(editing.refs||[]).concat(urls);renderMain()});
+   Promise.all(files.map(readRaw)).then(function(urls){syncForm();urls.forEach(function(u){var id=galAdd('refs',u);editing.refs=(editing.refs||[]).concat([id])});saveGallery();renderMain()},function(){});
    return;
  }
  if(t.dataset&&t.dataset.money){t.value=fmtMoney(parseMoney(t.value));return}
- if(t.dataset&&t.dataset.date){var p=parseDate(t.value);if(p)t.value=fmtDate(p);return}
 });
 document.addEventListener('submit',function(e){
  e.preventDefault();
@@ -951,14 +994,14 @@ function endDrag(e){
  var from=Number(dragEl.dataset.id),to=overEl?Number(overEl.dataset.id):null;
  dragEl=null;overEl=null;
  if(to!=null){
-   if(order.indexOf(from)<0)order=sorted(items).map(function(i){return i.id});
+   if(order.indexOf(from)<0)order=sorted(vis()).map(function(i){return i.id});
    var fi=order.indexOf(from),ti=order.indexOf(to),o=order.filter(function(x){return x!==from});
    o.splice(o.indexOf(to)<0?o.length:(fi<ti?o.indexOf(to)+1:o.indexOf(to)),0,from);
    order=o;saveOrder();
  }
  render();
 }
-var dragEl2=null,overEl2=null;
+var overEl=null;
 document.addEventListener('pointerup',endDrag);
 document.addEventListener('pointercancel',endDrag);
 document.addEventListener('wheel',function(e){if(CR&&e.target.closest&&e.target.closest('#cropv')){e.preventDefault();cropZoom(Math.min(4,Math.max(1,CR.z*(1-e.deltaY/500))))}},{passive:false});
