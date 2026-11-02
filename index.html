@@ -133,7 +133,7 @@ footer#ver{text-align:center;padding:24px 14px calc(36px + env(safe-area-inset-b
 <main id="app"><p class="meta">Loading…</p></main>
 <footer id="ver" class="meta"></footer>
 <div id="upd" class="upd" hidden></div>
-<nav id="tabbar" class="tabbar"><button data-a="jotd"><span>✨</span><span>JOTD</span></button><button data-a="nav" data-v="secret"><span>🗝️</span><span>Secret Compartment</span></button><button data-a="nav" data-v="box" class="big"><span>💍</span><span>My Jewelry Box</span></button><button data-a="nav" data-v="gallery"><span>🖼️</span><span>Gallery</span></button><button data-a="nav" data-v="edit" data-new="1"><span>＋</span><span>Add to Collection</span></button></nav>
+<nav id="tabbar" class="tabbar"><button data-a="nav" data-v="box" class="big"><span>💍</span><span>My Jewelry Box</span></button><button data-a="nav" data-v="secret"><span>🗝️</span><span>Secret Compartment</span></button><button data-a="nav" data-v="gallery"><span>🖼️</span><span>Gallery</span></button><button data-a="nav" data-v="edit" data-new="1"><span>＋</span><span>Add to Collection</span></button><button data-a="jotd"><span>✨</span><span>JOTD</span></button></nav>
 <div class="scrim" id="scrim" data-a="dclose"></div>
 <aside class="drawer" id="drawer"></aside>
 <div id="modal"></div>
@@ -142,7 +142,7 @@ footer#ver{text-align:center;padding:24px 14px calc(36px + env(safe-area-inset-b
 <input type="file" id="gfile" accept="image/*" multiple hidden>
 <script>
 var K='ntts_items_v2',OK='ntts_order_v1',PER=25,MAX_UPLOAD=300*1024;
-var APP_VERSION='1.5.5',APP_DATE='2026-11-01',UPDATE_URL='';
+var APP_VERSION='1.5.7',APP_DATE='2026-11-01',UPDATE_URL='';
 var EMOJI={ring:'💍',earring:'✨',necklace:'📿',bracelet:'⭕',watch:'⌚',other:'💎'};
 var CATS=['Ring','Earring','Necklace','Bracelet','Watch','Other'];
 var STAT=['Wishlist','Waiting','Private Collection','To List','Listed','Sold'];
@@ -230,7 +230,12 @@ function kclear(){return new Promise(function(res){if(!DB){MEM={};return res()}v
 function saveItems(){return kset('items',items)}
 function saveOrder(){return kset('order',order)}
 function saveSettings(){kset('theme',theme);return kset('hideSold',hideSold)}
-function saveGallery(){return kset('gallery',gal)}
+function healGallery(){
+ Object.keys(gal.imgs).forEach(function(id){if(gal.refs.indexOf(id)<0&&gal.covers.indexOf(id)<0)gal.refs.push(id)});
+ gal.refs=gal.refs.filter(function(id){return !!gal.imgs[id]});
+ gal.covers=gal.covers.filter(function(id){return !!gal.imgs[id]});
+}
+function saveGallery(){healGallery();return kset('gallery',gal)}
 function normGal(g){
  if(!g)return {imgs:{},refs:[],covers:[]};
  if(g.imgs)return {imgs:g.imgs,refs:g.refs||[],covers:g.covers||[]};
@@ -247,7 +252,7 @@ async function init(){
    var legacy=null,lo=null;
    try{legacy=JSON.parse(localStorage.getItem(K)||localStorage.getItem('ntts_items_v1')||'null')}catch(e){}
    try{lo=JSON.parse(localStorage.getItem(OK)||'null')}catch(e){}
-   items=(legacy||JSON.parse(JSON.stringify(seed))).map(mig);
+   items=(legacy||[]).map(mig);
    order=lo||[];
    await kset('items',items);await kset('order',order);await kset('theme',theme);await kset('hideSold',hideSold);
  }else{
@@ -257,6 +262,7 @@ async function init(){
    var hs=await kget('hideSold');hideSold=typeof hs==='boolean'?hs:true;
    await saveItems();
  }
+ renumberIds();
  await saveGallery();
  if(!THEMES[theme])theme='ruby';
 }
@@ -300,7 +306,7 @@ function calcs(o){
 function uid(){return 'g'+Date.now().toString(36)+Math.random().toString(36).slice(2,7)}
 function putImg(src){
  for(var k in gal.imgs)if(gal.imgs[k]===src)return k;
- var id=uid();gal.imgs[id]=src;return id;
+ var id=uid();gal.imgs[id]=src;gal.refs.push(id);return id;
 }
 
 /* ---------- migration ---------- */
@@ -321,8 +327,7 @@ function mig(i){
  if(!Array.isArray(i.stones))i.stones=[];
  if(!Array.isArray(i.metals))i.metals=[];
  if(typeof i.cover==='string')i.cover={id:putImg(i.cover),l:null,t:null,w:null,h:null};
- if(i.cover&&!gal.imgs[i.cover.id])i.cover=null;
- i.refs=(Array.isArray(i.refs)?i.refs:[]).map(function(r){return typeof r==='string'&&r.indexOf('data:')===0?putImg(r):r}).filter(function(id){return !!gal.imgs[id]});
+  i.refs=(Array.isArray(i.refs)?i.refs:[]).map(function(r){return typeof r==='string'&&r.indexOf('data:')===0?putImg(r):r});
  var t=[];
  (i.tags||[]).forEach(function(x){
    x=String(x);
@@ -341,7 +346,15 @@ function mig(i){
  if(i.buffer==null||i.buffer==='')i.buffer=5;
  return i;
 }
-function newItem(){return {id:Date.now(),_new:1,category:'Ring',period:'Antique',status:'Waiting',purchaseDate:today(),rating:0,buffer:5,photoshoot:false,tags:[],stones:[],metals:[],cut:[],refs:[],cover:null}}
+function nextId(){return items.reduce(function(m,i){return Math.max(m,Number(i.id)||0)},0)+1}
+function renumberIds(){
+ if(!items.some(function(i){return Number(i.id)>1000000000}))return;
+ var sortedItems=items.slice().sort(function(a,b){return Number(a.id)-Number(b.id)});
+ var map={};sortedItems.forEach(function(i,n){map[i.id]=n+1;i.id=n+1});
+ order=order.map(function(x){return map[x]}).filter(function(x){return x!==undefined});
+ saveItems();saveOrder();
+}
+function newItem(){return {id:nextId(),_new:1,category:'Ring',period:'Antique',status:'Waiting',purchaseDate:today(),rating:0,buffer:5,photoshoot:false,tags:[],stones:[],metals:[],cut:[],refs:[],cover:null}}
 function applyTheme(){
  var t=THEMES[theme]||THEMES.ruby,dk=window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches,s=document.documentElement.style;
  s.setProperty('--acc',dk?t.d:t.l);s.setProperty('--v1',t.v1);s.setProperty('--v2',t.v2);
@@ -401,19 +414,21 @@ function blockedHTML(list){
   +'<div class="bar" style="justify-content:center;margin:12px 0 0"><button data-a="x">OK</button></div></div></div>';
 }
 function previewHTML(src){return '<div class="modal" data-a="backdrop"><div style="max-width:94vw;text-align:center"><img src="'+esc(src)+'" alt="" style="max-width:100%;max-height:78vh;display:block;margin:0 auto;border-radius:10px"><p class="meta">'+sizeOf(src)+'</p><div class="bar" style="justify-content:center"><button data-a="x">Close</button></div></div></div>'}
+var galUnl={refs:false,covers:false};
+function avail(kind){return gal[kind].filter(function(id){return usedBy(id).length===0})}
 function gallerySection(kind,label){
- var list=gal[kind],sel=galSel[kind],n=Object.keys(sel).filter(function(k){return sel[k]}).length;
- return '<details open><summary>'+label+' ('+list.length+')</summary>'
-  +'<div class="bar"><button data-a="gadd" data-kind="'+kind+'">+ Add images</button><button data-a="gall" data-kind="'+kind+'">Select all</button><button data-a="gnone" data-kind="'+kind+'">Clear selection</button><button class="dan" data-a="gdelsel" data-kind="'+kind+'"'+(n?'':' disabled')+'>Delete selected ('+n+')</button></div>'
+ var all=gal[kind],list=galUnl[kind]?all.filter(function(id){return usedBy(id).length===0}):all,sel=galSel[kind],n=Object.keys(sel).filter(function(k){return sel[k]}).length;
+ return '<details><summary>'+label+' ('+all.length+')</summary>'
+  +'<div class="bar"><button data-a="gadd" data-kind="'+kind+'">+ Add images</button><button data-a="gunl" data-kind="'+kind+'"'+(galUnl[kind]?' class="on"':'')+'>Unlinked only</button><button data-a="gall" data-kind="'+kind+'">Select all</button><button data-a="gnone" data-kind="'+kind+'">Clear selection</button><button class="dan" data-a="gdelsel" data-kind="'+kind+'"'+(n?'':' disabled')+'>Delete selected ('+n+')</button></div>'
   +(list.length?'<div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(110px,1fr))">'+list.map(function(id){var on=!!sel[id],src=gal.imgs[id];return '<div style="position:relative"><img src="'+esc(src)+'" alt="" data-a="gview" data-kind="'+kind+'" data-id="'+id+'" style="width:100%;aspect-ratio:1;object-fit:cover;border-radius:8px;display:block;cursor:zoom-in;'+(on?'outline:3px solid var(--acc);':'')+'"><button data-a="gtog" data-kind="'+kind+'" data-id="'+id+'" style="position:absolute;top:4px;left:4px;padding:2px 7px;min-height:0">'+(on?'☑':'☐')+'</button><button data-a="gdel" data-kind="'+kind+'" data-id="'+id+'" style="position:absolute;top:4px;right:4px;padding:2px 7px;min-height:0">✕</button><span class="meta" style="position:absolute;left:4px;bottom:4px;background:rgba(0,0,0,.6);color:#fff;padding:1px 4px;border-radius:4px;font-size:.65rem">'+sizeOf(src)+'</span></div>'}).join('')+'</div>':'<p class="meta">No images yet.</p>')
   +'</details>';
 }
 function ringTableHTML(){return '<div class="tw"><table class="ringtbl"><thead><tr>'+RING_HEAD.map(function(h,n){return '<th class="'+(n===2?'us':'')+'">'+esc(h)+'</th>'}).join('')+'</tr></thead><tbody>'+RING_TXT.map(function(r){return '<tr>'+r.split(';').map(function(c,n){return '<td class="'+(n===2?'us':'')+'">'+esc(c)+'</td>'}).join('')+'</tr>'}).join('')+'</tbody></table></div>'}
 function ringOpts(val){var o='';for(var z=0;z<=52;z++){var n=z/4;o+='<option value="'+n+'"'+(val!==''&&val!=null&&Number(val)===n?' selected':'')+'>'+n+'</option>'}return o}
-function renderGallery(){return '<h2>Image Gallery</h2>'+gallerySection('refs','Reference Screenshots')+gallerySection('covers','Cover Photo Thumbnails')+'<details open><summary>Ring Size Reference</summary>'+ringTableHTML()+'</details>'}
+function renderGallery(){return '<h2>Gallery</h2>'+gallerySection('refs','Reference Screenshots')+gallerySection('covers','Cover Photos')+'<details open><summary>Ring Size Reference</summary>'+ringTableHTML()+'</details>'}
 function galPickHTML(act){
  act=act||'galuse';
- var sec=function(kind,label){return '<p class="meta" style="margin:10px 0 4px">'+label+'</p><div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(80px,1fr))">'+(gal[kind].length?gal[kind].map(function(id){return '<button type="button" data-a="'+act+'" data-id="'+id+'" style="padding:0;aspect-ratio:1;overflow:hidden;border-radius:8px;min-height:0;border:2px solid transparent"><img src="'+esc(gal.imgs[id])+'" alt="" style="width:100%;height:100%;object-fit:cover;display:block"></button>'}).join(''):'<p class="meta">None yet.</p>')+'</div>'};
+ var sec=function(kind,label){return '<p class="meta" style="margin:10px 0 4px">'+label+'</p><div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(80px,1fr))">'+(avail(kind).length?avail(kind).map(function(id){return '<button type="button" data-a="'+act+'" data-id="'+id+'" style="padding:0;aspect-ratio:1;overflow:hidden;border-radius:8px;min-height:0;border:2px solid transparent"><img src="'+esc(gal.imgs[id])+'" alt="" style="width:100%;height:100%;object-fit:cover;display:block"></button>'}).join(''):'<p class="meta">None yet.</p>')+'</div>'};
  return '<div class="modal" data-a="backdrop"><div><h3 style="margin:0 0 6px">'+(act==='galaddref'?'Add reference from gallery':'Add cover from gallery')+'</h3>'+sec('covers','Cover Photo Thumbnails')+sec('refs','Reference Screenshots')+'<div class="bar" style="justify-content:center;margin:12px 0 0"><button data-a="x">Cancel</button></div></div></div>';
 }
 
@@ -608,13 +623,13 @@ function imagesHTML(){
  var refs=editing.refs||[],c=editing.cover;
  return '<div class="f"><h4 class="sub">Reference screenshots</h4><div class="seg" style="grid-column:1/-1"><button type="button" data-a="refadd">+ Add images</button><button type="button" data-a="galref">Add from gallery</button></div>'
   +'<div style="grid-column:1/-1">'+(refs.length?'<div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(90px,1fr))">'+refs.map(function(id,n){var src=gal.imgs[id];return '<div style="position:relative"><img src="'+esc(src)+'" style="width:100%;aspect-ratio:1;object-fit:cover;border-radius:8px;display:block;cursor:zoom-in" alt="" data-a="preview" data-i="'+n+'"><span class="meta" style="position:absolute;left:4px;bottom:4px;background:rgba(0,0,0,.6);color:#fff;padding:1px 4px;border-radius:4px;font-size:.65rem">'+sizeOf(src)+'</span><button type="button" data-a="rmref" data-i="'+n+'" style="position:absolute;top:4px;right:4px;padding:2px 8px;min-height:0">✕</button></div>'}).join('')+'</div>':'<p class="meta">No reference screenshots yet.</p>')+'</div></div>'
-  +'<details open><summary>Cover photo</summary>'
+  +'<div class="f"><h4 class="sub">Cover photo</h4>'
   +'<input type="file" id="cvfile" accept="image/*" hidden><input type="file" id="reffile" accept="image/*" multiple hidden>'
   +'<div style="grid-column:1/-1">'+(c&&gal.imgs[c.id]?'<div style="position:relative;width:160px;height:160px;border-radius:10px;overflow:hidden;margin:6px 0">'+coverImg(c)+'</div><div class="meta">'+sizeOf(gal.imgs[c.id])+'</div>':'<p class="meta">No cover yet.</p>')
   +'<div class="seg"><button type="button" data-a="covadd">⬆ Upload new cover</button><button type="button" data-a="galpick">Add from gallery</button>'+(c?'<button type="button" data-a="cvadj">Pan &amp; Zoom</button><button type="button" data-a="cvrm">Remove cover</button>':'')+'</div>'
   +'<div id="crop" hidden><div id="cropv"><img id="cropimg" alt="" draggable="false"></div><input type="range" id="cropz" min="1" max="4" step="0.01" value="1" aria-label="Zoom"><p class="seg"><button type="button" class="pri" data-a="cvok">Use this crop</button><button type="button" data-a="cvcancel">Cancel</button></p><p class="meta">Drag to pan. Use the slider (or pinch) to zoom. The square is your thumbnail.</p></div></div>'
   +(refs.length?'<div style="grid-column:1/-1"><p class="meta">Use one of this piece’s reference images</p><div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(70px,1fr))">'+refs.map(function(id,n){return '<button type="button" data-a="pickref" data-i="'+n+'" style="padding:0;border-radius:8px;aspect-ratio:1;overflow:hidden;min-height:0;border:2px solid '+(c&&c.id===id?'var(--acc)':'transparent')+'"><img src="'+esc(gal.imgs[id])+'" alt="" style="width:100%;height:100%;object-fit:cover;display:block"></button>'}).join('')+'</div></div>':'')
-  +'</details>';
+  +'</div>';
 }
 function quickPrompt(){
  var lines=QA_KEYS.map(function(k){var s=FS[k],t=s[1],hint=t==='sel'?'one of: '+s[2].filter(Boolean).join(', '):t==='list'?'array of strings':t==='money'?'number, no $':t==='date'?'YYYY-MM-DD':t==='ringsz'?'number 0 to 13 in steps of 0.25':t==='number'?'number':t==='url'?'URL':'text';return '"'+k+'": '+hint+' ('+s[0]+')'});
@@ -688,7 +703,7 @@ function updateSummary(){
  });
  rows.push('<tr>'+td1+'Cover photo</td>'+td2+(editing.cover?'Added':'—')+'</td></tr>');
  rows.push('<tr>'+td1+'Reference screenshots</td>'+td2+(editing.refs||[]).length+'</td></tr>');
- tb.innerHTML=rows.join('');
+ tb.innerHTML='<tr>'+td1+'ID</td>'+td2+esc(editing.id)+'</td></tr>'+rows.join('');
 }
 function refreshCalc(){
  var g=function(k){var el=document.querySelector('#form [name="'+k+'"]');return el?el.value:''};
@@ -823,12 +838,12 @@ function importCSV(text){
    });
    idx[c[0]]=j;
  });
- var added=0,updated=0,skipped=0,nid=Date.now();
+ var added=0,updated=0,skipped=0,nid=Math.max(Date.now(),items.reduce(function(m,i){return Math.max(m,Number(i.id)||0)},0)+1);
  rows.slice(1).forEach(function(r){
    var rec={};
    CSV_COLS.forEach(function(c){var j=idx[c[0]];if(j<0)return;var v=(r[j]||'').trim();if(v!=='')rec[c[0]]=v});
    if(!rec.title){skipped++;return}
-   var existing=rec.id?items.filter(function(i){return String(i.id)===rec.id})[0]:null;
+   var existing=(rec.id?items.filter(function(i){return String(i.id)===rec.id})[0]:null)||(rec.title?items.filter(function(i){return String(i.title||'').trim().toLowerCase()===rec.title.trim().toLowerCase()&&(i.purchaseDate||'')===(parseDate(rec.purchaseDate||'')||'')})[0]:null)||null;
    var out=existing?JSON.parse(JSON.stringify(existing)):{id:nid++,status:'Waiting',category:'Other',period:'Antique',tags:[],stones:[],metals:[],cut:[],rating:0,refs:[],cover:null};
    Object.keys(rec).forEach(function(k){if(k!=='id')out[k]=coerce(k,rec[k])});
    out=mig(out);
@@ -961,6 +976,7 @@ document.addEventListener('click',function(e){
   case 'qaapply':var raw=document.getElementById('qaIn').value.trim();var za=raw.indexOf('{'),zb=raw.lastIndexOf('}');var txt=za>=0&&zb>za?raw.slice(za,zb+1):raw;var data=null;try{data=JSON.parse(txt)}catch(err){alert('That does not look like JSON. Paste the output exactly as Claude returns it.');break}syncForm();var cnt=applyQuick(data);M.innerHTML='';renderMain();alert('Filled '+cnt+' field'+(cnt===1?'':'s')+'. Review, then Save.');break;
   case 'copy':copyText(d.id,b);break;
   case 'ringref':M.innerHTML='<div class="modal" data-a="backdrop"><div style="max-width:94vw"><h3 style="margin:0 0 8px">Ring Size Reference</h3>'+ringTableHTML()+'<div class="bar" style="justify-content:center;margin-top:12px"><button data-a="x">Close</button></div></div></div>';break;
+  case 'gunl':galUnl[d.kind]=!galUnl[d.kind];renderMain();break;
   case 'gadd':galKind=d.kind;document.getElementById('gfile').click();break;
   case 'gview':M.innerHTML=previewHTML(gal.imgs[d.id]);break;
   case 'gtog':galSel[d.kind][d.id]=!galSel[d.kind][d.id];renderMain();break;
@@ -982,7 +998,7 @@ document.addEventListener('click',function(e){
   case 'cvcancel':CR=null;document.getElementById('crop').hidden=true;break;
   case 'cvrm':syncForm();editing.cover=null;renderMain();break;
   case 'cancel':show('box');break;
-  case 'dup':var c=syncForm();['channel','sellPlatform','dateListed','dateSold','feeFinal','shipActual','payout','linkSale','wornLast'].forEach(function(k){delete c[k]});delete c.wornCount;c.status='Waiting';c.id=Date.now();c._new=1;c.title=(c.title||'')+(c.title?' (copy)':'');editing=c;renderMain();window.scrollTo(0,0);break;
+  case 'dup':var c=syncForm();['channel','sellPlatform','dateListed','dateSold','feeFinal','shipActual','payout','linkSale','wornLast'].forEach(function(k){delete c[k]});delete c.wornCount;c.status='Waiting';c.id=nextId();c._new=1;c.title=(c.title||'')+(c.title?' (copy)':'');editing=c;renderMain();window.scrollTo(0,0);break;
   case 'del':if(confirm('Delete this piece?')){items=items.filter(function(i){return i.id!==editing.id});saveItems();show('box')}break;
   case 'slogin':hashKW(((document.getElementById('skw')||{}).value)||'').then(function(h){if(h===secretCfg.hash){secretUnlocked=true;document.getElementById('modal').innerHTML='';show('secret')}else alert('Incorrect keyword')});break;
   case 'sset':var kwa=document.getElementById('skw').value.trim();if(!kwa){alert('Enter a keyword');break}hashKW(kwa).then(function(h){secretCfg.hash=h;secretUnlocked=true;saveSecret();document.getElementById('modal').innerHTML='';show('secret')});break;
