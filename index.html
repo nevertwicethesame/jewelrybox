@@ -142,7 +142,7 @@ footer#ver{text-align:center;padding:24px 14px calc(36px + env(safe-area-inset-b
 <input type="file" id="gfile" accept="image/*" multiple hidden>
 <script>
 var K='ntts_items_v2',OK='ntts_order_v1',PER=25,MAX_UPLOAD=300*1024;
-var APP_VERSION='1.5.3',APP_DATE='2026-11-01',UPDATE_URL='';
+var APP_VERSION='1.5.4',APP_DATE='2026-11-01',UPDATE_URL='';
 var EMOJI={ring:'💍',earring:'✨',necklace:'📿',bracelet:'⭕',watch:'⌚',other:'💎'};
 var CATS=['Ring','Earring','Necklace','Bracelet','Watch','Other'];
 var STAT=['Wishlist','Waiting','Private Collection','To List','Listed','Sold'];
@@ -356,15 +356,20 @@ function readRaw(file){
      var img=new Image();
      img.onerror=function(){alert('Could not read that image.');rej(new Error('read'))};
      img.onload=function(){
-       var w=Math.max(1,Math.round(img.width*0.5)),h=Math.max(1,Math.round(img.height*0.5));
-       var c=document.createElement('canvas');c.width=w;c.height=h;
-       var ctx=c.getContext('2d');ctx.imageSmoothingEnabled=true;ctx.imageSmoothingQuality='high';ctx.drawImage(img,0,0,w,h);
-       var tries=[['image/webp',0.85],['image/webp',0.75],['image/jpeg',0.85],['image/jpeg',0.7]],last=0;
-       for(var k=0;k<tries.length;k++){
-         var url=c.toDataURL(tries[k][0],tries[k][1]);
-         if(url.indexOf('data:'+tries[k][0])!==0)continue;
-         var bytes=Math.floor(url.split(',')[1].length*3/4);last=bytes;
-         if(bytes<=MAX_UPLOAD)return res(url);
+       var scales=[0.5,0.4,0.33,0.25],quals=[0.85,0.7,0.55],last=0,types=[['image/webp'],['image/jpeg']];
+       var c=document.createElement('canvas');
+       for(var s=0;s<scales.length;s++){
+         var w=Math.max(1,Math.round(img.width*scales[s])),h=Math.max(1,Math.round(img.height*scales[s]));
+         c.width=w;c.height=h;
+         var ctx=c.getContext('2d');ctx.imageSmoothingEnabled=true;ctx.imageSmoothingQuality='high';ctx.clearRect(0,0,w,h);ctx.drawImage(img,0,0,w,h);
+         for(var t=0;t<types.length;t++){
+           for(var q=0;q<quals.length;q++){
+             var url=c.toDataURL(types[t][0],quals[q]);
+             if(url.indexOf('data:'+types[t][0])!==0)break;
+             var bytes=Math.floor(url.split(',')[1].length*3/4);last=bytes;
+             if(bytes<=MAX_UPLOAD)return res(url);
+           }
+         }
        }
        alert('That image is still '+Math.round(last/1024)+' KB after compressing. The limit is 300 KB. Please use a smaller or simpler image.');
        rej(new Error('too large'));
