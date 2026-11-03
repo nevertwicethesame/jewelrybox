@@ -119,6 +119,7 @@ footer#ver{text-align:center;padding:24px 14px calc(36px + env(safe-area-inset-b
  .tabbar button.on{background:var(--acc);color:#fff;border-color:var(--acc)}
 }
 @media (max-width:700px){
+ .f{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
  .tabbar{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:20;background:var(--card);border-top:1px solid var(--line);padding:6px 0 calc(6px + env(safe-area-inset-bottom,0px));justify-content:space-around}
  .tabbar button{border:0;background:transparent;flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:1.25rem;min-height:50px;padding:2px 0;color:var(--mute);border-radius:0}
  .tabbar button span{font-size:.68rem;margin-top:2px;letter-spacing:.02em}
@@ -148,7 +149,7 @@ footer#ver{text-align:center;padding:24px 14px calc(36px + env(safe-area-inset-b
 <input type="file" id="gfile" accept="image/*" multiple hidden>
 <script>
 var K='ntts_items_v2',OK='ntts_order_v1',PER=25,MAX_UPLOAD=300*1024;
-var APP_VERSION='1.6.4',APP_DATE='2026-11-02 · 4:00 PM ET',UPDATE_URL='';
+var APP_VERSION='1.6.5',APP_DATE='2026-11-02 · 8:10 PM ET',UPDATE_URL='';
 var EMOJI={ring:'💍',earrings:'✨',necklace:'📿',bracelet:'⭕',watch:'⌚',other:'💎'};
 var CATS=['Ring','Earrings','Necklace','Bracelet','Watch','Other'];
 var STAT=['Waiting','Private Collection','To List','Listed','Sold'];
@@ -200,7 +201,7 @@ var FS={
  dateListed:['Date Listed','date'],
  linkSale:['Listing Link','url'],
  dateSold:['Date Sold','date'],
- turnover:['Turnover (Days Listed → Sold)','calc','c-days'],
+ turnover:['Turnover (Days)','calc','c-days'],
  feeFinal:['Platform Fee','money'],
  shipActual:['Shipping','money'],
  payout:['Final Payout','money'],
@@ -211,7 +212,7 @@ var SUGG_KEYS=['era','country','stones','metals','cut','tags','colorMain'];
 var LOWER_KEYS=['stones','cut','tags','colorMain'];
 var ORDER_PIECE=['title','category','period','era','yearMade','country','stones','metals','hallmarks','measurements','weight','ringSize','cut','colorMain','tags','notes'];
 var ORDER_STATS=['wornLast','wornCount','rating'];
-var ORDER_PURCH=['purchaseDate','seller','purchasePlatform','cost'];
+var ORDER_PURCH=['seller','purchaseDate','purchasePlatform','cost'];
 var ORDER_PRICE=['shipEstimate','buffer','ebayPct','igPct','suggestedEbay','suggestedIG','potentialEbay','potentialIG'];
 var ORDER_SOLD=['sellPlatform','dateListed','linkSale','dateSold','turnover','feeFinal','shipActual','payout','netProfit'];
 var FORM_ORDER=ORDER_PIECE.concat(ORDER_STATS,['status'],ORDER_PURCH,ORDER_PRICE,ORDER_SOLD);
@@ -435,6 +436,7 @@ function previewHTML(src,kind,id){
  var lk=kind?'<button class="pri" data-a="rlopen" data-kind="'+kind+'" data-id="'+id+'">🔗 Link to Record</button>':'';
  return '<div class="modal" data-a="backdrop"><div style="max-width:94vw;text-align:center"><img src="'+esc(src)+'" alt="" style="max-width:100%;max-height:78vh;display:block;margin:0 auto;border-radius:10px"><p class="meta">'+sizeOf(src)+'</p><div class="bar" style="justify-content:center">'+lk+'<button data-a="x">Close</button></div></div></div>';
 }
+var wro=false;
 var galUnl={refs:false,covers:false},galOpen={refs:false,covers:false,wish:false};
 var secOpen={};
 function dOpen(k,d){return secOpen[k]===undefined?(d?' open':''):(secOpen[k]?' open':'')}
@@ -568,9 +570,9 @@ function gicon(n){var w=(28-(n-1)*2)/n,r='';for(var k=0;k<n;k++)r+='<rect x="'+(
 function wishCover(w){return w.cover||{id:w.img,l:null,t:null,w:null,h:null}}
 function renderWishlist(){
  var list=wish.filter(function(w){return (!wishType.length||wishType.indexOf(w.category)>-1)&&(!q||((w.category||'')+' '+(w.link||'')).toLowerCase().indexOf(q)>-1)});
- var tiles=list.map(function(w){return '<div style="position:relative"><button type="button" data-a="wopen" data-id="'+w.id+'" style="padding:0;border:0;border-radius:10px;overflow:hidden;aspect-ratio:1;width:100%;display:block;min-height:0;background:var(--acc);position:relative">'+coverImg(wishCover(w))+'</button><button type="button" data-a="wdel" data-id="'+w.id+'" style="position:absolute;top:4px;right:4px;padding:2px 8px;min-height:0">✕</button></div>'}).join('');
+ var tiles=list.map(function(w){return '<div class="'+(wro?'tile':'')+'" data-id="'+w.id+'" style="position:relative"><button type="button" data-a="wopen" data-id="'+w.id+'" style="padding:0;border:0;border-radius:10px;overflow:hidden;aspect-ratio:1;width:100%;display:block;min-height:0;background:var(--acc);position:relative">'+coverImg(wishCover(w))+'</button><button type="button" data-a="wdel" data-id="'+w.id+'" style="position:absolute;top:4px;right:4px;padding:2px 8px;min-height:0">✕</button></div>'}).join('');
  return '<h2>Wishlist</h2><div class="bar"><button class="pri" data-a="wadd">+ Add to Wishlist</button></div>'
-  +(list.length?'<div class="grid" style="grid-template-columns:repeat('+cols+',1fr)">'+tiles+'</div>':'<p class="meta">'+(wish.length?'No wishlist items match this type.':'Nothing on your wishlist yet.')+'</p>')
+  +(list.length?'<div class="grid'+(wro?' ro':'')+'" style="grid-template-columns:repeat('+cols+',1fr)">'+tiles+'</div>':'<p class="meta">'+(wish.length?'No wishlist items match this type.':'Nothing on your wishlist yet.')+'</p>')
   +'<h3 class="side" style="margin-top:18px">Ring Size Chart</h3>'+ringTableHTML();
 }
 function wishAddHTML(){
@@ -592,6 +594,7 @@ function viewControls(){
  var box=view==='box',h='<h3 style="margin:0 0 8px">View</h3>';
  if(box)h+='<span class="tgl">'+[['thumbs','▦ Grid'],['table','▤ Table']].map(function(o){return '<button data-a="vm" data-v="'+o[0]+'"'+(o[0]===vmode?' class="on"':'')+'>'+o[1]+'</button>'}).join('')+'</span>';
  if(view==='secret'||view==='wishlist'||(box&&vmode==='thumbs'))h+='<div class="meta" style="margin-top:12px">Grid Size</div><div class="seg" style="margin-top:4px">'+[1,2,3,4].map(function(n){return '<button data-a="cols" data-v="'+n+'" aria-label="'+n+' across"'+(n===cols?' class="on"':'')+'>'+gicon(n)+'</button>'}).join('')+'</div>';
+ if(view==='wishlist')h+='<div class="seg" style="margin-top:8px"><button data-a="wro"'+(wro?' class="on"':'')+'>'+(wro?'Done reordering':'✥ Reorder Grid')+'</button></div>';
  if(box&&vmode==='thumbs')h+='<div class="seg" style="margin-top:8px"><button data-a="ro"'+(ro?' class="on"':'')+'>'+(ro?'Done reordering':'✥ Reorder Grid')+'</button></div>';
  return h;
 }
@@ -633,6 +636,7 @@ function renderBox(){
   +(list.length?'':'<p class="meta">No pieces match.</p>')+countLine(list.length);
 }
 function valOf(v){return v==null?'':Array.isArray(v)?v.join(', '):String(v)}
+var WIDE_KEYS=['title','seller','link','notes','description'];
 function fieldHTML(k,v){
  var s=FS[k],t=s[1],val=LISTS.indexOf(k)>-1?(v||[]).join(', '):(v==null?'':v),c;
  if(LOWER_KEYS.indexOf(k)>-1)val=String(val).toLowerCase();
@@ -647,8 +651,8 @@ function fieldHTML(k,v){
  else if(t==='date')c='<input name="'+k+'" type="date" value="'+esc(v||'')+'">';
  else if(t==='number')c='<input name="'+k+'" type="number" step="'+(k==='buffer'?'0.5':'1')+'" inputmode="decimal" value="'+esc(val)+'">';
  else c='<input name="'+k+'" type="'+(t==='url'?'url':'text')+'" value="'+esc(val)+'"'+''+(SUGG_KEYS.indexOf(k)>-1?' data-sugg="'+k+'" autocomplete="off"':'')+'>';
- var sg=SUGG_KEYS.indexOf(k)>-1;
- return '<label'+(sg?' style="position:relative"':'')+'>'+(k==='ringSize'?'<span style="display:flex;justify-content:space-between;align-items:center;gap:8px;line-height:1.2"><span>'+s[0]+'</span><button type="button" data-a="ringref" style="border:0;background:none;padding:0;margin:0;min-height:0;font-size:.8rem;line-height:1.2;color:var(--acc);text-decoration:underline;border-radius:0">view chart</button></span>':(t==='list'?s[0]+' (comma separated)':s[0]))+c+(sg?'<div class="sg" hidden></div>':'')+'</label>';
+ var sg=SUGG_KEYS.indexOf(k)>-1,wd=t==='textarea'||WIDE_KEYS.indexOf(k)>-1;
+ return '<label'+(sg||wd?' style="'+(sg?'position:relative;':'')+(wd?'grid-column:1/-1;':'')+'"':'')+'>'+(k==='ringSize'?'<span style="display:flex;justify-content:space-between;align-items:center;gap:8px;line-height:1.2"><span>'+s[0]+'</span><button type="button" data-a="ringref" style="border:0;background:none;padding:0;margin:0;min-height:0;font-size:.8rem;line-height:1.2;color:var(--acc);text-decoration:underline;border-radius:0">view chart</button></span>':(t==='list'?s[0]+' (comma separated)':s[0]))+c+(sg?'<div class="sg" hidden></div>':'')+'</label>';
 }
 function suggPool(k){
  if(k==='colorMain')return COLOR_ORDER.map(function(c){return {v:c,l:(HEARTS[c]||'')+' '+c}});
@@ -732,7 +736,7 @@ function renderEdit(){
  var it=editing;
  var pr=it.shipEstimate!=null&&it.shipEstimate!==''?it.shipEstimate:shipDefault(it.cost);
  shipTouched=false;
- var h='<div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><h2 style="margin:0">Add/Edit a Piece</h2><button type="button" data-a="quickadd">⚡ Quick add</button></div><form id="form" autocomplete="off"><div id="editbar" class="bar" style="position:sticky;top:0;z-index:4;background:var(--bg);padding:8px 0;margin:0 0 12px"><button type="submit" class="pri">Save</button><button type="button" class="dan" data-a="del">Delete</button><button type="button" data-a="cancel">Cancel</button></div>';
+ var h='<div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><h2 style="margin:0">Add/Edit a Piece</h2><button type="button" data-a="quickadd">⚡ Quick add</button></div><form id="form" autocomplete="off">';
  h+='<details data-sec="images"'+dOpen('images',true)+'><summary>Images</summary>'+imagesHTML()+'</details>';
 h+='<details data-sec="piece"'+dOpen('piece',true)+'><summary>Piece</summary><div class="f">'+sec(ORDER_PIECE)+'<h4 class="sub">Stats</h4>'+sec(ORDER_STATS)+'</div></details>';
  h+='<details data-sec="transaction"'+dOpen('transaction',true)+'><summary>Transaction</summary><div class="f">'+fieldHTML('status',it.status)+'<h4 class="sub">Purchase</h4>'+sec(ORDER_PURCH)+'</div>'
@@ -740,7 +744,7 @@ h+='<details data-sec="piece"'+dOpen('piece',true)+'><summary>Piece</summary><di
   +'<details data-sec="listing"'+dOpen('listing',false)+'><summary>Listing Helper</summary>'+listingBlock(it)+'<div class="f"><h4 class="sub">Pricing</h4>'+ORDER_PRICE.map(function(k){return fieldHTML(k,k==='shipEstimate'?pr:it[k])}).join('')+'</div></details>'
   +'<div class="f"><h4 class="sub">Sold Details</h4>'+sec(ORDER_SOLD)+'</div></details></details>';
   h+='<details data-sec="summary"'+dOpen('summary',false)+'><summary>Summary</summary><table style="width:100%;font-size:.88rem;border-collapse:collapse"><tbody id="sumtb"></tbody></table></details>';
- h+='</form>';
+ h+='<div id="editbar" class="bar" style="margin:16px 0 0"><button type="submit" class="pri">Save</button><button type="button" data-a="cancel">Cancel</button><button type="button" class="dan" data-a="del">Delete</button></div></form>';
  return h;
 }
 function readForm(){
@@ -789,7 +793,7 @@ function renderMain(){
  updateSummary();setTabs();updateStorage();
 }
 function render(){renderMain();renderDrawer()}
-function show(v){view=v;ro=false;drawer(false);render();window.scrollTo(0,0)}
+function show(v){view=v;ro=false;wro=false;drawer(false);render();window.scrollTo(0,0)}
 function setTabs(){document.querySelectorAll('#tabbar button').forEach(function(x){x.classList.toggle('on',x.dataset.v===view)})}
 
 /* ---------- pan & zoom on the original image ---------- */
@@ -1172,6 +1176,7 @@ document.addEventListener('click',function(e){
   case 'vm':vmode=d.v;page=1;ro=false;drawer(false);render();break;
   case 'ct':ctab=d.v;page=1;renderMain();break;
   case 'pg':page+=Number(d.v);renderMain();break;
+  case 'wro':drawer(false);wro=!wro;render();break;
   case 'ro':drawer(false);ro=!ro;if(ro){order=sorted(vis()).map(function(i){return i.id});sortBy='custom';saveOrder()}render();break;
   case 'open':if(!ro)popup(items.filter(function(i){return String(i.id)===d.id})[0]);break;
   case 'edit':M.innerHTML='';editing=JSON.parse(JSON.stringify(items.filter(function(i){return String(i.id)===d.id})[0]));show('edit');break;
@@ -1280,7 +1285,7 @@ document.addEventListener('toggle',function(e){if(e.target.classList&&e.target.c
 document.addEventListener('pointerdown',function(e){
  var v=e.target.closest('#cropv');
  if(v&&CR){CR.p[e.pointerId]={x:e.clientX,y:e.clientY};v.setPointerCapture(e.pointerId);return}
- if(!ro)return;var t=e.target.closest('.ro .tile');if(!t)return;dragEl=t;t.classList.add('drag');
+ if(!ro&&!wro)return;var t=e.target.closest('.ro .tile');if(!t)return;dragEl=t;t.classList.add('drag');
 });
 document.addEventListener('pointermove',function(e){
  if(CR&&CR.p[e.pointerId]){
@@ -1298,6 +1303,7 @@ document.addEventListener('pointermove',function(e){
 function endDrag(e){
  if(CR&&CR.p)delete CR.p[e.pointerId];
  if(!dragEl)return;
+ if(wro){var wf=dragEl.dataset.id,wt=overEl?overEl.dataset.id:null;dragEl=null;overEl=null;if(wt!=null&&wt!==wf){var wfi=wish.findIndex(function(w){return String(w.id)===wf}),wti0=wish.findIndex(function(w){return String(w.id)===wt}),down=wfi<wti0,wmv=wish.splice(wfi,1)[0],wti=wish.findIndex(function(w){return String(w.id)===wt});wish.splice(down?wti+1:wti,0,wmv);saveWish()}render();return}
  var from=Number(dragEl.dataset.id),to=overEl?Number(overEl.dataset.id):null;
  dragEl=null;overEl=null;
  if(to!=null){
