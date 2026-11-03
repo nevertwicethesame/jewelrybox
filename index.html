@@ -172,7 +172,7 @@ footer#ver{text-align:center;padding:24px 14px calc(36px + env(safe-area-inset-b
 <input type="file" id="gfile" accept="image/*" multiple hidden>
 <script>
 var K='ntts_items_v2',OK='ntts_order_v1',PER=25,MAX_UPLOAD=300*1024;
-var APP_VERSION='1.6.18',APP_DATE='2026-11-03 · 12:33 PM ET',UPDATE_URL='';
+var APP_VERSION='1.6.19',APP_DATE='2026-11-03 · 4:08 PM ET',UPDATE_URL='';
 var EMOJI={ring:'💍',earrings:'✨',necklace:'📿',bracelet:'⭕',watch:'⌚',other:'💎'};
 var CATS=['Ring','Earrings','Necklace','Bracelet','Watch','Other'];
 var STAT=['Waiting','Benched','Private Collection','To List','Listed','Sold'];
@@ -254,7 +254,7 @@ var seed=[
 
 /* ---------- state ---------- */
 var DEFAULT_STATUS=['Waiting','Benched','Private Collection'];
-var items=[],order=[],theme='ruby',hideSold=true,view='box',page=1,editing=null,fsel={category:['Ring'],status:DEFAULT_STATUS.slice()},rng={},sortBy='new',cols=3,ctab='Piece',vmode='thumbs',q='',ro=false,dragEl=null,overEl=null,ioOpen=false,lastJ=null,CR=null,DB=null,MEM={},shipTouched=false,PS={eb:13,ig:0},showAllF={},gal={imgs:{},refs:[],covers:[],comps:[]},galSel={refs:{},covers:{},comps:{}},galKind='refs',swS=null;
+var items=[],order=[],theme='ruby',hideSold=true,view='box',page=1,editing=null,fsel={status:DEFAULT_STATUS.slice()},rng={},sortBy='new',cols=3,ctab='Piece',vmode='thumbs',q='',ro=false,dragEl=null,overEl=null,ioOpen=false,lastJ=null,CR=null,DB=null,MEM={},shipTouched=false,PS={eb:13,ig:0},showAllF={},gal={imgs:{},refs:[],covers:[],comps:[]},galSel={refs:{},covers:{},comps:{}},galKind='refs',swS=null;
 
 /* ---------- storage ---------- */
 function openDB(){return new Promise(function(res,rej){if(!window.indexedDB)return rej('no indexedDB');var r=indexedDB.open('ntts',1);r.onupgradeneeded=function(){r.result.createObjectStore('kv')};r.onsuccess=function(){res(r.result)};r.onerror=function(){rej(r.error)}})}
@@ -589,12 +589,12 @@ function renderManage(){
  var nfiles=planChunks().length;
  var imgCount=Object.keys(gal.imgs).length;
  var jsonBody='<div class="bar" style="flex-direction:column;align-items:stretch;margin:0"><button data-a="import">⬆ Import JSON</button><button data-a="export">⬇ Export JSON</button></div><p class="meta">Export includes '+items.length+' piece'+(items.length===1?'':'s')+' with their details, '+imgCount+' photo'+(imgCount===1?'':'s')+' (covers and reference screenshots), '+wish.length+' wishlist item'+(wish.length===1?'':'s')+', your order, theme and settings. It saves as '+nfiles+' file'+(nfiles===1?'':'s')+'.</p>'+expPanelHTML();
- return '<h2>I/O</h2><h3 class="side">Manage Images</h3>'
-  +gallerySection('refs','Reference Screenshots')+gallerySection('comps','Comparables')+gallerySection('covers','Cover Photos')+wishGalHTML()
+ return '<h2>I/O</h2>'
   +'<h3 class="side">Data Backup</h3><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px">'+card('CSV Backup',csvBody)+card('JSON Backup',jsonBody)+'</div>'
   +'<div style="margin-top:12px;border:1px solid var(--line);border-radius:12px;padding:12px"><h4 class="sub" style="margin:0 0 6px;text-align:left">App Stats</h4><div id="stormeter" class="meta" style="text-align:left"></div></div>'
-  +'<h3 class="side">Reset</h3><div style="border:1px solid var(--line);border-radius:12px;padding:12px"><p class="meta" style="margin:0 0 8px">Current Version: v'+APP_VERSION+' · '+APP_DATE+'</p><button class="dan" data-a="delete">Delete All</button><p class="meta" style="margin:6px 0 0">Erases every piece, photo, and setting on this device. This cannot be undone.</p></div>'+'<p class="meta" style="text-align:center;margin-top:18px">This project first started on November 1, 2026.<br>Thank you for inspiring me, Koala-Chan 🐨</p>';
+  +'<h3 class="side">Reset</h3><div style="border:1px solid var(--line);border-radius:12px;padding:12px"><button class="dan" data-a="delete">Delete All</button><p class="meta" style="margin:6px 0 0">Erases every piece, photo, and setting on this device. This cannot be undone.</p></div>'+'<p class="meta" style="text-align:center;margin-top:18px">This project first started on November 1, 2026.<br>Thank you for inspiring me, Koala-Chan 🐨</p>';
 }
+function renderGallery(){return '<h2>Gallery</h2><h3 class="side">Manage Images</h3>'+gallerySection('refs','Reference Screenshots')+gallerySection('comps','Comparables')+gallerySection('covers','Cover Photos')+wishGalHTML()}
 function gicon(n){var w=(28-(n-1)*2)/n,r='';for(var k=0;k<n;k++)r+='<rect x="'+(k*(w+2))+'" y="0" width="'+w+'" height="14" rx="2" fill="currentColor"/>';return '<svg role="img" aria-label="'+n+' across" width="28" height="14" viewBox="0 0 28 14">'+r+'</svg>'}
 function wishCover(w){return w.cover||{id:w.img,l:null,t:null,w:null,h:null}}
 function renderWishlist(){
@@ -638,16 +638,16 @@ function wishFilterHTML(){
  return '<fieldset class="facet"><legend>Type</legend><div class="cloud">'+cats.map(function(c){return '<button data-a="wtype" data-v="'+esc(c)+'"'+(wishType.indexOf(c)>-1?' class="on"':'')+'>'+esc(c)+' ('+wish.filter(function(w){return w.category===c}).length+')</button>'}).join('')+'</div></fieldset>'+(wishType.length?'<p><button data-a="wclear">Clear type filter</button></p>':'');
 }
 function renderDrawer(){
- document.getElementById('drawer').innerHTML=(view==='jotd'?'':viewControls())+themeHTML()+'<div class="dv"><span>✦ 💍 ✦</span></div>'+(view==='jotd'?'':view==='wishlist'?wishFilterHTML():filtersHTML());
+ document.getElementById('drawer').innerHTML=(view==='jotd'?'':'<div class="bar" style="margin:0 0 10px"><button data-a="nav" data-v="gallery"'+(view==='gallery'?' class="on"':'')+'>Gallery</button></div>'+viewControls())+themeHTML()+'<div class="dv"><span>✦ 💍 ✦</span></div>'+(view==='jotd'?'':view==='wishlist'?wishFilterHTML():filtersHTML());
 }
 function drawer(o){document.getElementById('drawer').classList.toggle('open',o);document.getElementById('scrim').classList.toggle('open',o)}
 
 /* ---------- rendering ---------- */
 function thumb(i){var sold=i.status==='Sold',wait=i.status==='Waiting';
  var veil='<span aria-hidden="true" style="position:absolute;inset:0;background:rgba(0,0,0,.4);pointer-events:none"></span>';
- var soldBadge='<span aria-hidden="true" style="position:absolute;right:6px;bottom:6px;width:24px;height:24px;border-radius:50%;background:rgba(0,0,0,.35);display:flex;align-items:center;justify-content:center;pointer-events:none;font-size:13px;line-height:1">💔</span>';
- var benchBadge='<span aria-hidden="true" style="position:absolute;right:6px;bottom:6px;width:24px;height:24px;border-radius:50%;background:rgba(0,0,0,.35);display:flex;align-items:center;justify-content:center;pointer-events:none;font-size:13px;line-height:1">🛠️</span>';
- var clock='<span aria-hidden="true" style="position:absolute;right:6px;bottom:6px;width:22px;height:22px;border-radius:50%;background:rgba(0,0,0,.35);display:flex;align-items:center;justify-content:center;pointer-events:none;opacity:.8"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span>';
+ var soldBadge='<span aria-hidden="true" style="position:absolute;right:6px;bottom:6px;width:24px;height:24px;border-radius:50%;background:rgba(0,0,0,.35);display:flex;align-items:center;justify-content:center;pointer-events:none;font-size:13px;line-height:1;filter:brightness(0) invert(1)">💔</span>';
+ var benchBadge='<span aria-hidden="true" style="position:absolute;right:6px;bottom:6px;width:24px;height:24px;border-radius:50%;background:rgba(0,0,0,.35);display:flex;align-items:center;justify-content:center;pointer-events:none;font-size:13px;line-height:1;filter:brightness(0) invert(1)">🛠️</span>';
+ var clock='<span aria-hidden="true" style="position:absolute;right:6px;bottom:6px;width:24px;height:24px;border-radius:50%;background:rgba(0,0,0,.35);display:flex;align-items:center;justify-content:center;pointer-events:none;opacity:.8"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span>';
  return '<div class="tile" data-a="open" data-id="'+i.id+'"'+(sold?' style="filter:grayscale(1)"':'')+'>'+(EMOJI[String(i.category).toLowerCase()]||'💎')+coverImg(i.cover)+(sold?veil+soldBadge:'')+(wait?clock:'')+(i.status==='Benched'?benchBadge:'')+'</div>'}
 function countLine(n){return '<p class="meta" style="text-align:center;margin:16px 0 0">'+n+' piece'+(n===1?'':'s')+(anyFilter()?' (filtered)':'')+'</p>'}
 var TC={
@@ -881,7 +881,7 @@ function setupFloat(){
  floatIO.observe(bar);
 }
 function renderMain(){
- document.getElementById('app').innerHTML=backupBanner()+(view==='box'?renderBox():view==='manage'?renderManage():view==='wishlist'?renderWishlist():view==='secret'?renderSecret():view==='jotd'?renderJotd():renderEdit());
+ document.getElementById('app').innerHTML=backupBanner()+(view==='box'?renderBox():view==='gallery'?renderGallery():view==='manage'?renderManage():view==='wishlist'?renderWishlist():view==='secret'?renderSecret():view==='jotd'?renderJotd():renderEdit());
  var eb=document.getElementById('editbar'),hd=document.querySelector('header');if(eb&&hd)eb.style.top=hd.offsetHeight+'px';
  setupFloat();
  updateSummary();setTabs();updateStorage();
@@ -1219,11 +1219,11 @@ function fmtBytes(b){return b<1048576?Math.round(b/1024)+' KB':b<1073741824?(b/1
 function updateStorage(){
  var el=document.getElementById('stormeter');if(!el)return;
  var st=storageBytes();
- var lines=['App data: '+fmtBytes(st.total)+' ('+items.length+' pieces, '+st.imgs+' images, '+wish.length+' wishlist items)'];
+ var lines=['Current version: v'+APP_VERSION+' · '+APP_DATE,'','App data: '+fmtBytes(st.total)+' ('+items.length+' pieces, '+st.imgs+' images, '+wish.length+' wishlist items)'];
  if(st.total/1048576>150)lines.push('Large library: consider separate image storage soon.');
- var bi=lines.length;lines.push('Browser data: checking');
+ var bi=lines.length;lines.push('Browser data: checking','');
  lines.push('Persistent storage: '+(persistOK===true?'granted':persistOK===false?'not granted':'checking'));
- lines.push('Last JSON backup: '+agoText(lastExport));
+ lines.push('Last backup: '+agoText(lastExport));
  var show=function(){el.innerHTML=lines.map(esc).join('<br>')};
  if(navigator.storage&&navigator.storage.estimate){navigator.storage.estimate().then(function(e){lines[bi]='Browser data: '+fmtBytes(e.usage||0)+' used of about '+fmtBytes(e.quota||0)+' allowed';show()}).catch(function(){lines[bi]='Browser data: unavailable';show()})}
  else{lines[bi]='Browser data: unavailable';show()}
@@ -1231,7 +1231,7 @@ function updateStorage(){
 function deleteAll(){
  var t=prompt('This erases every piece, photo, and setting on this device. Type DELETE to confirm.');
  if(t!=='DELETE')return;
- items=[];gal={imgs:{},refs:[],covers:[],comps:[]};galSel={refs:{},covers:{},comps:{}};secretCfg={on:false,hash:'',threshold:null};secretUnlocked=false;wish=[];order=[];theme='ruby';hideSold=true;fsel={category:['Ring'],status:DEFAULT_STATUS.slice()};rng={};q='';document.getElementById('q').value='';sortBy='new';ro=false;view='box';
+ items=[];gal={imgs:{},refs:[],covers:[],comps:[]};galSel={refs:{},covers:{},comps:{}};secretCfg={on:false,hash:'',threshold:null};secretUnlocked=false;wish=[];order=[];theme='ruby';hideSold=true;fsel={status:DEFAULT_STATUS.slice()};rng={};q='';document.getElementById('q').value='';sortBy='new';ro=false;view='box';
  kclear().then(function(){return Promise.all([saveItems(),saveOrder(),saveSettings(),saveGallery()])}).then(function(){applyTheme();render();alert('Everything has been reset.')});
 }
 
@@ -1541,7 +1541,7 @@ function manualCheck(){
    else alert('You have the latest version (v'+APP_VERSION+').');
  }).catch(function(){alert('Could not check for updates. Make sure version.json is published in the same folder as index.html.')});
 }
-function renderFooter(){document.getElementById('ver').innerHTML='<button class="link" data-a="io" style="font-size:inherit;margin:0">Never Twice the Same</button> · <button class="link" data-a="checkupd" style="font-size:inherit;margin:0">v'+APP_VERSION+'</button>'}
+function renderFooter(){document.getElementById('ver').innerHTML='<button class="link" data-a="io" style="font-size:inherit;margin:0">Never Twice the Same</button> · <button class="link" data-a="io" style="font-size:inherit;margin:0">v'+APP_VERSION+'</button>'}
 document.addEventListener('input',function(e){var t=e.target;if(!t||!t.getAttribute)return;if(t.id==='rlq'){rlRender(t.value,t.getAttribute('data-kind'),t.getAttribute('data-img'));return}if(t.getAttribute('data-sugg')){suggShow(t);return}
  if(t.name==='keyword'&&t.closest&&t.closest('#kwform')&&t.closest('#kwform').getAttribute('data-mode')==='unlock')autoUnlock(t)});
 document.addEventListener('focusout',function(e){var t=e.target;if(t&&t.getAttribute&&t.getAttribute('data-sugg')){var box=t.parentNode.querySelector('.sg');setTimeout(function(){if(box)box.hidden=true},300)}});
