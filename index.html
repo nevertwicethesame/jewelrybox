@@ -9,6 +9,8 @@
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1b1715;--fg:#efe8df;--mute:#a89d92;--card:#262120;--line:#3a3330}}
 *{box-sizing:border-box}
 html{scroll-padding-top:env(safe-area-inset-top,0px)}
+#offline{position:fixed;inset:0;z-index:100;background:var(--bg);display:flex;align-items:center;justify-content:center;padding:24px;text-align:center;font-size:1.4rem;color:var(--fg);cursor:pointer}
+#offline[hidden]{display:none}
 body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.45 Georgia,"Times New Roman",serif}
 body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--bg);z-index:10}
 header{position:sticky;top:env(safe-area-inset-top,0px);background:var(--bg);border-bottom:1px solid var(--line);padding:10px 14px;z-index:5;display:flex;align-items:center;gap:10px}
@@ -150,6 +152,7 @@ footer#ver{text-align:center;padding:24px 14px calc(36px + env(safe-area-inset-b
 </style>
 </head>
 <body>
+<div id="offline" hidden><p>Out treasure hunting…</p></div>
 <div id="upd" class="upd" hidden></div>
 <div id="bkp" class="upd" hidden></div>
 <header>
@@ -169,7 +172,7 @@ footer#ver{text-align:center;padding:24px 14px calc(36px + env(safe-area-inset-b
 <input type="file" id="gfile" accept="image/*" multiple hidden>
 <script>
 var K='ntts_items_v2',OK='ntts_order_v1',PER=25,MAX_UPLOAD=300*1024;
-var APP_VERSION='1.6.14',APP_DATE='2026-11-03 · 7:50 AM ET',UPDATE_URL='';
+var APP_VERSION='1.6.15',APP_DATE='2026-11-03 · 8:43 AM ET',UPDATE_URL='';
 var EMOJI={ring:'💍',earrings:'✨',necklace:'📿',bracelet:'⭕',watch:'⌚',other:'💎'};
 var CATS=['Ring','Earrings','Necklace','Bracelet','Watch','Other'];
 var STAT=['Waiting','Private Collection','To List','Listed','Sold'];
@@ -1051,7 +1054,7 @@ function dashHTML(){
  var rows=Object.keys(sel).map(function(k){return {name:k,count:sel[k].count,spend:sel[k].spend}}).sort(function(a,b){return dashSort==='spend'?(b.spend-a.spend||b.count-a.count):(b.count-a.count||b.spend-a.spend)});
  var metric=function(r){return dashSort==='spend'?r.spend:r.count};
  var shown=dashAll?rows:rows.slice(0,10),mx=rows.length?Math.max.apply(null,rows.map(metric)):1;if(!mx)mx=1;
- var sellers=shown.map(function(r){return '<div style="display:grid;grid-template-columns:120px minmax(0,1fr) 150px;gap:8px;align-items:center;height:28px;margin:4px 0"><span style="min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+esc(r.name)+'</span><span style="background:var(--line);border-radius:6px;height:12px;display:block;overflow:hidden"><span style="display:block;height:100%;width:'+(metric(r)/mx*100)+'%;background:var(--acc)"></span></span><span class="meta" style="white-space:nowrap;text-align:right;overflow:hidden">'+r.count+' · '+esc(fmtMoney(r.spend))+'</span></div>'}).join('');
+ var sellers=shown.map(function(r){return '<div style="display:grid;grid-template-columns:140px minmax(0,1fr) 108px;gap:6px;align-items:center;height:42px;margin:2px 0"><span style="min-width:0;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;line-height:1.2;overflow-wrap:anywhere">'+esc(r.name)+'</span><span style="background:var(--line);border-radius:6px;height:12px;display:block;overflow:hidden"><span style="display:block;height:100%;width:'+(metric(r)/mx*100)+'%;background:var(--acc)"></span></span><span class="meta" style="white-space:nowrap;text-align:right;overflow:hidden;line-height:1.2">'+r.count+' · '+esc(fmtMoney(r.spend))+'</span></div>'}).join('');
  var tb=function(v,l){var on=dashSort===v;return '<button type="button" data-a="dashsort" data-v="'+v+'" aria-pressed="'+on+'" style="border:0;border-radius:0;margin:0;min-height:30px;padding:4px 12px;font-size:.85rem;background:'+(on?'var(--acc)':'transparent')+';color:'+(on?'#fff':'var(--fg)')+'">'+l+'</button>'};
  var toggle='<div style="display:inline-flex;border:1px solid var(--acc);border-radius:999px;overflow:hidden;flex:none">'+tb('count','Count')+tb('spend','Spend')+'</div>';
  return '<h4 class="sub" style="margin:0 0 6px">Spend vs. Sales by Year</h4>'+chart
@@ -1553,6 +1556,18 @@ document.addEventListener('click',function(e){var b=e.target.closest&&e.target.c
 document.querySelector('header').insertAdjacentElement('afterend',document.getElementById('tabbar'));
 init().then(function(){renderFooter();checkUpdate();setInterval(checkUpdate,3600000);document.addEventListener('visibilitychange',function(){if(!document.hidden)checkUpdate()});applyTheme();try{matchMedia('(prefers-color-scheme: dark)').addEventListener('change',applyTheme)}catch(e){}render()})
  .catch(function(e){document.getElementById('app').innerHTML='<p class="meta">Could not start storage: '+esc(e&&e.message||e)+'</p>'});
+(function(){
+ var o=document.getElementById('offline');
+ if(o&&navigator.onLine===false){
+  o.hidden=false;
+  var hide=function(){o.hidden=true};
+  o.addEventListener('click',hide);
+  window.addEventListener('online',hide);
+ }
+ if('serviceWorker' in navigator){
+  window.addEventListener('load',function(){try{navigator.serviceWorker.register('sw.js').catch(function(){})}catch(e){}});
+ }
+})();
 </script>
 </body>
 </html>
