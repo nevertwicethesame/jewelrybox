@@ -146,6 +146,7 @@ footer#ver{text-align:center;padding:24px 14px calc(36px + env(safe-area-inset-b
 <main id="app"><p class="meta">Loading…</p></main>
 <footer id="ver" class="meta"></footer>
 <div id="upd" class="upd" hidden></div>
+<div id="bkp" class="upd" hidden></div>
 <nav id="tabbar" class="tabbar"><button data-a="nav" data-v="box" class="big"><span>💍</span><span>My Jewelry Box</span></button><button data-a="nav" data-v="secret"><span>🗝️</span><span>Secret Compartment</span></button><button data-a="nav" data-v="wishlist"><span>🛍️</span><span>Wishlist</span></button><button data-a="nav" data-v="edit" data-new="1"><span>＋</span><span>Add to Collection</span></button><button data-a="nav" data-v="jotd"><span>✨</span><span>JOTD</span></button></nav>
 <div class="scrim" id="scrim" data-a="dclose"></div>
 <aside class="drawer" id="drawer"></aside>
@@ -155,7 +156,7 @@ footer#ver{text-align:center;padding:24px 14px calc(36px + env(safe-area-inset-b
 <input type="file" id="gfile" accept="image/*" multiple hidden>
 <script>
 var K='ntts_items_v2',OK='ntts_order_v1',PER=25,MAX_UPLOAD=300*1024;
-var APP_VERSION='1.6.10',APP_DATE='2026-11-02 · 11:30 PM ET',UPDATE_URL='';
+var APP_VERSION='1.6.11',APP_DATE='2026-11-02 · 11:59 PM ET',UPDATE_URL='';
 var EMOJI={ring:'💍',earrings:'✨',necklace:'📿',bracelet:'⭕',watch:'⌚',other:'💎'};
 var CATS=['Ring','Earrings','Necklace','Bracelet','Watch','Other'];
 var STAT=['Waiting','Private Collection','To List','Listed','Sold'];
@@ -272,13 +273,11 @@ async function init(){
  wish=(await kget('wishlist'))||[];
  lastExport=(await kget('lastExport'))||'';
  try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist().then(function(ok){persistOK=ok;updateStorage()})}catch(e){}
+ var ranBefore=false;try{ranBefore=localStorage.getItem('ntts_ran')==='1'}catch(e){}
  if(it===undefined){
-   var legacy=null,lo=null;
-   try{legacy=JSON.parse(localStorage.getItem(K)||localStorage.getItem('ntts_items_v1')||'null')}catch(e){}
-   try{lo=JSON.parse(localStorage.getItem(OK)||'null')}catch(e){}
-   items=(legacy||[]).map(mig);
-   order=lo||[];
-   await kset('items',items);await kset('order',order);await kset('theme',theme);await kset('hideSold',hideSold);
+   items=[];order=[];
+   if(ranBefore)missingData=true;
+   else{await kset('items',items);await kset('order',order);await kset('theme',theme);await kset('hideSold',hideSold)}
  }else{
    items=it.map(mig);
    order=(await kget('order'))||[];
@@ -289,6 +288,7 @@ async function init(){
  renumberIds();
  if(Object.keys(gal.imgs).length||!items.length)await saveGallery();
  if(!THEMES[theme])theme='ruby';
+ try{localStorage.setItem('ntts_ran','1')}catch(e){}
 }
 
 /* ---------- helpers ---------- */
@@ -448,6 +448,7 @@ function previewHTML(src,kind,id){
  return '<div class="modal" data-a="backdrop"><div style="max-width:94vw;text-align:center"><img src="'+esc(src)+'" alt="" style="max-width:100%;max-height:78vh;display:block;margin:0 auto;border-radius:10px"><p class="meta">'+sizeOf(src)+'</p><div class="bar" style="justify-content:center">'+lk+'<button data-a="x">Close</button></div></div></div>';
 }
 var wro=false;
+var missingData=false,restoreShown=false;
 var backTo='box';
 var galUnl={refs:false,covers:false,comps:false},galOpen={refs:false,covers:false,comps:false,wish:false};
 var secOpen={};
@@ -571,7 +572,7 @@ function renderManage(){
  var csvBody='<div class="bar" style="flex-direction:column;align-items:stretch;margin:0"><button data-a="csvup">⬆ Import (CSV)</button><button data-a="csvdown">⬇ Export (CSV)</button></div><p class="meta">Import adds new pieces and updates existing ones by ID. Blank cells keep the existing value. Photos are not included.</p><p class="meta">Export includes '+items.length+' piece'+(items.length===1?'':'s')+' as one CSV file, one row per piece with its details, cost and sale info. Photos are not included.</p><details class="tpl"><summary>CSV Template Fields</summary><p class="meta" style="word-break:break-word;margin:0 0 8px">'+CSV_COLS.map(function(c){return c[0]==='tags'?'motifs':c[0]}).join(', ')+'</p><p class="meta" style="margin:0 0 8px">Lists separate values with ; or commas. Dates use YYYY-MM-DD. Rating is 0 to 5. Photoshoot is true or false. Leave a cell empty to keep the existing value when updating by id.</p></details>';
  var nfiles=planChunks().length;
  var imgCount=Object.keys(gal.imgs).length;
- var jsonBody='<div class="bar" style="flex-direction:column;align-items:stretch;margin:0"><button data-a="import">⬆ Import JSON</button><button data-a="export">⬇ Export JSON</button></div><p class="meta">Export includes '+items.length+' piece'+(items.length===1?'':'s')+' with their details, '+imgCount+' photo'+(imgCount===1?'':'s')+' (covers and reference screenshots), '+wish.length+' wishlist item'+(wish.length===1?'':'s')+', your order, theme and settings. It saves as '+nfiles+' file'+(nfiles===1?'':'s')+'.</p>'+expPanelHTML();
+ var jsonBody='<div class="bar" style="flex-direction:column;align-items:stretch;margin:0"><button data-a="import">⬆ Import JSON</button><button data-a="restore">⟲ Restore from backup</button><button data-a="export">⬇ Export JSON</button></div><p class="meta">Export includes '+items.length+' piece'+(items.length===1?'':'s')+' with their details, '+imgCount+' photo'+(imgCount===1?'':'s')+' (covers and reference screenshots), '+wish.length+' wishlist item'+(wish.length===1?'':'s')+', your order, theme and settings. It saves as '+nfiles+' file'+(nfiles===1?'':'s')+'.</p>'+expPanelHTML();
  return '<h2>I/O</h2><h3 class="side">Manage Images</h3>'
   +gallerySection('refs','Reference Screenshots')+gallerySection('comps','Comparables')+gallerySection('covers','Cover Photos')+wishGalHTML()
   +'<h3 class="side">Data Backup</h3><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px">'+card('CSV Backup',csvBody)+card('JSON Backup',jsonBody)+'</div>'
@@ -1133,10 +1134,17 @@ function expPanelHTML(){
 function keycap(n){return String(n).split('').map(function(d){return d+'\uFE0F\u20E3'}).join('')}
 function agoText(iso){if(!iso)return 'never';var d=Math.floor((Date.now()-new Date(iso).getTime())/864e5);return d<=0?'today':d===1?'yesterday':d+' days ago'}
 function backupBanner(){
+ var b=document.getElementById('bkp');if(!b)return '';
  var days=lastExport?(Date.now()-new Date(lastExport).getTime())/864e5:Infinity;
- if(days<=7)return '';
- var n=planChunks().length;
- return '<div style="border:1px solid var(--acc);border-radius:12px;padding:10px 12px;margin-bottom:12px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between"><span>Last JSON backup: '+agoText(lastExport)+'. Estimated backup: '+n+' file'+(n===1?'':'s')+'.</span><button class="pri" data-a="backupnow">Backup Now</button></div>';
+ if(days<=7){b.hidden=true;b.innerHTML=''}
+ else{b.innerHTML='<span>Last JSON backup: '+agoText(lastExport)+'.</span><button data-a="backupnow">Backup Now</button>';b.hidden=false}
+ var u=document.getElementById('upd');
+ b.style.top='calc(env(safe-area-inset-top,0px) + '+((u&&!u.hidden)?u.offsetHeight:0)+'px)';
+ if(missingData&&!restoreShown){restoreShown=true;setTimeout(function(){document.getElementById('modal').innerHTML=restoreHTML(true)},0)}
+ return '';
+}
+function restoreHTML(missing){
+ return '<div class="modal" data-a="backdrop"><div style="max-width:520px;width:94vw"><h3 style="margin:0 0 6px">'+(missing?'Your saved data is missing':'Restore from backup')+'</h3><p class="meta">'+(missing?'This device has no saved pieces, but the app has been used here before. Restore from a JSON backup file you saved. ':'Choose a JSON backup file you saved. ')+'Restoring replaces everything on this device, and you will be asked to confirm.</p><div class="bar" style="justify-content:center;margin:12px 0 0"><button class="pri" data-a="restorepick">Choose backup file(s)</button><button data-a="x">Cancel</button></div></div></div>';
 }
 function readFileP(f){return new Promise(function(res){var r=new FileReader();r.onload=function(){res(String(r.result))};r.readAsText(f)})}
 function importJSON(texts){
@@ -1248,6 +1256,8 @@ document.addEventListener('click',function(e){
   case 'theme':theme=d.v;applyTheme();saveSettings();renderDrawer();break;
   case 'export':exportJSON();break;
   case 'import':document.getElementById('fjson').click();break;
+  case 'restore':M.innerHTML=restoreHTML(false);break;
+  case 'restorepick':M.innerHTML='';document.getElementById('fjson').click();break;
   case 'delete':deleteAll();break;
   case 'csvup':document.getElementById('fcsv').click();break;
   case 'csvdown':exportCSV();break;
@@ -1411,6 +1421,7 @@ function checkUpdate(){
    var b=document.getElementById('upd');
    b.innerHTML='<span>A new version ('+esc(d.version)+') is available.</span><button data-a="updx">Later</button><button class="pri" data-a="reload">Update</button>';
    b.hidden=false;
+   backupBanner();
  }).catch(function(){});
 }
 function manualCheck(){
