@@ -68,6 +68,19 @@ h4.sub{margin:14px 0 6px;font-size:.95rem;letter-spacing:.03em;grid-column:1/-1}
 .facet label{flex-direction:row;align-items:center;gap:10px;color:var(--fg);font-size:1rem;padding:5px 0}
 .facet input[type=checkbox]{width:auto}
 .swl{flex-direction:row;align-items:center;gap:10px;color:var(--fg);font-size:1rem;margin:14px 0 0}
+.fw{position:relative;display:block;min-width:0}
+.fw input,.fw select,.fw textarea{padding-right:36px}
+.fx{position:absolute;right:4px;top:50%;transform:translateY(-50%);width:28px;height:28px;min-height:0;padding:0;margin:0;border:0;border-radius:50%;background:none;color:var(--mute);font-size:14px;line-height:1;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:none}
+.fw textarea~.fx{top:8px;transform:none}
+.cdd{border:0;background:none;padding:0;margin:0;border-radius:0;position:relative}
+.cdd>div{position:absolute;left:0;right:0;top:100%;z-index:18;margin-top:4px;box-shadow:0 6px 18px rgba(0,0,0,.18)}
+.cddS{list-style:none;padding:0;font-weight:normal;display:flex;flex-direction:column;gap:3px;font-size:.82rem;color:var(--mute);cursor:pointer}
+.cddS::-webkit-details-marker{display:none}
+.cdd input[type=checkbox]{height:auto;min-height:0;width:16px;padding:0;margin:0;flex:none}
+.cdd .swl{line-height:1.2}
+.cddBox{box-sizing:border-box;height:44px;min-height:44px;border:1px solid var(--line);border-radius:8px;padding:9px;background:var(--bg);color:var(--fg);font-size:16px;display:flex;align-items:center;justify-content:space-between;gap:8px;line-height:1.2;overflow:hidden}
+.cddTxt{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.cddArr{flex:none;color:var(--mute);font-size:.8rem}
 .swl input{width:auto}
 .sw{display:inline-block;width:14px;height:14px;border-radius:50%;border:1px solid rgba(128,128,128,.6);vertical-align:-2px;flex:none}
 .dv{display:flex;align-items:center;gap:10px;margin:18px 0;color:var(--mute)}
@@ -91,7 +104,7 @@ details.tpl{margin:8px 0 0;padding:0 10px;border-radius:8px}
 details.tpl summary{font-weight:normal;font-size:.9rem;padding:8px 0}
 h4.side{margin:14px 0 6px;font-size:.95rem;letter-spacing:.03em}
 #cropv{width:100%;max-width:340px;aspect-ratio:1;overflow:hidden;position:relative;touch-action:none;border-radius:12px;background:#000;cursor:grab;outline:2px solid var(--acc)}
-#form #cropv{max-width:260px}
+#form #cropv{max-width:220px}
 #cropimg{position:absolute;left:0;top:0;max-width:none;user-select:none;-webkit-user-select:none;pointer-events:none;transform-origin:0 0}
 #cropz{max-width:340px;padding:6px 0;margin-top:8px}
 .phe{display:flex;align-items:center;justify-content:center;background:var(--acc);width:40px;height:40px;border-radius:6px;flex:none}
@@ -104,7 +117,7 @@ tr.grp td{background:var(--bg);font-weight:bold;letter-spacing:.03em;color:var(-
 .ringtbl{width:100%;table-layout:fixed}
 .ringtbl th,.ringtbl td{min-width:0;max-width:none;white-space:normal;overflow-wrap:normal;word-break:normal;text-align:center;padding:6px 4px}
 .ringtbl th.us,.ringtbl td.us{font-weight:bold}
-.upd{position:fixed;left:0;right:0;top:env(safe-area-inset-top,0px);z-index:50;background:var(--acc);color:#fff;padding:10px 14px;display:flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap;font-size:.9rem}
+.upd{position:relative;left:0;right:0;z-index:50;background:var(--acc);color:#fff;padding:calc(10px + env(safe-area-inset-top,0px)) 14px 10px;display:flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap;font-size:.9rem}
 .upd[hidden]{display:none}
 .upd button{border-color:#fff;background:transparent;color:#fff;min-height:36px;padding:6px 12px}
 .upd button.pri{background:#fff;color:var(--acc)}
@@ -137,6 +150,8 @@ footer#ver{text-align:center;padding:24px 14px calc(36px + env(safe-area-inset-b
 </style>
 </head>
 <body>
+<div id="upd" class="upd" hidden></div>
+<div id="bkp" class="upd" hidden></div>
 <header>
   <button data-a="drawer" aria-label="Menu">☰</button>
   <h1>NEVER TWICE THE SAME</h1>
@@ -145,8 +160,6 @@ footer#ver{text-align:center;padding:24px 14px calc(36px + env(safe-area-inset-b
 </header>
 <main id="app"><p class="meta">Loading…</p></main>
 <footer id="ver" class="meta"></footer>
-<div id="upd" class="upd" hidden></div>
-<div id="bkp" class="upd" hidden></div>
 <nav id="tabbar" class="tabbar"><button data-a="nav" data-v="box" class="big"><span>💍</span><span>My Jewelry Box</span></button><button data-a="nav" data-v="secret"><span>🗝️</span><span>Secret Compartment</span></button><button data-a="nav" data-v="wishlist"><span>🛍️</span><span>Wishlist</span></button><button data-a="nav" data-v="edit" data-new="1"><span>＋</span><span>Add to Collection</span></button><button data-a="nav" data-v="jotd"><span>✨</span><span>JOTD</span></button></nav>
 <div class="scrim" id="scrim" data-a="dclose"></div>
 <aside class="drawer" id="drawer"></aside>
@@ -156,7 +169,7 @@ footer#ver{text-align:center;padding:24px 14px calc(36px + env(safe-area-inset-b
 <input type="file" id="gfile" accept="image/*" multiple hidden>
 <script>
 var K='ntts_items_v2',OK='ntts_order_v1',PER=25,MAX_UPLOAD=300*1024;
-var APP_VERSION='1.6.12',APP_DATE='2026-11-03 · 12:10 AM ET',UPDATE_URL='';
+var APP_VERSION='1.6.13',APP_DATE='2026-11-03 · 6:20 AM ET',UPDATE_URL='';
 var EMOJI={ring:'💍',earrings:'✨',necklace:'📿',bracelet:'⭕',watch:'⌚',other:'💎'};
 var CATS=['Ring','Earrings','Necklace','Bracelet','Watch','Other'];
 var STAT=['Waiting','Private Collection','To List','Listed','Sold'];
@@ -307,7 +320,7 @@ function title(i){return i.title||'Untitled'}
 function days(i){return i.dateListed&&i.dateSold?Math.round((new Date(i.dateSold)-new Date(i.dateListed))/864e5):null}
 function fees(i){return num(i.feeFinal)||0}
 function sw(n){var c=COLORS[String(n).toLowerCase()];return c?'<span class="sw" style="background:'+c+'"></span>':''}
-function stars(n){return n?'❤️'.repeat(n):''}
+function stars(n){return n?'\u2665\uFE0F'.repeat(n):''}
 function uniqArr(a){return a.filter(function(x,n){return a.indexOf(x)===n})}
 function colorsHTML(a){a=Array.isArray(a)?a:(a?[a]:[]);return a.length?a.map(function(c){return sw(c)+' '+esc(c)}).join(', '):'—'}
 function distinct(arr){var m={};arr.forEach(function(v){if(v===''||v==null)return;var s=String(v).trim();if(!s)return;var k=s.toLowerCase();if(!m[k]||(s.charAt(0)===s.charAt(0).toUpperCase()&&m[k].charAt(0)!==m[k].charAt(0).toUpperCase()))m[k]=s});return Object.keys(m).sort().map(function(k){return m[k]})}
@@ -469,7 +482,7 @@ function gallerySection(kind,label){
   +'</details>';
 }
 function ringTableHTML(){return '<div class="tw"><table class="ringtbl"><thead><tr>'+RING_HEAD.map(function(h,n){return '<th class="'+(n===2?'us':'')+'">'+esc(h)+'</th>'}).join('')+'</tr></thead><tbody>'+RING_TXT.map(function(r){return '<tr>'+r.split(';').map(function(c,n){return '<td class="'+(n===2?'us':'')+'">'+esc(c)+'</td>'}).join('')+'</tr>'}).join('')+'</tbody></table></div>'}
-function ringOpts(val){var o='';for(var z=0;z<=52;z++){var n=z/4;o+='<option value="'+n+'"'+(val!==''&&val!=null&&Number(val)===n?' selected':'')+'>'+n+'</option>'}return o}
+function ringOpts(val){var o='';if(val!==''&&val!=null&&Number(val)>0&&Number(val)<1)o+='<option value="'+Number(val)+'" selected>'+Number(val)+'</option>';for(var z=4;z<=52;z++){var n=z/4;o+='<option value="'+n+'"'+(val!==''&&val!=null&&Number(val)===n?' selected':'')+'>'+n+'</option>'}return o}
 function galPickHTML(act){
  act=act||'galuse';
  var sec=function(kind,label){return '<p class="meta" style="margin:10px 0 4px">'+label+'</p><div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(80px,1fr))">'+(avail(kind).length?avail(kind).map(function(id){return '<button type="button" data-a="'+act+'" data-id="'+id+'" style="padding:0;aspect-ratio:1;overflow:hidden;border-radius:8px;min-height:0;border:2px solid transparent"><img src="'+esc(gal.imgs[id])+'" alt="" style="width:100%;height:100%;object-fit:cover;display:block"></button>'}).join(''):'<p class="meta">None yet.</p>')+'</div>'};
@@ -485,7 +498,7 @@ var FACETS=[
  {k:'era',l:'Era/Movement',counted:1,v:function(){return allOf(function(i){return [i.era]})},g:function(i){return [i.era]}},
  {k:'tags',l:'Motifs',cloud:1,cnt:1,v:function(){return allOf(function(i){return i.tags})},g:function(i){return i.tags||[]}},
  {k:'stones',l:'Stones',cloud:1,counted:1,v:function(){return allOf(function(i){return i.stones})},g:function(i){return i.stones||[]}},
- {k:'colorMain',l:'Color',sw:1,v:function(){return COLOR_ORDER.filter(function(c){return vis().some(function(i){return (i.colorMain||[]).indexOf(c)>-1})})},g:function(i){return i.colorMain||[]}},
+ {k:'colorMain',l:'Color',sw:1,v:function(){return COLOR_ORDER.slice()},g:function(i){return i.colorMain||[]}},
  {k:'finger',l:'Ring Size by Finger',cnt:1,v:function(){return FINGERS},g:function(i){return [finger(i)]}}
 ];
 function facetOf(k){return FACETS.filter(function(F){return F.k===k})[0]}
@@ -583,18 +596,25 @@ function gicon(n){var w=(28-(n-1)*2)/n,r='';for(var k=0;k<n;k++)r+='<rect x="'+(
 function wishCover(w){return w.cover||{id:w.img,l:null,t:null,w:null,h:null}}
 function renderWishlist(){
  var list=wish.filter(function(w){return (!wishType.length||wishType.indexOf(w.category)>-1)&&(!q||((w.category||'')+' '+(w.link||'')).toLowerCase().indexOf(q)>-1)});
- var tiles=list.map(function(w){return '<div class="'+(wro?'tile':'')+'" data-id="'+w.id+'" style="position:relative"><button type="button" data-a="wopen" data-id="'+w.id+'" style="padding:0;border:0;border-radius:10px;overflow:hidden;aspect-ratio:1;width:100%;display:block;min-height:0;background:var(--acc);position:relative">'+coverImg(wishCover(w))+'</button><button type="button" data-a="wdel" data-id="'+w.id+'" style="position:absolute;top:4px;right:4px;width:26px;height:26px;min-width:0;padding:0;min-height:0;border-radius:50%;display:flex;align-items:center;justify-content:center;line-height:1;font-size:.75rem">✕</button></div>'}).join('');
+ var tiles=list.map(function(w){return '<div class="'+(wro?'tile':'')+'" data-id="'+w.id+'" style="position:relative"><button type="button" data-a="wopen" data-id="'+w.id+'" style="padding:0;border:0;border-radius:10px;overflow:hidden;aspect-ratio:1;width:100%;display:block;min-height:0;background:var(--acc);position:relative">'+coverImg(wishCover(w))+'</button>'+(wro?'<button type="button" data-a="wdel" data-id="'+w.id+'" style="position:absolute;top:4px;right:4px;width:26px;height:26px;min-width:0;padding:0;min-height:0;border-radius:50%;display:flex;align-items:center;justify-content:center;line-height:1;font-size:.75rem">✕</button>':'')+'<div class="meta" style="margin-top:4px;text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+esc(wishDomain(w.link))+'</div></div>'}).join('');
  return '<div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:12px"><h2 style="margin:0">Wishlist</h2><button class="pri" data-a="wadd">+ Add to Wishlist</button></div>'
   +(list.length?'<div class="grid'+(wro?' ro':'')+'" style="grid-template-columns:repeat('+cols+',1fr)">'+tiles+'</div>':'<p class="meta">'+(wish.length?'No wishlist items match this type.':'Nothing on your wishlist yet.')+'</p>')
   +'<hr style="border:0;border-top:1px solid var(--line);margin:18px 0">'+'<h3 class="side" style="margin-top:0">Ring Size Chart</h3>'+ringTableHTML();
 }
 function wishAddHTML(){
  return '<div class="modal" data-a="backdrop"><div style="max-width:520px;width:94vw"><h3 style="margin:0 0 6px">Add to Wishlist</h3>'
-  +'<label>Photo<input type="file" id="wfile" accept="image/*"></label>'
-  +'<div id="crop" style="margin-top:10px" hidden><div id="cropv"><img id="cropimg" alt="" draggable="false"></div><input type="range" id="cropz" min="1" max="4" step="0.01" value="1" aria-label="Zoom"><p class="meta">Drag to pan. Use the slider (or pinch) to zoom. The square is your thumbnail.</p></div>'
-  +'<label style="margin-top:10px">Type<select id="wcat">'+CATS.map(function(c){return '<option>'+c+'</option>'}).join('')+'</select></label>'
   +'<label style="margin-top:10px">Link<input type="url" id="wlink" placeholder="https://"></label>'
+  +'<label style="margin-top:10px">Type<select id="wcat">'+CATS.map(function(c){return '<option>'+c+'</option>'}).join('')+'</select></label>'
+  +'<label>Photo<input type="file" id="wfile" accept="image/*"></label>'
+  +'<div id="crop" style="margin-top:10px" hidden><div id="cropv" style="max-width:240px"><img id="cropimg" alt="" draggable="false"></div><input type="range" id="cropz" min="1" max="4" step="0.01" value="1" aria-label="Zoom"><p class="meta">Drag to pan. Use the slider (or pinch) to zoom. The square is your thumbnail.</p></div>'
   +'<div class="bar" style="justify-content:center;margin:12px 0 0"><button class="pri" data-a="wsave">Save</button><button data-a="x">Cancel</button></div></div></div>';
+}
+function wishDomain(link){
+ try{var h=new URL(link).hostname.toLowerCase().replace(/^www\./,''),p=h.split('.');
+  var n=(p.length>2&&p[p.length-2].length<=3&&p[p.length-1].length===2)?3:2;
+  var base=p.slice(-n)[0]||'';
+  return base.split('-').filter(Boolean).map(function(w){return w.charAt(0).toUpperCase()+w.slice(1)}).join(' ');
+ }catch(e){return ''}
 }
 function wishCropFrac(){
  if(CR&&CR.id===wishPending){var V=cropV().clientWidth;return {l:CR.x/V,t:CR.y/V,w:CR.img.width*CR.s0*CR.z/V,h:CR.img.height*CR.s0*CR.z/V}}
@@ -653,7 +673,7 @@ var WIDE_KEYS=['title','seller','link','notes','description'];
 function fieldHTML(k,v){
  var s=FS[k],t=s[1],val=LISTS.indexOf(k)>-1?(v||[]).join(', '):(v==null?'':v),c;
  if(LOWER_KEYS.indexOf(k)>-1)val=String(val).toLowerCase();
- if(k==='colorMain'){var cchk=v||[];return '<details class="cdd" style="grid-column:1/-1"><summary style="cursor:pointer;min-height:44px;display:flex;align-items:center;justify-content:space-between;gap:8px;border:1px solid var(--line);border-radius:8px;padding:0 10px;background:var(--bg);color:var(--fg)"><span>'+s[0]+'</span><span class="meta cddTxt">'+esc(cchk.join(', ')||'Choose colors')+'</span></summary><div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px 10px;padding:8px 2px">'+COLOR_ORDER.map(function(c){return '<label class="swl" style="flex-direction:row;align-items:center;gap:6px;color:var(--fg)"><input type="checkbox" name="colorMain" value="'+esc(c)+'"'+(cchk.indexOf(c)>-1?' checked':'')+'> '+(HEARTS[c]||'')+' '+esc(c)+'</label>'}).join('')+'</div></details>'}
+ if(k==='colorMain'){var cchk=v||[];return '<details class="cdd" data-sel="'+esc(JSON.stringify(cchk))+'"><summary class="cddS"><span>'+s[0]+'</span><span class="cddBox"><span class="cddTxt">'+esc(cchk.join(', ')||'Choose colors')+'</span><span class="cddArr">▾</span></span></summary><div style="display:grid;grid-template-columns:1fr;gap:0;margin-top:4px;padding:6px 10px;border:1px solid var(--line);border-radius:8px;background:var(--bg)">'+COLOR_ORDER.map(function(c){return '<label class="swl" style="flex-direction:row;align-items:center;gap:6px;color:var(--fg);margin:0;padding:3px 0;font-size:.95rem"><input type="checkbox" name="colorMain" value="'+esc(c)+'"'+(cchk.indexOf(c)>-1?' checked':'')+'> '+(HEARTS[c]||'')+' '+esc(c)+'</label>'}).join('')+'</div></details>'}
  if(t==='check')return '<label class="swl"><input type="checkbox" name="'+k+'"'+(v?' checked':'')+'> '+s[0]+'</label>';
  if(t==='calc')return '<label>'+s[0]+'<div class="calc" id="'+s[2]+'">'+esc(calcs(editing)[s[2]])+'</div></label>';
  if(t==='pct')return '<label>'+s[0]+'<input name="'+k+'" type="number" step="0.1" inputmode="decimal" value="'+(k==='ebayPct'?PS.eb:PS.ig)+'"></label>';
@@ -665,6 +685,7 @@ function fieldHTML(k,v){
  else if(t==='date')c='<input name="'+k+'" type="date" value="'+esc(v||'')+'">';
  else if(t==='number')c='<input name="'+k+'" type="number" step="'+(k==='buffer'?'0.5':'1')+'" inputmode="decimal" value="'+esc(val)+'">';
  else c='<input name="'+k+'" type="'+(t==='url'?'url':'text')+'" value="'+esc(val)+'"'+''+(SUGG_KEYS.indexOf(k)>-1?' data-sugg="'+k+'" autocomplete="off"':'')+'>';
+ if(t!=='check'&&t!=='calc'&&t!=='pct'&&(t!=='sel'||s[2].indexOf('')>-1))c='<span class="fw">'+c+'<button type="button" class="fx" data-a="fclr" aria-label="Clear">✕</button></span>';
  var sg=SUGG_KEYS.indexOf(k)>-1,wd=t==='textarea'||WIDE_KEYS.indexOf(k)>-1;
  return '<label'+(sg||wd?' style="'+(sg?'position:relative;':'')+(wd?'grid-column:1/-1;':'')+'"':'')+'>'+(k==='ringSize'?'<span style="display:flex;justify-content:space-between;align-items:center;gap:8px;line-height:1.2"><span>'+s[0]+'</span><button type="button" data-a="ringref" style="border:0;background:none;padding:0;margin:0;min-height:0;font-size:.8rem;line-height:1.2;color:var(--acc);text-decoration:underline;border-radius:0">view chart</button></span>':(t==='list'?s[0]+' (comma separated)':s[0]))+c+(sg?'<div class="sg" hidden></div>':'')+'</label>';
 }
@@ -734,26 +755,28 @@ function copyText(id,btn){
 function compBlockHTML(){
  var cs=editing.comps||[];
  return '<div class="f" id="secComps"><h4 class="sub">Comparables</h4><input type="file" id="compfile" accept="image/*" multiple hidden>'
-  +'<div class="seg" style="grid-column:1/-1"><button type="button" data-a="compadd">+ Add images</button><button type="button" data-a="galcomp">Add from gallery</button></div>'
+  +'<div class="seg" style="grid-column:1/-1"><button type="button" data-a="compadd">+ Add new</button><button type="button" data-a="galcomp">Add from gallery</button></div>'
   +'<div style="grid-column:1/-1">'+(cs.length?'<div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(90px,1fr))">'+cs.map(function(id,n){var src=gal.imgs[id];return '<div style="position:relative"><img src="'+esc(src)+'" style="width:100%;aspect-ratio:1;object-fit:cover;border-radius:8px;display:block;cursor:zoom-in" alt="" data-a="previewc" data-id="'+esc(id)+'"><span class="meta" style="position:absolute;left:4px;bottom:4px;background:rgba(0,0,0,.6);color:#fff;padding:1px 4px;border-radius:4px;font-size:.65rem">'+sizeOf(src)+'</span><button type="button" data-a="rmcomp" data-i="'+n+'" style="position:absolute;top:4px;right:4px;padding:2px 8px;min-height:0">✕</button></div>'}).join('')+'</div>':'<p class="meta">No comparables yet.</p>')+'</div></div>';
 }
+var compShownFor=null;
 function imagesHTML(){
  var refs=editing.refs||[],c=editing.cover;
+ var showComp=(editing.comps||[]).length>0||compShownFor===editing.id;
  var refBlock='<div class="f" id="secRefs"><h4 class="sub">Reference Screenshots</h4><input type="file" id="reffile" accept="image/*" multiple hidden>'
-  +'<div class="seg" style="grid-column:1/-1"><button type="button" data-a="refadd">+ Add images</button><button type="button" data-a="galref">Add from gallery</button></div>'
+  +'<div class="seg" style="grid-column:1/-1"><button type="button" data-a="refadd">+ Add new</button><button type="button" data-a="galref">Add from gallery</button>'+(showComp?'':'<button type="button" data-a="showcomp">Add comp</button>')+'</div>'
   +'<div style="grid-column:1/-1">'+(refs.length?'<div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(90px,1fr))">'+refs.map(function(id,n){var src=gal.imgs[id];return '<div style="position:relative"><img src="'+esc(src)+'" style="width:100%;aspect-ratio:1;object-fit:cover;border-radius:8px;display:block;cursor:zoom-in" alt="" data-a="preview" data-i="'+n+'"><span class="meta" style="position:absolute;left:4px;bottom:4px;background:rgba(0,0,0,.6);color:#fff;padding:1px 4px;border-radius:4px;font-size:.65rem">'+sizeOf(src)+'</span><button type="button" data-a="rmref" data-i="'+n+'" style="position:absolute;top:4px;right:4px;padding:2px 8px;min-height:0">✕</button></div>'}).join('')+'</div>':'<p class="meta">No reference screenshots yet.</p>')+'</div></div>';
  var divider='<hr style="grid-column:1/-1;border:0;border-top:1px solid var(--line);margin:14px 0">';
  var coverBlock='<div class="f" id="secCover"><h4 class="sub">Cover Photo</h4><input type="file" id="cvfile" accept="image/*" hidden>'
-  +'<div class="seg" style="grid-column:1/-1"><button type="button" data-a="covadd">⬆ Upload new cover</button><button type="button" data-a="galpick">Add from gallery</button>'+(c?'<button type="button" data-a="cvadj">Crop</button><button type="button" data-a="cvrm">Remove cover</button>':'')+'</div>'
-  +'<div style="grid-column:1/-1">'+(c&&gal.imgs[c.id]?'<div data-a="previewcover" style="position:relative;width:160px;height:160px;border-radius:10px;overflow:hidden;margin:6px 0;cursor:zoom-in">'+coverImg(c)+'</div><div class="meta">'+sizeOf(gal.imgs[c.id])+'</div>':'<p class="meta">No cover yet.</p>')+'</div>'
-  +'<div id="crop" style="grid-column:1/-1" hidden><div id="cropv"><img id="cropimg" alt="" draggable="false"></div><input type="range" id="cropz" min="1" max="4" step="0.01" value="1" aria-label="Zoom"><p class="seg"><button type="button" class="pri" data-a="cvok">Use this crop</button><button type="button" data-a="cvcancel">Cancel</button></p><p class="meta">Drag to pan. Use the slider (or pinch) to zoom. The square is your thumbnail.</p></div>'
+  +'<div class="seg" style="grid-column:1/-1"><button type="button" data-a="covadd">+ Add new</button><button type="button" data-a="galpick">Add from gallery</button>'+(c?'<button type="button" data-a="cvadj">Crop</button>':'')+'</div>'
+  +'<div style="grid-column:1/-1">'+(c&&gal.imgs[c.id]?'<div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(90px,1fr))"><div style="position:relative"><div data-a="previewcover" style="position:relative;width:100%;aspect-ratio:1;border-radius:8px;overflow:hidden;cursor:zoom-in">'+coverImg(c)+'</div><span class="meta" style="position:absolute;left:4px;bottom:4px;background:rgba(0,0,0,.6);color:#fff;padding:1px 4px;border-radius:4px;font-size:.65rem">'+sizeOf(gal.imgs[c.id])+'</span><button type="button" data-a="cvrm" style="position:absolute;top:4px;right:4px;padding:2px 8px;min-height:0">✕</button></div></div>':'<p class="meta">No cover yet.</p>')+'</div>'
   +(refs.length&&!c?'<div style="grid-column:1/-1"><p class="meta">Use a reference screenshot as the cover</p><div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(70px,1fr))">'+refs.map(function(id,n){return '<button type="button" data-a="pickref" data-i="'+n+'" style="padding:0;border-radius:8px;aspect-ratio:1;overflow:hidden;min-height:0;border:2px solid '+(c&&c.id===id?'var(--acc)':'transparent')+'"><img src="'+esc(gal.imgs[id])+'" alt="" style="width:100%;height:100%;object-fit:cover;display:block"></button>'}).join('')+'</div></div>':'')
   +'</div>';
  var pst='<div style="grid-column:1/-1">'+fieldHTML('photoshoot',editing.photoshoot)+'</div>';var ci=coverBlock.lastIndexOf('</div>');coverBlock=coverBlock.slice(0,ci)+pst+coverBlock.slice(ci);
- return refBlock+divider+compBlockHTML()+divider+coverBlock;
+ return refBlock+divider+(showComp?compBlockHTML()+divider:'')+coverBlock;
 }
+function firstRefCover(){if(!editing.cover&&(editing.refs||[]).length)editing.cover={id:editing.refs[0],l:null,t:null,w:null,h:null}}
 function quickPrompt(){
- var lines=QA_KEYS.map(function(k){var s=FS[k],t=s[1],hint=t==='sel'?'one of: '+s[2].filter(Boolean).join(', '):t==='list'?'array of strings':t==='money'?'number, no $':t==='date'?'YYYY-MM-DD':t==='ringsz'?'number 0 to 13 in steps of 0.25':t==='number'?'number':t==='url'?'URL':'text';return '"'+k+'": '+hint+' ('+s[0]+')'});
+ var lines=QA_KEYS.map(function(k){var s=FS[k],t=s[1],hint=t==='sel'?'one of: '+s[2].filter(Boolean).join(', '):t==='list'?'array of strings':t==='money'?'number, no $':t==='date'?'YYYY-MM-DD':t==='ringsz'?'number 1 to 13 in steps of 0.25':t==='number'?'number':t==='url'?'URL':'text';return '"'+k+'": '+hint+' ('+s[0]+')'});
  return 'Read the attached jewelry listing screenshots and output ONLY a JSON object with these keys. Omit any key you cannot find. No commentary.\n'+lines.join('\n');
 }
 function quickHTML(){
@@ -792,7 +815,7 @@ h+='<details data-sec="piece"'+dOpen('piece',true)+'><summary>Piece</summary><di
   +'<details data-sec="listing"'+dOpen('listing',false)+'><summary>Listing Helper</summary>'+listingBlock(it)+'<div class="f"><h4 class="sub">Pricing</h4>'+ORDER_PRICE.map(function(k){return fieldHTML(k,k==='shipEstimate'?pr:it[k])}).join('')+'</div></details>'
   +'<div class="f"><h4 class="sub">Sold Details</h4>'+sec(ORDER_SOLD)+'</div></details></details>';
   h+='<details data-sec="summary"'+dOpen('summary',false)+'><summary>Summary</summary><table style="width:100%;font-size:.88rem;border-collapse:collapse"><tbody id="sumtb"></tbody></table></details>';
- h+='<div id="editbar" class="bar" style="margin:16px 0 0"><button type="submit" class="pri">Save</button><button type="button" data-a="cancel">Cancel</button><button type="button" class="dan" data-a="del">Delete</button></div></form><div id="floatbar" class="floatbar"><button type="submit" form="form" class="pri">Save</button><button type="button" data-a="cancel">Cancel</button><button type="button" class="dan" data-a="del">Delete</button></div>';
+ h+='<div id="editbar" class="bar" style="margin:16px 0 0;justify-content:center"><button type="submit" class="pri">Save</button><button type="button" class="dan" data-a="del">Delete</button><button type="button" data-a="cancel">Cancel</button></div></form><div id="floatbar" class="floatbar"><button type="submit" form="form" class="pri">Save</button><button type="button" data-a="cancel">Cancel</button></div>';
  return h;
 }
 function readForm(){
@@ -800,7 +823,7 @@ function readForm(){
  Object.keys(FS).forEach(function(k){
    var t=FS[k][1];if(t==='calc'||t==='pct')return;
    if(t==='check'){o[k]=!!fd.get(k);return}
-   if(k==='colorMain'){o[k]=uniqArr(fd.getAll(k).map(function(x){return capColor(x)}).filter(Boolean));return}
+   if(k==='colorMain'){var cbx=document.querySelector('#form .cdd'),csel=[];try{csel=cbx?JSON.parse(cbx.dataset.sel||'[]'):[]}catch(err){}var chk=fd.getAll(k),cord=csel.filter(function(x){return chk.indexOf(x)>-1});chk.forEach(function(x){if(cord.indexOf(x)<0)cord.push(x)});o[k]=uniqArr(cord.map(function(x){return capColor(x)}).filter(Boolean));return}
    var raw=fd.get(k);if(raw==null)return;
    if(LISTS.indexOf(k)>-1)o[k]=String(raw).split(',').map(function(x){return x.trim()}).filter(Boolean);
    else if(t==='money')o[k]=parseMoney(raw);
@@ -871,6 +894,7 @@ function openCrop(img,id,crop){
  document.getElementById('cropimg').src=img.src;document.getElementById('cropz').value=CR.z;
  cropPlace();box.scrollIntoView({block:'nearest'});
 }
+function cropModalHTML(){return '<div class="modal" data-a="backdrop"><div style="max-width:94vw;width:300px"><h3 style="margin:0 0 6px">Crop Cover</h3><div id="crop"><div id="cropv" style="max-width:260px"><img id="cropimg" alt="" draggable="false"></div><input type="range" id="cropz" min="1" max="4" step="0.01" value="1" aria-label="Zoom"><p class="meta">Drag to pan. Use the slider (or pinch) to zoom. The square is your thumbnail.</p><div class="bar" style="justify-content:center;margin:12px 0 0"><button type="button" class="pri" data-a="cvok">Use crop</button><button type="button" data-a="cvcancel">Cancel</button></div></div></div></div>'}
 function cropZoom(z){
  if(!CR)return;var V=cropV().clientWidth,o=CR.s0*CR.z,cx=(V/2-CR.x)/o,cy=(V/2-CR.y)/o;
  CR.z=z;var n=CR.s0*z;CR.x=V/2-cx*n;CR.y=V/2-cy*n;cropPlace();document.getElementById('cropz').value=z;
@@ -878,7 +902,7 @@ function cropZoom(z){
 function cropApply(){
  if(!CR)return;var V=cropV().clientWidth;
  var id=CR.id,l=CR.x/V,t=CR.y/V,w=CR.img.width*CR.s0*CR.z/V,h=CR.img.height*CR.s0*CR.z/V;
- CR=null;
+ CR=null;document.getElementById('modal').innerHTML='';
  syncForm();editing.cover={id:id,l:l,t:t,w:w,h:h};renderMain();
 }
 
@@ -1139,7 +1163,6 @@ function backupBanner(){
  if(days<=7){b.hidden=true;b.innerHTML=''}
  else{b.innerHTML='<span>Last JSON backup: '+agoText(lastExport)+'.</span><button data-a="backupnow">Backup Now</button>';b.hidden=false}
  var u=document.getElementById('upd');
- b.style.top='calc(env(safe-area-inset-top,0px) + '+((u&&!u.hidden)?u.offsetHeight:0)+'px)';
  if(missingData&&!restoreShown){restoreShown=true;setTimeout(function(){document.getElementById('modal').innerHTML=restoreHTML(true)},0)}
  return '';
 }
@@ -1269,7 +1292,7 @@ document.addEventListener('click',function(e){
   case 'gadd':galKind=d.kind;document.getElementById('gfile').click();break;
   case 'rlopen':M.innerHTML=recordSearchHTML(d.kind,d.id);break;
   case 'rlopensel':var rlSel=Object.keys(galSel[d.kind]).filter(function(k){return galSel[d.kind][k]});if(!rlSel.length)break;M.innerHTML=recordSearchHTML(d.kind,rlSel.join(','));break;
-  case 'rlpick':var rlIt=items.filter(function(x){return String(x.id)===String(d.rid)})[0];if(!rlIt)break;var rlImgs=String(d.img).split(',');if(d.kind==='covers')rlIt.cover={id:rlImgs[0],l:null,t:null,w:null,h:null};else if(d.kind==='comps')rlIt.comps=uniqArr((rlIt.comps||[]).concat(rlImgs));else rlIt.refs=uniqArr((rlIt.refs||[]).concat(rlImgs));rlImgs.forEach(function(x){delete galSel[d.kind][x]});saveItems();M.innerHTML='';editing=JSON.parse(JSON.stringify(rlIt));backTo='manage';var rlJump=d.kind==='covers'?'secCover':d.kind==='comps'?'secComps':'secRefs';show('edit');setTimeout(function(){var jel=document.getElementById(rlJump);if(jel)window.scrollTo(0,jel.getBoundingClientRect().top+window.pageYOffset-90)},80);break;
+  case 'rlpick':var rlIt=items.filter(function(x){return String(x.id)===String(d.rid)})[0];if(!rlIt)break;var rlImgs=String(d.img).split(',');if(d.kind==='covers')rlIt.cover={id:rlImgs[0],l:null,t:null,w:null,h:null};else if(d.kind==='comps')rlIt.comps=uniqArr((rlIt.comps||[]).concat(rlImgs));else rlIt.refs=uniqArr((rlIt.refs||[]).concat(rlImgs));if(d.kind!=='covers'&&d.kind!=='comps'&&!rlIt.cover&&rlIt.refs.length)rlIt.cover={id:rlIt.refs[0],l:null,t:null,w:null,h:null};rlImgs.forEach(function(x){delete galSel[d.kind][x]});saveItems();M.innerHTML='';editing=JSON.parse(JSON.stringify(rlIt));backTo='manage';var rlJump=d.kind==='covers'?'secCover':d.kind==='comps'?'secComps':'secRefs';show('edit');setTimeout(function(){var jel=document.getElementById(rlJump);if(jel)window.scrollTo(0,jel.getBoundingClientRect().top+window.pageYOffset-90)},80);break;
   case 'gview':M.innerHTML=previewHTML(gal.imgs[d.id],d.kind,d.id);break;
   case 'gtog':galSel[d.kind][d.id]=!galSel[d.kind][d.id];renderMain();break;
   case 'gall':gal[d.kind].forEach(function(id){galSel[d.kind][id]=true});renderMain();break;
@@ -1285,7 +1308,7 @@ document.addEventListener('click',function(e){
   case 'galpick':M.innerHTML=galPickHTML('galuse');break;
   case 'galref':M.innerHTML=galPickHTML('galaddref');break;
   case 'galuse':M.innerHTML='';syncForm();editing.cover={id:d.id,l:null,t:null,w:null,h:null};renderMain();break;
-  case 'galaddref':M.innerHTML='';syncForm();if((editing.refs||[]).indexOf(d.id)<0)editing.refs=(editing.refs||[]).concat([d.id]);renderMain();break;
+  case 'galaddref':M.innerHTML='';syncForm();if((editing.refs||[]).indexOf(d.id)<0)editing.refs=(editing.refs||[]).concat([d.id]);firstRefCover();renderMain();break;
   case 'previewcover':if(editing.cover&&gal.imgs[editing.cover.id])M.innerHTML=previewHTML(gal.imgs[editing.cover.id]);break;
   case 'wadd':if(wishPending&&wish.every(function(w){return w.img!==wishPending}))delete gal.imgs[wishPending];wishPending=null;CR=null;M.innerHTML=wishAddHTML();break;
   case 'wsave':var wcat=document.getElementById('wcat').value;var wlk=(document.getElementById('wlink').value||'').trim();if(!wishPending){alert('Choose a photo.');break}if(!wlk){alert('Enter the link.');break}var href=/^https?:\/\//i.test(wlk)?wlk:'https://'+wlk;var cf=wishCropFrac();wish.push({id:uid(),img:wishPending,cover:{id:wishPending,l:cf.l,t:cf.t,w:cf.w,h:cf.h},category:wcat,link:href});wishPending=null;CR=null;saveWish();saveGallery();M.innerHTML='';renderMain();break;
@@ -1296,12 +1319,14 @@ document.addEventListener('click',function(e){
   case 'wdel':if(!confirm('Remove this from the wishlist?'))break;var wd=wish.filter(function(x){return x.id===d.id})[0];wish=wish.filter(function(x){return x.id!==d.id});if(wd&&!isUsed(wd.img)){gal.refs=gal.refs.filter(function(x){return x!==wd.img});gal.covers=gal.covers.filter(function(x){return x!==wd.img});delete gal.imgs[wd.img]}saveWish();saveGallery();renderMain();break;
   case 'covadd':document.getElementById('cvfile').click();break;
   case 'refadd':document.getElementById('reffile').click();break;
+  case 'showcomp':syncForm();compShownFor=editing.id;renderMain();setTimeout(function(){var sc=document.getElementById('secComps');if(sc)window.scrollTo(0,sc.getBoundingClientRect().top+window.pageYOffset-90)},50);break;
   case 'rmref':syncForm();editing.refs.splice(Number(d.i),1);renderMain();break;
   case 'pickref':syncForm();editing.cover={id:editing.refs[Number(d.i)],l:null,t:null,w:null,h:null};renderMain();break;
-  case 'cvadj':var cv=editing.cover;if(cv&&gal.imgs[cv.id]){var im=new Image();im.onload=function(){openCrop(im,cv.id,cv.w!=null?cv:null)};im.src=gal.imgs[cv.id]}break;
+  case 'cvadj':var cv=editing.cover;if(cv&&gal.imgs[cv.id]){var im=new Image();im.onload=function(){M.innerHTML=cropModalHTML();openCrop(im,cv.id,cv.w!=null?cv:null)};im.src=gal.imgs[cv.id]}break;
   case 'cvok':cropApply();break;
-  case 'cvcancel':CR=null;document.getElementById('crop').hidden=true;break;
+  case 'cvcancel':CR=null;M.innerHTML='';break;
   case 'cvrm':syncForm();editing.cover=null;renderMain();break;
+  case 'fclr':var fx=b.parentNode.querySelector('input,select,textarea');if(fx){if(fx.tagName==='SELECT'){fx.value=[].some.call(fx.options,function(o){return o.value===''})?'':'0'}else fx.value='';var fsg=b.parentNode.parentNode.querySelector('.sg');if(fsg)fsg.hidden=true}break;
   case 'cancel':var cGo=backTo;backTo='box';show(cGo);break;
   case 'dup':var c=syncForm();['channel','sellPlatform','dateListed','dateSold','feeFinal','shipActual','payout','linkSale','wornLast'].forEach(function(k){delete c[k]});delete c.wornCount;c.status='Waiting';c.id=nextId();c._new=1;c.title=(c.title||'')+(c.title?' (copy)':'');editing=c;renderMain();window.scrollTo(0,0);break;
   case 'del':if(confirm('Delete this piece?')){items=items.filter(function(i){return i.id!==editing.id});saveItems();show('box')}break;
@@ -1332,7 +1357,7 @@ document.addEventListener('change',function(e){
    readRaw(cf).then(function(url){
      var id=galAdd('covers',url);saveGallery();
      syncForm();editing.cover={id:id,l:null,t:null,w:null,h:null};renderMain();
-     var img=new Image();img.onload=function(){openCrop(img,id,null)};img.src=url;
+     var img=new Image();img.onload=function(){document.getElementById('modal').innerHTML=cropModalHTML();openCrop(img,id,null)};img.src=url;
    },function(){});
    return;
  }
@@ -1345,7 +1370,7 @@ document.addEventListener('change',function(e){
  }
  if(t.id==='reffile'&&t.files.length){
    var files=Array.prototype.slice.call(t.files);t.value='';
-   Promise.all(files.map(readRaw)).then(function(urls){syncForm();urls.forEach(function(u){var id=galAdd('refs',u);editing.refs=(editing.refs||[]).concat([id])});saveGallery();renderMain()},function(){});
+   Promise.all(files.map(readRaw)).then(function(urls){syncForm();urls.forEach(function(u){var id=galAdd('refs',u);editing.refs=(editing.refs||[]).concat([id])});firstRefCover();saveGallery();renderMain()},function(){});
    return;
  }
  if(t.dataset&&t.dataset.money){t.value=fmtMoney(parseMoney(t.value));return}
@@ -1354,7 +1379,7 @@ var kwTimer=null;
 document.addEventListener('change',function(e){
  var t=e.target;if(!t||t.name!=='colorMain'||!t.closest)return;
  var box=t.closest('.cdd');if(!box)return;
- var vals=Array.from(box.querySelectorAll('input:checked')).map(function(x){return x.value});
+ var sel=[];try{sel=JSON.parse(box.dataset.sel||'[]')}catch(err){}var cv=t.value,ci=sel.indexOf(cv);if(t.checked&&ci<0)sel.push(cv);if(!t.checked&&ci>-1)sel.splice(ci,1);box.dataset.sel=JSON.stringify(sel);var vals=sel;
  var tx=box.querySelector('.cddTxt');if(tx)tx.textContent=vals.join(', ')||'Choose colors';
 });
 document.addEventListener('change',function(e){
@@ -1375,7 +1400,7 @@ document.addEventListener('toggle',function(e){if(e.target.classList&&e.target.c
 document.addEventListener('pointerdown',function(e){
  var v=e.target.closest('#cropv');
  if(v&&CR){CR.p[e.pointerId]={x:e.clientX,y:e.clientY};v.setPointerCapture(e.pointerId);return}
- if(!ro&&!wro)return;var t=e.target.closest('.ro .tile');if(!t)return;dragEl=t;t.classList.add('drag');
+ if(!ro&&!wro)return;var t=e.target.closest('.ro .tile');if(!t)return;dragEl=t;t.classList.add('drag');makeGhost(t,e);captureBase(t);
 });
 document.addEventListener('pointermove',function(e){
  if(CR&&CR.p[e.pointerId]){
@@ -1386,23 +1411,96 @@ document.addEventListener('pointermove',function(e){
    return;
  }
  if(!dragEl)return;
- var t=document.elementsFromPoint(e.clientX,e.clientY).filter(function(n){return n.classList&&n.classList.contains('tile')&&n!==dragEl})[0];
+ var gh=document.getElementById('dragGhost');if(gh){gh.style.left=(e.clientX-ghostOff.x)+'px';gh.style.top=(e.clientY-ghostOff.y)+'px'}
+ var t=baseTileAt(e.clientX,e.clientY);
  if(overEl&&overEl!==t)overEl.classList.remove('over');
  overEl=t||null;if(overEl)overEl.classList.add('over');
+ applyPreview();
 });
+var ghostOff={x:0,y:0},dragBase=null;
+function captureBase(t){
+ var parent=t.parentElement;var b={id:t.dataset.id,ids:[],rects:{},els:{},parent:parent};
+ Array.from(parent.children).forEach(function(el){if(!el.dataset||!el.dataset.id)return;var id=el.dataset.id,r=el.getBoundingClientRect();b.ids.push(id);b.rects[id]={l:r.left,t:r.top,r:r.right,b:r.bottom};b.els[id]=el});
+ dragBase=b;
+}
+function baseTileAt(x,y){
+ if(!dragBase)return null;
+ for(var i=0;i<dragBase.ids.length;i++){var id=dragBase.ids[i];if(id===dragBase.id)continue;var r=dragBase.rects[id];if(x>=r.l&&x<=r.r&&y>=r.t&&y<=r.b)return dragBase.els[id]}
+ return null;
+}
+function previewIds(tid){
+ var from=dragBase.id,fi=dragBase.ids.indexOf(from),ti0=dragBase.ids.indexOf(tid);
+ var ids=dragBase.ids.filter(function(x){return x!==from});var ti=ids.indexOf(tid);
+ if(ti<0||ti0<0)return dragBase.ids.slice();
+ ids.splice(fi<ti0?ti+1:ti,0,from);return ids;
+}
+function applyPreview(){
+ if(!dragBase)return;
+ var tid=overEl?overEl.dataset.id:null;
+ var want=tid!=null?previewIds(tid):dragBase.ids.slice();
+ var parent=dragBase.parent;
+ var kids=Array.from(parent.children).filter(function(el){return el.dataset&&el.dataset.id});
+ if(kids.map(function(el){return el.dataset.id}).join('|')===want.join('|'))return;
+ var before={};kids.forEach(function(el){var r=el.getBoundingClientRect();before[el.dataset.id]={l:r.left,t:r.top}});
+ want.forEach(function(id){parent.appendChild(dragBase.els[id])});
+ kids.forEach(function(el){var fr=before[el.dataset.id];if(!fr)return;var nr=el.getBoundingClientRect();var dx=fr.l-nr.left,dy=fr.t-nr.top;if(!dx&&!dy)return;el.style.transition='none';el.style.transform='translate('+dx+'px,'+dy+'px)';el.getBoundingClientRect();el.style.transition='transform .3s ease';el.style.transform=''});
+}
+function makeGhost(t,e){
+ var r=t.getBoundingClientRect();var g=t.cloneNode(true);g.id='dragGhost';g.className='tile';
+ g.style.cssText='position:fixed;left:'+r.left+'px;top:'+r.top+'px;width:'+r.width+'px;height:'+r.height+'px;margin:0;opacity:.25;pointer-events:none;z-index:999;transition:none;outline:none;transform:none;box-shadow:0 6px 18px rgba(0,0,0,.35)';
+ document.body.appendChild(g);
+ ghostOff={x:e.clientX-r.left,y:e.clientY-r.top};
+ t.style.opacity='0';
+}
+function tileRects(){var m={};document.querySelectorAll('.tile[data-id]').forEach(function(el){var r=el.getBoundingClientRect();m[el.dataset.id]={l:r.left,t:r.top}});return m}
+function playFlip(fromRects,dropId,gr){
+ requestAnimationFrame(function(){
+   document.querySelectorAll('.tile[data-id]').forEach(function(el){
+     var id=el.dataset.id,nr=el.getBoundingClientRect();
+     if(id===String(dropId)){
+       if(!gr)return;
+       var dx=gr.left-nr.left,dy=gr.top-nr.top;
+       el.style.transition='none';el.style.transform='translate('+dx+'px,'+dy+'px)';el.style.opacity='.25';
+       el.getBoundingClientRect();
+       el.style.transition='transform .35s ease, opacity .35s ease';el.style.transform='';el.style.opacity='1';
+       return;
+     }
+     var fr=fromRects[id];if(!fr)return;
+     var ddx=fr.l-nr.left,ddy=fr.t-nr.top;if(!ddx&&!ddy)return;
+     el.style.transition='none';el.style.transform='translate('+ddx+'px,'+ddy+'px)';
+     el.getBoundingClientRect();
+     el.style.transition='transform .35s ease';el.style.transform='';
+   });
+   var gh=document.getElementById('dragGhost');if(gh)gh.remove();
+ });
+}
 function endDrag(e){
  if(CR&&CR.p)delete CR.p[e.pointerId];
  if(!dragEl)return;
- if(wro){var wf=dragEl.dataset.id,wt=overEl?overEl.dataset.id:null;dragEl=null;overEl=null;if(wt!=null&&wt!==wf){var wfi=wish.findIndex(function(w){return String(w.id)===wf}),wti0=wish.findIndex(function(w){return String(w.id)===wt}),down=wfi<wti0,wmv=wish.splice(wfi,1)[0],wti=wish.findIndex(function(w){return String(w.id)===wt});wish.splice(down?wti+1:wti,0,wmv);saveWish()}render();return}
- var from=Number(dragEl.dataset.id),to=overEl?Number(overEl.dataset.id):null;
- dragEl=null;overEl=null;
- if(to!=null){
-   if(order.indexOf(from)<0)order=sorted(vis()).map(function(i){return i.id});
-   var fi=order.indexOf(from),ti=order.indexOf(to),o=order.filter(function(x){return x!==from});
-   o.splice(o.indexOf(to)<0?o.length:(fi<ti?o.indexOf(to)+1:o.indexOf(to)),0,from);
-   order=o;saveOrder();
+ var gh=document.getElementById('dragGhost');var gr=gh?gh.getBoundingClientRect():null;
+ var dragged=dragEl;dragged.classList.remove('drag');
+ if(overEl)overEl.classList.remove('over');
+ var dropId=null;
+ if(wro){
+   var wf=dragged.dataset.id,wt=overEl?overEl.dataset.id:null;
+   if(wt!=null&&wt!==wf){
+     var wfi=wish.findIndex(function(w){return String(w.id)===wf}),wti0=wish.findIndex(function(w){return String(w.id)===wt}),down=wfi<wti0,wmv=wish.splice(wfi,1)[0],wti=wish.findIndex(function(w){return String(w.id)===wt});
+     wish.splice(down?wti+1:wti,0,wmv);saveWish();dropId=wf;
+   }
+ }else{
+   var from=Number(dragged.dataset.id),to=overEl?Number(overEl.dataset.id):null;
+   if(to!=null){
+     if(order.indexOf(from)<0)order=sorted(vis()).map(function(i){return i.id});
+     var fi=order.indexOf(from),ti=order.indexOf(to),o=order.filter(function(x){return x!==from});
+     o.splice(o.indexOf(to)<0?o.length:(fi<ti?o.indexOf(to)+1:o.indexOf(to)),0,from);
+     order=o;saveOrder();dropId=String(from);
+   }
  }
- render();
+ dragEl=null;overEl=null;dragBase=null;
+ // The grid already shows the result from the live preview, so no full rebuild (that caused the flicker).
+ dragged.style.opacity='';
+ if(dropId!=null)playFlip({},dropId,gr);
+ else if(gh)gh.remove();
 }
 var overEl=null;
 document.addEventListener('pointerup',endDrag);
