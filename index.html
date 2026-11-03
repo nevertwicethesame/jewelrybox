@@ -172,10 +172,10 @@ footer#ver{text-align:center;padding:24px 14px calc(36px + env(safe-area-inset-b
 <input type="file" id="gfile" accept="image/*" multiple hidden>
 <script>
 var K='ntts_items_v2',OK='ntts_order_v1',PER=25,MAX_UPLOAD=300*1024;
-var APP_VERSION='1.6.17',APP_DATE='2026-11-03 · 11:58 AM ET',UPDATE_URL='';
+var APP_VERSION='1.6.18',APP_DATE='2026-11-03 · 12:33 PM ET',UPDATE_URL='';
 var EMOJI={ring:'💍',earrings:'✨',necklace:'📿',bracelet:'⭕',watch:'⌚',other:'💎'};
 var CATS=['Ring','Earrings','Necklace','Bracelet','Watch','Other'];
-var STAT=['Waiting','Private Collection','To List','Listed','Sold'];
+var STAT=['Waiting','Benched','Private Collection','To List','Listed','Sold'];
 var PERIODS=['Ancient','Antique','Mid-Century','Vintage','New'];
 var FINGERS=['Index finger','Middle finger','Ring finger','Pinky'];
 var COLOR_ORDER=['Red','Pink','Orange','Brown','Yellow','Green','Light blue','Blue','Purple','Black','Gray','White','Multi'];
@@ -253,7 +253,8 @@ var seed=[
 ];
 
 /* ---------- state ---------- */
-var items=[],order=[],theme='ruby',hideSold=true,view='box',page=1,editing=null,fsel={category:['Ring']},rng={},sortBy='new',cols=3,ctab='Piece',vmode='thumbs',q='',ro=false,dragEl=null,overEl=null,ioOpen=false,lastJ=null,CR=null,DB=null,MEM={},shipTouched=false,PS={eb:13,ig:0},showAllF={},gal={imgs:{},refs:[],covers:[],comps:[]},galSel={refs:{},covers:{},comps:{}},galKind='refs',swS=null;
+var DEFAULT_STATUS=['Waiting','Benched','Private Collection'];
+var items=[],order=[],theme='ruby',hideSold=true,view='box',page=1,editing=null,fsel={category:['Ring'],status:DEFAULT_STATUS.slice()},rng={},sortBy='new',cols=3,ctab='Piece',vmode='thumbs',q='',ro=false,dragEl=null,overEl=null,ioOpen=false,lastJ=null,CR=null,DB=null,MEM={},shipTouched=false,PS={eb:13,ig:0},showAllF={},gal={imgs:{},refs:[],covers:[],comps:[]},galSel={refs:{},covers:{},comps:{}},galKind='refs',swS=null;
 
 /* ---------- storage ---------- */
 function openDB(){return new Promise(function(res,rej){if(!window.indexedDB)return rej('no indexedDB');var r=indexedDB.open('ntts',1);r.onupgradeneeded=function(){r.result.createObjectStore('kv')};r.onsuccess=function(){res(r.result)};r.onerror=function(){rej(r.error)}})}
@@ -520,7 +521,6 @@ function pass(i){
  if(secretCfg.on&&isHidden(i))return false;
  if(!matchQ(i))return false;
  var pickedStatus=fsel.status&&fsel.status.length;
- if(hideSold&&!pickedStatus&&!(i.status==='Waiting'||i.status==='Private Collection'))return false;
  for(var n=0;n<FACETS.length;n++){
    var F=FACETS[n],s=fsel[F.k];
    if(!s||!s.length)continue;
@@ -559,7 +559,7 @@ function rangeBlock(k,l,nums,fmt){
 function filtersHTML(){
  var h='<h3 style="margin:0 0 8px">Filters &amp; Sort</h3>'+(anyFilter()?'<button data-a="clear" style="width:100%;margin:0 0 10px">Clear all filters</button>':'')
   +'<label>Sort by<select data-a="sort" id="sort">'+SORTS.map(function(o){return '<option value="'+esc(o[0])+'"'+(o[0]===sortBy?' selected':'')+'>'+esc(o[1])+'</option>'}).join('')+'</select></label>'
-  +'<label class="swl"><input type="checkbox" data-a="hidesold"'+(hideSold?' checked':'')+'> Show Waiting and PC Only</label>';
+  ;
  FACETS.forEach(function(F){
    var vals=facetVals(F);
    if(vals.length){
@@ -646,8 +646,9 @@ function drawer(o){document.getElementById('drawer').classList.toggle('open',o);
 function thumb(i){var sold=i.status==='Sold',wait=i.status==='Waiting';
  var veil='<span aria-hidden="true" style="position:absolute;inset:0;background:rgba(0,0,0,.4);pointer-events:none"></span>';
  var soldBadge='<span aria-hidden="true" style="position:absolute;right:6px;bottom:6px;width:24px;height:24px;border-radius:50%;background:rgba(0,0,0,.35);display:flex;align-items:center;justify-content:center;pointer-events:none;font-size:13px;line-height:1">💔</span>';
+ var benchBadge='<span aria-hidden="true" style="position:absolute;right:6px;bottom:6px;width:24px;height:24px;border-radius:50%;background:rgba(0,0,0,.35);display:flex;align-items:center;justify-content:center;pointer-events:none;font-size:13px;line-height:1">🛠️</span>';
  var clock='<span aria-hidden="true" style="position:absolute;right:6px;bottom:6px;width:22px;height:22px;border-radius:50%;background:rgba(0,0,0,.35);display:flex;align-items:center;justify-content:center;pointer-events:none;opacity:.8"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span>';
- return '<div class="tile" data-a="open" data-id="'+i.id+'"'+(sold?' style="filter:grayscale(1)"':'')+'>'+(EMOJI[String(i.category).toLowerCase()]||'💎')+coverImg(i.cover)+(sold?veil+soldBadge:'')+(wait?clock:'')+'</div>'}
+ return '<div class="tile" data-a="open" data-id="'+i.id+'"'+(sold?' style="filter:grayscale(1)"':'')+'>'+(EMOJI[String(i.category).toLowerCase()]||'💎')+coverImg(i.cover)+(sold?veil+soldBadge:'')+(wait?clock:'')+(i.status==='Benched'?benchBadge:'')+'</div>'}
 function countLine(n){return '<p class="meta" style="text-align:center;margin:16px 0 0">'+n+' piece'+(n===1?'':'s')+(anyFilter()?' (filtered)':'')+'</p>'}
 var TC={
  Piece:[['Category',function(i){return esc(i.category)}],['Period',function(i){return esc(i.period)}],['Era/Movement',function(i){return esc(i.era||'—')}],['Year',function(i){return esc(i.yearMade==null?'—':i.yearMade)}],['Country of Origin',function(i){return esc(i.country||'—')}],['Stones',function(i){return esc((i.stone||[]).join(', ')||'—')}],['Metals',function(i){return esc((i.metal||[]).join(', ')||'—')}],['Hallmarks',function(i){return esc(i.hallmark||'—')}],['Measurements',function(i){return esc(i.measurement||'—')}],['Weight',function(i){return esc(i.weight||'—')}],['Ring Size',function(i){return esc(i.ringSize==null||i.ringSize===''?'—':i.ringSize)}],['Cut',function(i){return esc((i.cut||[]).join(', ')||'—')}],['Color',function(i){return colorsHTML(i.colorMain)}],['Motifs',function(i){return esc((i.motif||[]).join(', ')||'—')}],['Notes',function(i){return esc(i.notes||'—')}]],
@@ -670,8 +671,9 @@ function renderTable(){
 function renderBox(){
  if(vmode==='table')return renderTable();
  var list=ro?sorted(vis()):sorted(items.filter(pass));
- var waitL=ro?[]:list.filter(function(i){return i.status==='Waiting'});
- var mainL=ro?list:list.filter(function(i){return i.status!=='Waiting'});
+ var isTop=function(i){return i.status==='Waiting'||i.status==='Benched'};
+ var waitL=ro?[]:list.filter(isTop);
+ var mainL=ro?list:list.filter(function(i){return !isTop(i)});
  var waitGrid=waitL.length?'<div class="grid" style="grid-template-columns:repeat('+cols+',1fr)">'+waitL.map(thumb).join('')+'</div><hr style="border:0;border-top:1px solid var(--line);margin:16px 0">':'';
  return (ro?'<div class="bar"><span class="meta">Drag a photo onto another to move it. Order saves automatically.</span><button class="pri" data-a="ro">Done</button></div>':'')
   +'<div class="box">'+waitGrid+'<div class="grid'+(ro?' ro':'')+'" style="grid-template-columns:repeat('+cols+',1fr)">'+mainL.map(thumb).join('')+'</div></div>'
@@ -924,7 +926,7 @@ function wearMany(ids){
  saveItems();return n;
 }
 var jotdSel=null,jotdMsg='',jotdLock={ring1:false,ring2:false,earring:false,necklace:false};
-function jotdPool(cat){return vis().filter(function(i){return i.category===cat&&(i.status==='Waiting'||i.status==='Private Collection')})}
+function jotdPool(cat){return vis().filter(function(i){return i.category===cat&&i.status!=='Waiting'&&i.status!=='Benched'&&i.status!=='To List'&&i.status!=='Listed'&&i.status!=='Sold'})}
 function jotdPickOther(pool,cur){var c=cur?pool.filter(function(i){return i.id!==cur.id}):pool;if(!c.length)c=pool;return c.length?pickJ(c):null}
 function jotdRing2Pick(r1){
  if(!r1)return null;var f1=finger(r1);
@@ -1229,7 +1231,7 @@ function updateStorage(){
 function deleteAll(){
  var t=prompt('This erases every piece, photo, and setting on this device. Type DELETE to confirm.');
  if(t!=='DELETE')return;
- items=[];gal={imgs:{},refs:[],covers:[],comps:[]};galSel={refs:{},covers:{},comps:{}};secretCfg={on:false,hash:'',threshold:null};secretUnlocked=false;wish=[];order=[];theme='ruby';hideSold=true;fsel={};rng={};q='';document.getElementById('q').value='';sortBy='new';ro=false;view='box';
+ items=[];gal={imgs:{},refs:[],covers:[],comps:[]};galSel={refs:{},covers:{},comps:{}};secretCfg={on:false,hash:'',threshold:null};secretUnlocked=false;wish=[];order=[];theme='ruby';hideSold=true;fsel={category:['Ring'],status:DEFAULT_STATUS.slice()};rng={};q='';document.getElementById('q').value='';sortBy='new';ro=false;view='box';
  kclear().then(function(){return Promise.all([saveItems(),saveOrder(),saveSettings(),saveGallery()])}).then(function(){applyTheme();render();alert('Everything has been reset.')});
 }
 
