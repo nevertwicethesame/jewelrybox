@@ -119,7 +119,7 @@ tr.grp td{background:var(--bg);font-weight:bold;letter-spacing:.03em;color:var(-
 .ringtbl{width:100%;table-layout:fixed}
 .ringtbl th,.ringtbl td{min-width:0;max-width:none;white-space:normal;overflow-wrap:normal;word-break:normal;text-align:center;padding:6px 4px}
 .ringtbl th.us,.ringtbl td.us{font-weight:bold}
-.upd{position:relative;left:0;right:0;z-index:50;background:var(--acc);color:#fff;padding:calc(10px + env(safe-area-inset-top,0px)) 14px 10px;display:flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap;font-size:.9rem}
+.upd{position:relative;left:0;right:0;z-index:20;background:var(--acc);color:#fff;padding:calc(10px + env(safe-area-inset-top,0px)) 14px 10px;display:flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap;font-size:.9rem}
 .upd[hidden]{display:none}
 .upd button{border-color:#fff;background:transparent;color:#fff;min-height:36px;padding:6px 12px}
 .upd button.pri{background:#fff;color:var(--acc)}
@@ -172,7 +172,7 @@ footer#ver{text-align:center;padding:24px 14px calc(36px + env(safe-area-inset-b
 <input type="file" id="gfile" accept="image/*" multiple hidden>
 <script>
 var K='ntts_items_v2',OK='ntts_order_v1',PER=25,MAX_UPLOAD=300*1024;
-var APP_VERSION='1.6.19',APP_DATE='2026-11-03 · 4:08 PM ET',UPDATE_URL='';
+var APP_VERSION='1.6.20',APP_DATE='2026-11-03 · 5:35 PM ET',UPDATE_URL='';
 var EMOJI={ring:'💍',earrings:'✨',necklace:'📿',bracelet:'⭕',watch:'⌚',other:'💎'};
 var CATS=['Ring','Earrings','Necklace','Bracelet','Watch','Other'];
 var STAT=['Waiting','Benched','Private Collection','To List','Listed','Sold'];
@@ -474,7 +474,7 @@ function avail(kind){return gal[kind].filter(function(id){return !isUsed(id)})}
 function wishImgIds(){return wish.map(function(w){return w.img})}
 function wishGalHTML(){
  return '<details data-gsec="wish"'+(galOpen.wish?' open':'')+'><summary>Wishlist Items ('+wish.length+')</summary>'
-  +(wish.length?'<div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(110px,1fr))">'+wish.slice().reverse().map(function(w){return '<div><div style="position:relative;aspect-ratio:1;border-radius:8px;overflow:hidden;background:var(--acc)">'+coverImg(wishCover(w))+'</div></div>'}).join('')+'</div>':'<p class="meta">No wishlist items yet.</p>')
+  +(!galOpen.wish&&wish.length?'<p class="meta">Open to see '+wish.length+' wishlist item'+(wish.length===1?'':'s')+'.</p>':wish.length?'<div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(110px,1fr))">'+wish.slice().reverse().map(function(w){return '<div><div style="position:relative;aspect-ratio:1;border-radius:8px;overflow:hidden;background:var(--acc)">'+coverImg(wishCover(w))+'</div></div>'}).join('')+'</div>':'<p class="meta">No wishlist items yet.</p>')
   +'<p class="meta">Add or remove wishlist items on the Wishlist page.</p></details>';
 }
 function imgBytes(u){if(!u)return 0;var b=u.split(',')[1]||'';return Math.floor(b.length*3/4)-(b.slice(-2)==='=='?2:b.slice(-1)==='='?1:0)}
@@ -482,7 +482,7 @@ function gallerySection(kind,label){
  var all=(kind==='refs'?gal.refs.filter(function(id){return wishImgIds().indexOf(id)<0}):gal[kind]).slice().reverse(),list=galUnl[kind]?all.filter(function(id){return !isUsed(id)}):all,sel=galSel[kind],n=Object.keys(sel).filter(function(k){return sel[k]}).length;
  return '<details data-gsec="'+kind+'"'+(galOpen[kind]?' open':'')+'><summary>'+label+' ('+all.length+')</summary>'
   +'<div class="bar"><button data-a="gadd" data-kind="'+kind+'">+ Add images</button><button data-a="gunl" data-kind="'+kind+'"'+(galUnl[kind]?' class="on"':'')+'>Unlinked only</button><button data-a="gall" data-kind="'+kind+'">Select all</button><button data-a="gnone" data-kind="'+kind+'">Clear selection</button>'+(kind==='refs'||kind==='comps'?'<button class="pri" data-a="rlopensel" data-kind="'+kind+'"'+(n?'':' disabled')+'>🔗 Link selected ('+n+')</button>':'')+'<button class="dan" data-a="gdelsel" data-kind="'+kind+'"'+(n?'':' disabled')+'>Delete selected ('+n+')</button></div>'
-  +(list.length?'<div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(110px,1fr))">'+list.map(function(id){var on=!!sel[id],src=gal.imgs[id];return '<div style="position:relative"><img src="'+esc(src)+'" alt="" data-a="gview" data-kind="'+kind+'" data-id="'+id+'" style="width:100%;aspect-ratio:1;object-fit:cover;border-radius:8px;display:block;cursor:zoom-in;'+(on?'outline:3px solid var(--acc);':'')+'"><button data-a="gtog" data-kind="'+kind+'" data-id="'+id+'" style="position:absolute;top:4px;left:4px;padding:2px 7px;min-height:0">'+(on?'☑':'☐')+'</button><button data-a="gdel" data-kind="'+kind+'" data-id="'+id+'" style="position:absolute;top:4px;right:4px;padding:2px 7px;min-height:0">✕</button><span class="meta" style="position:absolute;left:4px;bottom:4px;background:rgba(0,0,0,.6);color:#fff;padding:1px 4px;border-radius:4px;font-size:.65rem">'+sizeOf(src)+'</span></div>'}).join('')+'</div>':'<p class="meta">No images yet.</p>')
+  +(!galOpen[kind]&&list.length?'<p class="meta">Open to see '+list.length+' image'+(list.length===1?'':'s')+'.</p>':list.length?'<div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(110px,1fr))">'+list.map(function(id){var on=!!sel[id],src=gal.imgs[id];return '<div style="position:relative"><img src="'+esc(src)+'" alt="" data-a="gview" data-kind="'+kind+'" data-id="'+id+'" style="width:100%;aspect-ratio:1;object-fit:cover;border-radius:8px;display:block;cursor:zoom-in;'+(on?'outline:3px solid var(--acc);':'')+'"><button data-a="gtog" data-kind="'+kind+'" data-id="'+id+'" style="position:absolute;top:4px;left:4px;padding:2px 7px;min-height:0">'+(on?'☑':'☐')+'</button><button data-a="gdel" data-kind="'+kind+'" data-id="'+id+'" style="position:absolute;top:4px;right:4px;padding:2px 7px;min-height:0">✕</button><span class="meta" style="position:absolute;left:4px;bottom:4px;background:rgba(0,0,0,.6);color:#fff;padding:1px 4px;border-radius:4px;font-size:.65rem">'+sizeOf(src)+'</span></div>'}).join('')+'</div>':'<p class="meta">No images yet.</p>')
   +'</details>';
 }
 function ringTableHTML(){return '<div class="tw"><table class="ringtbl"><thead><tr>'+RING_HEAD.map(function(h,n){return '<th class="'+(n===2?'us':'')+'">'+esc(h)+'</th>'}).join('')+'</tr></thead><tbody>'+RING_TXT.map(function(r){return '<tr>'+r.split(';').map(function(c,n){return '<td class="'+(n===2?'us':'')+'">'+esc(c)+'</td>'}).join('')+'</tr>'}).join('')+'</tbody></table></div>'}
@@ -591,10 +591,10 @@ function renderManage(){
  var jsonBody='<div class="bar" style="flex-direction:column;align-items:stretch;margin:0"><button data-a="import">⬆ Import JSON</button><button data-a="export">⬇ Export JSON</button></div><p class="meta">Export includes '+items.length+' piece'+(items.length===1?'':'s')+' with their details, '+imgCount+' photo'+(imgCount===1?'':'s')+' (covers and reference screenshots), '+wish.length+' wishlist item'+(wish.length===1?'':'s')+', your order, theme and settings. It saves as '+nfiles+' file'+(nfiles===1?'':'s')+'.</p>'+expPanelHTML();
  return '<h2>I/O</h2>'
   +'<h3 class="side">Data Backup</h3><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px">'+card('CSV Backup',csvBody)+card('JSON Backup',jsonBody)+'</div>'
-  +'<div style="margin-top:12px;border:1px solid var(--line);border-radius:12px;padding:12px"><h4 class="sub" style="margin:0 0 6px;text-align:left">App Stats</h4><div id="stormeter" class="meta" style="text-align:left"></div></div>'
+  +'<h3 class="side">App Stats</h3><div style="border:1px solid var(--line);border-radius:12px;padding:12px"><div id="stormeter" class="meta" style="text-align:left"></div></div>'
   +'<h3 class="side">Reset</h3><div style="border:1px solid var(--line);border-radius:12px;padding:12px"><button class="dan" data-a="delete">Delete All</button><p class="meta" style="margin:6px 0 0">Erases every piece, photo, and setting on this device. This cannot be undone.</p></div>'+'<p class="meta" style="text-align:center;margin-top:18px">This project first started on November 1, 2026.<br>Thank you for inspiring me, Koala-Chan 🐨</p>';
 }
-function renderGallery(){return '<h2>Gallery</h2><h3 class="side">Manage Images</h3>'+gallerySection('refs','Reference Screenshots')+gallerySection('comps','Comparables')+gallerySection('covers','Cover Photos')+wishGalHTML()}
+function renderGallery(){return '<h2>Gallery</h2>'+gallerySection('refs','Reference Screenshots')+gallerySection('comps','Comparables')+gallerySection('covers','Cover Photos')+wishGalHTML()}
 function gicon(n){var w=(28-(n-1)*2)/n,r='';for(var k=0;k<n;k++)r+='<rect x="'+(k*(w+2))+'" y="0" width="'+w+'" height="14" rx="2" fill="currentColor"/>';return '<svg role="img" aria-label="'+n+' across" width="28" height="14" viewBox="0 0 28 14">'+r+'</svg>'}
 function wishCover(w){return w.cover||{id:w.img,l:null,t:null,w:null,h:null}}
 function renderWishlist(){
@@ -638,7 +638,7 @@ function wishFilterHTML(){
  return '<fieldset class="facet"><legend>Type</legend><div class="cloud">'+cats.map(function(c){return '<button data-a="wtype" data-v="'+esc(c)+'"'+(wishType.indexOf(c)>-1?' class="on"':'')+'>'+esc(c)+' ('+wish.filter(function(w){return w.category===c}).length+')</button>'}).join('')+'</div></fieldset>'+(wishType.length?'<p><button data-a="wclear">Clear type filter</button></p>':'');
 }
 function renderDrawer(){
- document.getElementById('drawer').innerHTML=(view==='jotd'?'':'<div class="bar" style="margin:0 0 10px"><button data-a="nav" data-v="gallery"'+(view==='gallery'?' class="on"':'')+'>Gallery</button></div>'+viewControls())+themeHTML()+'<div class="dv"><span>✦ 💍 ✦</span></div>'+(view==='jotd'?'':view==='wishlist'?wishFilterHTML():filtersHTML());
+ document.getElementById('drawer').innerHTML='<h3 style="margin:0 0 10px">Menu</h3>'+(view==='jotd'?'':'<div style="margin:0 0 10px"><button data-a="nav" data-v="gallery" style="width:100%;justify-content:center"'+(view==='gallery'?' class="on"':'')+'>🖼️ Manage Gallery</button></div><div class="dv"><span>✦ 💍 ✦</span></div>'+viewControls())+themeHTML()+'<div class="dv"><span>✦ 💍 ✦</span></div>'+(view==='jotd'?'':view==='wishlist'?wishFilterHTML():filtersHTML());
 }
 function drawer(o){document.getElementById('drawer').classList.toggle('open',o);document.getElementById('scrim').classList.toggle('open',o)}
 
@@ -755,7 +755,7 @@ function listingTexts(g){
 function listingBlock(it){
  var LT=listingTexts(function(k){return valOf(it[k])});
  return '<div class="f"><div style="grid-column:1/-1"><div class="seg" style="justify-content:space-between"><span class="meta">Description</span><button type="button" class="link" data-a="copy" data-id="lhDesc">Copy</button></div><textarea id="lhDesc" rows="4" style="height:auto">'+esc(LT[0])+'</textarea></div>'
-  +'<div style="grid-column:1/-1"><div class="seg" style="justify-content:space-between"><span class="meta">Listing Details</span><button type="button" class="link" data-a="copy" data-id="lhList">Copy</button></div><textarea id="lhList" rows="6" style="height:auto">'+esc(LT[1])+'</textarea></div></div>';
+  +'<div style="grid-column:1/-1"><div class="seg" style="justify-content:space-between"><span class="meta">Details</span><button type="button" class="link" data-a="copy" data-id="lhList">Copy</button></div><textarea id="lhList" rows="4" style="height:auto">'+esc(LT[1])+'</textarea></div></div>';
 }
 function copyText(id,btn){
  var ta=document.getElementById(id);if(!ta)return;
@@ -820,11 +820,11 @@ function renderEdit(){
  shipTouched=false;
  var h='<div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:20px"><h2 style="margin:0">Add/Edit a Piece</h2><button type="button" data-a="quickadd">⚡ Quick add</button></div><form id="form" autocomplete="off">';
  h+='<details data-sec="images"'+dOpen('images',true)+'><summary>Images</summary>'+imagesHTML()+'</details>';
-h+='<details data-sec="piece"'+dOpen('piece',true)+'><summary>Piece</summary><div class="f">'+sec(ORDER_PIECE)+'<h4 class="sub">Stats</h4>'+sec(ORDER_STATS)+'</div></details>';
- h+='<details data-sec="transaction"'+dOpen('transaction',true)+'><summary>Transaction</summary><div class="f">'+fieldHTML('status',it.status)+'<h4 class="sub">Purchase</h4>'+sec(ORDER_PURCH)+'</div>'
-  +'<details data-sec="sale"'+dOpen('sale',false)+'><summary>Sale</summary>'
-  +'<details data-sec="listing"'+dOpen('listing',false)+'><summary>Listing Helper</summary>'+listingBlock(it)+'<div class="f"><h4 class="sub">Pricing</h4>'+ORDER_PRICE.map(function(k){return fieldHTML(k,k==='shipEstimate'?pr:it[k])}).join('')+'</div></details>'
-  +'<div class="f"><h4 class="sub">Sold Details</h4>'+sec(ORDER_SOLD)+'</div></details></details>';
+h+='<details data-sec="piece"'+dOpen('piece',true)+'><summary>Piece</summary><div class="f">'+sec(ORDER_PIECE)+'<h4 class="sub">Stats</h4>'+fieldHTML('status',it.status)+sec(ORDER_STATS)+'</div></details>';
+ h+='<details data-sec="transaction"'+dOpen('transaction',true)+'><summary>Transaction</summary><div class="f"><h4 class="sub">Purchase</h4>'+sec(ORDER_PURCH)+'</div>'
+  +'<hr style="border:0;border-top:1px solid var(--line);margin:14px 0">'
+  +'<h4 class="sub" style="display:flex;justify-content:space-between;align-items:center;gap:8px"><span>Sale</span><button type="button" data-a="listmodal" style="min-height:34px;padding:4px 10px;font-size:.85rem;font-weight:normal;white-space:nowrap">🏷️ Listing Helper</button></h4>'
+  +'<div class="f">'+sec(ORDER_SOLD)+'</div></details>';
   h+='<details data-sec="summary"'+dOpen('summary',false)+'><summary>Summary</summary><table style="width:100%;font-size:.88rem;border-collapse:collapse"><tbody id="sumtb"></tbody></table></details>';
  h+='<div id="editbar" class="bar" style="margin:16px 0 0;justify-content:center"><button type="submit" class="pri">Save</button><button type="button" class="dan" data-a="del">Delete</button><button type="button" data-a="cancel">Cancel</button></div></form><div id="floatbar" class="floatbar"><button type="submit" form="form" class="pri">Save</button><button type="button" data-a="cancel">Cancel</button></div>';
  return h;
@@ -1030,7 +1030,7 @@ function dashHTML(){
    if(/^\d{4}$/.test(py)&&num(i.cost)!=null){yrs[py]=yrs[py]||{spend:0,sales:0};yrs[py].spend+=num(i.cost)}
    if(/^\d{4}$/.test(sy)&&num(i.payout)!=null){yrs[sy]=yrs[sy]||{spend:0,sales:0};yrs[sy].sales+=num(i.payout)}
  });
- var years=Object.keys(yrs).sort(),shownYrs=dashYrsAll?years:years.slice(-3),max=1;
+ var years=Object.keys(yrs).sort(),shownYrs=years.slice(-3),max=1;
  shownYrs.forEach(function(y){max=Math.max(max,yrs[y].spend,yrs[y].sales)});
  var bars=shownYrs.map(function(y){
    var hs=Math.round(yrs[y].spend/max*100),ha=Math.round(yrs[y].sales/max*100);
@@ -1041,8 +1041,9 @@ function dashHTML(){
     +'<div title="Sales '+esc(fmtMoney(yrs[y].sales))+'" style="width:34%;max-width:34px;height:'+ha+'%;background:#3f9d5a;border-radius:4px 4px 0 0;position:relative"><span style="'+lab+'">'+compactMoney(yrs[y].sales)+'</span></div>'
     +'</div><div class="meta" style="margin-top:4px">'+y+'</div></div>';
  }).join('');
+ var allTable=dashYrsAll&&years.length?'<div class="tw" style="margin-top:8px"><table style="width:100%;font-size:.9rem;border-collapse:collapse"><thead><tr><th style="text-align:left;padding:4px 6px">Year</th><th style="text-align:right;padding:4px 6px">Spend</th><th style="text-align:right;padding:4px 6px">Sales</th></tr></thead><tbody>'+years.map(function(y){return '<tr style="border-top:1px solid var(--line)"><td style="padding:4px 6px">'+y+'</td><td style="text-align:right;padding:4px 6px">'+esc(fmtMoney(yrs[y].spend))+'</td><td style="text-align:right;padding:4px 6px">'+esc(fmtMoney(yrs[y].sales))+'</td></tr>'}).join('')+'</tbody></table></div>':'';
  var chart=years.length
-  ?'<div style="display:flex;gap:10px;align-items:stretch;padding-top:20px">'+bars+'</div>'+(years.length>3?'<button class="link" data-a="dashyrs">'+(dashYrsAll?'Show recent 3 years':'Show all time ('+years.length+' years)')+'</button>':'')
+  ?'<div style="display:flex;gap:10px;align-items:stretch;padding-top:20px">'+bars+'</div>'+(years.length>3?'<button class="link" data-a="dashyrs">'+(dashYrsAll?'Hide all time':'Show all time ('+years.length+' years)')+'</button>':'')+allTable
   :'<p class="meta">No dated purchases or sales yet.</p>';
  var sel={};
  items.forEach(function(i){var s=(i.seller||'').trim()||'Unknown';sel[s]=sel[s]||{count:0,spend:0};sel[s].count++;sel[s].spend+=num(i.cost)||0});
@@ -1283,8 +1284,8 @@ document.addEventListener('click',function(e){
   case 'open':if(!ro)popup(items.filter(function(i){return String(i.id)===d.id})[0]);break;
   case 'edit':M.innerHTML='';editing=JSON.parse(JSON.stringify(items.filter(function(i){return String(i.id)===d.id})[0]));show('edit');break;
   case 'wear':wear(Number(d.id));break;
-  case 'x':M.innerHTML='';break;
-  case 'backdrop':if(e.target===b)M.innerHTML='';break;
+  case 'x':if(document.getElementById('lhPrice'))syncForm();M.innerHTML='';break;
+  case 'backdrop':if(e.target===b){if(document.getElementById('lhPrice'))syncForm();M.innerHTML=''}break;
   case 'io':show('manage');break;
   case 'checkupd':manualCheck();break;
   case 'reload':location.reload();break;
@@ -1332,6 +1333,7 @@ document.addEventListener('click',function(e){
   case 'wdel':if(!confirm('Remove this from the wishlist?'))break;var wd=wish.filter(function(x){return x.id===d.id})[0];wish=wish.filter(function(x){return x.id!==d.id});if(wd&&!isUsed(wd.img)){gal.refs=gal.refs.filter(function(x){return x!==wd.img});gal.covers=gal.covers.filter(function(x){return x!==wd.img});delete gal.imgs[wd.img]}saveWish();saveGallery();renderMain();break;
   case 'covadd':document.getElementById('cvfile').click();break;
   case 'refadd':document.getElementById('reffile').click();break;
+  case 'listmodal':e.preventDefault();syncForm();var pr2=editing.shipEstimate!=null&&editing.shipEstimate!==''?editing.shipEstimate:shipDefault(editing.cost);var ph=ORDER_PRICE.map(function(k){return fieldHTML(k,k==='shipEstimate'?pr2:editing[k])}).join('').replace(/<(input|select|textarea) /g,'<$1 form="form" ');M.innerHTML='<div class="modal" data-a="backdrop"><div id="lhPrice" style="max-width:520px;width:94vw;max-height:88vh;overflow:auto"><h3 style="margin:0 0 8px">🏷️ Listing Helper</h3>'+listingBlock(editing)+'<div class="f">'+ph+'</div>'+'<div class="bar" style="justify-content:center;margin:12px 0 0"><button data-a="x">Close</button></div></div></div>';break;
   case 'showcomp':syncForm();compShownFor=editing.id;renderMain();setTimeout(function(){var sc=document.getElementById('secComps');if(sc)window.scrollTo(0,sc.getBoundingClientRect().top+window.pageYOffset-90)},50);break;
   case 'rmref':syncForm();editing.refs.splice(Number(d.i),1);renderMain();break;
   case 'pickref':syncForm();editing.cover={id:editing.refs[Number(d.i)],l:null,t:null,w:null,h:null};renderMain();break;
@@ -1410,7 +1412,7 @@ document.addEventListener('submit',function(e){
  idx>-1?items[idx]=o:items.push(o);
  saveItems();var backGo=backTo;backTo='box';show(backGo);
 });
-document.addEventListener('toggle',function(e){if(e.target.classList&&e.target.classList.contains('io'))ioOpen=e.target.open;if(e.target.dataset&&e.target.dataset.gsec)galOpen[e.target.dataset.gsec]=e.target.open;if(e.target.dataset&&e.target.dataset.sec)secOpen[e.target.dataset.sec]=e.target.open},true);
+document.addEventListener('toggle',function(e){if(e.target.classList&&e.target.classList.contains('io'))ioOpen=e.target.open;if(e.target.dataset&&e.target.dataset.gsec){galOpen[e.target.dataset.gsec]=e.target.open;if(view==='gallery')renderMain()}if(e.target.dataset&&e.target.dataset.sec)secOpen[e.target.dataset.sec]=e.target.open},true);
 document.addEventListener('pointerdown',function(e){
  var v=e.target.closest('#cropv');
  if(v&&CR){CR.p[e.pointerId]={x:e.clientX,y:e.clientY};v.setPointerCapture(e.pointerId);return}
@@ -1541,7 +1543,7 @@ function manualCheck(){
    else alert('You have the latest version (v'+APP_VERSION+').');
  }).catch(function(){alert('Could not check for updates. Make sure version.json is published in the same folder as index.html.')});
 }
-function renderFooter(){document.getElementById('ver').innerHTML='<button class="link" data-a="io" style="font-size:inherit;margin:0">Never Twice the Same</button> · <button class="link" data-a="io" style="font-size:inherit;margin:0">v'+APP_VERSION+'</button>'}
+function renderFooter(){document.getElementById('ver').innerHTML='<span>Never Twice the Same</span> · <button class="link" data-a="io" style="font-size:inherit;margin:0">v'+APP_VERSION+'</button>'}
 document.addEventListener('input',function(e){var t=e.target;if(!t||!t.getAttribute)return;if(t.id==='rlq'){rlRender(t.value,t.getAttribute('data-kind'),t.getAttribute('data-img'));return}if(t.getAttribute('data-sugg')){suggShow(t);return}
  if(t.name==='keyword'&&t.closest&&t.closest('#kwform')&&t.closest('#kwform').getAttribute('data-mode')==='unlock')autoUnlock(t)});
 document.addEventListener('focusout',function(e){var t=e.target;if(t&&t.getAttribute&&t.getAttribute('data-sugg')){var box=t.parentNode.querySelector('.sg');setTimeout(function(){if(box)box.hidden=true},300)}});
