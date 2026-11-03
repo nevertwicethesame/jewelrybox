@@ -148,7 +148,7 @@ footer#ver{text-align:center;padding:24px 14px calc(36px + env(safe-area-inset-b
 <input type="file" id="gfile" accept="image/*" multiple hidden>
 <script>
 var K='ntts_items_v2',OK='ntts_order_v1',PER=25,MAX_UPLOAD=300*1024;
-var APP_VERSION='1.6.3',APP_DATE='2026-11-02 · 3:50 PM ET',UPDATE_URL='';
+var APP_VERSION='1.6.4',APP_DATE='2026-11-02 · 4:00 PM ET',UPDATE_URL='';
 var EMOJI={ring:'💍',earrings:'✨',necklace:'📿',bracelet:'⭕',watch:'⌚',other:'💎'};
 var CATS=['Ring','Earrings','Necklace','Bracelet','Watch','Other'];
 var STAT=['Waiting','Private Collection','To List','Listed','Sold'];
@@ -431,7 +431,10 @@ function blockedHTML(list){
   +list.map(function(b){return '<div style="display:flex;gap:10px;align-items:flex-start;margin:10px 0;border-top:1px solid var(--line);padding-top:10px"><img src="'+esc(b.g.src)+'" alt="" style="width:64px;height:64px;object-fit:cover;border-radius:8px;flex:none"><div style="display:flex;flex-direction:column;gap:6px;align-items:flex-start"><span class="meta">Used by</span>'+b.pieces.map(function(p){return p.id==null?'<span class="meta">'+esc(p.title)+'</span>':'<button data-a="edit" data-id="'+p.id+'">'+esc(title(p))+'</button>'}).join('')+'</div></div>'}).join('')
   +'<div class="bar" style="justify-content:center;margin:12px 0 0"><button data-a="x">OK</button></div></div></div>';
 }
-function previewHTML(src){return '<div class="modal" data-a="backdrop"><div style="max-width:94vw;text-align:center"><img src="'+esc(src)+'" alt="" style="max-width:100%;max-height:78vh;display:block;margin:0 auto;border-radius:10px"><p class="meta">'+sizeOf(src)+'</p><div class="bar" style="justify-content:center"><button data-a="x">Close</button></div></div></div>'}
+function previewHTML(src,kind,id){
+ var lk=kind?'<button class="pri" data-a="rlopen" data-kind="'+kind+'" data-id="'+id+'">🔗 Link to Record</button>':'';
+ return '<div class="modal" data-a="backdrop"><div style="max-width:94vw;text-align:center"><img src="'+esc(src)+'" alt="" style="max-width:100%;max-height:78vh;display:block;margin:0 auto;border-radius:10px"><p class="meta">'+sizeOf(src)+'</p><div class="bar" style="justify-content:center">'+lk+'<button data-a="x">Close</button></div></div></div>';
+}
 var galUnl={refs:false,covers:false},galOpen={refs:false,covers:false,wish:false};
 var secOpen={};
 function dOpen(k,d){return secOpen[k]===undefined?(d?' open':''):(secOpen[k]?' open':'')}
@@ -444,9 +447,9 @@ function wishGalHTML(){
 }
 function imgBytes(u){if(!u)return 0;var b=u.split(',')[1]||'';return Math.floor(b.length*3/4)-(b.slice(-2)==='=='?2:b.slice(-1)==='='?1:0)}
 function gallerySection(kind,label){
- var all=(kind==='refs'?gal.refs.filter(function(id){return wishImgIds().indexOf(id)<0}):gal[kind]).slice().reverse(),list=galUnl[kind]?all.filter(function(id){return !isUsed(id)}):all.slice().sort(function(a,b){return imgBytes(gal.imgs[b])-imgBytes(gal.imgs[a])}),sel=galSel[kind],n=Object.keys(sel).filter(function(k){return sel[k]}).length;
+ var all=(kind==='refs'?gal.refs.filter(function(id){return wishImgIds().indexOf(id)<0}):gal[kind]).slice().reverse(),list=galUnl[kind]?all.filter(function(id){return !isUsed(id)}):all,sel=galSel[kind],n=Object.keys(sel).filter(function(k){return sel[k]}).length;
  return '<details data-gsec="'+kind+'"'+(galOpen[kind]?' open':'')+'><summary>'+label+' ('+all.length+')</summary>'
-  +'<div class="bar"><button data-a="gadd" data-kind="'+kind+'">+ Add images</button><button data-a="gunl" data-kind="'+kind+'"'+(galUnl[kind]?' class="on"':'')+'>Unlinked only</button><button data-a="gall" data-kind="'+kind+'">Select all</button><button data-a="gnone" data-kind="'+kind+'">Clear selection</button><button class="dan" data-a="gdelsel" data-kind="'+kind+'"'+(n?'':' disabled')+'>Delete selected ('+n+')</button></div>'
+  +'<div class="bar"><button data-a="gadd" data-kind="'+kind+'">+ Add images</button><button data-a="gunl" data-kind="'+kind+'"'+(galUnl[kind]?' class="on"':'')+'>Unlinked only</button><button data-a="gall" data-kind="'+kind+'">Select all</button><button data-a="gnone" data-kind="'+kind+'">Clear selection</button>'+(kind==='refs'&&n?'<button class="pri" data-a="rlopensel" data-kind="refs">🔗 Link selected ('+n+')</button>':'')+'<button class="dan" data-a="gdelsel" data-kind="'+kind+'"'+(n?'':' disabled')+'>Delete selected ('+n+')</button></div>'
   +(list.length?'<div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(110px,1fr))">'+list.map(function(id){var on=!!sel[id],src=gal.imgs[id];return '<div style="position:relative"><img src="'+esc(src)+'" alt="" data-a="gview" data-kind="'+kind+'" data-id="'+id+'" style="width:100%;aspect-ratio:1;object-fit:cover;border-radius:8px;display:block;cursor:zoom-in;'+(on?'outline:3px solid var(--acc);':'')+'"><button data-a="gtog" data-kind="'+kind+'" data-id="'+id+'" style="position:absolute;top:4px;left:4px;padding:2px 7px;min-height:0">'+(on?'☑':'☐')+'</button><button data-a="gdel" data-kind="'+kind+'" data-id="'+id+'" style="position:absolute;top:4px;right:4px;padding:2px 7px;min-height:0">✕</button><span class="meta" style="position:absolute;left:4px;bottom:4px;background:rgba(0,0,0,.6);color:#fff;padding:1px 4px;border-radius:4px;font-size:.65rem">'+sizeOf(src)+'</span></div>'}).join('')+'</div>':'<p class="meta">No images yet.</p>')
   +'</details>';
 }
@@ -523,7 +526,7 @@ function rangeBlock(k,l,nums,fmt){
   +'<input type="range" data-a="rng" data-k="'+k+'" min="'+mn+'" max="'+mx+'" step="1" value="'+r[1]+'"></div></fieldset>';
 }
 function filtersHTML(){
- var h='<h3 style="margin:0 0 8px">Filters &amp; Sort</h3>'
+ var h='<h3 style="margin:0 0 8px">Filters &amp; Sort</h3>'+(anyFilter()?'<button data-a="clear" style="width:100%;margin:0 0 10px">Clear all filters</button>':'')
   +'<label>Sort by<select data-a="sort" id="sort">'+SORTS.map(function(o){return '<option value="'+esc(o[0])+'"'+(o[0]===sortBy?' selected':'')+'>'+esc(o[1])+'</option>'}).join('')+'</select></label>'
   +'<label class="swl"><input type="checkbox" data-a="hidesold"'+(hideSold?' checked':'')+'> Show Waiting and PC Only</label>';
  FACETS.forEach(function(F){
@@ -542,8 +545,7 @@ function filtersHTML(){
    if(F.k==='era')h+=rangeBlock('year','Year',vis().map(function(i){return num(i.yearMade)}).filter(function(n){return n!=null}),function(v){return String(Math.round(v))});
  });
  h+=rangeBlock('cost','Cost',vis().map(function(i){return num(i.cost)}).filter(function(n){return n!=null}),wholeMoney);
- if(anyFilter())h+='<p><button data-a="clear">Clear all filters</button></p>';
- return h;
+  return h;
 }
 function themeHTML(){
  return '<div class="meta" style="margin:14px 0 6px">Theme</div><div class="seg">'+Object.keys(THEMES).map(function(k){
@@ -667,6 +669,24 @@ function suggShow(t){
 function autoUnlock(t){
  var v=t.value;if(!v)return;
  hashKW(v).then(function(h){if(h===secretCfg.hash&&t.value===v){secretUnlocked=true;document.getElementById('modal').innerHTML='';show('secret')}});
+}
+function recordSearchHTML(kind,img){
+ return '<div class="modal" data-a="backdrop"><div><h3 style="margin:0 0 6px">Link to Record</h3><p class="meta" style="margin:0 0 8px">'+(kind==='covers'?'Sets this photo as the record’s cover.':'Adds '+(String(img).indexOf(',')>-1?'these '+String(img).split(',').length+' photos':'this photo')+' as reference screenshot'+(String(img).indexOf(',')>-1?'s':'')+' on the record.')+'</p>'
+  +'<input type="search" id="rlq" data-kind="'+kind+'" data-img="'+img+'" placeholder="Search title, category, era, seller" autocomplete="off">'
+  +'<div id="rlres" style="margin-top:8px"><p class="meta">Start typing to find a record.</p></div>'
+  +'<div class="bar" style="justify-content:center;margin-top:12px"><button data-a="x">Cancel</button></div></div></div>';
+}
+function rlRender(q,kind,img){
+ var box=document.getElementById('rlres');if(!box)return;
+ q=String(q||'').trim().toLowerCase();
+ if(!q){box.innerHTML='<p class="meta">Start typing to find a record.</p>';return}
+ var hits=items.filter(function(it){var hay=[title(it),it.id,it.category,it.period,it.era,it.country,it.seller,(it.stones||[]).join(' '),(it.tags||[]).join(' '),(it.metals||[]).join(' ')].join(' ').toLowerCase();return hay.indexOf(q)>-1})
+  .sort(function(x,y){var tx=title(x).toLowerCase(),ty=title(y).toLowerCase();var sx=tx.indexOf(q)===0?0:tx.indexOf(q)>-1?1:2,sy=ty.indexOf(q)===0?0:ty.indexOf(q)>-1?1:2;return sx-sy||tx.localeCompare(ty)})
+  .slice(0,3);
+ box.innerHTML=hits.length?hits.map(function(it){
+   var sub=[it.category,it.era,it.seller].filter(Boolean).join(' · ')||('ID '+it.id);
+   return '<button type="button" data-a="rlpick" data-kind="'+kind+'" data-img="'+img+'" data-rid="'+it.id+'" style="display:block;width:100%;text-align:left;margin:6px 0">'+esc(title(it))+'<br><span class="meta">'+esc(sub)+'</span></button>';
+ }).join(''):'<p class="meta">No records match.</p>';
 }
 function sec(keys){return keys.map(function(k){return fieldHTML(k,editing[k])}).join('')}
 function listingTexts(g){
@@ -1175,7 +1195,10 @@ document.addEventListener('click',function(e){
   case 'ringref':M.innerHTML='<div class="modal" data-a="backdrop"><div style="max-width:94vw"><h3 style="margin:0 0 8px">Ring Size Chart</h3>'+ringTableHTML()+'<div class="bar" style="justify-content:center;margin-top:12px"><button data-a="x">Close</button></div></div></div>';break;
   case 'gunl':galUnl[d.kind]=!galUnl[d.kind];renderMain();break;
   case 'gadd':galKind=d.kind;document.getElementById('gfile').click();break;
-  case 'gview':M.innerHTML=previewHTML(gal.imgs[d.id]);break;
+  case 'rlopen':M.innerHTML=recordSearchHTML(d.kind,d.id);break;
+  case 'rlopensel':var rlSel=Object.keys(galSel[d.kind]).filter(function(k){return galSel[d.kind][k]});if(!rlSel.length)break;M.innerHTML=recordSearchHTML(d.kind,rlSel.join(','));break;
+  case 'rlpick':var rlIt=items.filter(function(x){return String(x.id)===String(d.rid)})[0];if(!rlIt)break;var rlImgs=String(d.img).split(',');if(d.kind==='covers')rlIt.cover={id:rlImgs[0],l:null,t:null,w:null,h:null};else rlIt.refs=uniqArr((rlIt.refs||[]).concat(rlImgs));rlImgs.forEach(function(x){delete galSel[d.kind][x]});saveItems();M.innerHTML='';editing=JSON.parse(JSON.stringify(rlIt));show('edit');break;
+  case 'gview':M.innerHTML=previewHTML(gal.imgs[d.id],d.kind,d.id);break;
   case 'gtog':galSel[d.kind][d.id]=!galSel[d.kind][d.id];renderMain();break;
   case 'gall':gal[d.kind].forEach(function(id){galSel[d.kind][id]=true});renderMain();break;
   case 'gnone':galSel[d.kind]={};renderMain();break;
@@ -1310,7 +1333,7 @@ function manualCheck(){
  }).catch(function(){alert('Could not check for updates. Make sure version.json is published in the same folder as index.html.')});
 }
 function renderFooter(){document.getElementById('ver').innerHTML='<button class="link" data-a="io" style="font-size:inherit;margin:0">Never Twice the Same</button> · <button class="link" data-a="checkupd" style="font-size:inherit;margin:0">v'+APP_VERSION+'</button>'}
-document.addEventListener('input',function(e){var t=e.target;if(!t||!t.getAttribute)return;if(t.getAttribute('data-sugg')){suggShow(t);return}
+document.addEventListener('input',function(e){var t=e.target;if(!t||!t.getAttribute)return;if(t.id==='rlq'){rlRender(t.value,t.getAttribute('data-kind'),t.getAttribute('data-img'));return}if(t.getAttribute('data-sugg')){suggShow(t);return}
  if(t.name==='keyword'&&t.closest&&t.closest('#kwform')&&t.closest('#kwform').getAttribute('data-mode')==='unlock')autoUnlock(t)});
 document.addEventListener('focusout',function(e){var t=e.target;if(t&&t.getAttribute&&t.getAttribute('data-sugg')){var box=t.parentNode.querySelector('.sg');setTimeout(function(){if(box)box.hidden=true},300)}});
 document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('.sgi');if(!b)return;e.preventDefault();var box=b.parentNode,t=box.parentNode.querySelector('[data-sugg]');if(!t)return;var k=t.getAttribute('data-sugg'),v=b.getAttribute('data-sgv');
