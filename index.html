@@ -129,8 +129,9 @@ footer#ver{text-align:center;padding:24px 14px calc(36px + env(safe-area-inset-b
  .tabbar button.on{color:var(--acc)}
  main{padding-bottom:calc(100px + env(safe-area-inset-bottom,0px))}
 }
-.floatbar{display:none;position:fixed;left:0;right:0;bottom:0;z-index:25;background:transparent;padding:8px 14px calc(8px + env(safe-area-inset-bottom,0px));justify-content:center;gap:8px;margin:0}
+.floatbar{transition:opacity .25s ease;display:none;position:fixed;left:0;right:0;bottom:0;z-index:25;background:transparent;padding:8px 14px calc(8px + env(safe-area-inset-bottom,0px));justify-content:center;gap:8px;margin:0}
 .floatbar.on{display:flex}
+.floatbar.scrolling{opacity:0;pointer-events:none}
 @media (max-width:700px){.floatbar{bottom:calc(62px + env(safe-area-inset-bottom,0px))}}
 .sechdr{display:flex;align-items:flex-end;min-height:2.5em;line-height:1.2}
 </style>
@@ -154,7 +155,7 @@ footer#ver{text-align:center;padding:24px 14px calc(36px + env(safe-area-inset-b
 <input type="file" id="gfile" accept="image/*" multiple hidden>
 <script>
 var K='ntts_items_v2',OK='ntts_order_v1',PER=25,MAX_UPLOAD=300*1024;
-var APP_VERSION='1.6.8',APP_DATE='2026-11-02 · 10:55 PM ET',UPDATE_URL='';
+var APP_VERSION='1.6.9',APP_DATE='2026-11-02 · 11:10 PM ET',UPDATE_URL='';
 var EMOJI={ring:'💍',earrings:'✨',necklace:'📿',bracelet:'⭕',watch:'⌚',other:'💎'};
 var CATS=['Ring','Earrings','Necklace','Bracelet','Watch','Other'];
 var STAT=['Waiting','Private Collection','To List','Listed','Sold'];
@@ -804,7 +805,9 @@ function refreshCalc(){
  var LT=listingTexts(g);var dEl=document.getElementById('lhDesc'),lEl=document.getElementById('lhList');if(dEl)dEl.value=LT[0];if(lEl)lEl.value=LT[1];
  updateSummary();
 }
-var floatIO=null;
+var floatIO=null,fbTimer=null;
+function onScrollFloat(){var fb=document.getElementById('floatbar');if(!fb)return;fb.classList.add('scrolling');clearTimeout(fbTimer);fbTimer=setTimeout(function(){fb.classList.remove('scrolling')},200)}
+window.addEventListener('scroll',onScrollFloat,{passive:true});
 function setupFloat(){
  if(floatIO){floatIO.disconnect();floatIO=null}
  var bar=document.getElementById('editbar'),fb=document.getElementById('floatbar');
@@ -1079,7 +1082,7 @@ function stampNow(){var d=new Date();return today()+'-'+('0'+d.getHours()).slice
 function saveFile(name,mime,text){
  var mobile=/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)||navigator.maxTouchPoints>1;
  if(mobile&&navigator.canShare&&typeof File==='function'){
-   try{var f=new File([text],name,{type:mime});if(navigator.canShare({files:[f]}))return navigator.share({files:[f],title:name}).then(function(){return true},function(e){if(e&&e.name==='AbortError')return false;download(name,mime,text);return true})}catch(e){}
+   try{var f=new File([text],name,{type:mime});if(navigator.canShare({files:[f]}))return navigator.share({files:[f]}).then(function(){return true},function(e){if(e&&e.name==='AbortError')return false;download(name,mime,text);return true})}catch(e){}
  }
  download(name,mime,text);return Promise.resolve(true);
 }
