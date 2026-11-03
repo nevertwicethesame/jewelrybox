@@ -91,6 +91,7 @@ details.tpl{margin:8px 0 0;padding:0 10px;border-radius:8px}
 details.tpl summary{font-weight:normal;font-size:.9rem;padding:8px 0}
 h4.side{margin:14px 0 6px;font-size:.95rem;letter-spacing:.03em}
 #cropv{width:100%;max-width:340px;aspect-ratio:1;overflow:hidden;position:relative;touch-action:none;border-radius:12px;background:#000;cursor:grab;outline:2px solid var(--acc)}
+#form #cropv{max-width:260px}
 #cropimg{position:absolute;left:0;top:0;max-width:none;user-select:none;-webkit-user-select:none;pointer-events:none;transform-origin:0 0}
 #cropz{max-width:340px;padding:6px 0;margin-top:8px}
 .phe{display:flex;align-items:center;justify-content:center;background:var(--acc);width:40px;height:40px;border-radius:6px;flex:none}
@@ -153,7 +154,7 @@ footer#ver{text-align:center;padding:24px 14px calc(36px + env(safe-area-inset-b
 <input type="file" id="gfile" accept="image/*" multiple hidden>
 <script>
 var K='ntts_items_v2',OK='ntts_order_v1',PER=25,MAX_UPLOAD=300*1024;
-var APP_VERSION='1.6.7',APP_DATE='2026-11-02 · 10:35 PM ET',UPDATE_URL='';
+var APP_VERSION='1.6.8',APP_DATE='2026-11-02 · 10:55 PM ET',UPDATE_URL='';
 var EMOJI={ring:'💍',earrings:'✨',necklace:'📿',bracelet:'⭕',watch:'⌚',other:'💎'};
 var CATS=['Ring','Earrings','Necklace','Bracelet','Watch','Other'];
 var STAT=['Waiting','Private Collection','To List','Listed','Sold'];
@@ -581,9 +582,9 @@ function wishCover(w){return w.cover||{id:w.img,l:null,t:null,w:null,h:null}}
 function renderWishlist(){
  var list=wish.filter(function(w){return (!wishType.length||wishType.indexOf(w.category)>-1)&&(!q||((w.category||'')+' '+(w.link||'')).toLowerCase().indexOf(q)>-1)});
  var tiles=list.map(function(w){return '<div class="'+(wro?'tile':'')+'" data-id="'+w.id+'" style="position:relative"><button type="button" data-a="wopen" data-id="'+w.id+'" style="padding:0;border:0;border-radius:10px;overflow:hidden;aspect-ratio:1;width:100%;display:block;min-height:0;background:var(--acc);position:relative">'+coverImg(wishCover(w))+'</button><button type="button" data-a="wdel" data-id="'+w.id+'" style="position:absolute;top:4px;right:4px;width:26px;height:26px;min-width:0;padding:0;min-height:0;border-radius:50%;display:flex;align-items:center;justify-content:center;line-height:1;font-size:.75rem">✕</button></div>'}).join('');
- return '<h2>Wishlist</h2><div class="bar"><button class="pri" data-a="wadd">+ Add to Wishlist</button></div>'
+ return '<div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:12px"><h2 style="margin:0">Wishlist</h2><button class="pri" data-a="wadd">+ Add to Wishlist</button></div>'
   +(list.length?'<div class="grid'+(wro?' ro':'')+'" style="grid-template-columns:repeat('+cols+',1fr)">'+tiles+'</div>':'<p class="meta">'+(wish.length?'No wishlist items match this type.':'Nothing on your wishlist yet.')+'</p>')
-  +'<h3 class="side" style="margin-top:18px">Ring Size Chart</h3>'+ringTableHTML();
+  +'<hr style="border:0;border-top:1px solid var(--line);margin:18px 0">'+'<h3 class="side" style="margin-top:0">Ring Size Chart</h3>'+ringTableHTML();
 }
 function wishAddHTML(){
  return '<div class="modal" data-a="backdrop"><div style="max-width:520px;width:94vw"><h3 style="margin:0 0 6px">Add to Wishlist</h3>'
@@ -1307,10 +1308,11 @@ document.addEventListener('change',function(e){
  }
  if(t.dataset&&t.dataset.money){t.value=fmtMoney(parseMoney(t.value));return}
 });
+var kwTimer=null;
 document.addEventListener('change',function(e){
  var t=e.target;if(!t||t.name!=='keyword'||!t.closest||!t.closest('#secretform'))return;
  var kw=t.value;if(!kw.trim())return;
- hashKW(kw).then(function(h){secretCfg.hash=h;secretCfg.kw=kw;saveSecret();var m=document.getElementById('kwmsg');if(m){m.style.opacity='1'}});
+ hashKW(kw).then(function(h){secretCfg.hash=h;secretCfg.kw=kw;saveSecret();var m=document.getElementById('kwmsg');if(m){m.style.opacity='1';clearTimeout(kwTimer);kwTimer=setTimeout(function(){m.style.opacity='0'},3000)}});
 });
 document.addEventListener('submit',function(e){
  if(e.target.id==='kwform'){e.preventDefault();handleKeywordForm(e.target);return}
