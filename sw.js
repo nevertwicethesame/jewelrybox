@@ -1,6 +1,6 @@
 // Never Twice the Same: offline cache for the app shell.
 // Keep CACHE in step with the app version so old caches are replaced on update.
-const CACHE = 'ntts-shell-1.6.15';
+const CACHE = 'ntts-shell-1.6.16';
 const SHELL = ['./', 'index.html'];
 
 self.addEventListener('install', function (e) {

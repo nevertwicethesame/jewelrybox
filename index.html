@@ -172,7 +172,7 @@ footer#ver{text-align:center;padding:24px 14px calc(36px + env(safe-area-inset-b
 <input type="file" id="gfile" accept="image/*" multiple hidden>
 <script>
 var K='ntts_items_v2',OK='ntts_order_v1',PER=25,MAX_UPLOAD=300*1024;
-var APP_VERSION='1.6.15',APP_DATE='2026-11-03 · 8:43 AM ET',UPDATE_URL='';
+var APP_VERSION='1.6.16',APP_DATE='2026-11-03 · 11:40 AM ET',UPDATE_URL='';
 var EMOJI={ring:'💍',earrings:'✨',necklace:'📿',bracelet:'⭕',watch:'⌚',other:'💎'};
 var CATS=['Ring','Earrings','Necklace','Bracelet','Watch','Other'];
 var STAT=['Waiting','Private Collection','To List','Listed','Sold'];
@@ -612,24 +612,10 @@ function wishAddHTML(){
   +'<div id="crop" style="margin-top:10px" hidden><div id="cropv" style="max-width:240px"><img id="cropimg" alt="" draggable="false"></div><input type="range" id="cropz" min="1" max="4" step="0.01" value="1" aria-label="Zoom"><p class="meta">Drag to pan. Use the slider (or pinch) to zoom. The square is your thumbnail.</p></div>'
   +'<div class="bar" style="justify-content:center;margin:12px 0 0"><button class="pri" data-a="wsave">Save</button><button data-a="x">Cancel</button></div></div></div>';
 }
-var WISH_WORDS=('bijoux bijou baume jewel jewels jewelry jewellery joaillerie gold silver vintage antique antiques estate shop store boutique maison atelier gems gem stone stone pearl pearls diamond diamonds ring rings lux luxe the and de du la le des les paris london milano studio house co collection collections treasure treasures curio curios objet objets ancien anciens belle beau petit rose royal crown heart love luna sol stella oro argento etoile fleur fleurs or amour mode design craft crafts co uk').split(' ');
-function wishWords(s){
- var n=s.length,best=new Array(n+1),prev=new Array(n+1);best[0]=0;
- for(var i=0;i<n;i++){
-  if(best[i]===undefined)continue;
-  var u=best[i]-1;if(best[i+1]===undefined||u>best[i+1]){best[i+1]=u;prev[i+1]=[i,null]}
-  for(var j=i+2;j<=n;j++){var w=s.slice(i,j);if(WISH_WORDS.indexOf(w)>-1){var v=best[i]+w.length*w.length;if(best[j]===undefined||v>best[j]){best[j]=v;prev[j]=[i,w]}}}
- }
- var parts=[],k=n;
- while(k>0){var p=prev[k];parts.unshift(p[1]===null?{u:s.slice(p[0],k)}:p[1]);k=p[0]}
- var out=[];parts.forEach(function(p){if(typeof p==='string'){out.push(p);return}var last=out[out.length-1];if(last&&last.u!==undefined&&typeof last==='object'){last.u+=p.u}else out.push(typeof p==='object'&&p.u!==undefined?{u:p.u}:p)});
- return out.map(function(p){var t=typeof p==='string'?p:p.u;return t.charAt(0).toUpperCase()+t.slice(1)}).join(' ');
-}
 function wishDomain(link){
  try{var h=new URL(link).hostname.toLowerCase().replace(/^www\./,''),p=h.split('.');
   var n=(p.length>2&&p[p.length-2].length<=3&&p[p.length-1].length===2)?3:2;
-  var base=p.slice(-n)[0]||'';
-  return base.split('-').filter(Boolean).map(wishWords).join(' ');
+  return p.slice(-n)[0]||'';
  }catch(e){return ''}
 }
 function wishCropFrac(){
