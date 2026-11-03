@@ -128,9 +128,10 @@ footer#ver{text-align:center;padding:24px 14px calc(36px + env(safe-area-inset-b
  .tabbar button.on{color:var(--acc)}
  main{padding-bottom:calc(100px + env(safe-area-inset-bottom,0px))}
 }
-.floatbar{display:none;position:fixed;left:0;right:0;bottom:0;z-index:25;background:var(--card);border-top:1px solid var(--line);padding:8px 14px calc(8px + env(safe-area-inset-bottom,0px));justify-content:center;gap:8px;margin:0}
+.floatbar{display:none;position:fixed;left:0;right:0;bottom:0;z-index:25;background:transparent;padding:8px 14px calc(8px + env(safe-area-inset-bottom,0px));justify-content:center;gap:8px;margin:0}
 .floatbar.on{display:flex}
 @media (max-width:700px){.floatbar{bottom:calc(62px + env(safe-area-inset-bottom,0px))}}
+.sechdr{display:flex;align-items:flex-end;min-height:2.5em;line-height:1.2}
 </style>
 </head>
 <body>
@@ -152,7 +153,7 @@ footer#ver{text-align:center;padding:24px 14px calc(36px + env(safe-area-inset-b
 <input type="file" id="gfile" accept="image/*" multiple hidden>
 <script>
 var K='ntts_items_v2',OK='ntts_order_v1',PER=25,MAX_UPLOAD=300*1024;
-var APP_VERSION='1.6.6',APP_DATE='2026-11-02 · 9:35 PM ET',UPDATE_URL='';
+var APP_VERSION='1.6.7',APP_DATE='2026-11-02 · 10:35 PM ET',UPDATE_URL='';
 var EMOJI={ring:'💍',earrings:'✨',necklace:'📿',bracelet:'⭕',watch:'⌚',other:'💎'};
 var CATS=['Ring','Earrings','Necklace','Bracelet','Watch','Other'];
 var STAT=['Waiting','Private Collection','To List','Listed','Sold'];
@@ -728,17 +729,17 @@ function copyText(id,btn){
 }
 function compBlockHTML(){
  var cs=editing.comps||[];
- return '<div class="f"><h4 class="sub">Comparables</h4><input type="file" id="compfile" accept="image/*" multiple hidden>'
+ return '<div class="f" id="secComps"><h4 class="sub">Comparables</h4><input type="file" id="compfile" accept="image/*" multiple hidden>'
   +'<div class="seg" style="grid-column:1/-1"><button type="button" data-a="compadd">+ Add images</button><button type="button" data-a="galcomp">Add from gallery</button></div>'
   +'<div style="grid-column:1/-1">'+(cs.length?'<div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(90px,1fr))">'+cs.map(function(id,n){var src=gal.imgs[id];return '<div style="position:relative"><img src="'+esc(src)+'" style="width:100%;aspect-ratio:1;object-fit:cover;border-radius:8px;display:block;cursor:zoom-in" alt="" data-a="previewc" data-id="'+esc(id)+'"><span class="meta" style="position:absolute;left:4px;bottom:4px;background:rgba(0,0,0,.6);color:#fff;padding:1px 4px;border-radius:4px;font-size:.65rem">'+sizeOf(src)+'</span><button type="button" data-a="rmcomp" data-i="'+n+'" style="position:absolute;top:4px;right:4px;padding:2px 8px;min-height:0">✕</button></div>'}).join('')+'</div>':'<p class="meta">No comparables yet.</p>')+'</div></div>';
 }
 function imagesHTML(){
  var refs=editing.refs||[],c=editing.cover;
- var refBlock='<div class="f"><h4 class="sub">Reference Screenshots</h4><input type="file" id="reffile" accept="image/*" multiple hidden>'
+ var refBlock='<div class="f" id="secRefs"><h4 class="sub">Reference Screenshots</h4><input type="file" id="reffile" accept="image/*" multiple hidden>'
   +'<div class="seg" style="grid-column:1/-1"><button type="button" data-a="refadd">+ Add images</button><button type="button" data-a="galref">Add from gallery</button></div>'
   +'<div style="grid-column:1/-1">'+(refs.length?'<div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(90px,1fr))">'+refs.map(function(id,n){var src=gal.imgs[id];return '<div style="position:relative"><img src="'+esc(src)+'" style="width:100%;aspect-ratio:1;object-fit:cover;border-radius:8px;display:block;cursor:zoom-in" alt="" data-a="preview" data-i="'+n+'"><span class="meta" style="position:absolute;left:4px;bottom:4px;background:rgba(0,0,0,.6);color:#fff;padding:1px 4px;border-radius:4px;font-size:.65rem">'+sizeOf(src)+'</span><button type="button" data-a="rmref" data-i="'+n+'" style="position:absolute;top:4px;right:4px;padding:2px 8px;min-height:0">✕</button></div>'}).join('')+'</div>':'<p class="meta">No reference screenshots yet.</p>')+'</div></div>';
  var divider='<hr style="grid-column:1/-1;border:0;border-top:1px solid var(--line);margin:14px 0">';
- var coverBlock='<div class="f"><h4 class="sub">Cover Photo</h4><input type="file" id="cvfile" accept="image/*" hidden>'
+ var coverBlock='<div class="f" id="secCover"><h4 class="sub">Cover Photo</h4><input type="file" id="cvfile" accept="image/*" hidden>'
   +'<div class="seg" style="grid-column:1/-1"><button type="button" data-a="covadd">⬆ Upload new cover</button><button type="button" data-a="galpick">Add from gallery</button>'+(c?'<button type="button" data-a="cvadj">Crop</button><button type="button" data-a="cvrm">Remove cover</button>':'')+'</div>'
   +'<div style="grid-column:1/-1">'+(c&&gal.imgs[c.id]?'<div data-a="previewcover" style="position:relative;width:160px;height:160px;border-radius:10px;overflow:hidden;margin:6px 0;cursor:zoom-in">'+coverImg(c)+'</div><div class="meta">'+sizeOf(gal.imgs[c.id])+'</div>':'<p class="meta">No cover yet.</p>')+'</div>'
   +'<div id="crop" style="grid-column:1/-1" hidden><div id="cropv"><img id="cropimg" alt="" draggable="false"></div><input type="range" id="cropz" min="1" max="4" step="0.01" value="1" aria-label="Zoom"><p class="seg"><button type="button" class="pri" data-a="cvok">Use this crop</button><button type="button" data-a="cvcancel">Cancel</button></p><p class="meta">Drag to pan. Use the slider (or pinch) to zoom. The square is your thumbnail.</p></div>'
@@ -936,10 +937,10 @@ function handleKeywordForm(form){
  var pw=form.querySelector('input[name=keyword]').value;
  var M=document.getElementById('modal');
  if(form.dataset.mode==='unlock'){
-   hashKW(pw).then(function(h){if(h===secretCfg.hash){secretUnlocked=true;M.innerHTML='';show('secret')}else alert('Incorrect keyword')});
+   hashKW(pw).then(function(h){if(h===secretCfg.hash){secretCfg.kw=pw;saveSecret();secretUnlocked=true;M.innerHTML='';show('secret')}else alert('Incorrect keyword')});
  }else{
    if(!pw.trim()){alert('Enter a keyword.');return}
-   hashKW(pw).then(function(h){secretCfg.hash=h;secretUnlocked=true;saveSecret();M.innerHTML='';show('secret')});
+   hashKW(pw).then(function(h){secretCfg.hash=h;secretCfg.kw=pw;secretUnlocked=true;saveSecret();M.innerHTML='';show('secret')});
  }
 }
 function handleSecretForm(form){
@@ -948,7 +949,7 @@ function handleSecretForm(form){
  secretCfg.threshold=num(parseMoney(thr));
  secretCfg.on=secretCfg.threshold!=null;
  var finish=function(){saveSecret();secretUnlocked=false;show('box')};
- if(kw.trim()){hashKW(kw).then(function(h){secretCfg.hash=h;finish()})}else finish();
+ if(kw.trim()){hashKW(kw).then(function(h){secretCfg.hash=h;secretCfg.kw=kw;finish()})}else finish();
 }
 var dashAll=false,dashYrsAll=false,dashSort='count';
 function compactMoney(n){n=Number(n)||0;return n>=1000?'$'+(n/1000).toFixed(n>=10000?0:1).replace(/\.0$/,'')+'k':'$'+Math.round(n)}
@@ -989,7 +990,7 @@ function renderSecret(){
  var hidden=items.filter(isHidden).sort(function(a,b){return num(b.cost)-num(a.cost)});
  return '<h2>Secret Compartment</h2>'
   +'<form id="secretform" autocomplete="on"><input type="text" name="username" autocomplete="username" value="Never Twice the Same" style="position:absolute;left:-9999px" tabindex="-1" aria-hidden="true">'
-  +'<div class="f"><label><span style="display:flex;justify-content:space-between;align-items:center;gap:8px;line-height:1.2"><span>Threshold (hide above this)</span><button type="button" data-a="sclear" style="border:0;background:none;padding:0;margin:0;min-height:0;font-size:.8rem;color:var(--acc);text-decoration:underline;border-radius:0">clear</button></span><input type="text" inputmode="decimal" name="threshold" data-a="sthr" data-money="1" value="'+esc(secretCfg.threshold==null?'':fmtMoney(secretCfg.threshold))+'" placeholder="$0.00"></label><label>Keyword<input type="text" name="keyword" autocomplete="off" placeholder="'+(secretCfg.hash?'••••••••':'Set a keyword')+'"></label></div>'
+  +'<div class="f"><label><span class="sechdr">Threshold (hide above this)</span><span style="position:relative;display:block"><input type="text" inputmode="decimal" name="threshold" data-a="sthr" data-money="1" value="'+esc(secretCfg.threshold==null?'':fmtMoney(secretCfg.threshold))+'" placeholder="$0.00" style="padding-right:38px"><button type="button" data-a="sclear" aria-label="Clear threshold" style="position:absolute;right:6px;top:50%;transform:translateY(-50%);width:26px;height:26px;min-width:0;min-height:0;padding:0;border-radius:50%;display:flex;align-items:center;justify-content:center;line-height:1;font-size:.75rem">✕</button></span></label><label><span class="sechdr"><span>Keyword</span><span id="kwmsg" class="meta" style="margin-left:auto;opacity:0;transition:opacity .4s ease">Updated!</span></span><span style="position:relative;display:block"><input type="text" name="keyword" autocomplete="off" value="'+esc(secretCfg.kw||'')+'" placeholder="'+(secretCfg.hash?'••••••••':'Set a keyword')+'" style="padding-right:38px"><button type="button" data-a="kwclear" aria-label="Clear keyword" style="position:absolute;right:6px;top:50%;transform:translateY(-50%);width:26px;height:26px;min-width:0;min-height:0;padding:0;border-radius:50%;display:flex;align-items:center;justify-content:center;line-height:1;font-size:.75rem">✕</button></span></label></div>'
   +'<div class="bar"><button type="submit" class="pri">Lock</button></div>'
   +'<p class="meta">'+hidden.length+' piece'+(hidden.length===1?'':'s')+' over the threshold'+(secretCfg.on?' (hidden from the Jewelry Box)':' (not hidden yet)')+'.</p>'
   +'<div class="grid" style="grid-template-columns:repeat('+cols+',1fr)">'+hidden.map(function(i){return '<div>'+thumb(i)+'<div class="meta">'+esc(title(i))+' · '+money(num(i.cost))+'</div></div>'}).join('')+'</div></form>'
@@ -1225,7 +1226,7 @@ document.addEventListener('click',function(e){
   case 'gadd':galKind=d.kind;document.getElementById('gfile').click();break;
   case 'rlopen':M.innerHTML=recordSearchHTML(d.kind,d.id);break;
   case 'rlopensel':var rlSel=Object.keys(galSel[d.kind]).filter(function(k){return galSel[d.kind][k]});if(!rlSel.length)break;M.innerHTML=recordSearchHTML(d.kind,rlSel.join(','));break;
-  case 'rlpick':var rlIt=items.filter(function(x){return String(x.id)===String(d.rid)})[0];if(!rlIt)break;var rlImgs=String(d.img).split(',');if(d.kind==='covers')rlIt.cover={id:rlImgs[0],l:null,t:null,w:null,h:null};else if(d.kind==='comps')rlIt.comps=uniqArr((rlIt.comps||[]).concat(rlImgs));else rlIt.refs=uniqArr((rlIt.refs||[]).concat(rlImgs));rlImgs.forEach(function(x){delete galSel[d.kind][x]});saveItems();M.innerHTML='';editing=JSON.parse(JSON.stringify(rlIt));backTo='manage';show('edit');break;
+  case 'rlpick':var rlIt=items.filter(function(x){return String(x.id)===String(d.rid)})[0];if(!rlIt)break;var rlImgs=String(d.img).split(',');if(d.kind==='covers')rlIt.cover={id:rlImgs[0],l:null,t:null,w:null,h:null};else if(d.kind==='comps')rlIt.comps=uniqArr((rlIt.comps||[]).concat(rlImgs));else rlIt.refs=uniqArr((rlIt.refs||[]).concat(rlImgs));rlImgs.forEach(function(x){delete galSel[d.kind][x]});saveItems();M.innerHTML='';editing=JSON.parse(JSON.stringify(rlIt));backTo='manage';var rlJump=d.kind==='covers'?'secCover':d.kind==='comps'?'secComps':'secRefs';show('edit');setTimeout(function(){var jel=document.getElementById(rlJump);if(jel)window.scrollTo(0,jel.getBoundingClientRect().top+window.pageYOffset-90)},80);break;
   case 'gview':M.innerHTML=previewHTML(gal.imgs[d.id],d.kind,d.id);break;
   case 'gtog':galSel[d.kind][d.id]=!galSel[d.kind][d.id];renderMain();break;
   case 'gall':gal[d.kind].forEach(function(id){galSel[d.kind][id]=true});renderMain();break;
@@ -1264,6 +1265,7 @@ document.addEventListener('click',function(e){
   case 'slogin':hashKW(((document.getElementById('skw')||{}).value)||'').then(function(h){if(h===secretCfg.hash){secretUnlocked=true;document.getElementById('modal').innerHTML='';show('secret')}else alert('Incorrect keyword')});break;
   case 'sset':var kwa=document.getElementById('skw').value.trim();if(!kwa){alert('Enter a keyword');break}hashKW(kwa).then(function(h){secretCfg.hash=h;secretUnlocked=true;saveSecret();document.getElementById('modal').innerHTML='';show('secret')});break;
   case 'skwchg':var kwb=document.getElementById('skw2').value.trim();if(!kwb){alert('Enter a new keyword');break}hashKW(kwb).then(function(h){secretCfg.hash=h;saveSecret();document.getElementById('skw2').value='';alert('Keyword saved.')});break;
+  case 'kwclear':var kwi=document.querySelector('#secretform input[name=keyword]');if(kwi){kwi.value='';kwi.focus()}break;
   case 'slock':secretUnlocked=false;show('box');break;
   case 'sclear':secretCfg.threshold=null;saveSecret();render();break;
   case 'dashyrs':dashYrsAll=!dashYrsAll;renderMain();break;
@@ -1304,6 +1306,11 @@ document.addEventListener('change',function(e){
    return;
  }
  if(t.dataset&&t.dataset.money){t.value=fmtMoney(parseMoney(t.value));return}
+});
+document.addEventListener('change',function(e){
+ var t=e.target;if(!t||t.name!=='keyword'||!t.closest||!t.closest('#secretform'))return;
+ var kw=t.value;if(!kw.trim())return;
+ hashKW(kw).then(function(h){secretCfg.hash=h;secretCfg.kw=kw;saveSecret();var m=document.getElementById('kwmsg');if(m){m.style.opacity='1'}});
 });
 document.addEventListener('submit',function(e){
  if(e.target.id==='kwform'){e.preventDefault();handleKeywordForm(e.target);return}
