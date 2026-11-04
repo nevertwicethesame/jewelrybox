@@ -1,10 +1,11 @@
 // Never Twice the Same: offline cache for the app shell.
-// Keep CACHE in step with the app version so old caches are replaced on update.
-const CACHE = 'ntts-shell-1.6.16';
+// Fixed name: this file never needs changing for a new version. Updates reach the app because
+// index.html is fetched from the network first whenever the phone is online.
+const CACHE = 'ntts-shell';
 const SHELL = ['./', 'index.html'];
 
 self.addEventListener('install', function (e) {
-  e.waitUntil(caches.open(CACHE).then(function (c) { return c.addAll(SHELL); }).then(function () { return self.skipWaiting(); }));
+  e.waitUntil(caches.open(CACHE).then(function (c) { return c.addAll(SHELL.map(function (u) { return new Request(u, { cache: 'reload' }); })); }).then(function () { return self.skipWaiting(); }));
 });
 
 self.addEventListener('activate', function (e) {
@@ -22,7 +23,8 @@ self.addEventListener('fetch', function (e) {
   if (u.pathname.endsWith('/version.json')) return;
   // Network first, so online users always get the latest copy; fall back to the cache when offline.
   e.respondWith(
-    fetch(e.request).then(function (r) {
+    // cache: 'no-cache' asks the server to confirm the copy, so the phone never reuses an old HTTP-cached index.html.
+    fetch(new Request(e.request, { cache: 'no-cache' })).then(function (r) {
       if (r && r.ok) {
         var copy = r.clone();
         caches.open(CACHE).then(function (c) { c.put(e.request, copy); });

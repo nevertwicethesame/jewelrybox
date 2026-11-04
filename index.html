@@ -174,7 +174,7 @@ footer#ver{text-align:center;padding:24px 14px calc(36px + env(safe-area-inset-b
 <input type="file" id="gfile" accept="image/*" multiple hidden>
 <script>
 var K='ntts_items_v2',OK='ntts_order_v1',PER=25,MAX_UPLOAD=300*1024;
-var APP_VERSION='1.7.1',APP_DATE='2026-11-03 · 10:30 PM ET',UPDATE_URL='';
+var APP_VERSION='1.7.2',APP_DATE='2026-11-03 · 10:47 PM ET',UPDATE_URL='';
 var EMOJI={ring:'💍',earrings:'✨',necklace:'📿',bracelet:'⭕',watch:'⌚',other:'💎'};
 var CATS=['Ring','Earrings','Necklace','Bracelet','Watch','Other'];
 var STAT=['Waiting','Benched','Private Collection','To List','Listed','Sold'];
@@ -631,7 +631,7 @@ function renderManage(){
  var jsonBody='<div class="bar" style="flex-direction:column;align-items:stretch;margin:0"><button data-a="import">⬆ Import JSON</button><button data-a="export">⬇ Export JSON</button></div><p class="meta">Export includes '+items.length+' piece'+(items.length===1?'':'s')+' with their details, '+imgCount+' photo'+(imgCount===1?'':'s')+' (covers and reference screenshots), '+wish.length+' wishlist item'+(wish.length===1?'':'s')+', your order, theme and settings. It saves as '+nfiles+' file'+(nfiles===1?'':'s')+'.</p>'+expPanelHTML();
  return '<h2>I/O</h2>'
   +'<h3 class="side">Data Backup</h3><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px">'+card('CSV Backup',csvBody)+card('JSON Backup',jsonBody)+'</div>'
-  +'<h3 class="side">App Stats</h3><div style="border:1px solid var(--line);border-radius:12px;padding:12px"><div id="stormeter" class="meta" style="text-align:left"></div></div>'
+  +'<h3 class="side">App Stats</h3><div style="border:1px solid var(--line);border-radius:12px;padding:12px"><div id="stormeter" class="meta" style="text-align:left"></div><div style="margin-top:10px"><button data-a="checkupd">Check for new version</button></div></div>'
   +'<h3 class="side">Reset</h3><div style="border:1px solid var(--line);border-radius:12px;padding:12px"><button class="dan" data-a="delete">Delete All</button><p class="meta" style="margin:6px 0 0">Erases every piece, photo, and setting on this device. This cannot be undone.</p></div>'+'';
 }
 function renderGallery(){return '<h2>Gallery</h2>'+gallerySection('refs','Reference Screenshots')+gallerySection('comps','Comparables')+gallerySection('covers','Cover Photos')+wishGalHTML()}
@@ -941,7 +941,8 @@ function renderMain(){
  updateSummary();setTabs();updateStorage();
 }
 function render(){renderMain();renderDrawer()}
-function show(v){view=v;ro=false;wro=false;if(v!=='edit')backTo='box';drawer(false);render();window.scrollTo(0,0)}
+var keepY=null;
+function show(v){view=v;ro=false;wro=false;if(v!=='edit')backTo='box';drawer(false);render();if(v==='box'&&keepY!=null){window.scrollTo(0,keepY);keepY=null}else{keepY=null;window.scrollTo(0,0)}}
 function setTabs(){document.querySelectorAll('#tabbar button').forEach(function(x){x.classList.toggle('on',x.dataset.v===view)})}
 
 /* ---------- pan & zoom on the original image ---------- */
@@ -1036,7 +1037,7 @@ function renderJotd(){
   +(jotdMsg?'<p class="meta">'+esc(jotdMsg)+'</p>':'');
 }
 function popup(i){
- document.getElementById('modal').innerHTML='<div class="modal" data-a="backdrop"><div>'+(i.cover?'<div style="position:relative;width:100%;max-width:260px;aspect-ratio:1;overflow:hidden;border-radius:10px;margin:0 auto 10px">'+coverImg(i.cover)+'</div>':'')+'<h3>'+esc(title(i))+'</h3>'+(i.notes?'<p class="meta">'+esc(i.notes)+'</p>':'')+'<p class="meta">'+esc([i.category,i.period,i.era,i.country,(i.metal||[]).join('/'),(i.stone||[]).join('/')].filter(Boolean).join(' · '))+'</p>'+'</p>'+(i.seller?'<p class="meta">Seller: '+esc(i.seller)+'</p>':'')+'<p class="meta">'+(i.colorMain?sw(i.colorMain)+' '+esc(i.colorMain)+' · ':'')+(stars(i.rating)?stars(i.rating)+' · ':'')+esc((i.motif||[]).join(', '))+'</p><div class="bar" style="justify-content:center"><button class="pri" data-a="edit" data-id="'+i.id+'">Edit</button><button data-a="x">Close</button></div></div></div>';
+ document.getElementById('modal').innerHTML='<div class="modal" data-a="backdrop"><div>'+(i.cover?'<div style="position:relative;width:100%;max-width:260px;aspect-ratio:1;overflow:hidden;border-radius:10px;margin:0 auto 10px">'+coverImg(i.cover)+'</div>':'')+'<h3>'+esc(title(i))+'</h3>'+(i.notes?'<p class="meta">'+esc(i.notes)+'</p>':'')+'<p class="meta">'+esc([i.category,i.period,i.era,i.country,(i.metal||[]).join('/'),(i.stone||[]).join('/')].filter(Boolean).join(' · '))+'</p>'+'</p>'+'<p class="meta">'+(i.colorMain?sw(i.colorMain)+' '+esc(i.colorMain)+' · ':'')+(stars(i.rating)?stars(i.rating)+' · ':'')+esc((i.motif||[]).join(', '))+'</p>'+(i.seller?'<p class="meta">'+esc(i.seller)+'</p>':'')+'<div class="bar" style="justify-content:center"><button class="pri" data-a="edit" data-id="'+i.id+'">Edit</button><button data-a="x">Close</button></div></div></div>';
 }
 
 /* ---------- secret compartment ---------- */
@@ -1337,7 +1338,7 @@ document.addEventListener('click',function(e){
   case 'wro':drawer(false);wro=!wro;render();break;
   case 'ro':drawer(false);ro=!ro;if(ro){order=sorted(vis()).map(function(i){return i.id});sortBy='custom';saveOrder()}render();break;
   case 'open':if(!ro)popup(items.filter(function(i){return String(i.id)===d.id})[0]);break;
-  case 'edit':M.innerHTML='';editing=JSON.parse(JSON.stringify(items.filter(function(i){return String(i.id)===d.id})[0]));show('edit');break;
+  case 'edit':M.innerHTML='';keepY=view==='box'?window.pageYOffset:null;editing=JSON.parse(JSON.stringify(items.filter(function(i){return String(i.id)===d.id})[0]));show('edit');break;
   case 'wear':wear(Number(d.id));break;
   case 'x':if(document.getElementById('lhPrice'))syncForm();M.innerHTML='';break;
   case 'backdrop':if(e.target===b){if(document.getElementById('lhPrice'))syncForm();M.innerHTML=''}break;
