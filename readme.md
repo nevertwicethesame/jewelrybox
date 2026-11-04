@@ -6,7 +6,7 @@ Live site: https://nevertwicethesame.github.io/jewelrybox/
 
 ## Features
 
-- **Catalog:** record each piece with its title, category, period, era, country, maker, stones, metals, motifs, colour, hallmarks, ring size, measurements, and notes.
+- **Catalog:** record each piece with its title, category, period, era, country, maker, stones, metals, motifs, color, hallmarks, ring size, measurements, and notes.
 - **Photos:** a shared gallery holds reference screenshots, comparables, and cover photos. A cover can be cropped to a square thumbnail.
 - **Link to Record:** attach gallery images to a piece as references, comparables, or covers.
 - **Wishlist:** save wanted items with a photo, a link, and a type. Reorder the grid by dragging.
@@ -17,6 +17,7 @@ Live site: https://nevertwicethesame.github.io/jewelrybox/
 - **Import and export:** CSV for spreadsheet-style editing, and JSON for full backups that include photos, the wishlist, and settings.
 - **Backup reminder:** a banner appears when the last JSON backup is more than 7 days old.
 - **Update notice:** a banner appears when a newer version is published.
+- **About:** the menu footer opens the project's start date and the design reference.
 
 ## Install on iPhone
 
@@ -30,10 +31,10 @@ All data is stored on your device in the browser's IndexedDB storage. Nothing is
 
 Browser storage can be cleared by iOS in some situations, so keep regular JSON backups:
 
-1. Open the menu and choose **Export JSON**.
-2. Save the files to Files or iCloud Drive.
+1. Open the menu, tap **I/O**, then choose **Export JSON**.
+2. Tap each file to save it. A large library saves as several files. Save all of them to Files or iCloud Drive.
 
-To restore, open the menu and choose **Import JSON**, then select the backup files. Restoring replaces the data on the device, and the app asks you to confirm first.
+To restore, open the menu, tap **I/O**, and choose **Import JSON**. Select **every** backup file from the same export at once. The last file holds the photo gallery lists, so a restore without it can leave photos unlinked from their pieces. Restoring replaces the data on the device, and the app asks you to confirm first.
 
 ## Privacy
 
@@ -54,7 +55,7 @@ To restore, open the menu and choose **Import JSON**, then select the backup fil
 
 ## Versioning
 
-The version is set in `APP_VERSION` in `index.html`. Update `version.json` to the same number when a release changes the app, so installed copies show the update notice.
+The version is set in `APP_VERSION` in `index.html`. Update `version.json` to the same number when a release changes the app, so installed copies show the update notice. Both files must match.
 
 ## Development notes
 
