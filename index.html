@@ -172,7 +172,7 @@ footer#ver{text-align:center;padding:24px 14px calc(36px + env(safe-area-inset-b
 <input type="file" id="gfile" accept="image/*" multiple hidden>
 <script>
 var K='ntts_items_v2',OK='ntts_order_v1',PER=25,MAX_UPLOAD=300*1024;
-var APP_VERSION='1.6.29',APP_DATE='2026-11-03 · 7:50 PM ET',UPDATE_URL='';
+var APP_VERSION='1.6.32',APP_DATE='2026-11-03 · 9:10 PM ET',UPDATE_URL='';
 var EMOJI={ring:'💍',earrings:'✨',necklace:'📿',bracelet:'⭕',watch:'⌚',other:'💎'};
 var CATS=['Ring','Earrings','Necklace','Bracelet','Watch','Other'];
 var STAT=['Waiting','Benched','Private Collection','To List','Listed','Sold'];
@@ -521,7 +521,7 @@ function galPickHTML(act){
  var multi=act==='galaddref'||act==='galaddcomp',n=Object.keys(galPick).filter(function(k){return galPick[k]}).length;
  var sec=function(kind,label){return '<p class="meta" style="margin:10px 0 4px">'+label+'</p><div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(80px,1fr))">'+(avail(kind).length?avail(kind).map(function(id){var on=multi&&!!galPick[id];return '<button type="button" data-a="'+(multi?'galtog':act)+'" data-id="'+id+'"'+(multi?' data-act="'+act+'"':'')+' style="padding:0;aspect-ratio:1;overflow:hidden;border-radius:8px;min-height:0;border:3px solid '+(on?'var(--acc)':'transparent')+'"><img data-th="'+id+'" src="'+esc(TH[id]||'')+'" alt="" style="width:100%;height:100%;object-fit:cover;display:block"></button>'}).join(''):'<p class="meta">None yet.</p>')+'</div>'};
  var bar=multi?'<button class="pri" data-a="galaddsel" data-act="'+act+'"'+(n?'':' disabled')+'>Add selected ('+n+')</button><button data-a="x">Cancel</button>':'<button data-a="x">Cancel</button>';
- return '<div class="modal" data-a="backdrop"><div style="max-width:520px;width:94vw;max-height:88vh;overflow:auto"><h3 style="margin:0 0 6px">'+(act==='galaddref'?'Add Reference From Gallery':act==='galaddcomp'?'Add Comparable From Gallery':'Add Cover From Gallery')+'</h3>'+(act==='galaddcomp'?sec('comps','Comparables'):sec('refs','Reference Screenshots')+sec('covers','Cover Photos'))+'<div class="bar" style="justify-content:center;margin:12px 0 0">'+bar+'</div></div></div>';
+ return '<div class="modal" data-a="backdrop"><div style="max-width:520px;width:94vw;max-height:88vh;display:flex;flex-direction:column"><div style="overflow:auto;flex:1;min-height:0"><h3 style="margin:0 0 6px">'+(act==='galaddref'?'Add Reference From Gallery':act==='galaddcomp'?'Add Comparable From Gallery':'Add Cover From Gallery')+'</h3>'+(act==='galaddcomp'?sec('comps','Comparables'):sec('refs','Reference Screenshots')+sec('covers','Cover Photos'))+'</div><div class="bar" style="justify-content:center;margin:12px 0 0;flex-shrink:0">'+bar+'</div></div></div>';
 }
 
 /* ---------- filters ---------- */
@@ -700,7 +700,8 @@ function renderTable(){
   +(rows.length?'':'<p class="meta">No pieces match these filters.</p>')
   +'<div class="pager"><button data-a="pg" data-v="-1"'+(page<=1?' disabled':'')+'>Prev</button><span>Page '+page+' of '+n+'</span><button data-a="pg" data-v="1"'+(page>=n?' disabled':'')+'>Next</button></div>';
 }
-var boxLim=60,boxKey='';
+var boxLim=60,boxKey='',boxIO=null;
+function setupLazyBox(){var el=document.getElementById('boxSent');if(boxIO){boxIO.disconnect();boxIO=null}if(!el||!('IntersectionObserver' in window))return;boxIO=new IntersectionObserver(function(es){if(es.some(function(e){return e.isIntersecting})){boxIO.disconnect();boxIO=null;boxLim+=60;renderMain()}},{rootMargin:'800px 0px'});boxIO.observe(el)}
 function renderBox(){
  if(vmode==='table')return renderTable();
  var bk=[q,sortBy,JSON.stringify(fsel),JSON.stringify(rng),hideSold,vmode].join('|');
@@ -712,7 +713,7 @@ function renderBox(){
  var lim=ro?Infinity:boxLim;
  var waitS=waitL.slice(0,lim),mainS=mainL.slice(0,Math.max(0,lim-waitS.length));
  var waitGrid=waitS.length?'<div class="grid" style="grid-template-columns:repeat('+cols+',1fr)">'+waitS.map(thumb).join('')+'</div>'+(mainS.length?'<hr style="border:0;border-top:1px solid var(--line);margin:16px 0">':''):'';
- var more=(!ro&&list.length>boxLim)?'<div class="bar" style="justify-content:center;margin:14px 0"><button data-a="boxmore">Show more ('+(list.length-boxLim)+' left)</button><button data-a="boxall">Show all ('+list.length+')</button></div>':'';
+ var more=(!ro&&list.length>boxLim)?'<div id="boxSent" style="height:1px"></div>':'';
  return (ro?'<div class="bar"><span class="meta">Drag a photo onto another to move it. Order saves automatically.</span><button class="pri" data-a="ro">Done</button></div>':'')
   +'<div class="box">'+waitGrid+'<div class="grid'+(ro?' ro':'')+'" style="grid-template-columns:repeat('+cols+',1fr)">'+mainS.map(thumb).join('')+'</div></div>'+more
   +(list.length?'':'<p class="meta">No pieces match.</p>')+countLine(list.length);
@@ -780,14 +781,20 @@ function sec(keys){return keys.map(function(k){return fieldHTML(k,editing[k])}).
 function listingTexts(g){
  var place=[g('period'),g('era'),g('title')].filter(function(x){return x}).join(' ');
  var metal=g('metal'),ring=g('ringSize'),meas=g('measurement'),wt=g('weight'),hm=g('hallmark'),c=g('country').trim();
- var d=[];if(place)d.push(place);if(metal)d.push('Metal: '+metal);if(ring)d.push('Ring size US '+ring);
- var L=[];if(place)L.push('• '+place);if(metal)L.push('• Metal: '+metal);
- if(ring)L.push('• Ring size US '+ring);else if(meas)L.push('• Measurement: '+meas);
+ var km=(metal.match(/\d+\s*k\b/i)||[])[0],mat=km?km.replace(/\s+/g,'').toLowerCase():(metal?metal.split(',')[0].trim():'');
+ var headline=[g('period'),g('era'),mat,g('title'),ring].filter(function(x){return x}).join(' ');
+ var d=[];if(headline)d.push(headline);
+ var L=[];if(place)L.push('• '+place);
+ var eraDec=[g('era'),g('decade')].filter(function(x){return x}).join(' ');if(eraDec)L.push('• '+eraDec);
+ if(metal)L.push('• Metal: '+metal);
+ if(ring)L.push('• Size: '+ring);
+ if(meas)L.push('• Measurement: '+meas);
  if(wt)L.push('• Weight: '+wt);
+ var mk=g('maker').trim();if(mk)L.push('• Maker: '+mk);
+ if(hm)L.push('• Hallmark: '+hm);
  var uk={england:'UK',scotland:'UK',wales:'UK','northern ireland':'UK','great britain':'UK','united kingdom':'UK',uk:'UK'};
  var us=['us','usa','u.s.','u.s.a.','united states','united states of america','america'];
  if(c&&us.indexOf(c.toLowerCase())<0)L.push('• Sourced from '+(uk[c.toLowerCase()]||c));
- if(hm)L.push('• Hallmark: '+hm);
  return [d.join('\n'),L.join('\n')];
 }
 function listingBlock(it){
@@ -825,8 +832,7 @@ function imagesHTML(){
 }
 function firstRefCover(){if(!editing.cover&&(editing.refs||[]).length)editing.cover={id:editing.refs[0],l:null,t:null,w:null,h:null}}
 function quickPrompt(){
- var lines=QA_KEYS.map(function(k){var s=FS[k],t=s[1],hint=t==='sel'?'one of: '+s[2].filter(Boolean).join(', '):t==='list'?'array of strings':t==='money'?'number, no $':t==='date'?'YYYY-MM-DD':t==='ringsz'?'number 1 to 13 in steps of 0.25':t==='number'?'number':t==='url'?'URL':'text';return '"'+k+'": '+hint+' ('+s[0]+')'});
- return 'Read the attached jewelry listing screenshots and output ONLY a JSON object with these keys. Omit any key you cannot find. No commentary.\n'+lines.join('\n');
+ return "Read the attached jewelry listing screenshots and output ONLY a JSON object with the keys below. Omit any key you cannot find. No commentary.\n\nKeys and rules:\n- \"title\": text\n- \"category\": one of Ring, Earrings, Necklace, Bracelet, Watch, Other\n- \"period\": one of Ancient, Antique, Mid-Century, Vintage, New\n- \"era\": text (era or movement), copied from the listing only. Do not infer it from the year.\n- \"decade\": text, copied from the listing only. Do not derive it from \"yearMade.\"\n- \"yearMade\": number\n- \"country\": text (country of origin)\n- \"maker\": text\n- \"stone\": array of strings\n- \"metal\": array of strings. Abbreviate gold by karat and color: yellow gold = yg, white gold = wg, rose gold = rg. Examples: \"18k gold\" with yellow gold shown or stated = \"18k yg\"; \"18k rose gold\" = \"18k rg\". Non-gold metals keep their name, such as \"platinum\" or \"silver\".\n- \"hallmark\": text\n- \"measurement\": text\n- \"weight\": text, in the unit written in the listing (grams or ct). Do not convert.\n- \"ringSize\": number from 1 to 13 in steps of 0.25 (rings only). Convert to US using the chart below and round to the nearest 0.25. The chart overrides any size stated in the listing. If the listing uses a system not on the chart, omit this key.\n- \"cut\": array of strings\n- \"colorMain\": array of strings. Choose only from: Red, Pink, Orange, Brown, Yellow, Green, Light blue, Blue, Purple, Black, Gray, White, Multi. Ignore emoji and numbers.\n- \"motif\": array of strings\n- \"notes\": text. Include only for a special circumstance, such as a defect, repair, missing part, or a discrepancy between the listing and the item. Seller policies (shipping, returns, payment) are not notes. Omit otherwise.\n- \"purchaseDate\": YYYY-MM-DD. Omit if the listing has no purchase date.\n- \"seller\": text\n- \"purchasePlatform\": \"Etsy\", \"1stDibs\", or \"Seller\". Any other platform is \"Seller\".\n- \"cost\": number with no currency symbol or code\n\nSource priority: the listing text is primary. Use the photos to confirm or fill in color, stone, and cut only when the text is silent. If text and photos conflict, use the text, and record the conflict in \"notes\" only if it is a special circumstance.\n\nRing size chart (US & Canada column):\n5.25 = J.5 (UK); 5.5 = K; 5.75 = K.5; 6 = L; 6.25 = L.5; 6.5 = M; 6.75 = M.5; 7 = N; 7.25 = N.5; 7.5 = O; 7.75 = O.5; 8 = P; 8.25 = P.5; 8.5 = Q; 8.75 = Q.5; 9 = R; 9.25 = R.5\n\nExample: for a ring listed as \"M (UK)\" with \"18k rose gold\" in the text, output:\n{\"title\": \"...\", \"category\": \"Ring\", \"period\": \"Antique\", \"decade\": \"1880s\", \"metal\": [\"18k rg\"], \"ringSize\": 6.5, \"colorMain\": [\"Yellow\"], \"purchasePlatform\": \"Seller\"}";
 }
 function quickHTML(){
  return '<div class="modal" data-a="backdrop"><div style="max-width:520px;width:94vw"><h3 style="margin:0 0 6px">Quick add</h3><p class="meta">1. Copy the prompt and send it with your listing screenshots to Claude.<br>2. Paste Claude’s JSON reply below and tap Apply.</p>'
@@ -864,7 +870,7 @@ h+='<details data-sec="piece"'+dOpen('piece',true)+'><summary>Piece</summary><di
   +'<h4 class="sub" style="display:flex;justify-content:space-between;align-items:center;gap:8px"><span>Sale</span><button type="button" data-a="listmodal" style="min-height:34px;padding:4px 10px;font-size:.85rem;font-weight:normal;white-space:nowrap">🏷️ Listing Helper</button></h4>'
   +'<div class="f">'+sec(ORDER_SOLD)+'</div></details>';
   h+='<details data-sec="summary"'+dOpen('summary',false)+'><summary>Summary</summary><table style="width:100%;font-size:.88rem;border-collapse:collapse"><tbody id="sumtb"></tbody></table></details>';
- h+='<div id="editbar" class="bar" style="margin:16px 0 0;justify-content:center"><button type="submit" class="pri">Save</button><button type="button" class="dan" data-a="del">Delete</button><button type="button" data-a="cancel">Cancel</button></div></form><div id="floatbar" class="floatbar"><button type="submit" form="form" class="pri">Save</button><button type="button" data-a="cancel">Cancel</button></div>';
+ h+='<div id="editbar" class="bar" style="margin:16px 0 0;justify-content:space-between"><div style="display:flex;gap:8px"><button type="submit" class="pri">Save</button><button type="button" data-a="cancel">Cancel</button></div><button type="button" class="dan" data-a="del">Delete</button></div></form><div id="floatbar" class="floatbar"><button type="submit" form="form" class="pri">Save</button></div>';
  return h;
 }
 function readForm(){
@@ -923,6 +929,7 @@ function renderMain(){
  var eb=document.getElementById('editbar'),hd=document.querySelector('header');if(eb&&hd)eb.style.top=hd.offsetHeight+'px';
  setupFloat();
  if(view==='gallery')fillThumbs();
+ setupLazyBox();
  updateSummary();setTabs();updateStorage();
 }
 function render(){renderMain();renderDrawer()}
