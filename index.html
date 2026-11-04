@@ -942,7 +942,7 @@ function renderMain(){
 }
 function render(){renderMain();renderDrawer()}
 var keepY=null;
-function show(v){view=v;ro=false;wro=false;if(v!=='edit')backTo='box';drawer(false);render();if(v==='box'&&keepY!=null){window.scrollTo(0,keepY);keepY=null}else{keepY=null;window.scrollTo(0,0)}}
+function show(v){view=v;ro=false;wro=false;compShownFor=null;if(v!=='edit')backTo='box';drawer(false);render();if(v==='box'&&keepY!=null){window.scrollTo(0,keepY);keepY=null}else{keepY=null;window.scrollTo(0,0)}}
 function setTabs(){document.querySelectorAll('#tabbar button').forEach(function(x){x.classList.toggle('on',x.dataset.v===view)})}
 
 /* ---------- pan & zoom on the original image ---------- */
