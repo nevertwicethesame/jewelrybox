@@ -172,7 +172,7 @@ footer#ver{text-align:center;padding:24px 14px calc(36px + env(safe-area-inset-b
 <input type="file" id="gfile" accept="image/*" multiple hidden>
 <script>
 var K='ntts_items_v2',OK='ntts_order_v1',PER=25,MAX_UPLOAD=300*1024;
-var APP_VERSION='1.6.33',APP_DATE='2026-11-03 · 9:35 PM ET',UPDATE_URL='';
+var APP_VERSION='1.7.0',APP_DATE='2026-11-03 · 9:40 PM ET',UPDATE_URL='';
 var EMOJI={ring:'💍',earrings:'✨',necklace:'📿',bracelet:'⭕',watch:'⌚',other:'💎'};
 var CATS=['Ring','Earrings','Necklace','Bracelet','Watch','Other'];
 var STAT=['Waiting','Benched','Private Collection','To List','Listed','Sold'];
@@ -627,7 +627,7 @@ function renderManage(){
  return '<h2>I/O</h2>'
   +'<h3 class="side">Data Backup</h3><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px">'+card('CSV Backup',csvBody)+card('JSON Backup',jsonBody)+'</div>'
   +'<h3 class="side">App Stats</h3><div style="border:1px solid var(--line);border-radius:12px;padding:12px"><div id="stormeter" class="meta" style="text-align:left"></div></div>'
-  +'<h3 class="side">Reset</h3><div style="border:1px solid var(--line);border-radius:12px;padding:12px"><button class="dan" data-a="delete">Delete All</button><p class="meta" style="margin:6px 0 0">Erases every piece, photo, and setting on this device. This cannot be undone.</p></div>'+'<p class="meta" style="text-align:center;margin-top:18px">This project first started on November 1, 2026.<br>Thank you for inspiring me, Koala-Chan 🐨</p>';
+  +'<h3 class="side">Reset</h3><div style="border:1px solid var(--line);border-radius:12px;padding:12px"><button class="dan" data-a="delete">Delete All</button><p class="meta" style="margin:6px 0 0">Erases every piece, photo, and setting on this device. This cannot be undone.</p></div>'+'<p class="meta" style="text-align:center;margin-top:18px">This project first started on November 1, 2026.<br>Thank you for inspiring me, Koala-chan 🐨</p>';
 }
 function renderGallery(){return '<h2>Gallery</h2>'+gallerySection('refs','Reference Screenshots')+gallerySection('comps','Comparables')+gallerySection('covers','Cover Photos')+wishGalHTML()}
 function gicon(n){var w=(28-(n-1)*2)/n,r='';for(var k=0;k<n;k++)r+='<rect x="'+(k*(w+2))+'" y="0" width="'+w+'" height="14" rx="2" fill="currentColor"/>';return '<svg role="img" aria-label="'+n+' across" width="28" height="14" viewBox="0 0 28 14">'+r+'</svg>'}
@@ -1360,6 +1360,7 @@ document.addEventListener('click',function(e){
   case 'galmore':galLim[d.kind]+=60;renderMain();break;
   case 'boxmore':boxLim+=60;renderMain();break;
   case 'boxall':boxLim=Infinity;renderMain();break;
+  case 'about':M.innerHTML='<div class="modal" data-a="backdrop"><div style="max-width:420px;width:90vw;text-align:center"><h3 style="margin:0 0 12px">Never Twice the Same</h3><p style="margin:0 0 10px">This project first started on November 1, 2026.</p><p style="margin:0 0 16px">Thank you for inspiring me, Koala-chan 🐨</p><button data-a="x">Close</button></div></div>';break;
   case 'gview':M.innerHTML=previewHTML(gal.imgs[d.id],d.kind,d.id);break;
   case 'gtog':galSel[d.kind][d.id]=!galSel[d.kind][d.id];renderMain();break;
   case 'gall':gal[d.kind].forEach(function(id){galSel[d.kind][id]=true});renderMain();break;
@@ -1598,7 +1599,7 @@ function manualCheck(){
    else alert('You have the latest version (v'+APP_VERSION+').');
  }).catch(function(){alert('Could not check for updates. Make sure version.json is published in the same folder as index.html.')});
 }
-function renderFooter(){document.getElementById('ver').innerHTML='<span>Never Twice the Same</span> · <button class="link" data-a="io" style="font-size:inherit;margin:0">v'+APP_VERSION+'</button>'}
+function renderFooter(){document.getElementById('ver').innerHTML='<button class="link" data-a="about" style="font-size:inherit;margin:0">Never Twice the Same</button> · <button class="link" data-a="io" style="font-size:inherit;margin:0">v'+APP_VERSION+'</button>'}
 document.addEventListener('input',function(e){var t=e.target;if(!t||!t.getAttribute)return;if(t.id==='rlq'){rlRender(t.value,t.getAttribute('data-kind'),t.getAttribute('data-img'));return}if(t.getAttribute('data-sugg')){suggShow(t);return}
  if(t.name==='keyword'&&t.closest&&t.closest('#kwform')&&t.closest('#kwform').getAttribute('data-mode')==='unlock')autoUnlock(t)});
 document.addEventListener('focusout',function(e){var t=e.target;if(t&&t.getAttribute&&t.getAttribute('data-sugg')){var box=t.parentNode.querySelector('.sg');setTimeout(function(){if(box)box.hidden=true},300)}});
