@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Never Twice the Same</title>
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,500&family=Literata:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
 <style>
 :root{--bg:#faf7f2;--fg:#2a2420;--mute:#7a6f66;--card:#fff;--line:#e4dcd0;--gold:#a8864f;--gold-soft:#d9c49b;--acc:#5a1538;--v1:#2a0115;--v2:#2a0115;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1b1715;--fg:#efe8df;--mute:#a89d92;--card:#262120;--line:#3a3330;--gold:#c9a86a;--gold-soft:#8a7350}}
@@ -12,7 +12,7 @@
 html{scroll-padding-top:env(safe-area-inset-top,0px)}
 #offline{position:fixed;inset:0;z-index:100;background:var(--bg);display:flex;align-items:center;justify-content:center;padding:24px;text-align:center;font-size:1.4rem;color:var(--fg);cursor:pointer}
 #offline[hidden]{display:none}
-body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.45 Inter,-apple-system,"Helvetica Neue",Helvetica,Arial,sans-serif}
+body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.45 Literata,Georgia,"Times New Roman",serif}
 .box.pat{background-image:var(--pat);background-repeat:repeat;background-size:69.282px 40px;background-color:var(--v2)}
 body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--bg);z-index:10}
 header{position:sticky;top:env(safe-area-inset-top,0px);background:var(--bg);border-bottom:1px solid var(--line);padding:10px 14px;z-index:5;display:flex;align-items:center;gap:10px}
@@ -154,9 +154,12 @@ footer#ver{text-align:center;padding:24px 14px calc(36px + env(safe-area-inset-b
 .sechdr{display:flex;align-items:flex-end;min-height:2.5em;line-height:1.2}
 /* v2.0 — antique with modern clean */
 h1,h2,h3,h4,.sub{font-family:"Cormorant Garamond",Georgia,serif;font-weight:600;letter-spacing:.02em}
-h1{font-size:1.2rem;letter-spacing:.06em}
-h3.side{font-variant:small-caps;letter-spacing:.08em;font-size:1.3rem;font-weight:600;border-bottom:1px solid var(--gold);padding-bottom:4px;margin-top:22px}
-summary{font-family:"Cormorant Garamond",Georgia,serif;font-size:1.15rem;letter-spacing:.03em}
+h1{font-size:1.3rem;letter-spacing:.06em}
+h2{font-size:1.7rem}
+h3{font-size:1.55rem}
+h4,.sub{font-size:1.25rem}
+h3.side{font-variant:small-caps;letter-spacing:.08em;font-size:1.6rem;font-weight:600;border-bottom:1px solid var(--gold);padding-bottom:4px;margin-top:22px}
+details>summary:not(.cddS){font-family:"Cormorant Garamond",Georgia,serif;font-size:1.3rem;letter-spacing:.03em}
 header{border-bottom:1px solid var(--gold)}
 hr{border:0;border-top:1px solid var(--gold);opacity:.5}
 button.pri{box-shadow:inset 0 0 0 1px var(--gold)}
@@ -174,12 +177,19 @@ table.spec th{font-weight:500;color:var(--mute);font-size:.82rem;width:38%;paddi
 table.spec td{padding:7px 0;border-bottom:1px solid var(--line);font-size:.92rem;text-align:left}
 .note-b{text-align:left;margin-top:14px}
 .note-b p{white-space:pre-line;margin:2px 0 0;font-size:.92rem}
+@media (max-width:700px){
 .tabbar{padding-top:4px;padding-bottom:calc(2px + env(safe-area-inset-bottom,0px))}
 .tabbar button{justify-content:flex-start;padding-top:2px;align-self:stretch}
 .tabbar button>span:first-child{display:flex;align-items:center;justify-content:center;height:26px;font-size:1.25rem;flex:none}
 .tabbar button>span:first-child svg{display:block}
 .tabbar button>span:last-child{display:block;min-height:2.3em;line-height:1.15;text-align:center;margin-top:0}
+}
 #ver{padding-bottom:calc(84px + env(safe-area-inset-bottom,0px))}
+#drawer h3{font-size:1.05rem;font-weight:600}
+#drawer h3.mh{font-size:1.45rem}
+.dh{font-family:"Cormorant Garamond",Georgia,serif;font-size:1.05rem;font-weight:600;letter-spacing:.02em;line-height:1.2;color:var(--fg);margin:14px 0 6px}
+legend{font-family:"Cormorant Garamond",Georgia,serif;font-size:1.05rem;font-weight:600}
+#form button,#editbar button,.floatbar button{font-size:.875rem}
 </style>
 </head>
 <body>
@@ -190,11 +200,11 @@ table.spec td{padding:7px 0;border-bottom:1px solid var(--line);font-size:.92rem
   <button data-a="drawer" aria-label="Menu">☰</button>
   <h1>NEVER TWICE THE SAME</h1>
   <input type="search" id="q" placeholder="Search jewelry" aria-label="Search" autocomplete="off">
-  <button id="qb" aria-label="Search">🔍</button>
+  <button id="qb" aria-label="Search"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l5 5"/></svg></button>
 </header>
 <main id="app"><p class="meta">Loading…</p></main>
 <footer id="ver" class="meta"></footer>
-<nav id="tabbar" class="tabbar"><button data-a="nav" data-v="box" class="big"><span><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx='12' cy='14' r='6'/><path d='M9.5 8 12 4l2.5 4'/><path d='M12 9.5l1.5 2.5-1.5 2.5-1.5-2.5z'/></svg></span><span>My Jewelry Box</span></button><button data-a="nav" data-v="secret"><span><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x='5' y='11' width='14' height='10' rx='2'/><path d='M8 11V7a4 4 0 0 1 8 0v4'/></svg></span><span>Secret Compartment</span></button><button data-a="nav" data-v="wishlist"><span><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d='M5 8h14l-1 12H6z'/><path d='M9 8V6a3 3 0 0 1 6 0v2'/></svg></span><span>Wishlist</span></button><button data-a="nav" data-v="edit" data-new="1"><span><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d='M12 5v14M5 12h14'/></svg></span><span>Add to Collection</span></button><button data-a="nav" data-v="jotd"><span><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d='M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z'/></svg></span><span>JOTD</span></button></nav>
+<nav id="tabbar" class="tabbar"><button data-a="nav" data-v="box" class="big"><span><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx='12' cy='14' r='6'/><path d='M9.5 8 12 4l2.5 4'/><path d='M12 9.5l1.5 2.5-1.5 2.5-1.5-2.5z'/></svg></span><span>My Jewelry<br>Box</span></button><button data-a="nav" data-v="secret"><span><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x='5' y='11' width='14' height='10' rx='2'/><path d='M8 11V7a4 4 0 0 1 8 0v4'/></svg></span><span>Secret Compartment</span></button><button data-a="nav" data-v="wishlist"><span><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d='M5 8h14l-1 12H6z'/><path d='M9 8V6a3 3 0 0 1 6 0v2'/></svg></span><span>Coveted</span></button><button data-a="nav" data-v="edit" data-new="1"><span><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d='M12 5v14M5 12h14'/></svg></span><span>Add to Collection</span></button><button data-a="nav" data-v="jotd"><span><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d='M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z'/></svg></span><span>JOTD</span></button></nav>
 <div class="scrim" id="scrim" data-a="dclose"></div>
 <aside class="drawer" id="drawer"></aside>
 <div id="modal"></div>
@@ -203,7 +213,7 @@ table.spec td{padding:7px 0;border-bottom:1px solid var(--line);font-size:.92rem
 <input type="file" id="gfile" accept="image/*" multiple hidden>
 <script>
 var K='ntts_items_v2',OK='ntts_order_v1',PER=25,MAX_UPLOAD=300*1024;
-var APP_VERSION='2.0.0',APP_DATE='2026-11-03 · 11:40 PM ET',UPDATE_URL='';
+var APP_VERSION='2.0.1',APP_DATE='2026-11-04 · 12:05 AM ET',UPDATE_URL='';
 var EMOJI={ring:'💍',earrings:'✨',necklace:'📿',bracelet:'⭕',watch:'⌚',other:'💎'};
 var ICONS={ring:"<circle cx='12' cy='14' r='6'/><path d='M9.5 8 12 4l2.5 4'/><path d='M12 9.5l1.5 2.5-1.5 2.5-1.5-2.5z'/>",earrings:"<path d='M7 3v3'/><path d='M7 6c-1.6 0-2.5 1.3-2.5 3S6 14 7 17c1-3 2.5-5 2.5-8C9.5 7.3 8.6 6 7 6z'/><path d='M17 3v3'/><path d='M17 6c-1.6 0-2.5 1.3-2.5 3S16 14 17 17c1-3 2.5-5 2.5-8C19.5 7.3 18.6 6 17 6z'/>",necklace:"<path d='M4 5c2 7 14 7 16 0'/><path d='M12 12.5V15'/><circle cx='12' cy='17' r='2.2'/>",bracelet:"<ellipse cx='12' cy='12' rx='8' ry='5.5'/><ellipse cx='12' cy='12' rx='5.5' ry='3'/>",watch:"<circle cx='12' cy='13' r='5.5'/><path d='M9 7.5 10 3h4l1 4.5M9 18.5 10 23h4l1-4.5'/><path d='M12 10.5V13l1.8 1.2'/>",other:"<path d='M7 4h10l4 5-9 11L3 9z'/><path d='M3 9h18M9 4l3 16 3-16'/>",heart:"<path d='M12 20s-7-4.4-7-9.5A4 4 0 0 1 12 8a4 4 0 0 1 7 2.5C19 15.6 12 20 12 20z'/>",wrench:"<path d='M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.5 2.5-2.5-.5-.5-2.5z'/>",pencil:"<path d='M4 20h4L19 9l-4-4L4 16z'/><path d='M13.5 6.5l4 4'/>",lock:"<rect x='5' y='11' width='14' height='10' rx='2'/><path d='M8 11V7a4 4 0 0 1 8 0v4'/>",bag:"<path d='M5 8h14l-1 12H6z'/><path d='M9 8V6a3 3 0 0 1 6 0v2'/>",plus:"<path d='M12 5v14M5 12h14'/>",spark:"<path d='M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z'/>",gallery:"<rect x='3' y='4' width='18' height='16' rx='2'/><circle cx='9' cy='10' r='2'/><path d='M21 16l-5-5-8 9'/>"};
 var ORN='<svg width="72" height="10" viewBox="0 0 72 10" fill="none" stroke="#a8864f" stroke-width="1.2"><path d="M0 5h28M44 5h28"/><path d="M36 1l4 4-4 4-4-4z"/></svg>';
@@ -220,7 +230,7 @@ var THEMES={ruby:{n:'Ruby',l:'#5a1538',d:'#7a2a52',v1:'#2a0115',v2:'#2a0115',pf:
 var PAT_TPL="data:image/svg+xml,<svg id='patternId' width='100%' height='100%' xmlns='http://www.w3.org/2000/svg'><defs><pattern id='a' patternUnits='userSpaceOnUse' width='69.282' height='40' patternTransform='scale(1) rotate(0)'><rect x='0' y='0' width='100%' height='100%' fill='__FILL__'/><path d='M34.641-20v80m34.64-40L0-20m69.282 80L0 20m69.282 0L0 60m69.282-80L0 20m69.282-40v80M0-20v80M34.64 40l11.547-20m11.547 20l11.547 20M34.641 40h23.094m11.547-20L57.735 40M46.188 20L34.641 40l11.547 20h23.094L80.83 40 69.282 20H46.188zM34.641 40l11.547-20m11.547 20l11.547 20M34.641 40h23.094m11.547-20L57.735 40M46.188 20L34.641 40l11.547 20h23.094L80.83 40 69.282 20H46.188zM34.641 0l11.547-20M57.735 0l11.547 20M34.642 0h23.093m11.547-20L57.735 0M46.188-20L34.641 0l11.547 20h23.094L80.83 0 69.282-20H46.188zM34.641 40L23.094 20M11.547 40L0 60m34.64-20H11.548M0 20l11.547 20m11.547-20l11.547 20-11.547 20H0l-11.547-20L0 20h23.094zM34.641 0L23.094-20M11.547 0L0 20M34.64 0H11.548M0-20L11.547 0m11.547-20L34.641 0 23.094 20H0L-11.547 0 0-20h23.094z'  stroke-width='1' stroke='__STROKE__' fill='none'/></pattern></defs><rect width='800%' height='800%' transform='translate(-139,-80)' fill='url(%23a)'/></svg>";
 var SORTS=[['new','Newest First (Purchase Date)'],['old','Oldest First (Purchase Date)'],['worn','Most Worn'],['rest','Least Recently Worn'],['era','Era'],['grp:colorMain','Group by Color'],['grp:category','Group by Type'],['grp:period','Group by Period'],['custom','My Ordering']];
 var ALIAS={metals:'metal',stones:'stone',hallmarks:'hallmark',measurements:'measurement',tags:'motif',mainColor:'colorMain',pdate:'purchaseDate',platform:'purchasePlatform',dListed:'dateListed',link:'linkSale',shipEst:'shipEstimate',dSold:'dateSold',ship:'shipActual',final:'payout',lastWorn:'wornLast',hearts:'rating',size:'ringSize',channel:'sellPlatform'};
-var CSV_COLS=[['id','id'],['title','title'],['category','category'],['period','period'],['era','era'],['yearMade','year'],['country','country'],['stone','stone'],['metal','metal'],['hallmark','hallmark'],['measurement','measurement'],['weight','weight'],['ringSize','ring size'],['cut','cut'],['colorMain','main color'],['motif','motifs'],['provenance','provenance'],['condition','condition'],['notes','notes'],['wornLast','last worn'],['wornCount','times worn'],['rating','rating'],['photoshoot','photoshoot'],['status','status'],['purchaseDate','purchase date'],['seller','seller'],['purchasePlatform','platform'],['cost','cost'],['sellPlatform','selling platform'],['dateListed','date listed'],['linkSale','listing link'],['dateSold','date sold'],['feeFinal','platform fee'],['shipActual','shipping'],['payout','final payout'],['shipEstimate','shipping estimate'],['buffer','buffer'],['maker','maker'],['decade','decade']];
+var CSV_COLS=[['id','id'],['title','title'],['category','category'],['motif','motifs'],['period','period'],['era','era'],['decade','decade'],['yearMade','year'],['country','country'],['maker','maker'],['hallmark','hallmark'],['provenance','provenance'],['measurement','measurement'],['weight','weight'],['ringSize','ring size'],['metal','metal'],['stone','stone'],['cut','cut'],['colorMain','main color'],['condition','condition'],['notes','notes'],['wornLast','last worn'],['wornCount','times worn'],['rating','rating'],['photoshoot','photoshoot'],['status','status'],['seller','seller'],['purchaseDate','purchase date'],['purchasePlatform','platform'],['cost','cost'],['shipEstimate','shipping estimate'],['buffer','buffer'],['sellPlatform','selling platform'],['dateListed','date listed'],['linkSale','listing link'],['dateSold','date sold'],['feeFinal','platform fee'],['shipActual','shipping'],['payout','final payout']];
 var FS={
  title:['Title','text'],
  category:['Category','sel',CATS],
@@ -239,7 +249,7 @@ var FS={
  cut:['Cut','list'],
  colorMain:['Color','list'],
  motif:['Motif','list'],
- provenance:['Provenance','textarea'],
+ provenance:['Provenance','text'],
  condition:['Condition','textarea'],
  notes:['Notes','textarea'],
  wornLast:['Last Worn','date'],
@@ -272,7 +282,7 @@ var FS={
 var LISTS=['stone','metal','motif','cut','colorMain'];
 var SUGG_KEYS=['era','country','stone','metal','cut','motif','colorMain'];
 var LOWER_KEYS=['stone','cut','motif','colorMain'];
-var ORDER_PIECE=['title','category','motif','period','era','decade','yearMade','country','maker','hallmark','measurement','weight','ringSize','metal','stone','cut','colorMain','provenance','condition','notes'];
+var ORDER_PIECE=['title','category','motif','period','era','decade','yearMade','country','maker','hallmark','provenance','measurement','weight','ringSize','metal','stone','cut','colorMain','condition','notes'];
 var ORDER_STATS=['wornLast','wornCount','rating'];
 var ORDER_PURCH=['seller','purchaseDate','purchasePlatform','cost'];
 var ORDER_PRICE=['shipEstimate','buffer','ebayPct','igPct','suggestedEbay','suggestedIG','potentialEbay','potentialIG'];
@@ -535,9 +545,9 @@ function dOpen(k,d){return secOpen[k]===undefined?(d?' open':''):(secOpen[k]?' o
 function avail(kind){return gal[kind].filter(function(id){return !isUsed(id)})}
 function wishImgIds(){return wish.map(function(w){return w.img})}
 function wishGalHTML(){
- return '<details data-gsec="wish"'+(galOpen.wish?' open':'')+'><summary>Wishlist Items ('+wish.length+')</summary>'
-  +(!galOpen.wish&&wish.length?'<p class="meta">Open to see '+wish.length+' wishlist item'+(wish.length===1?'':'s')+'.</p>':wish.length?'<div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(110px,1fr))">'+wish.slice().reverse().map(function(w){return '<div><div style="position:relative;aspect-ratio:1;border-radius:8px;overflow:hidden;background:var(--acc)">'+(gal.imgs[wishCover(w).id]?coverImg(wishCover(w),true):'<span class="meta" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center">No image</span>')+'</div></div>'}).join('')+'</div>':'<p class="meta">No wishlist items yet.</p>')
-  +'<p class="meta">Add or remove wishlist items on the Wishlist page.</p></details>';
+ return '<details data-gsec="wish"'+(galOpen.wish?' open':'')+'><summary>Coveted Items ('+wish.length+')</summary>'
+  +(!galOpen.wish&&wish.length?'<p class="meta">Open to see '+wish.length+' coveted item'+(wish.length===1?'':'s')+'.</p>':wish.length?'<div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(110px,1fr))">'+wish.slice().reverse().map(function(w){return '<div><div style="position:relative;aspect-ratio:1;border-radius:8px;overflow:hidden;background:var(--acc)">'+(gal.imgs[wishCover(w).id]?coverImg(wishCover(w),true):'<span class="meta" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center">No image</span>')+'</div></div>'}).join('')+'</div>':'<p class="meta">Nothing coveted yet.</p>')
+  +'<p class="meta">Add or remove coveted items on the Coveted page.</p></details>';
 }
 function imgBytes(u){if(!u)return 0;var b=u.split(',')[1]||'';return Math.floor(b.length*3/4)-(b.slice(-2)==='=='?2:b.slice(-1)==='='?1:0)}
 var TH={},thQ=[],thRun=false;
@@ -568,6 +578,7 @@ function galPickHTML(act){
 /* ---------- filters ---------- */
 var FACETS=[
  {k:'photoshoot',l:'Photoshoot',cnt:1,v:function(){return ['Yes','No']},g:function(i){return [i.photoshoot?'Yes':'No']}},
+ {k:'refimg',l:'Reference Images',cnt:1,v:function(){return ['Yes','No']},g:function(i){return [(i.refs&&i.refs.length)?'Yes':'No']}},
  {k:'status',l:'Status',cnt:1,v:function(){return STAT},g:function(i){return [i.status]}},
  {k:'category',l:'Type',cnt:1,v:function(){return CATS},g:function(i){return [i.category]}},
  {k:'period',l:'Period',cnt:1,v:function(){return PERIODS},g:function(i){return [i.period]}},
@@ -632,7 +643,7 @@ function rangeBlock(k,l,nums,fmt){
 }
 function filtersHTML(){
  var h='<h3 style="margin:0 0 8px">Filters &amp; Sort</h3>'+(anyFilter()?'<button data-a="clear" style="width:100%;margin:0 0 10px">Clear all filters</button>':'')
-  +'<label>Sort by<select data-a="sort" id="sort">'+SORTS.map(function(o){return '<option value="'+esc(o[0])+'"'+(o[0]===sortBy?' selected':'')+'>'+esc(o[1])+'</option>'}).join('')+'</select></label>'
+  +'<div class="dh">Sort By</div><label><select data-a="sort" id="sort">'+SORTS.map(function(o){return '<option value="'+esc(o[0])+'"'+(o[0]===sortBy?' selected':'')+'>'+esc(o[1])+'</option>'}).join('')+'</select></label>'
   ;
  FACETS.forEach(function(F){
    var vals=facetVals(F);
@@ -653,16 +664,16 @@ function filtersHTML(){
   return h;
 }
 function themeHTML(){
- return '<div class="meta" style="margin:14px 0 6px">Theme</div><div class="seg">'+Object.keys(THEMES).map(function(k){
+ return '<div class="dh" style="margin:14px 0 6px">Theme</div><div class="seg">'+Object.keys(THEMES).map(function(k){
    return '<button data-a="theme" data-v="'+k+'"'+(theme===k?' class="on"':'')+'><span class="sw" style="background:'+THEMES[k].l+'"></span> '+THEMES[k].n+'</button>';
- }).join('')+'</div><div class="meta" style="margin:14px 0 6px">Background</div><div class="seg">'+[['velvet','Velvet'],['pattern','Asanoha']].map(function(b){return '<button data-a="bgs" data-v="'+b[0]+'"'+(bgStyle===b[0]?' class="on"':'')+'>'+b[1]+'</button>'}).join('')+'</div>';
+ }).join('')+'</div><div class="dh" style="margin:14px 0 6px">Background</div><div class="seg">'+[['velvet','Velvet'],['pattern','Asanoha']].map(function(b){return '<button data-a="bgs" data-v="'+b[0]+'"'+(bgStyle===b[0]?' class="on"':'')+'>'+b[1]+'</button>'}).join('')+'</div>';
 }
 function renderManage(){
  var card=function(t,body){return '<div style="border:1px solid var(--line);border-radius:12px;padding:12px"><h4 class="sub" style="margin:0 0 8px">'+t+'</h4>'+body+'</div>'};
  var csvBody='<div class="bar" style="flex-direction:column;align-items:stretch;margin:0"><button data-a="csvup">⬆ Import (CSV)</button><button data-a="csvdown">⬇ Export (CSV)</button></div><p class="meta">Import adds new pieces and updates existing ones by ID. Blank cells keep the existing value. Photos are not included.</p><p class="meta">Export includes '+items.length+' piece'+(items.length===1?'':'s')+' as one CSV file, one row per piece with its details, cost and sale info. Photos are not included.</p><details class="tpl"><summary>CSV Template Fields</summary><p class="meta" style="word-break:break-word;margin:0 0 8px">'+CSV_COLS.map(function(c){return c[0]==='motif'?'motifs':c[0]}).join(', ')+'</p><p class="meta" style="margin:0 0 8px">Lists separate values with ; or commas. Dates use YYYY-MM-DD. Rating is 0 to 5. Photoshoot is true or false. Leave a cell empty to keep the existing value when updating by id.</p></details>';
  var nfiles=planChunks().length;
  var imgCount=Object.keys(gal.imgs).length;
- var jsonBody='<div class="bar" style="flex-direction:column;align-items:stretch;margin:0"><button data-a="import">⬆ Import JSON</button><button data-a="export">⬇ Export JSON</button></div><p class="meta">Export includes '+items.length+' piece'+(items.length===1?'':'s')+' with their details, '+imgCount+' photo'+(imgCount===1?'':'s')+' (covers and reference screenshots), '+wish.length+' wishlist item'+(wish.length===1?'':'s')+', your order, theme and settings. It saves as '+nfiles+' file'+(nfiles===1?'':'s')+'.</p>'+expPanelHTML();
+ var jsonBody='<div class="bar" style="flex-direction:column;align-items:stretch;margin:0"><button data-a="import">⬆ Import JSON</button><button data-a="export">⬇ Export JSON</button></div><p class="meta">Export includes '+items.length+' piece'+(items.length===1?'':'s')+' with their details, '+imgCount+' photo'+(imgCount===1?'':'s')+' (covers and reference screenshots), '+wish.length+' coveted item'+(wish.length===1?'':'s')+', your order, theme and settings. It saves as '+nfiles+' file'+(nfiles===1?'':'s')+'.</p>'+expPanelHTML();
  return '<h2>I/O</h2>'
   +'<h3 class="side">Data Backup</h3><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px">'+card('CSV Backup',csvBody)+card('JSON Backup',jsonBody)+'</div>'
   +'<h3 class="side">App Stats</h3><div style="border:1px solid var(--line);border-radius:12px;padding:12px"><div style="margin-bottom:10px"><button data-a="checkupd">Check for new version</button></div><div id="stormeter" class="meta" style="text-align:left"></div></div>'
@@ -674,12 +685,12 @@ function wishCover(w){return w.cover||{id:w.img,l:null,t:null,w:null,h:null}}
 function renderWishlist(){
  var list=wish.filter(function(w){return (!wishType.length||wishType.indexOf(w.category)>-1)&&(!q||((w.category||'')+' '+(w.link||'')).toLowerCase().indexOf(q)>-1)});
  var tiles=list.map(function(w){return '<div class="'+(wro?'tile':'')+'" data-id="'+w.id+'" style="position:relative"><button type="button" data-a="wopen" data-id="'+w.id+'" style="padding:0;border:0;border-radius:10px;overflow:hidden;aspect-ratio:1;width:100%;display:block;min-height:0;background:var(--acc);position:relative">'+coverImg(wishCover(w))+'</button>'+(wro?'<button type="button" data-a="wdel" data-id="'+w.id+'" style="position:absolute;top:4px;right:4px;width:26px;height:26px;min-width:0;padding:0;min-height:0;border-radius:50%;display:flex;align-items:center;justify-content:center;line-height:1;font-size:.75rem">✕</button>':'')+'<div class="meta" style="margin-top:4px;text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+esc(wishDomain(w.link))+'</div></div>'}).join('');
- return '<div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:12px"><h2 style="margin:0">Wishlist</h2><button class="pri" data-a="wadd">+ Add to Wishlist</button></div>'
-  +(list.length?'<div class="grid'+(wro?' ro':'')+'" style="grid-template-columns:repeat('+cols+',1fr)">'+tiles+'</div>':'<p class="meta">'+(wish.length?'No wishlist items match this type.':'Nothing on your wishlist yet.')+'</p>')
+ return '<div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:12px"><h2 style="margin:0">Coveted</h2><button class="pri" data-a="wadd">+ Add to Coveted</button></div>'
+  +(list.length?'<div class="grid'+(wro?' ro':'')+'" style="grid-template-columns:repeat('+cols+',1fr)">'+tiles+'</div>':'<p class="meta">'+(wish.length?'No coveted items match this type.':'Nothing coveted yet.')+'</p>')
   +'<hr style="border:0;border-top:1px solid var(--line);margin:18px 0">'+'<h3 class="side" style="margin-top:0">Ring Size Chart</h3>'+ringTableHTML();
 }
 function wishAddHTML(){
- return '<div class="modal" data-a="backdrop"><div style="max-width:520px;width:94vw"><h3 style="margin:0 0 6px">Add to Wishlist</h3>'
+ return '<div class="modal" data-a="backdrop"><div style="max-width:520px;width:94vw"><h3 style="margin:0 0 6px">Add to Coveted</h3>'
   +'<label style="margin-top:10px">Link<input type="url" id="wlink" placeholder="https://"></label>'
   +'<label style="margin-top:10px">Type<select id="wcat">'+CATS.map(function(c){return '<option>'+c+'</option>'}).join('')+'</select></label>'
   +'<label>Photo<input type="file" id="wfile" accept="image/*"></label>'
@@ -702,7 +713,7 @@ function wishPreviewHTML(href){
 function viewControls(){
  var box=view==='box',h='<h3 style="margin:0 0 8px">View</h3>';
  if(box)h+='<span class="tgl">'+[['thumbs','▦ Grid'],['table','▤ Table']].map(function(o){return '<button data-a="vm" data-v="'+o[0]+'"'+(o[0]===vmode?' class="on"':'')+'>'+o[1]+'</button>'}).join('')+'</span>';
- if(view==='secret'||view==='wishlist'||(box&&vmode==='thumbs'))h+='<div class="meta" style="margin-top:12px">Grid Size</div><div class="seg" style="margin-top:4px">'+[1,2,3,4].map(function(n){return '<button data-a="cols" data-v="'+n+'" aria-label="'+n+' across"'+(n===cols?' class="on"':'')+'>'+gicon(n)+'</button>'}).join('')+'</div>';
+ if(view==='secret'||view==='wishlist'||(box&&vmode==='thumbs'))h+='<div class="dh" style="margin-top:12px">Grid Size</div><div class="seg" style="margin-top:4px">'+[1,2,3,4].map(function(n){return '<button data-a="cols" data-v="'+n+'" aria-label="'+n+' across"'+(n===cols?' class="on"':'')+'>'+gicon(n)+'</button>'}).join('')+'</div>';
  if(view==='wishlist')h+='<div class="seg" style="margin-top:8px"><button data-a="wro"'+(wro?' class="on"':'')+'>'+(wro?'Done reordering':'✥ Reorder Grid')+'</button></div>';
  if(box&&vmode==='thumbs')h+='<div class="seg" style="margin-top:8px"><button data-a="ro"'+(ro?' class="on"':'')+'>'+(ro?'Done reordering':'✥ Reorder Grid')+'</button></div>';
  return h;
@@ -712,7 +723,7 @@ function wishFilterHTML(){
  return '<fieldset class="facet"><legend>Type</legend><div class="cloud">'+cats.map(function(c){return '<button data-a="wtype" data-v="'+esc(c)+'"'+(wishType.indexOf(c)>-1?' class="on"':'')+'>'+esc(c)+' ('+wish.filter(function(w){return w.category===c}).length+')</button>'}).join('')+'</div></fieldset>'+(wishType.length?'<p><button data-a="wclear">Clear type filter</button></p>':'');
 }
 function renderDrawer(){
- document.getElementById('drawer').innerHTML='<h3 style="margin:0 0 10px">Menu</h3>'+(view==='jotd'?'':'<div style="margin:0 0 10px"><button data-a="nav" data-v="gallery" style="width:100%;justify-content:center"'+(view==='gallery'?' class="on"':'')+'>'+ico('gallery',18)+' Manage Gallery</button></div><div class="dv"><span>'+ORN+'</span></div>'+viewControls())+themeHTML()+'<div class="dv"><span>'+ORN+'</span></div>'+(view==='jotd'?'':view==='wishlist'?wishFilterHTML():filtersHTML());
+ document.getElementById('drawer').innerHTML='<h3 class="mh" style="margin:0 0 10px">Menu</h3>'+(view==='jotd'?'':'<div style="margin:0 0 10px"><button data-a="nav" data-v="gallery" style="width:100%;justify-content:center"'+(view==='gallery'?' class="on"':'')+'>'+ico('gallery',18)+' Manage Gallery</button></div><div class="dv"><span>'+ORN+'</span></div>'+viewControls())+themeHTML()+'<div class="dv"><span>'+ORN+'</span></div>'+(view==='jotd'?'':view==='wishlist'?wishFilterHTML():filtersHTML());
 }
 function drawer(o){document.getElementById('drawer').classList.toggle('open',o);document.getElementById('scrim').classList.toggle('open',o)}
 
@@ -761,11 +772,11 @@ function renderBox(){
   +(list.length?'':'<p class="meta">No pieces match.</p>')+countLine(list.length);
 }
 function valOf(v){return v==null?'':Array.isArray(v)?v.join(', '):String(v)}
-var WIDE_KEYS=['title','seller','link','notes','description','provenance','condition'];
+var WIDE_KEYS=['title','seller','link','notes','description','condition'];
 function fieldHTML(k,v){
  var s=FS[k],t=s[1],val=LISTS.indexOf(k)>-1?(v||[]).join(', '):(v==null?'':v),c;
  if(LOWER_KEYS.indexOf(k)>-1)val=String(val).toLowerCase();
- if(k==='colorMain'){var cchk=v||[];return '<details class="cdd" data-sel="'+esc(JSON.stringify(cchk))+'"><summary class="cddS"><span>'+s[0]+'</span><span class="cddBox"><span class="cddTxt">'+esc(cchk.join(', ')||'Choose colors')+'</span><span class="cddArr">▾</span></span></summary><div style="display:grid;grid-template-columns:1fr;gap:0;margin-top:4px;padding:6px 10px;border:1px solid var(--line);border-radius:8px;background:var(--bg)">'+COLOR_ORDER.map(function(c){return '<label class="swl" style="flex-direction:row;align-items:center;gap:6px;color:var(--fg);margin:0;padding:3px 0;font-size:.95rem"><input type="checkbox" name="colorMain" value="'+esc(c)+'"'+(cchk.indexOf(c)>-1?' checked':'')+'> '+(HEARTS[c]||'')+' '+esc(c)+'</label>'}).join('')+'</div></details>'}
+ if(k==='colorMain'){var cchk=v||[];return '<details class="cdd" data-sel="'+esc(JSON.stringify(cchk))+'"><summary class="cddS"><span>'+s[0]+'</span><span class="cddBox"><span class="cddTxt">'+esc(cchk.join(', '))+'</span><span class="cddArr">▾</span></span></summary><div style="display:grid;grid-template-columns:1fr;gap:0;margin-top:4px;padding:6px 10px;border:1px solid var(--line);border-radius:8px;background:var(--bg)">'+COLOR_ORDER.map(function(c){return '<label class="swl" style="flex-direction:row;align-items:center;gap:6px;color:var(--fg);margin:0;padding:3px 0;font-size:.95rem"><input type="checkbox" name="colorMain" value="'+esc(c)+'"'+(cchk.indexOf(c)>-1?' checked':'')+'> '+sw(c)+' '+esc(c)+'</label>'}).join('')+'</div></details>'}
  if(t==='check')return '<label class="swl"><input type="checkbox" name="'+k+'"'+(v?' checked':'')+'> '+s[0]+'</label>';
  if(t==='calc')return '<label>'+s[0]+'<div class="calc" id="'+s[2]+'">'+esc(calcs(editing)[s[2]])+'</div></label>';
  if(t==='pct')return '<label>'+s[0]+'<input name="'+k+'" type="number" step="0.1" inputmode="decimal" value="'+(k==='ebayPct'?PS.eb:PS.ig)+'"></label>';
@@ -779,7 +790,7 @@ function fieldHTML(k,v){
  else c='<input name="'+k+'" type="'+(t==='url'?'url':'text')+'" value="'+esc(val)+'"'+''+(SUGG_KEYS.indexOf(k)>-1?' data-sugg="'+k+'" autocomplete="off"':'')+'>';
  if(t!=='check'&&t!=='calc'&&t!=='pct'&&(t!=='sel'||s[2].indexOf('')>-1))c='<span class="fw">'+c+'<button type="button" class="fx" data-a="fclr" aria-label="Clear">✕</button></span>';
  var sg=SUGG_KEYS.indexOf(k)>-1,wd=t==='textarea'||WIDE_KEYS.indexOf(k)>-1;
- return '<label'+(sg||wd?' style="'+(sg?'position:relative;':'')+(wd?'grid-column:1/-1;':'')+'"':'')+'>'+(k==='ringSize'?'<span style="display:flex;justify-content:space-between;align-items:center;gap:8px;line-height:1.2"><span>'+s[0]+'</span><button type="button" data-a="ringref" style="border:0;background:none;padding:0;margin:0;min-height:0;font-size:.8rem;line-height:1.2;color:var(--acc);text-decoration:underline;border-radius:0">view chart</button></span>':(t==='list'?s[0]+' (comma separated)':s[0]))+c+(sg?'<div class="sg" hidden></div>':'')+'</label>';
+ return '<label'+(sg||wd?' style="'+(sg?'position:relative;':'')+(wd?'grid-column:1/-1;':'')+'"':'')+'>'+(k==='ringSize'?'<span style="display:flex;justify-content:space-between;align-items:center;gap:8px;line-height:1.45"><span>'+s[0]+'</span><button type="button" data-a="ringref" style="border:0;background:none;padding:0;margin:0;min-height:0;font-size:.8rem;line-height:1.2;color:var(--acc);text-decoration:underline;border-radius:0">view chart</button></span>':(t==='list'?s[0]+' (comma separated)':s[0]))+c+(sg?'<div class="sg" hidden></div>':'')+'</label>';
 }
 function suggPool(k){
  if(k==='colorMain')return COLOR_ORDER.map(function(c){return {v:c,l:(HEARTS[c]||'')+' '+c}});
@@ -1047,7 +1058,9 @@ function jotdStart(){
 }
 function jotdCard(label,i,emptyMsg,k){
  var locked=!!jotdLock[k],btn='font-size:.8rem;padding:4px 8px;min-height:0;';
- var lockBtn='<button data-a="jlock" data-k="'+k+'" aria-pressed="'+locked+'"'+(i?'':' disabled')+' style="'+btn+'">'+(locked?'🔒 Locked':'🔓 Lock')+'</button>';
+ var lockBtn='<div class="seg" style="flex-wrap:nowrap;gap:0;flex:none">'
+  +'<button data-a="jlock" data-k="'+k+'" aria-pressed="'+locked+'"'+(i?'':' disabled')+' class="'+(locked?'on':'')+'" style="'+btn+'border-radius:999px 0 0 999px">'+(locked?'Locked':'Lock')+'</button>'
+  +'<button data-a="jskip" data-k="'+k+'"'+(i&&!locked?'':' disabled')+' style="'+btn+'border-radius:0 999px 999px 0;margin-left:-1px">Skip</button></div>';
  var pic=i?(i.cover?coverImg(i.cover):'<div style="font-size:3.5rem;text-align:center;padding-top:30%">'+ico(String(i.category).toLowerCase(),56)+'</div>')
   :'<div class="meta" style="padding:10px;text-align:center;display:flex;align-items:center;justify-content:center;height:100%">'+esc(emptyMsg)+'</div>';
  var picWrap='<div '+(i?'data-a="open" data-id="'+i.id+'" style="cursor:zoom-in;':'style="')+'position:relative;width:100%;aspect-ratio:1;overflow:hidden;border-radius:10px;margin:0 0 6px;background:var(--acc)">'+pic+'</div>';
@@ -1067,11 +1080,11 @@ function renderJotd(){
   +'</div>';
  return '<h2>Jewelry of the Day</h2>'
   +cards
-  +'<div class="bar" style="margin-top:12px"><button data-a="jlucky">🍀 Feelin’ lucky</button><button data-a="jreset">🔄 Start over</button><button class="pri" data-a="jwear"'+(ids.length?'':' disabled')+'>✓ Say Yes!</button></div>'
+  +'<div class="bar" style="margin-top:12px"><button data-a="jlucky">Feelin’ lucky</button><button data-a="jreset">Start over</button><button class="pri" data-a="jwear"'+(ids.length?'':' disabled')+'>Say Yes!</button></div>'
   +(jotdMsg?'<p class="meta">'+esc(jotdMsg)+'</p>':'');
 }
 function popup(i){
- var rows=[['Category',i.category],['Period',i.period],['Era / Movement',i.era],['Year',i.yearMade],['Country',i.country],['Metal',(i.metal||[]).join(', ')],['Stone',(i.stone||[]).join(', ')],['Ring size',i.ringSize],['Motifs',(i.motif||[]).join(', ')],['Seller',i.seller],['Status',i.status]].filter(function(r){return r[1]!=null&&String(r[1]).trim()!==''});
+ var rows=[['Year',i.yearMade],['Country',i.country],['Metal',(i.metal||[]).join(', ')],['Ring size',i.ringSize],['Seller',i.seller],['Status',i.status]].filter(function(r){return r[1]!=null&&String(r[1]).trim()!==''});
  var table=rows.map(function(r){return '<tr><th>'+esc(String(r[0]))+'</th><td>'+esc(String(r[1]))+'</td></tr>'}).join('');
  var rate=stars(i.rating)?'<tr><th>Rating</th><td><span style="color:var(--gold);letter-spacing:.1em">'+stars(i.rating)+'</span></td></tr>':'';
  var cover=i.cover?'<div class="mat"><div class="photo">'+coverImg(i.cover)+'</div></div>':'';
@@ -1325,7 +1338,7 @@ function fmtBytes(b){return b<1048576?Math.round(b/1024)+' KB':b<1073741824?(b/1
 function updateStorage(){
  var el=document.getElementById('stormeter');if(!el)return;
  var st=storageBytes();
- var lines=['Current version: v'+APP_VERSION+' · '+APP_DATE,'App data: '+fmtBytes(st.total)+' ('+items.length+' pieces, '+st.imgs+' images, '+wish.length+' wishlist items)'];
+ var lines=['Current version: v'+APP_VERSION+' · '+APP_DATE,'App data: '+fmtBytes(st.total)+' ('+items.length+' pieces, '+st.imgs+' images, '+wish.length+' coveted items)'];
  if(st.total/1048576>150)lines.push('Large library: consider separate image storage soon.');
  var bi=lines.length;lines.push('Browser data: checking');
  lines.push('Persistent storage: '+(persistOK===true?'granted':persistOK===false?'not granted':'checking'));
@@ -1374,6 +1387,7 @@ document.addEventListener('click',function(e){
   case 'nav':if(d.new)editing=newItem();if(d.v==='secret'){secretGate();break}show(d.v);break;
   case 'jotd':show('jotd');break;
   case 'jlock':if(jotdSel&&jotdSel[d.k]){jotdLock[d.k]=!jotdLock[d.k];renderMain()}break;
+  case 'jskip':if(jotdSel&&jotdSel[d.k]&&!jotdLock[d.k]){jotdRoll(d.k);renderMain()}break;
   case 'jlucky':jotdLuck();renderMain();break;
   case 'jreset':jotdStart();renderMain();break;
   case 'jwear':var wn=wearMany([jotdSel.ring1,jotdSel.ring2,jotdSel.earring,jotdSel.necklace].filter(Boolean).map(function(i){return i.id}));jotdMsg=wn?'Saved as worn today ('+wn+' piece'+(wn===1?'':'s')+').':'Already saved as worn today.';renderMain();break;
@@ -1442,7 +1456,7 @@ document.addEventListener('click',function(e){
   case 'wclear':wishType=[];render();break;
   case 'wcols':wishCols=Number(d.v);renderMain();break;
   case 'wopen':var wo=wish.filter(function(x){return x.id===d.id})[0];if(wo){var wa=document.createElement('a');wa.href=wo.link;wa.target='_blank';wa.rel='noopener';document.body.appendChild(wa);wa.click();wa.remove()}break;
-  case 'wdel':if(!confirm('Remove this from the wishlist?'))break;var wd=wish.filter(function(x){return x.id===d.id})[0];wish=wish.filter(function(x){return x.id!==d.id});if(wd&&!isUsed(wd.img)){gal.refs=gal.refs.filter(function(x){return x!==wd.img});gal.covers=gal.covers.filter(function(x){return x!==wd.img});delete gal.imgs[wd.img]}saveWish();saveGallery();renderMain();break;
+  case 'wdel':if(!confirm('Remove this from coveted?'))break;var wd=wish.filter(function(x){return x.id===d.id})[0];wish=wish.filter(function(x){return x.id!==d.id});if(wd&&!isUsed(wd.img)){gal.refs=gal.refs.filter(function(x){return x!==wd.img});gal.covers=gal.covers.filter(function(x){return x!==wd.img});delete gal.imgs[wd.img]}saveWish();saveGallery();renderMain();break;
   case 'covadd':document.getElementById('cvfile').click();break;
   case 'refadd':document.getElementById('reffile').click();break;
   case 'listmodal':e.preventDefault();syncForm();var pr2=editing.shipEstimate!=null&&editing.shipEstimate!==''?editing.shipEstimate:shipDefault(editing.cost);var ph=ORDER_PRICE.map(function(k){return fieldHTML(k,k==='shipEstimate'?pr2:editing[k])}).join('').replace(/<(input|select|textarea) /g,'<$1 form="form" ');M.innerHTML='<div class="modal" data-a="backdrop"><div id="lhPrice" style="max-width:520px;width:94vw;max-height:88vh;overflow:auto"><h3 style="margin:0 0 8px">🏷️ Listing Helper</h3>'+listingBlock(editing)+'<div class="f">'+ph+'</div>'+'<div class="bar" style="justify-content:center;margin:12px 0 0"><button data-a="x">Close</button></div></div></div>';break;
@@ -1636,7 +1650,7 @@ document.addEventListener('pointercancel',endDrag);
 document.addEventListener('wheel',function(e){if(CR&&e.target.closest&&e.target.closest('#cropv')){e.preventDefault();cropZoom(Math.min(4,Math.max(1,CR.z*(1-e.deltaY/500))))}},{passive:false});
 document.addEventListener('touchstart',function(e){if(e.touches.length!==1)return;var t=e.touches[0],open=document.getElementById('drawer').classList.contains('open');swS=(t.clientX<40||open)?{x:t.clientX,y:t.clientY,t:Date.now(),open:open}:null},{passive:true});
 document.addEventListener('touchend',function(e){if(!swS)return;var s=swS;swS=null;var t=e.changedTouches[0],dx=t.clientX-s.x,dy=Math.abs(t.clientY-s.y),dt=Date.now()-s.t;if(dy>50||dt>800)return;if(!s.open&&dx>70&&document.getElementById('modal').innerHTML==='')drawer(true);else if(s.open&&dx<-70)drawer(false)},{passive:true});
-function qtoggle(open){var h=document.querySelector('header'),i=document.getElementById('q');h.classList.toggle('sq',open);document.getElementById('qb').textContent=open?'✕':'🔍';if(open)i.focus();else if(q){i.value='';q='';page=1;renderMain()}}
+function qtoggle(open){var h=document.querySelector('header'),i=document.getElementById('q');h.classList.toggle('sq',open);document.getElementById('qb').innerHTML=open?'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>':'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l5 5"/></svg>';if(open)i.focus();else if(q){i.value='';q='';page=1;renderMain()}}
 document.getElementById('qb').addEventListener('click',function(){qtoggle(!document.querySelector('header').classList.contains('sq'))});
 document.getElementById('q').addEventListener('input',function(e){q=e.target.value.trim().toLowerCase();page=1;renderMain()});
 function checkUpdate(){
