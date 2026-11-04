@@ -174,7 +174,7 @@ footer#ver{text-align:center;padding:24px 14px calc(36px + env(safe-area-inset-b
 <input type="file" id="gfile" accept="image/*" multiple hidden>
 <script>
 var K='ntts_items_v2',OK='ntts_order_v1',PER=25,MAX_UPLOAD=300*1024;
-var APP_VERSION='1.7.2',APP_DATE='2026-11-03 · 10:47 PM ET',UPDATE_URL='';
+var APP_VERSION='1.7.3',APP_DATE='2026-11-03 · 11:10 PM ET',UPDATE_URL='';
 var EMOJI={ring:'💍',earrings:'✨',necklace:'📿',bracelet:'⭕',watch:'⌚',other:'💎'};
 var CATS=['Ring','Earrings','Necklace','Bracelet','Watch','Other'];
 var STAT=['Waiting','Benched','Private Collection','To List','Listed','Sold'];
@@ -1037,7 +1037,7 @@ function renderJotd(){
   +(jotdMsg?'<p class="meta">'+esc(jotdMsg)+'</p>':'');
 }
 function popup(i){
- document.getElementById('modal').innerHTML='<div class="modal" data-a="backdrop"><div>'+(i.cover?'<div style="position:relative;width:100%;max-width:260px;aspect-ratio:1;overflow:hidden;border-radius:10px;margin:0 auto 10px">'+coverImg(i.cover)+'</div>':'')+'<h3>'+esc(title(i))+'</h3>'+(i.notes?'<p class="meta">'+esc(i.notes)+'</p>':'')+'<p class="meta">'+esc([i.category,i.period,i.era,i.country,(i.metal||[]).join('/'),(i.stone||[]).join('/')].filter(Boolean).join(' · '))+'</p>'+'</p>'+'<p class="meta">'+(i.colorMain?sw(i.colorMain)+' '+esc(i.colorMain)+' · ':'')+(stars(i.rating)?stars(i.rating)+' · ':'')+esc((i.motif||[]).join(', '))+'</p>'+(i.seller?'<p class="meta">'+esc(i.seller)+'</p>':'')+'<div class="bar" style="justify-content:center"><button class="pri" data-a="edit" data-id="'+i.id+'">Edit</button><button data-a="x">Close</button></div></div></div>';
+ document.getElementById('modal').innerHTML='<div class="modal" data-a="backdrop"><div>'+(i.cover?'<div style="position:relative;width:100%;max-width:260px;aspect-ratio:1;overflow:hidden;border-radius:10px;margin:0 auto 10px">'+coverImg(i.cover)+'</div>':'')+'<h3>'+esc(title(i))+'</h3><p class="meta">'+esc([i.category,i.period,i.era,i.country,(i.metal||[]).join('/'),(i.stone||[]).join('/')].filter(Boolean).join(' · '))+'</p>'+'</p>'+'<p class="meta">'+[(stars(i.rating)||''),esc((i.motif||[]).join(', '))].filter(Boolean).join(' · ')+'</p>'+(i.seller?'<p class="meta">'+esc(i.seller)+'</p>':'')+'<div class="bar" style="justify-content:center"><button class="pri" data-a="edit" data-id="'+i.id+'">Edit</button><button data-a="x">Close</button></div></div></div>';
 }
 
 /* ---------- secret compartment ---------- */
