@@ -172,7 +172,7 @@ footer#ver{text-align:center;padding:24px 14px calc(36px + env(safe-area-inset-b
 <input type="file" id="gfile" accept="image/*" multiple hidden>
 <script>
 var K='ntts_items_v2',OK='ntts_order_v1',PER=25,MAX_UPLOAD=300*1024;
-var APP_VERSION='1.6.27',APP_DATE='2026-11-03 · 7:40 PM ET',UPDATE_URL='';
+var APP_VERSION='1.6.29',APP_DATE='2026-11-03 · 7:50 PM ET',UPDATE_URL='';
 var EMOJI={ring:'💍',earrings:'✨',necklace:'📿',bracelet:'⭕',watch:'⌚',other:'💎'};
 var CATS=['Ring','Earrings','Necklace','Bracelet','Watch','Other'];
 var STAT=['Waiting','Benched','Private Collection','To List','Listed','Sold'];
@@ -183,7 +183,7 @@ var COLOR_SEL=[''].concat(COLOR_ORDER);
 var COLORS={pink:'#f4a7c1',red:'#d03a3a',orange:'#f0892b',brown:'#7b4a2a',yellow:'#f4d03f',green:'#3f9d5a','light blue':'#8fd3f4',blue:'#3d6fd0',purple:'#8a4fc0',black:'#1a1a1a',gray:'#8d8d8d',white:'#ffffff',multi:'conic-gradient(#d03a3a,#f4d03f,#3f9d5a,#3d6fd0,#8a4fc0,#d03a3a)'};
 var HEARTS={Pink:'🩷',Red:'❤️',Orange:'🧡',Brown:'🤎',Yellow:'💛',Green:'💚','Light blue':'🩵',Blue:'💙',Purple:'💜',Black:'🖤',Gray:'🩶',White:'🤍',Multi:'🌈'};
 var THEMES={ruby:{n:'Ruby',l:'#7b2d3b',d:'#d98a9b',v1:'#4d2036',v2:'#26101c'},sapphire:{n:'Sapphire',l:'#2e5aa8',d:'#8fb3ff',v1:'#1f2f5a',v2:'#0c1530'},emerald:{n:'Emerald',l:'#1f6b4a',d:'#7fd1a8',v1:'#1d4a37',v2:'#0a2118'}};
-var SORTS=[['new','Newest First (Purchase Date)'],['worn','Most Worn'],['rest','Least Recently Worn'],['era','Era'],['status','Status'],['grp:colorMain','Group by Color'],['grp:category','Group by Type'],['grp:period','Group by Period'],['custom','My Ordering']];
+var SORTS=[['new','Newest First (Purchase Date)'],['old','Oldest First (Purchase Date)'],['worn','Most Worn'],['rest','Least Recently Worn'],['era','Era'],['grp:colorMain','Group by Color'],['grp:category','Group by Type'],['grp:period','Group by Period'],['custom','My Ordering']];
 var ALIAS={metals:'metal',stones:'stone',hallmarks:'hallmark',measurements:'measurement',tags:'motif',mainColor:'colorMain',pdate:'purchaseDate',platform:'purchasePlatform',dListed:'dateListed',link:'linkSale',shipEst:'shipEstimate',dSold:'dateSold',ship:'shipActual',final:'payout',lastWorn:'wornLast',hearts:'rating',size:'ringSize',channel:'sellPlatform'};
 var CSV_COLS=[['id','id'],['title','title'],['category','category'],['period','period'],['era','era'],['yearMade','year'],['country','country'],['stone','stone'],['metal','metal'],['hallmark','hallmark'],['measurement','measurement'],['weight','weight'],['ringSize','ring size'],['cut','cut'],['colorMain','main color'],['motif','motifs'],['notes','notes'],['wornLast','last worn'],['wornCount','times worn'],['rating','rating'],['photoshoot','photoshoot'],['status','status'],['purchaseDate','purchase date'],['seller','seller'],['purchasePlatform','platform'],['cost','cost'],['sellPlatform','selling platform'],['dateListed','date listed'],['linkSale','listing link'],['dateSold','date sold'],['feeFinal','platform fee'],['shipActual','shipping'],['payout','final payout'],['shipEstimate','shipping estimate'],['buffer','buffer'],['maker','maker'],['decade','decade']];
 var FS={
@@ -568,6 +568,7 @@ function gKey(i,p){
 function sorted(list){
  var a=list.slice();
  if(sortBy==='new')a.sort(function(x,y){var dx=x.purchaseDate||'',dy=y.purchaseDate||'';if(dx!==dy)return dx<dy?1:-1;return y.id-x.id});
+else if(sortBy==='old')a.sort(function(x,y){var dx=x.purchaseDate||'',dy=y.purchaseDate||'';if(dx!==dy){if(!dx)return 1;if(!dy)return -1;return dx<dy?-1:1}return x.id-y.id});
  else if(sortBy==='worn')a.sort(function(x,y){return (Number(y.wornCount)||0)-(Number(x.wornCount)||0)});
  else if(sortBy==='rest')a.sort(function(x,y){return (x.wornLast||'').localeCompare(y.wornLast||'')});
  else if(sortBy==='custom')a.sort(function(x,y){return (order.indexOf(x.id)-order.indexOf(y.id))||(y.id-x.id)});
@@ -594,7 +595,7 @@ function filtersHTML(){
  FACETS.forEach(function(F){
    var vals=facetVals(F);
    if(vals.length){
-     var sel=fsel[F.k]||[],open=!!showAllF[F.k],shown=open?vals:vals.slice(0,6);
+     var sel=fsel[F.k]||[],allC=F.k==='colorMain',open=allC||!!showAllF[F.k],shown=open?vals:vals.slice(0,6);
      var chips=shown.map(function(v){
        var on=sel.indexOf(v)>-1;
        if(F.cloud)return '<button data-a="f" data-k="'+F.k+'" data-val="'+esc(v)+'"'+(on?' class="on"':'')+'>'+esc(v)+((F.counted||F.cnt)?' ('+cntF(F,v)+')':'')+'</button>';
@@ -602,7 +603,7 @@ function filtersHTML(){
        return '<label><input type="checkbox" data-a="fc" data-k="'+F.k+'" data-val="'+esc(v)+'"'+(on?' checked':'')+'>'+esc(lbl)+'</label>';
      }).join('');
      h+='<fieldset class="facet"><legend>'+F.l+'</legend>'+(F.cloud?'<div class="cloud">'+chips+'</div>':chips)
-       +(vals.length>6?'<button class="link" data-a="showall" data-k="'+F.k+'">'+(open?'Show less':'Show all ('+vals.length+')')+'</button>':'')+'</fieldset>';
+       +(vals.length>6&&!allC?'<button class="link" data-a="showall" data-k="'+F.k+'">'+(open?'Show less':'Show all ('+vals.length+')')+'</button>':'')+'</fieldset>';
    }
    if(F.k==='era')h+=rangeBlock('year','Year',vis().map(function(i){return num(i.yearMade)}).filter(function(n){return n!=null}),function(v){return String(Math.round(v))});
  });
@@ -711,7 +712,7 @@ function renderBox(){
  var lim=ro?Infinity:boxLim;
  var waitS=waitL.slice(0,lim),mainS=mainL.slice(0,Math.max(0,lim-waitS.length));
  var waitGrid=waitS.length?'<div class="grid" style="grid-template-columns:repeat('+cols+',1fr)">'+waitS.map(thumb).join('')+'</div>'+(mainS.length?'<hr style="border:0;border-top:1px solid var(--line);margin:16px 0">':''):'';
- var more=(!ro&&list.length>boxLim)?'<div style="text-align:center;margin:14px 0"><button data-a="boxmore">Show more ('+(list.length-boxLim)+' left)</button></div>':'';
+ var more=(!ro&&list.length>boxLim)?'<div class="bar" style="justify-content:center;margin:14px 0"><button data-a="boxmore">Show more ('+(list.length-boxLim)+' left)</button><button data-a="boxall">Show all ('+list.length+')</button></div>':'';
  return (ro?'<div class="bar"><span class="meta">Drag a photo onto another to move it. Order saves automatically.</span><button class="pri" data-a="ro">Done</button></div>':'')
   +'<div class="box">'+waitGrid+'<div class="grid'+(ro?' ro':'')+'" style="grid-template-columns:repeat('+cols+',1fr)">'+mainS.map(thumb).join('')+'</div></div>'+more
   +(list.length?'':'<p class="meta">No pieces match.</p>')+countLine(list.length);
@@ -1348,6 +1349,7 @@ document.addEventListener('click',function(e){
   case 'rlpick':var rlIt=items.filter(function(x){return String(x.id)===String(d.rid)})[0];if(!rlIt)break;var rlImgs=String(d.img).split(',');if(d.kind==='covers')rlIt.cover={id:rlImgs[0],l:null,t:null,w:null,h:null};else if(d.kind==='comps')rlIt.comps=uniqArr((rlIt.comps||[]).concat(rlImgs));else rlIt.refs=uniqArr((rlIt.refs||[]).concat(rlImgs));if(d.kind!=='covers'&&d.kind!=='comps'&&!rlIt.cover&&rlIt.refs.length)rlIt.cover={id:rlIt.refs[0],l:null,t:null,w:null,h:null};rlImgs.forEach(function(x){delete galSel[d.kind][x]});saveItems();M.innerHTML='';editing=JSON.parse(JSON.stringify(rlIt));backTo='gallery';var rlJump=d.kind==='covers'?'secCover':d.kind==='comps'?'secComps':'secRefs';show('edit');setTimeout(function(){var jel=document.getElementById(rlJump);if(jel)window.scrollTo(0,jel.getBoundingClientRect().top+window.pageYOffset-90)},80);break;
   case 'galmore':galLim[d.kind]+=60;renderMain();break;
   case 'boxmore':boxLim+=60;renderMain();break;
+  case 'boxall':boxLim=Infinity;renderMain();break;
   case 'gview':M.innerHTML=previewHTML(gal.imgs[d.id],d.kind,d.id);break;
   case 'gtog':galSel[d.kind][d.id]=!galSel[d.kind][d.id];renderMain();break;
   case 'gall':gal[d.kind].forEach(function(id){galSel[d.kind][id]=true});renderMain();break;
