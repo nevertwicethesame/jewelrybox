@@ -172,7 +172,7 @@ footer#ver{text-align:center;padding:24px 14px calc(36px + env(safe-area-inset-b
 <input type="file" id="gfile" accept="image/*" multiple hidden>
 <script>
 var K='ntts_items_v2',OK='ntts_order_v1',PER=25,MAX_UPLOAD=300*1024;
-var APP_VERSION='1.6.32',APP_DATE='2026-11-03 · 9:10 PM ET',UPDATE_URL='';
+var APP_VERSION='1.6.33',APP_DATE='2026-11-03 · 9:35 PM ET',UPDATE_URL='';
 var EMOJI={ring:'💍',earrings:'✨',necklace:'📿',bracelet:'⭕',watch:'⌚',other:'💎'};
 var CATS=['Ring','Earrings','Necklace','Bracelet','Watch','Other'];
 var STAT=['Waiting','Benched','Private Collection','To List','Listed','Sold'];
@@ -263,9 +263,11 @@ function kset(k,v){return new Promise(function(res){if(!DB){MEM[k]=JSON.parse(JS
 var SAVED={};
 function kdel(k){return new Promise(function(res){if(!DB){delete MEM[k];return res()}var t=DB.transaction('kv','readwrite');t.objectStore('kv').delete(k);t.oncomplete=function(){res()};t.onerror=function(){res()}})}
 function kclear(){SAVED={};TH={};thQ=[];return new Promise(function(res){if(!DB){MEM={};return res()}var t=DB.transaction('kv','readwrite');t.objectStore('kv').clear();t.oncomplete=function(){res()};t.onerror=function(){res()}})}
-function saveItems(){return kset('items',items)}
-function saveOrder(){return kset('order',order)}
-function saveSettings(){kset('theme',theme);return kset('hideSold',hideSold)}
+var lastChangeAt='',booted=false;
+function touchChange(){if(!booted)return;lastChangeAt=new Date().toISOString();kset('lastChange',lastChangeAt)}
+function saveItems(){touchChange();return kset('items',items)}
+function saveOrder(){touchChange();return kset('order',order)}
+function saveSettings(){touchChange();kset('theme',theme);return kset('hideSold',hideSold)}
 function healGallery(){
  var wi=wishImgIds();
  Object.keys(gal.imgs).forEach(function(id){if(gal.refs.indexOf(id)<0&&gal.covers.indexOf(id)<0&&gal.comps.indexOf(id)<0&&wi.indexOf(id)<0&&id!==wishPending)gal.refs.push(id)});
@@ -273,7 +275,7 @@ function healGallery(){
  gal.covers=gal.covers.filter(function(id){return !!gal.imgs[id]});
  gal.comps=gal.comps.filter(function(id){return !!gal.imgs[id]});
 }
-function saveGallery(){healGallery();var p=[],fresh=[];Object.keys(gal.imgs).forEach(function(id){if(!SAVED[id]){SAVED[id]=1;fresh.push(id);p.push(kset('img:'+id,gal.imgs[id]))}});Object.keys(SAVED).forEach(function(id){if(!(id in gal.imgs)){delete SAVED[id];delete TH[id];p.push(kdel('img:'+id));p.push(kdel('th2:'+id))}});if(fresh.length)thumbsQueue(fresh);p.push(kset('gallery',{refs:gal.refs,covers:gal.covers,comps:gal.comps}));return Promise.all(p)}
+function saveGallery(){healGallery();touchChange();var p=[],fresh=[];Object.keys(gal.imgs).forEach(function(id){if(!SAVED[id]){SAVED[id]=1;fresh.push(id);p.push(kset('img:'+id,gal.imgs[id]))}});Object.keys(SAVED).forEach(function(id){if(!(id in gal.imgs)){delete SAVED[id];delete TH[id];p.push(kdel('img:'+id));p.push(kdel('th2:'+id))}});if(fresh.length)thumbsQueue(fresh);p.push(kset('gallery',{refs:gal.refs,covers:gal.covers,comps:gal.comps}));return Promise.all(p)}
 async function loadGalImgs(gRaw){
  if(gRaw&&gRaw.imgs){
    var old=Object.keys(gal.imgs);
@@ -290,7 +292,7 @@ async function loadGalImgs(gRaw){
  keys.forEach(function(id,n){if(tvals[n]&&gal.imgs[id])TH[id]=tvals[n]});
  healGallery();
 }
-function saveWish(){return kset('wishlist',wish)}
+function saveWish(){touchChange();return kset('wishlist',wish)}
 function isUsed(id){return usedBy(id).length>0||wish.some(function(w){return w.img===id})}
 function normGal(g){
  if(!g)return {imgs:{},refs:[],covers:[],comps:[]};
@@ -309,6 +311,7 @@ async function init(){
  wish=(await kget('wishlist'))||[];
  await loadGalImgs(gRaw);
  lastExport=(await kget('lastExport'))||'';
+ lastChangeAt=(await kget('lastChange'))||'';
  try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist().then(function(ok){persistOK=ok;updateStorage()})}catch(e){}
  var ranBefore=false;try{ranBefore=localStorage.getItem('ntts_ran')==='1'}catch(e){}
  if(it===undefined){
@@ -1203,7 +1206,7 @@ function saveFile(name,mime,text){
 }
 function exportJSON(){
  var chunks=planChunks(),N=chunks.length,S=stampNow();
- expParts=chunks.map(function(c,n){return {name:'ntts-backup-'+S+'-part'+(n+1)+'of'+N+'.json',chunk:c,n:n,N:N}});
+ expParts=chunks.map(function(c,n){var sz=0;try{sz=new Blob([JSON.stringify(docForPart(c,n,N))]).size}catch(e){}return {name:'ntts-backup-'+S+'-part'+(n+1)+'of'+N+'.json',chunk:c,n:n,N:N,size:sz}});
  expDone={};
  renderMain();
  var pe=document.getElementById('expPanel');if(pe&&pe.scrollIntoView)pe.scrollIntoView({behavior:'smooth',block:'center'});
@@ -1212,7 +1215,7 @@ function expPanelHTML(){
  if(!expParts)return '';
  var N=expParts.length,done=Object.keys(expDone).length;
  return '<div id="expPanel" style="margin-top:10px;border:1px solid var(--acc);border-radius:12px;padding:12px"><h4 class="sub" style="margin:0 0 6px">Save your backup</h4><p class="meta" style="margin:0 0 8px">Tap each file to save it. You stay on this page.</p><div class="bar" style="flex-direction:column;align-items:stretch;margin:0">'
-  +expParts.map(function(p){var ok=!!expDone[p.n];var lbl=N===1?'Save backup file':'Save file '+(p.n+1)+' of '+N;return '<button data-a="expsave" data-n="'+p.n+'">'+(ok?'✓ Saved · ':'')+lbl+'</button>'}).join('')
+  +expParts.map(function(p){var ok=!!expDone[p.n];var lbl=(N===1?'Save backup file':'Save file '+(p.n+1)+' of '+N)+(p.size?' ('+fmtBytes(p.size)+')':'');return '<button data-a="expsave" data-n="'+p.n+'">'+(ok?'✓ Saved · ':'')+lbl+'</button>'}).join('')
   +'</div><p class="meta" style="margin:8px 0 0">'+done+' of '+N+' saved</p></div>';
 }
 function keycap(n){return String(n).split('').map(function(d){return d+'\uFE0F\u20E3'}).join('')}
@@ -1267,11 +1270,11 @@ function fmtBytes(b){return b<1048576?Math.round(b/1024)+' KB':b<1073741824?(b/1
 function updateStorage(){
  var el=document.getElementById('stormeter');if(!el)return;
  var st=storageBytes();
- var lines=['Current version: v'+APP_VERSION+' · '+APP_DATE,'','App data: '+fmtBytes(st.total)+' ('+items.length+' pieces, '+st.imgs+' images, '+wish.length+' wishlist items)'];
+ var lines=['Current version: v'+APP_VERSION+' · '+APP_DATE,'App data: '+fmtBytes(st.total)+' ('+items.length+' pieces, '+st.imgs+' images, '+wish.length+' wishlist items)'];
  if(st.total/1048576>150)lines.push('Large library: consider separate image storage soon.');
- var bi=lines.length;lines.push('Browser data: checking','');
+ var bi=lines.length;lines.push('Browser data: checking');
  lines.push('Persistent storage: '+(persistOK===true?'granted':persistOK===false?'not granted':'checking'));
- lines.push('Last backup: '+backupText(lastExport));
+ lines.push('Last backup: '+backupText(lastExport));lines.push('Last change: '+backupText(lastChangeAt));
  var show=function(){el.innerHTML=lines.map(esc).join('<br>')};
  if(navigator.storage&&navigator.storage.estimate){navigator.storage.estimate().then(function(e){lines[bi]='Browser data: '+fmtBytes(e.usage||0)+' used of about '+fmtBytes(e.quota||0)+' allowed';show()}).catch(function(){lines[bi]='Browser data: unavailable';show()})}
  else{lines[bi]='Browser data: unavailable';show()}
@@ -1603,7 +1606,7 @@ document.addEventListener('click',function(e){var b=e.target.closest&&e.target.c
  if(LISTS.indexOf(k)>-1){var parts=t.value.split(',');parts[parts.length-1]=' '+v;t.value=parts.map(function(x){return x.trim()}).filter(Boolean).join(', ')+', '}else t.value=v;
  box.hidden=true;t.focus()});
 document.querySelector('header').insertAdjacentElement('afterend',document.getElementById('tabbar'));
-init().then(function(){renderFooter();checkUpdate();setInterval(checkUpdate,3600000);document.addEventListener('visibilitychange',function(){if(!document.hidden)checkUpdate()});applyTheme();try{matchMedia('(prefers-color-scheme: dark)').addEventListener('change',applyTheme)}catch(e){}render()})
+init().then(function(){booted=true;renderFooter();checkUpdate();setInterval(checkUpdate,3600000);document.addEventListener('visibilitychange',function(){if(!document.hidden)checkUpdate()});applyTheme();try{matchMedia('(prefers-color-scheme: dark)').addEventListener('change',applyTheme)}catch(e){}render()})
  .catch(function(e){document.getElementById('app').innerHTML='<p class="meta">Could not start storage: '+esc(e&&e.message||e)+'</p>'});
 (function(){
  var o=document.getElementById('offline');
