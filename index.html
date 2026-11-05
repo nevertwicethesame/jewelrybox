@@ -170,10 +170,10 @@ tr.grp td{background:var(--bg);font-weight:bold;letter-spacing:.03em;color:var(-
 }
 @media (max-width:700px){
  .f{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
- .tabbar{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:20;background:var(--card);border-top:1px solid var(--line);padding:6px 0 calc(6px + env(safe-area-inset-bottom,0px));justify-content:space-around}
- .tabbar button{border:0;background:transparent;flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:20px;min-height:50px;padding:2px 0;color:var(--mute);border-radius:0}
+ .tabbar{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:20;background:var(--card);border-top:1px solid var(--line);padding:6px 12px calc(6px + env(safe-area-inset-bottom,0px));justify-content:space-around}
+ .tabbar button{border:0;background:transparent;flex:1 1 0;min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:20px;min-height:50px;padding:2px 0;color:var(--mute);border-radius:0}
  .tabbar button span{font-size:12px;margin-top:2px;letter-spacing:.02em}
- .tabbar button.big{flex:1.5;font-size:24px}
+ .tabbar button.big{flex:1 1 0;font-size:24px}
 .tabbar button>span:first-child>.ni-s{display:none}
 .tabbar button.on>span:first-child>.ni-s{display:block}
 .tabbar button.on>span:first-child>.ni-o{display:none}
@@ -256,7 +256,7 @@ header button[data-a="drawer"]{display:flex;align-items:center;justify-content:c
 </header>
 <div id="savecue" role="status" aria-live="polite" data-a="backupnow"></div>
 <main id="app"><p class="meta">Loading…</p></main>
-<nav id="tabbar" class="tabbar"><button data-a="nav" data-v="box" class="big"><span><svg class="ni-o" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx='12' cy='14' r='6'/><path d='M9.5 8 12 4l2.5 4'/><path d='M12 9.5l1.5 2.5-1.5 2.5-1.5-2.5z'/></svg><svg class="ni-s" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx='12' cy='14' r='6' stroke-width='2.8'/><path d='M9 7.5 12 3l3 4.5z' fill='currentColor'/><path d='M12 9l2.3 3L12 15l-2.3-3z' fill='currentColor'/></svg></span><span>My Jewelry<br>Box</span></button><button data-a="nav" data-v="secret"><span><svg class="ni-o" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><g transform='rotate(-45 12.5 12)'><circle cx='8' cy='12' r='4'/><path d='M12 12h9M18 12v3M21 12v2.5'/></g></svg><svg class="ni-s" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><g transform='rotate(-45 12.25 12)'><circle cx='8' cy='12' r='4.5' fill='currentColor'/><path d='M12.5 12H21M18 12v3.5M21 12v3' stroke-width='2.6'/></g></svg></span><span>Secret Compartment</span></button><button data-a="nav" data-v="wishlist"><span><svg class="ni-o" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d='M5 8h14l-1 12H6z'/><path d='M9 8V6a3 3 0 0 1 6 0v2'/></svg><svg class="ni-s" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d='M5 8h14l-1 12H6z' fill='currentColor'/><path d='M9 8V6a3 3 0 0 1 6 0v2'/></svg></span><span>Coveted</span></button><button data-a="nav" data-v="edit" data-new="1"><span><svg class="ni-o" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d='M12 5v14M5 12h14'/></svg><svg class="ni-s" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx='12' cy='12' r='9.5' fill='currentColor' stroke='none'/><path d='M12 7.5v9M7.5 12h9' stroke='var(--card)' stroke-width='2'/></svg></span><span>Add to <br class="nb">Collection</span></button><button data-a="nav" data-v="jotd"><span><svg class="ni-o" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d='M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z'/></svg><svg class="ni-s" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d='M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z' fill='currentColor'/></svg></span><span>JOTD</span></button></nav>
+<nav id="tabbar" class="tabbar"><button data-a="nav" data-v="box" class="big"><span><svg class="ni-o" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx='12' cy='14' r='6'/><path d='M9.5 8 12 4l2.5 4'/><path d='M12 9.5l1.5 2.5-1.5 2.5-1.5-2.5z'/></svg><svg class="ni-s" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx='12' cy='14' r='6' stroke-width='2.8'/><path d='M9 7.5 12 3l3 4.5z' fill='currentColor'/><path d='M12 9l2.3 3L12 15l-2.3-3z' fill='currentColor'/></svg></span><span>My Jewelry<br>Box</span></button><button data-a="nav" data-v="coll"><span><svg class="ni-o" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x='3' y='4' width='18' height='16' rx='2'/><path d='M3 10h18M8 14h8'/></svg><svg class="ni-s" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x='3' y='4' width='18' height='16' rx='2' fill='currentColor'/><path d='M3 10h18M8 14h8' stroke='#fff'/></svg></span><span>Collections</span></button><button data-a="nav" data-v="secret"><span><svg class="ni-o" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><g transform='rotate(-45 12.5 12)'><circle cx='8' cy='12' r='4'/><path d='M12 12h9M18 12v3M21 12v2.5'/></g></svg><svg class="ni-s" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><g transform='rotate(-45 12.25 12)'><circle cx='8' cy='12' r='4.5' fill='currentColor'/><path d='M12.5 12H21M18 12v3.5M21 12v3' stroke-width='2.6'/></g></svg></span><span>Secret Compartment</span></button><button data-a="nav" data-v="wishlist"><span><svg class="ni-o" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d='M5 8h14l-1 12H6z'/><path d='M9 8V6a3 3 0 0 1 6 0v2'/></svg><svg class="ni-s" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d='M5 8h14l-1 12H6z' fill='currentColor'/><path d='M9 8V6a3 3 0 0 1 6 0v2'/></svg></span><span>Coveted<br>Pieces</span></button><button data-a="nav" data-v="jotd"><span><svg class="ni-o" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d='M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z'/></svg><svg class="ni-s" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d='M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z' fill='currentColor'/></svg></span><span>JOTD</span></button></nav>
 <div class="scrim" id="scrim" data-a="dclose"></div>
 <aside class="drawer" id="drawer"></aside>
 <div id="modal"></div>
@@ -265,7 +265,7 @@ header button[data-a="drawer"]{display:flex;align-items:center;justify-content:c
 <input type="file" id="gfile" accept="image/*" multiple hidden>
 <script>
 var K='ntts_items_v2',OK='ntts_order_v1',PER=25,MAX_UPLOAD=300*1024;
-var APP_VERSION='2.2',APP_DATE='2026-11-05 · 12:28 PM ET',UPDATE_URL='';
+var APP_VERSION='2.3',APP_DATE='2026-11-05 · 4:58 PM ET',UPDATE_URL='';
 var EMOJI={ring:'💍',earrings:'✨',necklace:'📿',bracelet:'⭕',watch:'⌚',other:'💎'};
 var ICONS={ring:"<circle cx='12' cy='14' r='6'/><path d='M9.5 8 12 4l2.5 4'/><path d='M12 9.5l1.5 2.5-1.5 2.5-1.5-2.5z'/>",earrings:"<path d='M7 3v3'/><path d='M7 6c-1.6 0-2.5 1.3-2.5 3S6 14 7 17c1-3 2.5-5 2.5-8C9.5 7.3 8.6 6 7 6z'/><path d='M17 3v3'/><path d='M17 6c-1.6 0-2.5 1.3-2.5 3S16 14 17 17c1-3 2.5-5 2.5-8C19.5 7.3 18.6 6 17 6z'/>",necklace:"<path d='M4 5c2 7 14 7 16 0'/><path d='M12 12.5V15'/><circle cx='12' cy='17' r='2.2'/>",bracelet:"<ellipse cx='12' cy='12' rx='8' ry='5.5'/><ellipse cx='12' cy='12' rx='5.5' ry='3'/>",watch:"<circle cx='12' cy='13' r='5.5'/><path d='M9 7.5 10 3h4l1 4.5M9 18.5 10 23h4l1-4.5'/><path d='M12 10.5V13l1.8 1.2'/>",other:"<path d='M7 4h10l4 5-9 11L3 9z'/><path d='M3 9h18M9 4l3 16 3-16'/>",heart:"<path d='M12 20s-7-4.4-7-9.5A4 4 0 0 1 12 8a4 4 0 0 1 7 2.5C19 15.6 12 20 12 20z'/>",wrench:"<path d='M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.5 2.5-2.5-.5-.5-2.5z'/>",key:"<g transform='rotate(-45 12.5 12)'><circle cx='8' cy='12' r='4'/><path d='M12 12h9M18 12v3M21 12v2.5'/></g>",curio:"<rect x='4' y='3' width='16' height='18' rx='1'/><path d='M3 3h18M3 21h18'/><path d='M12 3v18'/><path d='M4 11h16'/><path d='M10.5 7v1.5M13.5 7v1.5M10.5 15v1.5M13.5 15v1.5'/>",clock:"<circle cx='12' cy='12' r='9'/><path d='M12 7v5l3 2'/>",pencil:"<path d='M4 20h4L19 9l-4-4L4 16z'/><path d='M13.5 6.5l4 4'/>",lock:"<rect x='5' y='11' width='14' height='10' rx='2'/><path d='M8 11V7a4 4 0 0 1 8 0v4'/>",unlock:"<rect x='3.95' y='11' width='11.1' height='10' rx='2'/><path d='M12.8 11V6.3A3.3 3.3 0 0 1 19.4 6.3V9.5'/>",bag:"<path d='M5 8h14l-1 12H6z'/><path d='M9 8V6a3 3 0 0 1 6 0v2'/>",plus:"<path d='M12 5v14M5 12h14'/>",x:"<path d='M6 6l12 12M18 6L6 18'/>",spark:"<path d='M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z'/>",gallery:"<rect x='3' y='4' width='18' height='16' rx='2'/><circle cx='9' cy='10' r='2'/><path d='M21 16l-5-5-8 9'/>"};
 var ORN='<svg width="72" height="10" viewBox="0 0 72 10" fill="none" stroke="#a8864f" stroke-width="1.2"><path d="M0 5h28M44 5h28"/><path d="M36 1l4 4-4 4-4-4z"/></svg>';
@@ -314,7 +314,7 @@ function designHTML(){
   +'</div>';
 }
 var CATS=['Ring','Earrings','Necklace','Bracelet','Watch','Other'];
-var STAT=['Waiting','Benched','Private Collection','To List','Listed','Sold'];
+var STAT=['Waiting','Benched','Keeping','To List','Listed','Sold'];
 var PERIODS=['Ancient','Antique','Mid-Century','Vintage','New'];
 var FINGERS=['Index finger','Middle finger','Ring finger','Pinky'];
 var COLOR_ORDER=['Red','Pink','Orange','Brown','Yellow','Green','Light blue','Blue','Purple','Black','Gray','White','Multi'];
@@ -390,12 +390,12 @@ var RING_TXT=['15.9;50;5.25;J.5;10;;10','16.1;50.6;5.5;K;;10;','16.3;51.2;5.75;K
 var seed=[
  {id:1,title:'Georgian paste ring',description:'Georgian paste ring. Closed-back setting.',category:'Ring',status:'Listed',period:'Antique',era:'1790s',yearMade:1795,country:'England',stone:['paste'],metal:['silver','gold'],rating:3,cost:120,sellPlatform:'eBay',purchaseDate:'2026-08-15',dateListed:'2026-09-01'},
  {id:2,title:'Snake bracelet',description:'Snake bracelet with garnet eyes.',category:'Bracelet',status:'Sold',period:'Antique',era:'1870s',yearMade:1870,country:'France',stone:['garnet'],metal:['gold'],motif:['snake'],colorMain:'Red',rating:4,cost:210,payout:480,feeFinal:40,shipActual:12,sellPlatform:'Instagram',purchaseDate:'2026-06-10',dateListed:'2026-07-02',dateSold:'2026-07-20'},
- {id:3,title:'Roman intaglio ring',description:'Roman intaglio ring, carnelian.',category:'Ring',status:'Private Collection',period:'Ancient',era:'Roman',country:'Italy',stone:['carnelian'],metal:['gold'],colorMain:'Orange',rating:5,cost:650,purchaseDate:'2026-03-02'},
- {id:4,title:'Emerald-cut drop earrings',description:'Emerald-cut drop earrings.',category:'Earrings',status:'Private Collection',period:'Antique',era:'1905',yearMade:1905,country:'USA',stone:['emerald','diamond'],metal:['platinum'],colorMain:'Green',rating:5,cost:380,purchaseDate:'2026-05-20'}
+ {id:3,title:'Roman intaglio ring',description:'Roman intaglio ring, carnelian.',category:'Ring',status:'Keeping',period:'Ancient',era:'Roman',country:'Italy',stone:['carnelian'],metal:['gold'],colorMain:'Orange',rating:5,cost:650,purchaseDate:'2026-03-02'},
+ {id:4,title:'Emerald-cut drop earrings',description:'Emerald-cut drop earrings.',category:'Earrings',status:'Keeping',period:'Antique',era:'1905',yearMade:1905,country:'USA',stone:['emerald','diamond'],metal:['platinum'],colorMain:'Green',rating:5,cost:380,purchaseDate:'2026-05-20'}
 ];
 
 /* ---------- state ---------- */
-var DEFAULT_STATUS=['Waiting','Benched','Private Collection'];
+var DEFAULT_STATUS=['Waiting','Benched','Keeping'];
 var items=[],order=[],theme='ruby',hideSold=true,view='box',page=1,editing=null,fsel={status:DEFAULT_STATUS.slice()},rng={},sortBy='new',cols=3,ctab='Piece',vmode='thumbs',q='',ro=false,dragEl=null,overEl=null,ioOpen=false,lastJ=null,CR=null,DB=null,MEM={},shipTouched=false,PS={eb:13,ig:0},showAllF={},gal={imgs:{},refs:[],covers:[],comps:[]},galSel={refs:{},covers:{},comps:{}},galKind='refs',swS=null;
 
 /* ---------- storage ---------- */
@@ -481,6 +481,7 @@ async function init(){
  var gRaw=await kget('gallery');gal=normGal(gRaw);
  secretCfg=(await kget('secret'))||secretCfg;
  wish=(await kget('wishlist'))||[];
+ colls=(await kget('collections'))||[];colls.forEach(function(c){if(!c.pieceIds)c.pieceIds=[]});
  await loadGalImgs(gRaw);
  lastExport=(await kget('lastExport'))||'';
  lastChangeAt=(await kget('lastChange'))||'';
@@ -573,7 +574,8 @@ function mig(i){
  var ex=(num(i.fees)||0)+(num(i.promo)||0)+(num(i.feePay)||0);
  if(ex)i.feeFinal=(num(i.feeFinal)||0)+ex;
  delete i.fees;delete i.promo;delete i.feePay;
- if(STAT.indexOf(i.status)<0)i.status='Private Collection';
+ if(i.status==='Private Collection')i.status='Keeping';
+ if(STAT.indexOf(i.status)<0)i.status='Keeping';
  var PM={Ancient:'Ancient',Georgian:'Antique',Victorian:'Antique',Edwardian:'Antique','Art Deco':'Vintage',Retro:'Vintage',Other:'Vintage','Mid-century':'Mid-Century','Mid-Century':'Mid-Century',Modern:'New',New:'New',Vintage:'Vintage',Antique:'Antique'};
  i.period=PM[i.period]||'Antique';
  if(typeof i.cut==='string')i.cut=i.cut.split(/[;,]/).map(function(s){return s.trim()}).filter(Boolean);
@@ -830,15 +832,15 @@ function wishCover(w){return w.cover||{id:w.img,l:null,t:null,w:null,h:null}}
 function renderWishlist(){
  var list=wish.filter(function(w){return (!wishType.length||wishType.indexOf(w.category)>-1)&&(!q||((w.category||'')+' '+(w.link||'')).toLowerCase().indexOf(q)>-1)});
  var tiles=list.map(function(w){return '<div class="'+(wro?'tile':'')+'" data-id="'+w.id+'" style="position:relative"><button type="button" data-a="wopen" data-id="'+w.id+'" style="padding:0;border:0;border-radius:10px;overflow:hidden;aspect-ratio:1;width:100%;display:block;min-height:0;background:var(--acc);position:relative">'+coverImg(wishCover(w),true)+'</button>'+(wro?'<button type="button" data-a="wdel" data-id="'+w.id+'" style="position:absolute;z-index:3;top:4px;right:4px;width:26px;height:26px;min-width:0;padding:0;min-height:0;border-radius:50%;display:flex;align-items:center;justify-content:center;line-height:1;font-size:12px;background:var(--card);color:var(--fg);border:1px solid var(--line);box-shadow:0 1px 3px rgba(0,0,0,.4)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>':'')+(wro?'':'<div class="meta" style="margin-top:4px;text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+esc(wishDomain(w.link))+'</div>')+'</div>'}).join('');
- return '<div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:12px"><h2 style="margin:0">Coveted</h2><button class="pri" data-a="wadd">+ Add to Coveted</button></div>'
+ return '<div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:12px"><h2 style="margin:0">Coveted Pieces</h2><button class="pri" data-a="wadd">+ Add new</button></div>'
   +(list.length?'<div class="grid'+(wro?' ro':'')+'" style="grid-template-columns:repeat('+cols+',minmax(0,1fr))">'+tiles+'</div>':'<p class="meta">'+(wish.length?'No coveted items match this type.':'Nothing coveted yet.')+'</p>')
   +'<hr style="border:0;border-top:1px solid var(--line);margin:18px 0">'+'<h3 class="side" style="margin-top:0">Ring Size Chart</h3>'+ringTableHTML();
 }
 function wishAddHTML(){
- return '<div class="modal" data-a="backdrop"><div style="max-width:520px;width:94vw"><h3 style="margin:0 0 6px">Add to Coveted</h3>'
+ return '<div class="modal" data-a="backdrop"><div style="max-width:520px;width:94vw"><h3 style="margin:0 0 6px">Add a coveted piece</h3>'
+    +'<label style="margin-top:10px">Type<select id="wcat">'+CATS.map(function(c){return '<option>'+c+'</option>'}).join('')+'</select></label>'
   +'<label style="margin-top:10px">Link<input type="url" id="wlink" placeholder="https://"></label>'
-  +'<label style="margin-top:10px">Type<select id="wcat">'+CATS.map(function(c){return '<option>'+c+'</option>'}).join('')+'</select></label>'
-  +'<label>Photo<input type="file" id="wfile" accept="image/*"></label>'
+  +'<label style="margin-top:10px">Photo<input type="file" id="wfile" accept="image/*"></label>'
   +'<div id="crop" style="margin-top:10px" hidden><div id="cropv" style="max-width:240px"><img id="cropimg" alt="" draggable="false"></div><input type="range" id="cropz" min="1" max="4" step="0.01" value="1" aria-label="Zoom"><p class="meta">Drag to pan. Use the slider (or pinch) to zoom. The square is your thumbnail.</p></div>'
   +'<div class="bar" style="justify-content:center;margin:12px 0 0"><button class="pri" data-a="wsave">Save</button><button data-a="x">Cancel</button></div></div></div>';
 }
@@ -874,7 +876,7 @@ function appearanceHTML(){
 function refreshAppearance(){var ab=document.getElementById('appBody');if(ab)ab.innerHTML=themeHTML()}
 function renderDrawer(){
  var dEl=document.getElementById('drawer'),keepY=(dEl.querySelector('.dbody')||{}).scrollTop||0;
- dEl.innerHTML='<div class="dbody"><h3 class="mh" style="margin:0 0 10px">Menu</h3>'+(view==='jotd'?'':'<div style="margin:0 0 10px"><button data-a="nav" data-v="gallery" style="width:100%;justify-content:center"'+(view==='gallery'?' class="on"':'')+'>'+ico('gallery',18)+' Manage Gallery</button></div>'+(view==='jotd'?'':'<div style="margin:0 0 10px"><button data-a="appearance" style="width:100%;justify-content:center">'+ico('spark',18)+' Appearance</button></div>')+'<div class="dv"><span>'+ORN+'</span></div>'+viewControls())+'<div class="dv"><span>'+ORN+'</span></div>'+(view==='jotd'?'':view==='wishlist'?wishFilterHTML():filtersHTML())+'</div><div class="dfoot"><p class="meta" style="text-align:center;margin:0">'+verLine()+'</p></div>';
+ dEl.innerHTML='<div class="dbody"><h3 class="mh" style="margin:0 0 10px">Menu</h3>'+(view==='jotd'?'':'<div style="margin:0 0 10px"><button data-a="nav" data-v="edit" data-new="1" style="width:100%;justify-content:center">'+ico('plus',18)+' Add Piece</button></div>')+(view==='jotd'?'':'<div style="margin:0 0 10px"><button data-a="nav" data-v="gallery" style="width:100%;justify-content:center"'+(view==='gallery'?' class="on"':'')+'>'+ico('gallery',18)+' Manage Gallery</button></div>'+(view==='jotd'?'':'<div style="margin:0 0 10px"><button data-a="appearance" style="width:100%;justify-content:center">'+ico('spark',18)+' Choose Appearance</button></div>')+'<div class="dv"><span>'+ORN+'</span></div>'+viewControls())+'<div class="dv"><span>'+ORN+'</span></div>'+(view==='jotd'||view==='coll'?'':view==='wishlist'?wishFilterHTML():filtersHTML())+'</div><div class="dfoot"><p class="meta" style="text-align:center;margin:0">'+verLine()+'</p></div>';
 
  var nb=dEl.querySelector('.dbody');if(nb)nb.scrollTop=keepY;
 }
@@ -1131,8 +1133,48 @@ function setupFloat(){
  floatIO=new IntersectionObserver(function(en){fb.classList.toggle('on',!en[0].isIntersecting)});
  floatIO.observe(bar);
 }
+var colls=[],collId=null;
+function saveColls(){touchChange();return track(kset('collections',colls))}
+function curColl(){return colls.filter(function(x){return x.id===collId})[0]}
+function collVisIds(c){var ok={};vis().forEach(function(i){ok[i.id]=i});return c.pieceIds.filter(function(id){return ok[id]}).map(function(id){return ok[id]})}
+function collMove(c,id,dir){
+ var k=c.pieceIds.indexOf(id);if(k<0)return;
+ var vids=vis().map(function(i){return i.id});
+ for(var j=k+dir;j>=0&&j<c.pieceIds.length;j+=dir){
+   if(vids.indexOf(c.pieceIds[j])>-1){var t=c.pieceIds[j];c.pieceIds[j]=id;c.pieceIds[k]=t;return}
+ }
+}
+function collEditHTML(c){
+ return '<div class="modal" data-a="backdrop"><div style="max-width:520px;width:94vw"><h3 style="margin:0 0 6px">'+(c?'Edit collection':'New collection')+'</h3>'
+  +'<label style="margin-top:10px">Title<input id="cedt" value="'+esc(c?c.title:'')+'" placeholder="e.g. Victorian mourning"></label>'
+  +'<label style="margin-top:10px">Note<textarea id="cedn" rows="4" placeholder="Optional. The story behind the set.">'+esc(c?c.note:'')+'</textarea></label>'
+  +'<div class="bar" style="justify-content:center;margin:12px 0 0"><button class="pri" data-a="csave">Save</button>'+(c?'<button data-a="cdelete">Delete</button>':'')+'<button data-a="x">Cancel</button></div></div></div>';
+}
+function collPickFilter(q){q=String(q||'').trim().toLowerCase();document.querySelectorAll('#modal [data-cprow]').forEach(function(r){var hit=!q||r.getAttribute('data-cprow').indexOf(q)>-1;r.style.display=hit?'':'none'})}
+function collPickerHTML(c){
+ var list=vis().map(function(i){var on=c.pieceIds.indexOf(i.id)>-1;
+  return '<label data-cprow="'+esc(((i.title||'')+' '+(i.category||'')).toLowerCase())+'" style="flex-direction:row;align-items:center;gap:10px;padding:6px 0;border-bottom:1px solid var(--line)"><input type="checkbox" name="cp" value="'+i.id+'"'+(on?' checked':'')+' style="width:auto;margin:0"><span style="flex:1;min-width:0">'+esc(i.title||'Untitled')+' <span class="meta">'+esc(i.category||'')+'</span></span></label>'}).join('');
+ return '<div class="modal" data-a="backdrop"><div style="max-width:520px;width:94vw"><h3 style="margin:0 0 6px">Add pieces</h3><p class="meta" style="margin:0 0 8px">Tick the pieces that belong in this collection.</p><input type="search" placeholder="Search by title or type" aria-label="Search pieces" oninput="collPickFilter(this.value)" style="margin:0 0 8px"><div style="max-height:55vh;overflow:auto">'+list+'</div><div class="bar" style="justify-content:center;margin:12px 0 0"><button class="pri" data-a="cpsave">Save</button><button data-a="x">Cancel</button></div></div></div>';
+}
+function renderCollDetail(c){
+ var p=collVisIds(c);
+ var rows=p.map(function(i){return '<div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--line)"><div style="width:56px;height:56px;flex:none;border-radius:8px;overflow:hidden;background:var(--acc)">'+(coverImg(i.cover,true)||noThumb(i,40))+'</div><div style="flex:1;min-width:0"><div style="font-weight:bold;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+esc(i.title||'Untitled')+'</div><div class="meta">'+esc(i.category||'')+'</div></div><div style="display:flex;gap:4px;flex:none"><button type="button" data-a="cup" data-id="'+i.id+'">Up</button><button type="button" data-a="cdown" data-id="'+i.id+'">Down</button><button type="button" data-a="cremove" data-id="'+i.id+'">Remove</button></div></div>'}).join('');
+ return '<div style="margin-bottom:8px"><button data-a="cback">Back</button></div>'
+  +'<h2 style="margin:0 0 6px">'+esc(c.title||'Untitled collection')+'</h2>'
+  +(c.note?'<p class="meta" style="margin:0 0 12px;white-space:pre-wrap">'+esc(c.note)+'</p>':'')
+  +'<div class="bar" style="margin-bottom:12px"><button data-a="cedit">Edit details</button><button class="pri" data-a="cpicker">+ Add pieces</button></div>'
+  +(p.length?rows:'<p class="meta">No pieces yet. Use Add pieces.</p>');
+}
+function renderColl(){
+ if(collId!=null){var cc=curColl();if(cc)return renderCollDetail(cc);collId=null}
+ var head='<div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:12px"><h2 style="margin:0">Collections</h2><button class="pri" data-a="cnew">+ Add new</button></div>';
+ var cards=colls.map(function(c){return {c:c,p:collVisIds(c)}}).filter(function(x){return x.p.length||x.c.pieceIds.length===0||!secretCfg.on});
+ if(!cards.length)return head+'<p class="meta">'+(colls.length?'Nothing to show while Secret Compartment is on.':'No collections yet.')+'</p>';
+ var tiles=cards.map(function(x){var f=x.p[0];return '<button type="button" data-a="copen" data-id="'+x.c.id+'" style="padding:0;border:0;background:transparent;text-align:left;display:block;min-height:0"><div style="aspect-ratio:1;border-radius:10px;overflow:hidden;background:var(--acc)">'+(f?(coverImg(f.cover,true)||noThumb(f,40)):'<div class="meta" style="height:100%;display:flex;align-items:center;justify-content:center">Empty</div>')+'</div><div style="margin-top:6px;font-weight:bold">'+esc(x.c.title||'Untitled')+'</div><div class="meta">'+x.p.length+' piece'+(x.p.length===1?'':'s')+'</div></button>'}).join('');
+ return head+'<div class="grid" style="grid-template-columns:repeat('+Math.min(cols,3)+',minmax(0,1fr))">'+tiles+'</div>';
+}
 function renderMain(){
- document.getElementById('app').innerHTML=backupBanner()+(view==='box'?renderBox():view==='gallery'?renderGallery():view==='manage'?renderManage():view==='wishlist'?renderWishlist():view==='secret'?renderSecret():view==='jotd'?renderJotd():view==='about'?renderAbout():view==='piece'?renderPiece():renderEdit());
+ document.getElementById('app').innerHTML=backupBanner()+(view==='box'?renderBox():view==='gallery'?renderGallery():view==='manage'?renderManage():view==='wishlist'?renderWishlist():view==='coll'?renderColl():view==='secret'?renderSecret():view==='jotd'?renderJotd():view==='about'?renderAbout():view==='piece'?renderPiece():renderEdit());
  var eb=document.getElementById('editbar'),hd=document.querySelector('header');if(eb&&hd)eb.style.top=hd.offsetHeight+'px';
  setupFloat();
  if(view==='gallery')fillThumbs();
@@ -1206,7 +1248,7 @@ function jotdRing2Pick(r1){
  return c.length?pickJ(c):null;
 }
 function jotdRoll(k){
- var s=jotdSel;if(!s||(jotdLock[k]&&s[k]))return;jotdMsg='';
+ var s=jotdSel;if(!s||jotdLock[k])return;jotdMsg='';
  if(k==='ring1'){
    var cur=s.ring1,rings=jotdPool('Ring');
    var fs=['Index finger','Middle finger'].filter(function(f){return !(jotdLock.ring2&&s.ring2&&finger(s.ring2)===f)}).sort(function(){return Math.random()-0.5});
@@ -1270,7 +1312,7 @@ function popup(i){
   +'<div class="rule"></div>'
   +'<table class="spec">'+table+rate+'</table>'
   +prov+cond
-  +'<div class="bar" style="justify-content:center;margin-top:14px"><button class="pri" data-a="viewpiece" data-id="'+i.id+'">A Closer Look</button><button data-a="x">Close</button></div>'
+  +'<div class="bar" style="justify-content:center;margin-top:14px"><button class="pri" data-a="viewpiece" data-id="'+i.id+'">Details</button><button data-a="x">Close</button></div>'
   +'</div></div>';
 }
 
@@ -1413,7 +1455,7 @@ function coerce(k,v){
  if(k==='photoshoot')return /^(yes|true|1|y)$/i.test(v);
  if(['wornLast','purchaseDate','dateListed','dateSold'].indexOf(k)>-1)return parseDate(v)||String(v);
  if(k==='category')return CATS.filter(function(c){return c.toLowerCase()===v.toLowerCase()})[0]||'Other';
- if(k==='status')return STAT.filter(function(s){return s.toLowerCase()===v.toLowerCase()||(v.toUpperCase()==='PC'&&s==='Private Collection')})[0]||'Private Collection';
+ if(k==='status')return STAT.filter(function(s){return s.toLowerCase()===v.toLowerCase()||(v.toUpperCase()==='PC'&&s==='Keeping')||(v.toLowerCase()==='private collection'&&s==='Keeping')})[0]||'Keeping';
  if(k==='period')return PERIODS.filter(function(p){return p.toLowerCase()===v.toLowerCase()})[0]||'Antique';
  if(k==='colorMain')return String(v).split(/[,;]/).map(function(x){return capColor(x)}).filter(Boolean);
  return v;
@@ -1459,7 +1501,7 @@ function planChunks(){
  return chunks;
 }
 var expParts=null,expDone={};
-function docForPart(c,n,N){var doc={app:'never-twice-the-same',format:2,part:n+1,of:N,exported:new Date().toISOString(),items:c.items,images:c.imgs};if(n===N-1){doc.gallery={refs:gal.refs,covers:gal.covers,comps:gal.comps};doc.order=order;doc.theme=theme;doc.hideSold=hideSold;doc.wishlist=wish}return doc}
+function docForPart(c,n,N){var doc={app:'never-twice-the-same',format:2,part:n+1,of:N,exported:new Date().toISOString(),items:c.items,images:c.imgs};if(n===N-1){doc.gallery={refs:gal.refs,covers:gal.covers,comps:gal.comps};doc.order=order;doc.theme=theme;doc.hideSold=hideSold;doc.wishlist=wish;doc.collections=colls}return doc}
 function stampNow(){var d=new Date();return today()+'-'+('0'+d.getHours()).slice(-2)+('0'+d.getMinutes()).slice(-2)}
 function saveFile(name,mime,text){
  var mobile=/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)||navigator.maxTouchPoints>1;
@@ -1502,20 +1544,20 @@ function readFileP(f){return new Promise(function(res){var r=new FileReader();r.
 function importJSON(texts){
  var docs=[];
  try{texts.forEach(function(t){docs.push(JSON.parse(t))})}catch(e){alert('One of the selected files is not a valid backup.');return}
- var allItems=[],imgs={},lists={refs:[],covers:[],comps:[]},ord=null,th=null,hs=null,wl=null;
+ var allItems=[],imgs={},lists={refs:[],covers:[],comps:[]},ord=null,th=null,hs=null,wl=null,cl=null;
  var parts={},partOf=0,hasTail=false,fmt2=0;
  docs.forEach(function(d){
    if(d.format===2){fmt2++;if(d.part)parts[d.part]=1;if(d.of)partOf=Math.max(partOf,d.of);if(d.gallery)hasTail=true;
      (d.items||[]).forEach(function(i){allItems.push(i)});
      Object.keys(d.images||{}).forEach(function(k){imgs[k]=d.images[k]});
      if(d.gallery){lists.refs=lists.refs.concat(d.gallery.refs||[]);lists.covers=lists.covers.concat(d.gallery.covers||[]);lists.comps=lists.comps.concat(d.gallery.comps||[])}
-     if(d.order)ord=d.order;if(d.theme)th=d.theme;if(typeof d.hideSold==='boolean')hs=d.hideSold;if(d.wishlist)wl=d.wishlist;
+     if(d.order)ord=d.order;if(d.theme)th=d.theme;if(typeof d.hideSold==='boolean')hs=d.hideSold;if(d.wishlist)wl=d.wishlist;if(d.collections)cl=d.collections;
    }else{
      var arr=Array.isArray(d)?d:(d.items||[]);
      arr.forEach(function(i){allItems.push(i)});
      var g=normGal(d.gallery||null);Object.keys(g.imgs).forEach(function(k){imgs[k]=g.imgs[k]});
      lists.refs=lists.refs.concat(g.refs);lists.covers=lists.covers.concat(g.covers);lists.comps=lists.comps.concat(g.comps);
-     if(d.order)ord=d.order;if(d.theme)th=d.theme;if(typeof d.hideSold==='boolean')hs=d.hideSold;if(d.wishlist)wl=d.wishlist;
+     if(d.order)ord=d.order;if(d.theme)th=d.theme;if(typeof d.hideSold==='boolean')hs=d.hideSold;if(d.wishlist)wl=d.wishlist;if(d.collections)cl=d.collections;
    }
  });
  var warn='';
@@ -1529,7 +1571,7 @@ function importJSON(texts){
  order=ord||[];
  if(th&&THEMES[th])theme=th;
  if(hs!==null)hideSold=hs;
- if(wl)wish=wl;saveWish();
+ if(wl)wish=wl;saveWish();if(cl){colls=cl;colls.forEach(function(c){if(!c.pieceIds)c.pieceIds=[]});saveColls()}
  saveItems();saveOrder();saveSettings();saveGallery();applyTheme();render();
  alert('Backup restored: '+items.length+' pieces.');
 }
@@ -1632,7 +1674,17 @@ case 'copydiag':copyText(diagLines.join('\n')+'\n\nEvent log (newest last):\n'+(
   case 'reload':location.reload();break;
   case 'updx':document.getElementById('upd').hidden=true;break;
   case 'theme':theme=d.v;applyTheme();saveSettings();renderDrawer();refreshAppearance();break;
-case 'appearance':drawer(false);M.innerHTML=appearanceHTML();break;
+case 'cnew':collId=Date.now();document.getElementById('modal').innerHTML=collEditHTML(null);break;
+  case 'copen':collId=Number(d.id);render();break;
+  case 'cback':collId=null;render();break;
+  case 'cedit':if(curColl())document.getElementById('modal').innerHTML=collEditHTML(curColl());break;
+  case 'csave':{var ct=document.getElementById('cedt').value.trim(),cn=document.getElementById('cedn').value.trim();if(!ct){alert('Give it a title.');break}var cc=curColl();if(!cc){cc={id:collId,title:'',note:'',pieceIds:[]};colls.push(cc)}cc.title=ct;cc.note=cn;saveColls();document.getElementById('modal').innerHTML='';render();break}
+  case 'cdelete':if(curColl()&&confirm('Delete this collection? The pieces stay in your box.')){colls=colls.filter(function(x){return x.id!==collId});collId=null;saveColls();document.getElementById('modal').innerHTML='';render()}break;
+  case 'cpicker':if(curColl())document.getElementById('modal').innerHTML=collPickerHTML(curColl());break;
+  case 'cpsave':{var cp=curColl();if(!cp)break;var checked=[].map.call(document.querySelectorAll('#modal input[name=cp]:checked'),function(e){return Number(e.value)});var vids=vis().map(function(i){return i.id});var keep=cp.pieceIds.filter(function(id){return vids.indexOf(id)<0||checked.indexOf(id)>-1});var added=checked.filter(function(id){return cp.pieceIds.indexOf(id)<0});cp.pieceIds=keep.concat(added);saveColls();document.getElementById('modal').innerHTML='';render();break}
+  case 'cup':case 'cdown':{var cm=curColl();if(cm){collMove(cm,Number(d.id),d.a==='cup'?-1:1);saveColls();render()}break}
+  case 'cremove':{var cr=curColl();if(cr){cr.pieceIds=cr.pieceIds.filter(function(id){return id!==Number(d.id)});saveColls();render()}break}
+  case 'appearance':drawer(false);M.innerHTML=appearanceHTML();break;
 case 'jcolor':M.innerHTML=jcolorHTML();break;
 case 'jcolorset':jotdColor=d.v||null;M.innerHTML='';if(jotdSel){var keep2=jotdSel.ring2,keepE=jotdSel.earring,keepN=jotdSel.necklace;jotdRoll('ring1');var r1=jotdSel.ring1;jotdSel.earring=keepE;jotdSel.necklace=keepN;if(keep2&&r1&&keep2.id!==r1.id&&finger(keep2)!==finger(r1))jotdSel.ring2=keep2;else if(r1&&keep2&&finger(keep2)===finger(r1))jotdSel.ring2=jotdRing2Pick(r1);else jotdSel.ring2=keep2}renderMain();break;
   case 'bgs':bgStyle=d.v;kset('bgStyle',bgStyle);renderDrawer();renderMain();refreshAppearance();break;
