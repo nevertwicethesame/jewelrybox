@@ -17,6 +17,8 @@ Live site: https://nevertwicethesame.github.io/jewelrybox/
 - **Import and export:** CSV for spreadsheet-style editing, and JSON for full backups that include photos, the wishlist, and settings.
 - **Backup reminder:** a banner appears when the last JSON backup is more than 7 days old.
 - **Update notice:** a banner appears when a newer version is published.
+- **Save check:** a small "Saved" note appears after each change, once the app has read the data back from storage. If a save fails, a red note appears instead. Wait for "Saved" before closing the app after a big editing session.
+- **Diagnostics:** the I/O page shows storage and link counts, a revert check, and an event log. Tap **Copy** to share them when something looks wrong.
 - **About:** the menu footer opens the project's start date and the design reference.
 
 ## Install on iPhone
@@ -34,12 +36,12 @@ Browser storage can be cleared by iOS in some situations, so keep regular JSON b
 1. Open the menu, tap **I/O**, then choose **Export JSON**.
 2. Tap each file to save it. A large library saves as several files. Save all of them to Files or iCloud Drive.
 
-To restore, open the menu, tap **I/O**, and choose **Import JSON**. Select **every** backup file from the same export at once. The last file holds the photo gallery lists, so a restore without it can leave photos unlinked from their pieces. Restoring replaces the data on the device, and the app asks you to confirm first.
+To restore, open the menu, tap **I/O**, and choose **Import JSON**. Select **every** backup file from the same export at once. The last file holds the photo gallery lists, so a restore without it can leave photos unlinked from their pieces. If a file is missing, the app warns you before restoring and lets you cancel. Restoring replaces the data on the device, and the app asks you to confirm first.
 
 ## Privacy
 
-- The app has no accounts, analytics, or tracking, and it loads no outside scripts, fonts, or stylesheets.
-- Your collection, photos, and wishlist stay on your device. The only request the app makes is a check for `version.json` on this site, to show the update notice.
+- The app has no accounts, analytics, or tracking, and it loads no outside scripts. The only outside resource is the fonts (Cormorant Garamond and Varta), which load from Google Fonts.
+- Your collection, photos, and wishlist stay on your device. So does the event log (the last 150 events: saves, launches, and errors, with counts but no piece titles). Besides the Google Fonts request, the only request the app makes is a check for `version.json` on this site, to show the update notice.
 - Wishlist links open in a preview frame or a new tab. The sites you visit see a normal request from your browser.
 - GitHub Pages, which hosts the site, may log visits as any website does.
 - JSON backups are not encrypted. Anyone who can open a backup file can read it, so store backups somewhere private.
@@ -51,6 +53,8 @@ To restore, open the menu, tap **I/O**, and choose **Import JSON**. Select **eve
 | --- | --- |
 | `index.html` | The whole app: markup, styles, and script in one file. |
 | `version.json` | The current version number. The app reads it to show the update notice. |
+| `sw.js` | The service worker, which keeps the app working offline. |
+| `apple-touch-icon.png` | The Home Screen icon: a white curio cabinet on plum. Re-add the app to the Home Screen to pick up a new icon. |
 | `README.md` | This file. |
 
 ## Versioning
