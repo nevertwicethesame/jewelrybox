@@ -265,7 +265,7 @@ header button[data-a="drawer"]{display:flex;align-items:center;justify-content:c
 <input type="file" id="gfile" accept="image/*" multiple hidden>
 <script>
 var K='ntts_items_v2',OK='ntts_order_v1',PER=25,MAX_UPLOAD=300*1024;
-var APP_VERSION='2.1',APP_DATE='2026-11-05 · 12:40 AM ET',UPDATE_URL='';
+var APP_VERSION='2.1.1',APP_DATE='2026-11-05 · 9:05 AM ET',UPDATE_URL='';
 var EMOJI={ring:'💍',earrings:'✨',necklace:'📿',bracelet:'⭕',watch:'⌚',other:'💎'};
 var ICONS={ring:"<circle cx='12' cy='14' r='6'/><path d='M9.5 8 12 4l2.5 4'/><path d='M12 9.5l1.5 2.5-1.5 2.5-1.5-2.5z'/>",earrings:"<path d='M7 3v3'/><path d='M7 6c-1.6 0-2.5 1.3-2.5 3S6 14 7 17c1-3 2.5-5 2.5-8C9.5 7.3 8.6 6 7 6z'/><path d='M17 3v3'/><path d='M17 6c-1.6 0-2.5 1.3-2.5 3S16 14 17 17c1-3 2.5-5 2.5-8C19.5 7.3 18.6 6 17 6z'/>",necklace:"<path d='M4 5c2 7 14 7 16 0'/><path d='M12 12.5V15'/><circle cx='12' cy='17' r='2.2'/>",bracelet:"<ellipse cx='12' cy='12' rx='8' ry='5.5'/><ellipse cx='12' cy='12' rx='5.5' ry='3'/>",watch:"<circle cx='12' cy='13' r='5.5'/><path d='M9 7.5 10 3h4l1 4.5M9 18.5 10 23h4l1-4.5'/><path d='M12 10.5V13l1.8 1.2'/>",other:"<path d='M7 4h10l4 5-9 11L3 9z'/><path d='M3 9h18M9 4l3 16 3-16'/>",heart:"<path d='M12 20s-7-4.4-7-9.5A4 4 0 0 1 12 8a4 4 0 0 1 7 2.5C19 15.6 12 20 12 20z'/>",wrench:"<path d='M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.5 2.5-2.5-.5-.5-2.5z'/>",key:"<g transform='rotate(-45 12.5 12)'><circle cx='8' cy='12' r='4'/><path d='M12 12h9M18 12v3M21 12v2.5'/></g>",curio:"<rect x='4' y='3' width='16' height='18' rx='1'/><path d='M3 3h18M3 21h18'/><path d='M12 3v18'/><path d='M4 11h16'/><path d='M10.5 7v1.5M13.5 7v1.5M10.5 15v1.5M13.5 15v1.5'/>",clock:"<circle cx='12' cy='12' r='9'/><path d='M12 7v5l3 2'/>",pencil:"<path d='M4 20h4L19 9l-4-4L4 16z'/><path d='M13.5 6.5l4 4'/>",lock:"<rect x='5' y='11' width='14' height='10' rx='2'/><path d='M8 11V7a4 4 0 0 1 8 0v4'/>",unlock:"<rect x='5' y='11' width='14' height='10' rx='2'/><path d='M8 11V7a4 4 0 0 1 7.4-2.1'/>",bag:"<path d='M5 8h14l-1 12H6z'/><path d='M9 8V6a3 3 0 0 1 6 0v2'/>",plus:"<path d='M12 5v14M5 12h14'/>",x:"<path d='M6 6l12 12M18 6L6 18'/>",spark:"<path d='M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z'/>",gallery:"<rect x='3' y='4' width='18' height='16' rx='2'/><circle cx='9' cy='10' r='2'/><path d='M21 16l-5-5-8 9'/>"};
 var ORN='<svg width="72" height="10" viewBox="0 0 72 10" fill="none" stroke="#a8864f" stroke-width="1.2"><path d="M0 5h28M44 5h28"/><path d="M36 1l4 4-4 4-4-4z"/></svg>';
@@ -827,7 +827,7 @@ function gicon(n){var w=(28-(n-1)*2)/n,r='';for(var k=0;k<n;k++)r+='<rect x="'+(
 function wishCover(w){return w.cover||{id:w.img,l:null,t:null,w:null,h:null}}
 function renderWishlist(){
  var list=wish.filter(function(w){return (!wishType.length||wishType.indexOf(w.category)>-1)&&(!q||((w.category||'')+' '+(w.link||'')).toLowerCase().indexOf(q)>-1)});
- var tiles=list.map(function(w){return '<div class="'+(wro?'tile':'')+'" data-id="'+w.id+'" style="position:relative"><button type="button" data-a="wopen" data-id="'+w.id+'" style="padding:0;border:0;border-radius:10px;overflow:hidden;aspect-ratio:1;width:100%;display:block;min-height:0;background:var(--acc);position:relative">'+coverImg(wishCover(w))+'</button>'+(wro?'<button type="button" data-a="wdel" data-id="'+w.id+'" style="position:absolute;top:4px;right:4px;width:26px;height:26px;min-width:0;padding:0;min-height:0;border-radius:50%;display:flex;align-items:center;justify-content:center;line-height:1;font-size:12px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>':'')+'<div class="meta" style="margin-top:4px;text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+esc(wishDomain(w.link))+'</div></div>'}).join('');
+ var tiles=list.map(function(w){return '<div class="'+(wro?'tile':'')+'" data-id="'+w.id+'" style="position:relative"><button type="button" data-a="wopen" data-id="'+w.id+'" style="padding:0;border:0;border-radius:10px;overflow:hidden;aspect-ratio:1;width:100%;display:block;min-height:0;background:var(--acc);position:relative">'+coverImg(wishCover(w),true)+'</button>'+(wro?'<button type="button" data-a="wdel" data-id="'+w.id+'" style="position:absolute;z-index:3;top:4px;right:4px;width:26px;height:26px;min-width:0;padding:0;min-height:0;border-radius:50%;display:flex;align-items:center;justify-content:center;line-height:1;font-size:12px;background:var(--card);color:var(--fg);border:1px solid var(--line);box-shadow:0 1px 3px rgba(0,0,0,.4)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>':'')+(wro?'':'<div class="meta" style="margin-top:4px;text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+esc(wishDomain(w.link))+'</div>')+'</div>'}).join('');
  return '<div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:12px"><h2 style="margin:0">Coveted</h2><button class="pri" data-a="wadd">+ Add to Coveted</button></div>'
   +(list.length?'<div class="grid'+(wro?' ro':'')+'" style="grid-template-columns:repeat('+cols+',minmax(0,1fr))">'+tiles+'</div>':'<p class="meta">'+(wish.length?'No coveted items match this type.':'Nothing coveted yet.')+'</p>')
   +'<hr style="border:0;border-top:1px solid var(--line);margin:18px 0">'+'<h3 class="side" style="margin-top:0">Ring Size Chart</h3>'+ringTableHTML();
@@ -880,7 +880,7 @@ function drawer(o){document.getElementById('drawer').classList.toggle('open',o);
 
 /* ---------- rendering ---------- */
 function noThumb(i,sz){var fs=sz<=30?(sz<=22?12:14):16;return '<span class="nt" style="padding:'+(sz<=22?4:8)+'px;gap:'+(sz<=22?3:6)+'px">'+ico(String(i.category).toLowerCase(),sz)+'<span class="tt" style="font-size:'+fs+'px'+(sz<=18?';-webkit-line-clamp:2':'')+'">'+esc(title(i))+'</span></span>'}
-function thumb(i){var sold=i.status==='Sold',wait=i.status==='Waiting',cimg=coverImg(i.cover),tsz=cols>=4?18:cols===3?22:cols===2?30:36;
+function thumb(i){var sold=i.status==='Sold',wait=i.status==='Waiting',cimg=coverImg(i.cover,true),tsz=cols>=4?18:cols===3?22:cols===2?30:36;
  var veil='<span aria-hidden="true" style="position:absolute;inset:0;background:rgba(0,0,0,.4);pointer-events:none"></span>';
  var soldBadge='<span aria-hidden="true" style="position:absolute;right:6px;bottom:6px;width:24px;height:24px;border-radius:50%;background:rgba(0,0,0,.35);display:flex;align-items:center;justify-content:center;pointer-events:none;font-size:13px;line-height:1;color:#fff">'+ico('heart',14)+'</span>';
  var benchBadge='<span aria-hidden="true" style="position:absolute;right:6px;bottom:6px;width:24px;height:24px;border-radius:50%;background:rgba(0,0,0,.35);display:flex;align-items:center;justify-content:center;pointer-events:none;font-size:13px;line-height:1;color:#fff">'+ico('wrench',14)+'</span>';
@@ -898,7 +898,7 @@ function renderTable(){
  rows.forEach(function(i){
    var gk=i.category+'|'+i.period;
    if(gk!==last){body+='<tr class="grp"><td colspan="'+(cols.length+2)+'"><span style="position:sticky;left:0;display:inline-block">'+esc(i.category)+' · '+esc(i.period)+'</span></td></tr>';last=gk}
-   body+='<tr><td class="stk"><div style="display:flex;gap:6px;align-items:flex-start">'+(i.cover?'<div style="position:relative;width:40px;height:40px;border-radius:6px;overflow:hidden;flex:none">'+coverImg(i.cover)+'</div>':'<span class="phe">'+ico(String(i.category).toLowerCase(),18)+'</span>')+'<span>'+esc(i.title||'—')+'</span></div></td>'+cols.map(function(c){return '<td>'+c[1](i)+'</td>'}).join('')+'<td><button data-a="edit" data-id="'+i.id+'" aria-label="Edit" style="padding:6px 10px">'+ico('pencil',16)+'</button></td></tr>';
+   body+='<tr><td class="stk"><div style="display:flex;gap:6px;align-items:flex-start">'+(i.cover?'<div style="position:relative;width:40px;height:40px;border-radius:6px;overflow:hidden;flex:none">'+coverImg(i.cover,true)+'</div>':'<span class="phe">'+ico(String(i.category).toLowerCase(),18)+'</span>')+'<span>'+esc(i.title||'—')+'</span></div></td>'+cols.map(function(c){return '<td>'+c[1](i)+'</td>'}).join('')+'<td><button data-a="edit" data-id="'+i.id+'" aria-label="Edit" style="padding:6px 10px">'+ico('pencil',16)+'</button></td></tr>';
  });
  return '<div class="bar"><button data-a="ct" data-v="Piece"'+(ctab==='Piece'?' class="on"':'')+'>Piece</button><button data-a="ct" data-v="Transaction"'+(ctab==='Transaction'?' class="on"':'')+'>Provenance</button><button data-a="ct" data-v="Stats"'+(ctab==='Stats'?' class="on"':'')+'>Wear &amp; Rating</button><span class="meta">'+list.length+' pieces</span></div>'
   +'<div class="tw"><table><thead><tr><th class="stk">Title</th>'+cols.map(function(c){return '<th>'+c[0]+'</th>'}).join('')+'<th></th></tr></thead><tbody>'+body+'</tbody></table></div>'
@@ -1180,11 +1180,7 @@ function wearMany(ids){
 var jotdSel=null,jotdMsg='',jotdLock={ring1:false,ring2:false,earring:true,necklace:true},jotdColor=null;
 function jotdColorMatch(i,c){if(!c)return true;var v=i.colorMain;if(c==='__none')return String(Array.isArray(v)?v.join(''):(v||'')).trim()==='';var arr=Array.isArray(v)?v:String(v||'').split(/[,;\/]/);return arr.some(function(x){return String(x).trim().toLowerCase()===c})}
 function paletteSVG(c,sz){
- var hole='<circle cx="6.8" cy="14.6" r="2"';var fill;
- if(c==='__none')fill='<circle cx="6.8" cy="14.6" r="2" fill="none" stroke="currentColor" stroke-width="1.4"/>';
- else if(!c)fill='';
- else fill='<circle cx="6.8" cy="14.6" r="2" fill="none" stroke="currentColor" stroke-width="1.2"/>';
- return '<svg width="'+sz+'" height="'+sz+'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><path d="M12 3C7 3 3 7 3 12s4 9 9 9c1.2 0 2-.8 2-2 0-.5-.2-1-.5-1.3-.3-.3-.5-.7-.5-1.2 0-1.1.9-2 2-2h2.5c2.5 0 4.5-2 4.5-4.5C22 6.5 17.5 3 12 3z"/><circle cx="7.6" cy="9.4" r="1.1"/><circle cx="11.2" cy="6.6" r="1.1"/><circle cx="15.4" cy="7.8" r="1.1"/>'+fill+'</svg>';
+ return '<svg width="'+sz+'" height="'+sz+'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><path d="M12 3C7 3 3 7 3 12s4 9 9 9c1.2 0 2-.8 2-2 0-.5-.2-1-.5-1.3-.3-.3-.5-.7-.5-1.2 0-1.1.9-2 2-2h2.5c2.5 0 4.5-2 4.5-4.5C22 6.5 17.5 3 12 3z"/><circle cx="7.6" cy="9.4" r="1.1"/><circle cx="11.2" cy="6.6" r="1.1"/><circle cx="15.4" cy="7.8" r="1.1"/></svg>';
 }
 function jcolorBtnStyle(c){
  if(!c)return '';
@@ -1236,7 +1232,7 @@ function jotdCard(label,i,emptyMsg,k){
  var locked=!!jotdLock[k];
  var colorBtn=k==='ring1'?'<button type="button" data-a="jcolor" aria-label="Primary Ring color filter" style="width:40px;height:34px;min-width:0;min-height:0;padding:0;display:flex;align-items:center;justify-content:center;flex:none;'+jcolorBtnStyle(jotdColor)+'">'+paletteSVG(jotdColor,20)+'</button>':'';
  var lockBtn='<button data-a="jlock" data-k="'+k+'" aria-pressed="'+locked+'" aria-label="'+(locked?'Unlock ':'Lock ')+esc(label)+'"'+(i?'':' disabled')+(locked?' class="on"':'')+' style="width:36px;height:34px;min-width:0;min-height:0;padding:0;display:flex;align-items:center;justify-content:center;flex:none">'+ico(locked?'lock':'unlock',18)+'</button>';
- var pic=i?(coverImg(i.cover)||noThumb(i,40))
+ var pic=i?(coverImg(i.cover,true)||noThumb(i,40))
   :'<div class="meta" style="padding:10px;text-align:center;display:flex;align-items:center;justify-content:center;height:100%">'+esc(emptyMsg)+'</div>';
  var picWrap='<div '+(i?'data-a="open" data-id="'+i.id+'" style="cursor:zoom-in;':'style="')+'position:relative;width:100%;aspect-ratio:1;overflow:hidden;border-radius:10px;margin:0 0 6px;background:var(--acc)">'+pic+'</div>';
  return '<div style="border:1px solid '+(locked?'var(--acc)':'var(--line)')+';border-radius:12px;padding:8px;display:flex;flex-direction:column;min-width:0">'
@@ -1262,7 +1258,7 @@ function popup(i){
  var rows=[['Year',i.yearMade],['Country',i.country],['Metal',(i.metal||[]).join(', ')],['Ring size',i.ringSize],['Seller',i.seller],['Status',i.status]].filter(function(r){return r[1]!=null&&String(r[1]).trim()!==''});
  var table=rows.map(function(r){return '<tr><th>'+esc(String(r[0]))+'</th><td>'+esc(String(r[1]))+'</td></tr>'}).join('');
  var rate=stars(i.rating)?'<tr><th>Rating</th><td><span style="color:var(--gold);letter-spacing:.1em">'+stars(i.rating)+'</span></td></tr>':'';
- var cover=i.cover?'<div class="mat"><div class="photo">'+coverImg(i.cover)+'</div></div>':'';
+ var cover=i.cover?'<div class="mat"><div class="photo">'+coverImg(i.cover,true)+'</div></div>':'';
  var prov=i.provenance?'<div class="note-b"><h4 class="sub">Provenance</h4><p>'+esc(i.provenance)+'</p></div>':'';
  var cond=i.condition?'<div class="note-b"><h4 class="sub">Condition</h4><p>'+esc(i.condition)+'</p></div>':'';
  document.getElementById('modal').innerHTML='<div class="modal" data-a="backdrop"><div class="dcard">'
@@ -1637,7 +1633,7 @@ case 'copydiag':copyText(diagLines.join('\n')+'\n\nEvent log (newest last):\n'+(
   case 'theme':theme=d.v;applyTheme();saveSettings();renderDrawer();refreshAppearance();break;
 case 'appearance':drawer(false);M.innerHTML=appearanceHTML();break;
 case 'jcolor':M.innerHTML=jcolorHTML();break;
-case 'jcolorset':jotdColor=d.v||null;M.innerHTML='';if(jotdSel)jotdRoll('ring1');renderMain();break;
+case 'jcolorset':jotdColor=d.v||null;M.innerHTML='';if(jotdSel){var keep2=jotdSel.ring2,keepE=jotdSel.earring,keepN=jotdSel.necklace;jotdRoll('ring1');var r1=jotdSel.ring1;jotdSel.earring=keepE;jotdSel.necklace=keepN;if(keep2&&r1&&keep2.id!==r1.id&&finger(keep2)!==finger(r1))jotdSel.ring2=keep2;else if(r1&&keep2&&finger(keep2)===finger(r1))jotdSel.ring2=jotdRing2Pick(r1);else jotdSel.ring2=keep2}renderMain();break;
   case 'bgs':bgStyle=d.v;kset('bgStyle',bgStyle);renderDrawer();renderMain();refreshAppearance();break;
 case 'frm':frameStyle=d.v;document.documentElement.dataset.frame=frameStyle;kset('frameStyle',frameStyle);renderDrawer();renderMain();refreshAppearance();break;
   case 'export':exportJSON();break;
