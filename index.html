@@ -201,6 +201,13 @@ main>h2:first-child{margin-bottom:14px}
 .curtain.open .cl{transform:rotateY(-78deg);opacity:0}
 .curtain.open .cr{transform:rotateY(78deg);opacity:0}
 .modal.kwm{z-index:60;align-items:flex-start;padding-top:16vh}
+.modal.kwm .kwbox{position:relative;width:min(270px,80vw);text-align:center;padding:24px 18px 18px;box-sizing:border-box}
+.modal.kwm .kwbox h3{margin:0 0 6px;text-align:center}
+.modal.kwm .kwbox input{width:100%;box-sizing:border-box;text-align:center}
+.modal.kwm .kwbox .meta{text-align:center}
+.modal.kwm .kwx{position:absolute;top:6px;right:6px;width:32px;height:32px;border:0;background:none;padding:0;font-size:22px;line-height:1;color:var(--muted,#8a7d6e);cursor:pointer}
+.modal.kwm .kwopen{color:var(--gold);border-color:var(--gold)}
+.modal.kwm .kwopen svg{vertical-align:-5px}
 .savest{display:none;width:20px;height:20px;align-items:center;justify-content:center;flex:none;color:var(--mute)}
 .savest.on{display:inline-flex}
 .savest.spin svg{animation:savespin .9s linear infinite}
@@ -284,7 +291,7 @@ header button[data-a="drawer"]{display:flex;align-items:center;justify-content:c
 <input type="file" id="gfile" accept="image/*" multiple hidden>
 <script>
 var K='ntts_items_v2',OK='ntts_order_v1',PER=25,MAX_UPLOAD=300*1024;
-var APP_VERSION='2.5.8',APP_DATE='2026-11-05 · 10:26 PM ET',UPDATE_URL='';
+var APP_VERSION='2.5.9',APP_DATE='2026-11-05 · 10:49 PM ET',UPDATE_URL='';
 var EMOJI={ring:'💍',earrings:'✨',necklace:'📿',bracelet:'⭕',watch:'⌚',other:'💎'};
 var ICONS={ring:"<circle cx='12' cy='14' r='6'/><path d='M9.5 8 12 4l2.5 4'/><path d='M12 9.5l1.5 2.5-1.5 2.5-1.5-2.5z'/>",earrings:"<path d='M7 3v3'/><path d='M7 6c-1.6 0-2.5 1.3-2.5 3S6 14 7 17c1-3 2.5-5 2.5-8C9.5 7.3 8.6 6 7 6z'/><path d='M17 3v3'/><path d='M17 6c-1.6 0-2.5 1.3-2.5 3S16 14 17 17c1-3 2.5-5 2.5-8C19.5 7.3 18.6 6 17 6z'/>",necklace:"<path d='M4 5c2 7 14 7 16 0'/><path d='M12 12.5V15'/><circle cx='12' cy='17' r='2.2'/>",bracelet:"<ellipse cx='12' cy='12' rx='8' ry='5.5'/><ellipse cx='12' cy='12' rx='5.5' ry='3'/>",watch:"<circle cx='12' cy='13' r='5.5'/><path d='M9 7.5 10 3h4l1 4.5M9 18.5 10 23h4l1-4.5'/><path d='M12 10.5V13l1.8 1.2'/>",other:"<path d='M7 4h10l4 5-9 11L3 9z'/><path d='M3 9h18M9 4l3 16 3-16'/>",heart:"<path d='M12 20s-7-4.4-7-9.5A4 4 0 0 1 12 8a4 4 0 0 1 7 2.5C19 15.6 12 20 12 20z'/>",wrench:"<path d='M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.5 2.5-2.5-.5-.5-2.5z'/>",key:"<g transform='rotate(-45 12.5 12)'><circle cx='8' cy='12' r='4'/><path d='M12 12h9M18 12v3M21 12v2.5'/></g>",curio:"<rect x='4' y='3' width='16' height='18' rx='1'/><path d='M3 3h18M3 21h18'/><path d='M12 3v18'/><path d='M4 11h16'/><path d='M10.5 7v1.5M13.5 7v1.5M10.5 15v1.5M13.5 15v1.5'/>",clock:"<circle cx='12' cy='12' r='9'/><path d='M12 7v5l3 2'/>",pencil:"<path d='M4 20h4L19 9l-4-4L4 16z'/><path d='M13.5 6.5l4 4'/>",lock:"<rect x='5' y='11' width='14' height='10' rx='2'/><path d='M8 11V7a4 4 0 0 1 8 0v4'/>",unlock:"<rect x='3.95' y='11' width='11.1' height='10' rx='2'/><path d='M12.8 11V6.3A3.3 3.3 0 0 1 19.4 6.3V9.5'/>",bag:"<path d='M5 8h14l-1 12H6z'/><path d='M9 8V6a3 3 0 0 1 6 0v2'/>",plus:"<path d='M12 5v14M5 12h14'/>",x:"<path d='M6 6l12 12M18 6L6 18'/>",spark:"<path d='M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z'/>",gallery:"<rect x='3' y='4' width='18' height='16' rx='2'/><circle cx='9' cy='10' r='2'/><path d='M21 16l-5-5-8 9'/>"};
 var ORN='<svg width="72" height="10" viewBox="0 0 72 10" fill="none" stroke="#a8864f" stroke-width="1.2"><path d="M0 5h28M44 5h28"/><path d="M36 1l4 4-4 4-4-4z"/></svg>';
@@ -1501,9 +1508,9 @@ function secretGate(){
  show('secret');curtainOn();
  var user='<input type="text" name="username" autocomplete="username" value="Never Twice the Same" style="position:absolute;left:-9999px" tabindex="-1" aria-hidden="true">';
  if(!secretCfg.hash){
-   M.innerHTML='<div class="modal kwm" data-a="backdrop"><div><h3 style="margin:0 0 6px">Set a Keyword</h3><p class="meta">Choose a keyword to open the Secret Compartment. There is no reset, so remember it.</p><form id="kwform" data-mode="set" autocomplete="on">'+user+'<input type="password" name="keyword" autocomplete="new-password" placeholder="Set a keyword"><div class="bar" style="justify-content:center;margin:12px 0 0"><button type="submit" class="pri">Save</button><button type="button" data-a="x">Cancel</button></div></form></div></div>';
+   M.innerHTML='<div class="modal kwm" data-a="backdrop"><div class="kwbox"><button type="button" class="kwx" data-a="x" aria-label="Close">×</button><h3>Set a Keyword</h3><p class="meta">Choose a keyword to open the Secret Compartment. There is no reset, so remember it.</p><form id="kwform" data-mode="set" autocomplete="on">'+user+'<input type="password" name="keyword" autocomplete="new-password" placeholder="Set a keyword"><div class="bar" style="justify-content:center;margin:12px 0 0"><button type="submit" class="pri">Save</button></div></form></div></div>';
  }else{
-   M.innerHTML='<div class="modal kwm" data-a="backdrop"><div><h3 style="margin:0 0 6px">Secret Compartment</h3><form id="kwform" data-mode="unlock" autocomplete="on">'+user+'<input type="password" name="keyword" autocomplete="current-password" placeholder="unlock"><div class="bar" style="justify-content:center;margin:12px 0 0"><button type="submit" class="pri">Open</button><button type="button" data-a="x">Cancel</button></div></form></div></div>';
+   M.innerHTML='<div class="modal kwm" data-a="backdrop"><div class="kwbox"><button type="button" class="kwx" data-a="x" aria-label="Close">×</button><h3>Secret Compartment</h3><form id="kwform" data-mode="unlock" autocomplete="on">'+user+'<input type="password" name="keyword" autocomplete="current-password" placeholder="unlock"><div class="bar" style="justify-content:center;margin:12px 0 0"><button type="submit" class="pri kwopen" aria-label="Open"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><g transform="rotate(-45 12.5 12)"><circle cx="8" cy="12" r="4"/><path d="M12 12h9M18 12v3M21 12v2.5"/></g></svg></button></div></form></div></div>';
  }
 }
 function handleKeywordForm(form){
@@ -1564,10 +1571,10 @@ function dashHTML(){
 function renderSecret(){
  if(!secretUnlocked)return '<h2>Secret Compartment</h2><p class="meta">Locked.</p>';
  var hidden=items.filter(isHidden).sort(function(a,b){return num(b.cost)-num(a.cost)});
- return '<h2>Secret Compartment</h2>'
+ return '<div style="display:flex;align-items:center;justify-content:space-between;gap:12px"><h2 style="margin:0">Secret Compartment</h2><button type="submit" form="secretform" class="pri">Lock</button></div>'
   +'<form id="secretform" autocomplete="on"><input type="text" name="username" autocomplete="username" value="Never Twice the Same" style="position:absolute;left:-9999px" tabindex="-1" aria-hidden="true">'
   +'<div class="f"><label><span class="sechdr">Threshold (hide above this)</span><span style="position:relative;display:block"><input type="text" inputmode="decimal" name="threshold" data-a="sthr" data-money="1" value="'+esc(secretCfg.threshold==null?'':fmtMoney(secretCfg.threshold))+'" placeholder="$0.00" style="padding-right:38px"><button type="button" data-a="sclear" aria-label="Clear threshold" style="position:absolute;right:6px;top:50%;transform:translateY(-50%);width:26px;height:26px;min-width:0;min-height:0;padding:0;border-radius:50%;display:flex;align-items:center;justify-content:center;line-height:1;font-size:12px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button></span></label><label><span class="sechdr"><span>Keyword</span><span id="kwmsg" class="meta" style="margin-left:auto;opacity:0;transition:opacity .4s ease">Updated!</span></span><span style="position:relative;display:block"><input type="text" name="keyword" autocomplete="off" value="'+esc(secretCfg.kw||'')+'" placeholder="'+(secretCfg.hash?'••••••••':'Set a keyword')+'" style="padding-right:38px"><button type="button" data-a="kwclear" aria-label="Clear keyword" style="position:absolute;right:6px;top:50%;transform:translateY(-50%);width:26px;height:26px;min-width:0;min-height:0;padding:0;border-radius:50%;display:flex;align-items:center;justify-content:center;line-height:1;font-size:12px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button></span></label></div>'
-  +'<div class="bar"><button type="submit" class="pri">Lock</button></div>'
+  +''
   +'<p class="meta">'+hidden.length+' piece'+(hidden.length===1?'':'s')+' over the threshold'+(secretCfg.on?' (hidden from the Jewelry Box)':' (not hidden yet)')+'.</p>'
   +'<div class="grid" style="grid-template-columns:repeat('+cols+',1fr)">'+hidden.map(function(i){return '<div>'+thumb(i)+'<div class="meta">'+esc(title(i))+' · '+money(num(i.cost))+'</div></div>'}).join('')+'</div></form>'
   +'<details data-sec="dash" style="margin-top:22px"'+dOpen('dash',false)+'><summary>Dashboard</summary>'+dashHTML()+'</details>';
