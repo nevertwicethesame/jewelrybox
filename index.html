@@ -291,7 +291,7 @@ header button[data-a="drawer"]{display:flex;align-items:center;justify-content:c
 <input type="file" id="gfile" accept="image/*" multiple hidden>
 <script>
 var K='ntts_items_v2',OK='ntts_order_v1',PER=25,MAX_UPLOAD=300*1024;
-var APP_VERSION='2.6.0',APP_DATE='2026-11-05 · 11:13 PM ET',UPDATE_URL='';
+var APP_VERSION='2.6.1',APP_DATE='2026-11-06 · 7:02 AM ET',UPDATE_URL='';
 var EMOJI={ring:'💍',earrings:'✨',necklace:'📿',bracelet:'⭕',watch:'⌚',other:'💎'};
 var ICONS={ring:"<circle cx='12' cy='14' r='6'/><path d='M9.5 8 12 4l2.5 4'/><path d='M12 9.5l1.5 2.5-1.5 2.5-1.5-2.5z'/>",earrings:"<path d='M7 3v3'/><path d='M7 6c-1.6 0-2.5 1.3-2.5 3S6 14 7 17c1-3 2.5-5 2.5-8C9.5 7.3 8.6 6 7 6z'/><path d='M17 3v3'/><path d='M17 6c-1.6 0-2.5 1.3-2.5 3S16 14 17 17c1-3 2.5-5 2.5-8C19.5 7.3 18.6 6 17 6z'/>",necklace:"<path d='M4 5c2 7 14 7 16 0'/><path d='M12 12.5V15'/><circle cx='12' cy='17' r='2.2'/>",bracelet:"<ellipse cx='12' cy='12' rx='8' ry='5.5'/><ellipse cx='12' cy='12' rx='5.5' ry='3'/>",watch:"<circle cx='12' cy='13' r='5.5'/><path d='M9 7.5 10 3h4l1 4.5M9 18.5 10 23h4l1-4.5'/><path d='M12 10.5V13l1.8 1.2'/>",other:"<path d='M7 4h10l4 5-9 11L3 9z'/><path d='M3 9h18M9 4l3 16 3-16'/>",heart:"<path d='M12 20s-7-4.4-7-9.5A4 4 0 0 1 12 8a4 4 0 0 1 7 2.5C19 15.6 12 20 12 20z'/>",wrench:"<path d='M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.5 2.5-2.5-.5-.5-2.5z'/>",key:"<g transform='rotate(-45 12.5 12)'><circle cx='8' cy='12' r='4'/><path d='M12 12h9M18 12v3M21 12v2.5'/></g>",curio:"<rect x='4' y='3' width='16' height='18' rx='1'/><path d='M3 3h18M3 21h18'/><path d='M12 3v18'/><path d='M4 11h16'/><path d='M10.5 7v1.5M13.5 7v1.5M10.5 15v1.5M13.5 15v1.5'/>",clock:"<circle cx='12' cy='12' r='9'/><path d='M12 7v5l3 2'/>",pencil:"<path d='M4 20h4L19 9l-4-4L4 16z'/><path d='M13.5 6.5l4 4'/>",lock:"<rect x='5' y='11' width='14' height='10' rx='2'/><path d='M8 11V7a4 4 0 0 1 8 0v4'/>",unlock:"<rect x='3.95' y='11' width='11.1' height='10' rx='2'/><path d='M12.8 11V6.3A3.3 3.3 0 0 1 19.4 6.3V9.5'/>",bag:"<path d='M5 8h14l-1 12H6z'/><path d='M9 8V6a3 3 0 0 1 6 0v2'/>",plus:"<path d='M12 5v14M5 12h14'/>",x:"<path d='M6 6l12 12M18 6L6 18'/>",spark:"<path d='M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z'/>",gallery:"<rect x='3' y='4' width='18' height='16' rx='2'/><circle cx='9' cy='10' r='2'/><path d='M21 16l-5-5-8 9'/>"};
 var ORN='<svg width="72" height="10" viewBox="0 0 72 10" fill="none" stroke="#a8864f" stroke-width="1.2"><path d="M0 5h28M44 5h28"/><path d="M36 1l4 4-4 4-4-4z"/></svg>';
@@ -753,6 +753,7 @@ function galPickHTML(act){
 var FACETS=[
  {k:'photoshoot',l:'Photoshoot',cnt:1,v:function(){return ['Yes','No']},g:function(i){return [i.photoshoot?'Yes':'No']}},
  {k:'refimg',l:'Reference Images',cnt:1,v:function(){return ['Yes','No']},g:function(i){return [(i.refs&&i.refs.length)?'Yes':'No']}},
+ {k:'inColl',l:'In a Collection',cnt:1,v:function(){return ['Yes','No']},g:function(i){return [pieceInColl(i)?'Yes':'No']}},
  {k:'status',l:'Status',cnt:1,v:function(){return STAT},g:function(i){return [i.status]}},
  {k:'category',l:'Type',cnt:1,v:function(){return CATS},g:function(i){return [i.category]}},
  {k:'period',l:'Period',cnt:1,v:function(){return PERIODS},g:function(i){return [i.period]}},
@@ -762,6 +763,7 @@ var FACETS=[
  {k:'colorMain',l:'Color',sw:1,v:function(){return COLOR_ORDER.concat(['No color'])},g:function(i){var c=i.colorMain||[];return c.length?c:['No color']}},
  {k:'finger',l:'Ring Size by Finger',cnt:1,v:function(){return FINGERS},g:function(i){return [finger(i)]}}
 ];
+function pieceInColl(i){return colls.some(function(c){return (c.pieceIds||[]).indexOf(i.id)>-1})}
 function facetOf(k){return FACETS.filter(function(F){return F.k===k})[0]}
 function vis(){return secretCfg.on?items.filter(function(i){return !isHidden(i)}):items}
 function cntColor(c){var F=facetOf('colorMain');return vis().filter(function(i){return F.g(i).indexOf(c)>-1}).length}
@@ -1283,13 +1285,13 @@ function collPickerHTML(c){
 }
 function renderCollDetail(c){
  var p=collVisIds(c);
- var tiles=p.map(function(i){var img=coverImg(i.cover,true)||noThumb(i,40);
-  if(!collRo)return '<div data-a="open" data-id="'+i.id+'" style="aspect-ratio:1;border-radius:10px;overflow:hidden;background:var(--acc);position:relative;min-width:0;cursor:pointer">'+img+'</div>';
-  return '<div class="tile" data-id="'+i.id+'" style="aspect-ratio:1;border-radius:10px;overflow:hidden;background:var(--acc);position:relative">'+img+'<button type="button" data-a="cremove" data-id="'+i.id+'" aria-label="Remove from collection" style="position:absolute;z-index:3;top:4px;right:4px;width:26px;height:26px;min-width:0;padding:0;min-height:0;border-radius:50%;display:flex;align-items:center;justify-content:center;line-height:1;font-size:12px;background:var(--card);color:var(--fg);border:1px solid var(--line);box-shadow:0 1px 3px rgba(0,0,0,.4)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>';}).join('');
+ var tiles=p.map(function(i){var t=thumb(i);
+  if(!collRo)return t;
+  var x='<button type="button" data-a="cremove" data-id="'+i.id+'" aria-label="Remove from collection" style="position:absolute;z-index:3;top:4px;right:4px;width:26px;height:26px;min-width:0;padding:0;min-height:0;border-radius:50%;display:flex;align-items:center;justify-content:center;line-height:1;font-size:12px;background:var(--card);color:var(--fg);border:1px solid var(--line)">&times;</button>';
+  return t.slice(0,-6)+x+'</div>'}).join('');
  return '<div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:12px"><button data-a="cback">Back</button><div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end"><button data-a="cedit">Edit details</button><button class="pri" data-a="cpicker">+ Add pieces</button></div></div>'
-  +'<h2 style="margin:0 0 6px">'+esc(c.title||'Untitled collection')+'</h2>'
   +(c.note?'<p class="meta" style="margin:0 0 12px;white-space:pre-wrap">'+esc(c.note)+'</p>':'')
-  +(p.length?'<div class="box'+(bgStyle==='pattern'?' pat':'')+'" style="overflow:hidden;min-width:0"><div class="grid'+(collRo?' ro':'')+'" style="grid-template-columns:repeat('+cols+',minmax(0,1fr));gap:12px">'+tiles+'</div></div>':'<p class="meta">No pieces yet.</p>');
+  +(p.length?'<div class="box'+(bgStyle==='pattern'?' pat':'')+'" style="overflow:hidden;min-width:0"><div class="grid'+(collRo?' ro':'')+'" style="grid-template-columns:repeat('+cols+',1fr);gap:8px">'+tiles+'</div></div>':'<p class="meta">No pieces yet.</p>');
 }
 var collTab='cur',collListRo=false;
 function colorRankOf(i){var ix=(i.colorMain||[]).map(function(c){return COLOR_ORDER.indexOf(c)}).filter(function(x){return x>-1});return ix.length?Math.min.apply(null,ix):99}
@@ -1307,7 +1309,7 @@ function setTrays(){
 }
 function renderSets(){
  var trays=setTrays();
- if(!trays.length)return '<p class="meta">No sets yet. Link pieces on a piece\u2019s Edit page, under Set.</p>';
+ if(!trays.length)return '<p class="meta">No sets yet.</p>';
  return trays.map(function(t){return '<div style="margin:0 0 18px"><p class="meta" style="margin:0 0 6px">'+esc(t.map(function(x){return title(x)}).join(' + '))+'</p><div class="box'+(bgStyle==='pattern'?' pat':'')+'" style="overflow:hidden;min-width:0"><div class="grid" style="grid-template-columns:repeat('+cols+',minmax(0,1fr))">'+t.map(thumb).join('')+'</div></div></div>'}).join('');
 }
 function renderColl(){
@@ -1585,8 +1587,12 @@ function download(name,mime,text){var b=new Blob([text],{type:mime}),u=URL.creat
 function readFile(f,cb){var r=new FileReader();r.onload=function(){cb(String(r.result))};r.readAsText(f)}
 function csvCell(v){v=v==null?'':Array.isArray(v)?v.join('; '):typeof v==='boolean'?(v?'true':'false'):String(v);return /[",\r\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v}
 function exportCSV(){
- var head=CSV_COLS.map(function(c){return c[0]==='motif'?'motifs':c[0]}).join(',');
- var body=items.map(function(i){return CSV_COLS.map(function(c){return csvCell(i[c[0]])}).join(',')});
+ var head=CSV_COLS.map(function(c){return c[0]==='motif'?'motifs':c[0]}).concat(['curations','sets']).join(',');
+ var body=items.map(function(i){
+   var cur=colls.filter(function(c){return (c.pieceIds||[]).indexOf(i.id)>-1}).map(function(c){return c.title||'Untitled collection'}).join('; ');
+   var sets=(i.links||[]).join('; ');
+   return CSV_COLS.map(function(c){return csvCell(i[c[0]])}).concat([csvCell(cur),csvCell(sets)]).join(',');
+ });
  saveFile('ntts-records-'+stampNow()+'.csv','text/csv',[head].concat(body).join('\r\n'));
 }
 function parseCSV(t){
@@ -1615,6 +1621,7 @@ function coerce(k,v){
  if(k==='colorMain')return String(v).split(/[,;]/).map(function(x){return capColor(x)}).filter(Boolean);
  return v;
 }
+function clearedVal(v){return Array.isArray(v)?[]:(typeof v==='number'?null:'')}
 function importCSV(text){
  var rows=parseCSV(text);
  if(rows.length<2){alert('No records found in that file.');return}
@@ -1627,19 +1634,72 @@ function importCSV(text){
    });
    idx[c[0]]=j;
  });
- var added=0,updated=0,skipped=0,nid=Math.max(Date.now(),items.reduce(function(m,i){return Math.max(m,Number(i.id)||0)},0)+1);
+ var colIdx=function(name){var j=-1;head.forEach(function(h,n){if(j<0&&h.toLowerCase()===name)j=n});return j};
+ var cCur=colIdx('curations'),cSet=colIdx('sets');
+ var added=0,updated=0,skipped=0,curChanged=0,setChanged=0,warn=[],nid=Math.max(Date.now(),items.reduce(function(m,i){return Math.max(m,Number(i.id)||0)},0)+1);
+ var nextCid=Math.max(Date.now(),colls.reduce(function(m,c){return Math.max(m,Number(c.id)||0)},0)+1);
  rows.slice(1).forEach(function(r){
    var rec={};
    CSV_COLS.forEach(function(c){var j=idx[c[0]];if(j<0)return;var v=(r[j]||'').trim();if(v!=='')rec[c[0]]=v});
    if(!rec.title){skipped++;return}
-   var existing=(rec.id?items.filter(function(i){return String(i.id)===rec.id})[0]:null)||(rec.title?items.filter(function(i){return String(i.title||'').trim().toLowerCase()===rec.title.trim().toLowerCase()&&(i.purchaseDate||'')===(parseDate(rec.purchaseDate||'')||'')})[0]:null)||null;
+   var isNew=rec.id==='-1';
+   var existing=isNew?null:((rec.id?items.filter(function(i){return String(i.id)===rec.id})[0]:null)||items.filter(function(i){return String(i.title||'').trim().toLowerCase()===rec.title.trim().toLowerCase()&&(i.purchaseDate||'')===(parseDate(rec.purchaseDate||'')||'')})[0]||null);
    var out=existing?JSON.parse(JSON.stringify(existing)):{id:nid++,status:'Waiting',category:'Other',period:'Antique',motif:[],stone:[],metal:[],cut:[],rating:0,refs:[],cover:null};
-   Object.keys(rec).forEach(function(k){if(k!=='id')out[k]=coerce(k,rec[k])});
+   Object.keys(rec).forEach(function(k){
+     if(k==='id')return;
+     if(rec[k]==='(clear)'){if(k!=='title')out[k]=clearedVal(out[k])}
+     else out[k]=coerce(k,rec[k]);
+   });
    out=mig(out);
    if(existing){items[items.indexOf(existing)]=out;updated++}else{items.push(out);added++}
+   // Curations column: blank = no change, (clear) = remove from all, names = exact membership
+   if(cCur>-1){
+     var cv=(r[cCur]||'').trim();
+     if(cv!==''){
+       var wantNames=cv==='(clear)'?[]:cv.split(';').map(function(x){return x.trim()}).filter(Boolean),wantC=[];
+       wantNames.forEach(function(name){
+         var c=colls.filter(function(x){return String(x.title||'').trim().toLowerCase()===name.toLowerCase()})[0];
+         if(!c){c={id:nextCid++,title:name,note:'',pieceIds:[],cover:null};colls.push(c)}
+         wantC.push(c);
+       });
+       colls.forEach(function(c){
+         var has=(c.pieceIds||[]).indexOf(out.id)>-1,should=wantC.indexOf(c)>-1;
+         if(should&&!has){c.pieceIds=(c.pieceIds||[]).concat([out.id]);curChanged++}
+         if(!should&&has){c.pieceIds=c.pieceIds.filter(function(x){return x!==out.id});curChanged++}
+       });
+     }
+   }
+   // Sets column: blank = no change, (clear) = unlink all, IDs = exact set of direct links
+   if(cSet>-1){
+     var sv=(r[cSet]||'').trim();
+     if(sv!==''){
+       var wantIds=sv==='(clear)'?[]:sv.split(';').map(function(x){return x.trim()}).filter(Boolean),ids=[];
+       wantIds.forEach(function(t){
+         if(t==='-1'){warn.push('"'+rec.title+'": a new piece can\'t be linked by -1 yet (import it first)');return}
+         var target=items.filter(function(x){return String(x.id)===t})[0];
+         if(!target){warn.push('"'+rec.title+'": unknown ID '+t);return}
+         if(target===out){return}
+         ids.push(target.id);
+       });
+       var cur=(out.links||[]).slice();
+       cur.forEach(function(x){
+         if(ids.some(function(y){return String(y)===String(x)}))return;
+         var other=items.filter(function(i){return String(i.id)===String(x)})[0];
+         if(other)other.links=(other.links||[]).filter(function(l){return String(l)!==String(out.id)});
+         setChanged++;
+       });
+       ids.forEach(function(x){
+         if(cur.some(function(y){return String(y)===String(x)}))return;
+         var other=items.filter(function(i){return String(i.id)===String(x)})[0];
+         if(other&&(other.links||[]).indexOf(out.id)<0)other.links=(other.links||[]).concat([out.id]);
+         setChanged++;
+       });
+       out.links=ids;
+     }
+   }
  });
- saveItems();render();
- alert('Added '+added+', updated '+updated+(skipped?', skipped '+skipped+' (no title)':'')+'.');
+ saveItems();saveColls();render();
+ alert('Added '+added+', updated '+updated+(skipped?', skipped '+skipped+' (no title)':'')+'.\nCuration changes: '+curChanged+'. Set link changes: '+setChanged+'.'+(warn.length?'\n\nWarnings:\n'+warn.slice(0,8).join('\n'):''));
 }
 function planChunks(){
  var LIMIT=50*1024*1024,chunks=[],cur={items:[],imgs:{}},curSize=0,used={};
@@ -2112,8 +2172,8 @@ var overEl=null;
 document.addEventListener('pointerup',endDrag);
 document.addEventListener('pointercancel',endDrag);
 document.addEventListener('wheel',function(e){if(CR&&e.target.closest&&e.target.closest('#cropv')){e.preventDefault();cropZoom(Math.min(4,Math.max(1,CR.z*(1-e.deltaY/500))))}},{passive:false});
-document.addEventListener('touchstart',function(e){if(e.touches.length!==1)return;var t=e.touches[0],open=document.getElementById('drawer').classList.contains('open');swS=(t.clientX<40||open)?{x:t.clientX,y:t.clientY,t:Date.now(),open:open}:null},{passive:true});
-document.addEventListener('touchend',function(e){if(!swS)return;var s=swS;swS=null;var t=e.changedTouches[0],dx=t.clientX-s.x,dy=Math.abs(t.clientY-s.y),dt=Date.now()-s.t;if(dy>50||dt>800)return;if(!s.open&&dx>70&&document.getElementById('modal').innerHTML==='')drawer(true);else if(s.open&&dx<-70)drawer(false)},{passive:true});
+document.addEventListener('touchstart',function(e){if(e.touches.length!==1)return;var t=e.touches[0],open=document.getElementById('drawer').classList.contains('open');swS=(t.clientX<40||open)?{x:t.clientX,y:t.clientY,t:Date.now(),open:open,back:!!document.querySelector('#app [data-a="cback"],#app [data-a="pback"]')}:null},{passive:true});
+document.addEventListener('touchend',function(e){if(!swS)return;var s=swS;swS=null;var t=e.changedTouches[0],dx=t.clientX-s.x,dy=Math.abs(t.clientY-s.y),dt=Date.now()-s.t;if(dy>50||dt>800)return;if(!s.open&&dx>70){if(s.back&&document.getElementById('modal').innerHTML===''){var bb=document.querySelector('#app [data-a="cback"],#app [data-a="pback"]');if(bb)bb.click()}}else if(s.open&&dx<-70)drawer(false)},{passive:true});
 function qtoggle(open){var h=document.querySelector('header'),i=document.getElementById('q');h.classList.toggle('sq',open);document.getElementById('qb').innerHTML=open?'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>':'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l5 5"/></svg>';if(open)i.focus();else if(q){i.value='';q='';page=1;renderMain()}}
 document.getElementById('qb').addEventListener('click',function(){qtoggle(!document.querySelector('header').classList.contains('sq'))});
 document.getElementById('q').addEventListener('input',function(e){q=e.target.value.trim().toLowerCase();page=1;renderMain()});
