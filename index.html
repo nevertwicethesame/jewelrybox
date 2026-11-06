@@ -215,7 +215,7 @@ main>h2:first-child{margin-bottom:14px}
 @keyframes savespin{to{transform:rotate(360deg)}}
 @keyframes savepop{0%{transform:scale(.6);opacity:0}60%{transform:scale(1.15);opacity:1}100%{transform:scale(1)}}
 #savecue.err{background:#8a1c1c;color:#fff;border-color:#8a1c1c;pointer-events:auto}
-@media (max-width:700px){#savecue{bottom:calc(72px + env(safe-area-inset-bottom,0px))}}
+@media (max-width:700px){#savecue{bottom:calc(96px + env(safe-area-inset-bottom,0px))}}
 /* one-line button demo on the Design page */
 .bar.one{flex-wrap:nowrap;gap:4px}
 .bar.one button{padding:10px 10px 6px}
@@ -291,7 +291,7 @@ header button[data-a="drawer"]{display:flex;align-items:center;justify-content:c
 <input type="file" id="gfile" accept="image/*" multiple hidden>
 <script>
 var K='ntts_items_v2',OK='ntts_order_v1',PER=25,MAX_UPLOAD=300*1024;
-var APP_VERSION='2.5.9',APP_DATE='2026-11-05 · 10:49 PM ET',UPDATE_URL='';
+var APP_VERSION='2.6.0',APP_DATE='2026-11-05 · 11:13 PM ET',UPDATE_URL='';
 var EMOJI={ring:'💍',earrings:'✨',necklace:'📿',bracelet:'⭕',watch:'⌚',other:'💎'};
 var ICONS={ring:"<circle cx='12' cy='14' r='6'/><path d='M9.5 8 12 4l2.5 4'/><path d='M12 9.5l1.5 2.5-1.5 2.5-1.5-2.5z'/>",earrings:"<path d='M7 3v3'/><path d='M7 6c-1.6 0-2.5 1.3-2.5 3S6 14 7 17c1-3 2.5-5 2.5-8C9.5 7.3 8.6 6 7 6z'/><path d='M17 3v3'/><path d='M17 6c-1.6 0-2.5 1.3-2.5 3S16 14 17 17c1-3 2.5-5 2.5-8C19.5 7.3 18.6 6 17 6z'/>",necklace:"<path d='M4 5c2 7 14 7 16 0'/><path d='M12 12.5V15'/><circle cx='12' cy='17' r='2.2'/>",bracelet:"<ellipse cx='12' cy='12' rx='8' ry='5.5'/><ellipse cx='12' cy='12' rx='5.5' ry='3'/>",watch:"<circle cx='12' cy='13' r='5.5'/><path d='M9 7.5 10 3h4l1 4.5M9 18.5 10 23h4l1-4.5'/><path d='M12 10.5V13l1.8 1.2'/>",other:"<path d='M7 4h10l4 5-9 11L3 9z'/><path d='M3 9h18M9 4l3 16 3-16'/>",heart:"<path d='M12 20s-7-4.4-7-9.5A4 4 0 0 1 12 8a4 4 0 0 1 7 2.5C19 15.6 12 20 12 20z'/>",wrench:"<path d='M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.5 2.5-2.5-.5-.5-2.5z'/>",key:"<g transform='rotate(-45 12.5 12)'><circle cx='8' cy='12' r='4'/><path d='M12 12h9M18 12v3M21 12v2.5'/></g>",curio:"<rect x='4' y='3' width='16' height='18' rx='1'/><path d='M3 3h18M3 21h18'/><path d='M12 3v18'/><path d='M4 11h16'/><path d='M10.5 7v1.5M13.5 7v1.5M10.5 15v1.5M13.5 15v1.5'/>",clock:"<circle cx='12' cy='12' r='9'/><path d='M12 7v5l3 2'/>",pencil:"<path d='M4 20h4L19 9l-4-4L4 16z'/><path d='M13.5 6.5l4 4'/>",lock:"<rect x='5' y='11' width='14' height='10' rx='2'/><path d='M8 11V7a4 4 0 0 1 8 0v4'/>",unlock:"<rect x='3.95' y='11' width='11.1' height='10' rx='2'/><path d='M12.8 11V6.3A3.3 3.3 0 0 1 19.4 6.3V9.5'/>",bag:"<path d='M5 8h14l-1 12H6z'/><path d='M9 8V6a3 3 0 0 1 6 0v2'/>",plus:"<path d='M12 5v14M5 12h14'/>",x:"<path d='M6 6l12 12M18 6L6 18'/>",spark:"<path d='M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z'/>",gallery:"<rect x='3' y='4' width='18' height='16' rx='2'/><circle cx='9' cy='10' r='2'/><path d='M21 16l-5-5-8 9'/>"};
 var ORN='<svg width="72" height="10" viewBox="0 0 72 10" fill="none" stroke="#a8864f" stroke-width="1.2"><path d="M0 5h28M44 5h28"/><path d="M36 1l4 4-4 4-4-4z"/></svg>';
@@ -443,7 +443,7 @@ function logText(){return logArr().map(function(r){var t=new Date(r[0]);return t
 var wseq=0,pending=0,dirty=false,cueTimer=null,saveBad=false,revertInfo='',lastVerified='';
 function linkCounts(){var c=0,r=0,m=0,n=0;items.forEach(function(i){if(i.cover&&i.cover.id)c++;else n++;r+=(i.refs||[]).length;m+=(i.comps||[]).length});return {cover:c,refs:r,comps:m,none:n,total:c+r+m}}
 function writeMirror(){try{localStorage.setItem('ntts_mirror',JSON.stringify({seq:wseq,at:new Date().toISOString(),items:items.length,imgs:Object.keys(gal.imgs).length,links:linkCounts().total}))}catch(e){}}
-function cue(msg,kind){var el=document.getElementById('savecue');if(!el)return;clearTimeout(cueTimer);el.textContent=msg;el.className='show'+(kind==='err'?' err':'');if(kind==='ok')cueTimer=setTimeout(function(){el.className=''},1800)}
+function cue(msg,kind){var el=document.getElementById('savecue');if(!el)return;clearTimeout(cueTimer);el.textContent=msg;el.className='show'+(kind==='err'?' err':'');if(kind!=='err')cueTimer=setTimeout(function(){el.className=''},2200)}
 function saveFailed(){saveBad=true;cue('Not saved. Tap to back up now.','err')}
 var savestTimer=null;
 function saveStat(st){
@@ -512,7 +512,7 @@ async function init(){
  if(!DB)alert('Browser storage is unavailable. Changes will not be kept after you close the app.');
  var it=await kget('items');
  var gRaw=await kget('gallery');gal=normGal(gRaw);
- secretCfg=(await kget('secret'))||secretCfg;
+ secretCfg=(await kget('secret'))||secretCfg;if(secretCfg&&'kw' in secretCfg){delete secretCfg.kw;saveSecret()}
  wish=(await kget('wishlist'))||[];
  colls=(await kget('collections'))||[];colls.forEach(function(c){if(!c.pieceIds)c.pieceIds=[]});
  await loadGalImgs(gRaw);
@@ -847,11 +847,11 @@ function renderManage(){
  var csvBody='<div class="bar" style="flex-direction:column;align-items:stretch;margin:0"><button data-a="csvup">Import CSV</button><button data-a="csvdown">Export CSV</button></div><p class="meta">Import adds new pieces and updates existing ones by ID. Blank cells keep the existing value. Photos are not included.</p><p class="meta">Export includes '+items.length+' piece'+(items.length===1?'':'s')+' as one CSV file, one row per piece with its details, cost and sale info. Photos are not included.</p><details class="tpl"><summary>CSV Template Fields</summary><p class="meta" style="word-break:break-word;margin:0 0 8px">'+CSV_COLS.map(function(c){return c[0]==='motif'?'motifs':c[0]}).join(', ')+'</p><p class="meta" style="margin:0 0 8px">Lists separate values with ; or commas. Dates use YYYY-MM-DD. Rating is 0 to 5. Photoshoot is true or false. Leave a cell empty to keep the existing value when updating by id.</p></details>';
  var nfiles=planChunks().length;
  var imgCount=Object.keys(gal.imgs).length;
- var jsonBody='<div class="bar" style="flex-direction:column;align-items:stretch;margin:0"><button data-a="import">Import JSON</button><button data-a="export">Export JSON</button></div><p class="meta">Export includes '+items.length+' piece'+(items.length===1?'':'s')+' with their details, '+imgCount+' photo'+(imgCount===1?'':'s')+' (covers and reference screenshots), '+wish.length+' coveted item'+(wish.length===1?'':'s')+', your order, theme and settings. It saves as '+nfiles+' file'+(nfiles===1?'':'s')+'.</p>'+expPanelHTML();
+ var jsonBody='<div class="bar" style="flex-direction:column;align-items:stretch;margin:0"><button data-a="import">Import JSON</button><button data-a="export">Export JSON</button></div><p class="meta">Export includes '+items.length+' piece'+(items.length===1?'':'s')+' with their details, '+imgCount+' photo'+(imgCount===1?'':'s')+' (covers, curation covers and reference screenshots), '+wish.length+' coveted item'+(wish.length===1?'':'s')+', '+colls.length+' curation'+(colls.length===1?'':'s')+', your order, theme, appearance and secret compartment settings (the keyword itself is never saved). It saves as '+nfiles+' file'+(nfiles===1?'':'s')+'.</p>'+expPanelHTML();
  return '<h2>I/O</h2>'
   +'<h3 class="side">Diagnostics</h3><div style="border:1px solid var(--line);border-radius:12px;padding:12px"><div id="stormeter" class="meta" style="text-align:left"></div><div class="bar" style="margin:12px 0 0"><button data-a="checkupd">Check for new version</button><button type="button" class="link" data-a="copydiag">Copy</button><span id="copymsg" class="meta"></span></div></div>'
   +'<h3 class="side">Data Backup</h3><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px">'+card('JSON Backup',jsonBody)+card('CSV Backup',csvBody)+'</div>'
-  +'<h3 class="side">Reset</h3><div style="border:1px solid var(--line);border-radius:12px;padding:12px"><button class="dan" data-a="delete">Erase all data</button><p class="meta" style="margin:6px 0 0">Erases every piece, photo, and setting on this device. This cannot be undone.</p></div>'+'';
+  +'<h3 class="side">Reset</h3><div style="border:1px solid var(--line);border-radius:12px;padding:12px"><button class="dan" data-a="delete">Erase all data</button><p class="meta" style="margin:6px 0 0">Erases every piece, photo, and setting on this device. This cannot be undone.</p>'+(secretCfg.hash?'<p class="meta" style="margin:10px 0 0">Change the keyword: <button type="button" class="link" data-a="kwchange" style="font-size:inherit;margin:0">Change keyword</button></p><p class="meta" style="margin:10px 0 0">Forgot the keyword? <button type="button" class="link" data-a="kwforgot" style="font-size:inherit;margin:0">Delete keyword and settings</button></p>':'')+'</div>'+'';
 }
 function renderAbout(){
  return '<h2>Design</h2>'
@@ -1502,6 +1502,8 @@ function curtainOff(){var c=document.getElementById('curtain');if(!c)return;c.cl
 function curtainDrop(){var c=document.getElementById('curtain');if(c&&c.parentNode)c.parentNode.removeChild(c)}
 function secretReveal(){document.getElementById('modal').innerHTML='';render();curtainOff()}
 function secretAbort(){curtainDrop();if(view==='secret'&&!secretUnlocked)show('box')}
+function showKwChange(){document.getElementById('modal').innerHTML='<div class="modal kwm" data-a="backdrop"><div class="kwbox"><button type="button" class="kwx" data-a="x" aria-label="Close">×</button><h3>Change keyword</h3><form id="kwchangeform" autocomplete="off"><input type="password" name="current" autocomplete="off" placeholder="current keyword" style="margin-bottom:8px"><input type="password" name="next" autocomplete="off" placeholder="new keyword"><div class="bar" style="justify-content:center;margin:12px 0 0"><button type="submit" class="pri">Save</button></div></form></div></div>'}
+function handleKwChange(form){var cur=form.querySelector('input[name=current]').value,nxt=form.querySelector('input[name=next]').value.trim();if(!nxt){alert('Enter a new keyword');return}hashKW(cur).then(function(h){if(h!==secretCfg.hash){alert('Incorrect keyword');return}return hashKW(nxt).then(function(nh){secretCfg.hash=nh;saveSecret();document.getElementById('modal').innerHTML='';render();cue('Keyword changed.')})})}
 function secretGate(){
  var M=document.getElementById('modal');
  if(secretUnlocked){show('secret');return}
@@ -1517,19 +1519,17 @@ function handleKeywordForm(form){
  var pw=form.querySelector('input[name=keyword]').value;
  var M=document.getElementById('modal');
  if(form.dataset.mode==='unlock'){
-   hashKW(pw).then(function(h){if(h===secretCfg.hash){secretCfg.kw=pw;saveSecret();secretUnlocked=true;secretReveal()}else alert('Incorrect keyword')});
+   hashKW(pw).then(function(h){if(h===secretCfg.hash){saveSecret();secretUnlocked=true;secretReveal()}else alert('Incorrect keyword')});
  }else{
    if(!pw.trim()){alert('Enter a keyword.');return}
-   hashKW(pw).then(function(h){secretCfg.hash=h;secretCfg.kw=pw;secretUnlocked=true;saveSecret();secretReveal()});
+   hashKW(pw).then(function(h){secretCfg.hash=h;secretUnlocked=true;saveSecret();secretReveal()});
  }
 }
 function handleSecretForm(form){
- var kw=form.querySelector('input[name=keyword]').value;
  var thr=form.querySelector('input[name=threshold]').value;
  secretCfg.threshold=num(parseMoney(thr));
  secretCfg.on=secretCfg.threshold!=null;
- var finish=function(){saveSecret();secretUnlocked=false;show('box')};
- if(kw.trim()){hashKW(kw).then(function(h){secretCfg.hash=h;secretCfg.kw=kw;finish()})}else finish();
+ saveSecret();secretUnlocked=false;show('box');
 }
 var dashAll=false,dashYrsAll=false,dashSort='count';
 function compactMoney(n){n=Number(n)||0;return n>=1000?'$'+(n/1000).toFixed(n>=10000?0:1).replace(/\.0$/,'')+'k':'$'+Math.round(n)}
@@ -1573,7 +1573,7 @@ function renderSecret(){
  var hidden=items.filter(isHidden).sort(function(a,b){return num(b.cost)-num(a.cost)});
  return '<div style="display:flex;align-items:center;justify-content:space-between;gap:12px"><h2 style="margin:0">Secret Compartment</h2><button type="submit" form="secretform" class="pri">Lock</button></div>'
   +'<form id="secretform" autocomplete="on"><input type="text" name="username" autocomplete="username" value="Never Twice the Same" style="position:absolute;left:-9999px" tabindex="-1" aria-hidden="true">'
-  +'<div class="f"><label><span class="sechdr">Threshold (hide above this)</span><span style="position:relative;display:block"><input type="text" inputmode="decimal" name="threshold" data-a="sthr" data-money="1" value="'+esc(secretCfg.threshold==null?'':fmtMoney(secretCfg.threshold))+'" placeholder="$0.00" style="padding-right:38px"><button type="button" data-a="sclear" aria-label="Clear threshold" style="position:absolute;right:6px;top:50%;transform:translateY(-50%);width:26px;height:26px;min-width:0;min-height:0;padding:0;border-radius:50%;display:flex;align-items:center;justify-content:center;line-height:1;font-size:12px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button></span></label><label><span class="sechdr"><span>Keyword</span><span id="kwmsg" class="meta" style="margin-left:auto;opacity:0;transition:opacity .4s ease">Updated!</span></span><span style="position:relative;display:block"><input type="text" name="keyword" autocomplete="off" value="'+esc(secretCfg.kw||'')+'" placeholder="'+(secretCfg.hash?'••••••••':'Set a keyword')+'" style="padding-right:38px"><button type="button" data-a="kwclear" aria-label="Clear keyword" style="position:absolute;right:6px;top:50%;transform:translateY(-50%);width:26px;height:26px;min-width:0;min-height:0;padding:0;border-radius:50%;display:flex;align-items:center;justify-content:center;line-height:1;font-size:12px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button></span></label></div>'
+  +'<div class="f"><label><span class="sechdr">Threshold (hide above this)</span><span style="position:relative;display:block"><input type="text" inputmode="decimal" name="threshold" data-a="sthr" data-money="1" value="'+esc(secretCfg.threshold==null?'':fmtMoney(secretCfg.threshold))+'" placeholder="$0.00" style="padding-right:38px"><button type="button" data-a="sclear" aria-label="Clear threshold" style="position:absolute;right:6px;top:50%;transform:translateY(-50%);width:26px;height:26px;min-width:0;min-height:0;padding:0;border-radius:50%;display:flex;align-items:center;justify-content:center;line-height:1;font-size:12px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button></span></label></div>'
   +''
   +'<p class="meta">'+hidden.length+' piece'+(hidden.length===1?'':'s')+' over the threshold'+(secretCfg.on?' (hidden from the Jewelry Box)':' (not hidden yet)')+'.</p>'
   +'<div class="grid" style="grid-template-columns:repeat('+cols+',1fr)">'+hidden.map(function(i){return '<div>'+thumb(i)+'<div class="meta">'+esc(title(i))+' · '+money(num(i.cost))+'</div></div>'}).join('')+'</div></form>'
@@ -1656,7 +1656,7 @@ function planChunks(){
  return chunks;
 }
 var expParts=null,expDone={};
-function docForPart(c,n,N){var doc={app:'never-twice-the-same',format:2,part:n+1,of:N,exported:new Date().toISOString(),items:c.items,images:c.imgs};if(n===N-1){doc.gallery={refs:gal.refs,covers:gal.covers,comps:gal.comps};doc.order=order;doc.theme=theme;doc.hideSold=hideSold;doc.wishlist=wish;doc.collections=colls}return doc}
+function docForPart(c,n,N){var doc={app:'never-twice-the-same',format:2,part:n+1,of:N,exported:new Date().toISOString(),items:c.items,images:c.imgs};if(n===N-1){doc.gallery={refs:gal.refs,covers:gal.covers,comps:gal.comps};doc.order=order;doc.theme=theme;doc.hideSold=hideSold;doc.wishlist=wish;doc.collections=colls;doc.appearance={bgStyle:bgStyle,frameStyle:frameStyle};doc.secret={on:!!secretCfg.on,threshold:secretCfg.threshold,hash:secretCfg.hash||''}}return doc}
 function stampNow(){var d=new Date();return today()+'-'+('0'+d.getHours()).slice(-2)+('0'+d.getMinutes()).slice(-2)}
 function saveFile(name,mime,text){
  var mobile=/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)||navigator.maxTouchPoints>1;
@@ -1699,26 +1699,26 @@ function readFileP(f){return new Promise(function(res){var r=new FileReader();r.
 function importJSON(texts){
  var docs=[];
  try{texts.forEach(function(t){docs.push(JSON.parse(t))})}catch(e){alert('One of the selected files is not a valid backup.');return}
- var allItems=[],imgs={},lists={refs:[],covers:[],comps:[]},ord=null,th=null,hs=null,wl=null,cl=null;
+ var allItems=[],imgs={},lists={refs:[],covers:[],comps:[]},ord=null,th=null,hs=null,wl=null,cl=null,ap=null,sc=null;
  var parts={},partOf=0,hasTail=false,fmt2=0;
  docs.forEach(function(d){
    if(d.format===2){fmt2++;if(d.part)parts[d.part]=1;if(d.of)partOf=Math.max(partOf,d.of);if(d.gallery)hasTail=true;
      (d.items||[]).forEach(function(i){allItems.push(i)});
      Object.keys(d.images||{}).forEach(function(k){imgs[k]=d.images[k]});
      if(d.gallery){lists.refs=lists.refs.concat(d.gallery.refs||[]);lists.covers=lists.covers.concat(d.gallery.covers||[]);lists.comps=lists.comps.concat(d.gallery.comps||[])}
-     if(d.order)ord=d.order;if(d.theme)th=d.theme;if(typeof d.hideSold==='boolean')hs=d.hideSold;if(d.wishlist)wl=d.wishlist;if(d.collections)cl=d.collections;
+     if(d.order)ord=d.order;if(d.theme)th=d.theme;if(typeof d.hideSold==='boolean')hs=d.hideSold;if(d.wishlist)wl=d.wishlist;if(d.collections)cl=d.collections;if(d.appearance)ap=d.appearance;if(d.secret)sc=d.secret;
    }else{
      var arr=Array.isArray(d)?d:(d.items||[]);
      arr.forEach(function(i){allItems.push(i)});
      var g=normGal(d.gallery||null);Object.keys(g.imgs).forEach(function(k){imgs[k]=g.imgs[k]});
      lists.refs=lists.refs.concat(g.refs);lists.covers=lists.covers.concat(g.covers);lists.comps=lists.comps.concat(g.comps);
-     if(d.order)ord=d.order;if(d.theme)th=d.theme;if(typeof d.hideSold==='boolean')hs=d.hideSold;if(d.wishlist)wl=d.wishlist;if(d.collections)cl=d.collections;
+     if(d.order)ord=d.order;if(d.theme)th=d.theme;if(typeof d.hideSold==='boolean')hs=d.hideSold;if(d.wishlist)wl=d.wishlist;if(d.collections)cl=d.collections;if(d.appearance)ap=d.appearance;if(d.secret)sc=d.secret;
    }
  });
  var warn='';
  if(fmt2){var miss=[];for(var pn=1;pn<=partOf;pn++)if(!parts[pn])miss.push(pn);
    if(miss.length)warn+='\n\nWARNING: part '+miss.join(', ')+' of '+partOf+' is missing, so some pieces and photos will be missing.';
-   if(!hasTail)warn+='\n\nWARNING: the last part is not included. Gallery photo lists, piece order, theme, and the coveted list will not be restored.'}
+   if(!hasTail)warn+='\n\nWARNING: the last part is not included. Gallery photo lists, piece order, theme, the coveted list, curations, appearance, and secret settings will not be restored.'}
  if(!confirm((warn?'Restore anyway? ':'')+'Replace everything on this device with this backup ('+allItems.length+' pieces, '+Object.keys(imgs).length+' images)?'+warn)){logEv('restore','cancelled'+(warn?' after warning':''));return}
  logEv('restore',allItems.length+' pieces, '+Object.keys(imgs).length+' images, '+docs.length+' file(s)'+(warn?', with warning':''));
  gal={imgs:imgs,refs:lists.refs.filter(function(id){return !!imgs[id]}),covers:lists.covers.filter(function(id){return !!imgs[id]}),comps:lists.comps.filter(function(id){return !!imgs[id]})};
@@ -1727,8 +1727,10 @@ function importJSON(texts){
  if(th&&THEMES[th])theme=th;
  if(hs!==null)hideSold=hs;
  if(wl)wish=wl;saveWish();if(cl){colls=cl;colls.forEach(function(c){if(!c.pieceIds)c.pieceIds=[]});saveColls()}
+ if(ap){if(ap.bgStyle){bgStyle=ap.bgStyle;kset('bgStyle',bgStyle)}if(ap.frameStyle){frameStyle=ap.frameStyle;document.documentElement.dataset.frame=frameStyle;kset('frameStyle',frameStyle)}}
+ if(sc){secretCfg={on:!!sc.on,hash:sc.hash||'',threshold:sc.threshold==null?null:sc.threshold};secretUnlocked=false;saveSecret()}
  saveItems();saveOrder();saveSettings();saveGallery();applyTheme();render();
- alert('Backup restored: '+items.length+' pieces.');
+ alert('Backup restored: '+items.length+' pieces'+(cl?', '+cl.length+' curation'+(cl.length===1?'':'s'):'')+'.');
 }
 function storageBytes(){
  var imgB=Object.keys(gal.imgs).reduce(function(a,k){return a+gal.imgs[k].length},0)*0.75;
@@ -1739,12 +1741,15 @@ var diagLines=[];
 function runMode(){var standalone=false;try{standalone=!!(window.navigator.standalone||matchMedia('(display-mode: standalone)').matches)}catch(e){}return standalone?'Home screen app':'Browser tab'}
 function copyText(t){if(navigator.clipboard&&navigator.clipboard.writeText)return navigator.clipboard.writeText(t).then(function(){return true},function(){return copyFallback(t)});return Promise.resolve(copyFallback(t))}
 function copyFallback(t){try{var ta=document.createElement('textarea');ta.value=t;ta.setAttribute('readonly','');ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();var ok=document.execCommand('copy');document.body.removeChild(ta);return ok}catch(e){return false}}
+function setPairCount(){var p={};items.forEach(function(i){(i.links||[]).forEach(function(l){p[[i.id,l].sort().join('-')]=1})});return Object.keys(p).length}
 function updateStorage(){
  var el=document.getElementById('stormeter');if(!el)return;
  var st=storageBytes();
  var lc=linkCounts();
  var lines=['Current version: v'+APP_VERSION+' · '+APP_DATE,'Running as: '+runMode(),'Address: '+location.origin+location.pathname,'',
   'App data: '+fmtBytes(st.total)+' ('+items.length+' pieces, '+st.imgs+' images, '+wish.length+' coveted items)',
+  'Curations: '+colls.length+' ('+colls.filter(function(c){return c.cover}).length+' with a cover) · Set links: '+setPairCount(),
+  'Secret compartment: keyword '+(secretCfg.hash?'set':'not set')+' · '+items.filter(isHidden).length+' piece(s) hidden',
   'Photo links: '+lc.total+' ('+lc.cover+' covers, '+lc.refs+' reference photos, '+lc.comps+' comparison photos) · '+lc.none+' pieces without a cover',
   'Gallery lists: '+gal.refs.length+' reference, '+gal.covers.length+' cover, '+gal.comps.length+' comparison'];
  if(st.total/1048576>150)lines.push('Large library: consider separate image storage soon.');
@@ -1859,6 +1864,10 @@ case 'frm':frameStyle=d.v;document.documentElement.dataset.frame=frameStyle;kset
   case 'export':exportJSON();break;
   case 'import':document.getElementById('fjson').click();break;
   case 'restorepick':M.innerHTML='';document.getElementById('fjson').click();break;
+  case 'kwchange':showKwChange();break;
+  case 'kwforgot':M.innerHTML='<div class="modal kwm" data-a="backdrop"><div class="kwbox"><h3>Delete keyword and settings?</h3><p class="meta">This clears the keyword and the price threshold. Your pieces are not deleted, and nothing will be hidden anymore.</p><div class="bar" style="justify-content:center;margin:12px 0 0;flex-wrap:wrap"><button type="button" class="dan" data-a="kwforgotyes">Delete keyword and settings</button><button type="button" data-a="kwforgotno">Cancel</button></div></div></div>';break;
+  case 'kwforgotno':M.innerHTML='';break;
+  case 'kwforgotyes':secretCfg.hash='';secretCfg.threshold=null;secretCfg.on=false;secretUnlocked=false;saveSecret();M.innerHTML='';render();cue('Keyword and settings deleted. No pieces were deleted.');break;
   case 'delete':deleteAll();break;
   case 'csvup':document.getElementById('fcsv').click();break;
   case 'csvdown':exportCSV();break;
@@ -1918,8 +1927,6 @@ case 'frm':frameStyle=d.v;document.documentElement.dataset.frame=frameStyle;kset
   case 'del':if(confirm('Delete this piece?')){items=items.filter(function(i){return i.id!==editing.id});saveItems();show('box')}break;
   case 'slogin':hashKW(((document.getElementById('skw')||{}).value)||'').then(function(h){if(h===secretCfg.hash){secretUnlocked=true;secretReveal()}else alert('Incorrect keyword')});break;
   case 'sset':var kwa=document.getElementById('skw').value.trim();if(!kwa){alert('Enter a keyword');break}hashKW(kwa).then(function(h){secretCfg.hash=h;secretUnlocked=true;saveSecret();secretReveal()});break;
-  case 'skwchg':var kwb=document.getElementById('skw2').value.trim();if(!kwb){alert('Enter a new keyword');break}hashKW(kwb).then(function(h){secretCfg.hash=h;saveSecret();document.getElementById('skw2').value='';alert('Keyword saved.')});break;
-  case 'kwclear':var kwi=document.querySelector('#secretform input[name=keyword]');if(kwi){kwi.value='';kwi.focus()}break;
   case 'slock':secretUnlocked=false;show('box');break;
   case 'sclear':secretCfg.threshold=null;saveSecret();render();break;
   case 'dashyrs':dashYrsAll=!dashYrsAll;renderMain();break;
@@ -1970,13 +1977,9 @@ document.addEventListener('change',function(e){
  var sel=[];try{sel=JSON.parse(box.dataset.sel||'[]')}catch(err){}var cv=t.value,ci=sel.indexOf(cv);if(t.checked&&ci<0)sel.push(cv);if(!t.checked&&ci>-1)sel.splice(ci,1);box.dataset.sel=JSON.stringify(sel);var vals=sel;
  var tx=box.querySelector('.cddTxt');if(tx)tx.innerHTML=vals.map(function(c){return sw(c)+' '+esc(c)}).join(', ')||'Choose colors';
 });
-document.addEventListener('change',function(e){
- var t=e.target;if(!t||t.name!=='keyword'||!t.closest||!t.closest('#secretform'))return;
- var kw=t.value;if(!kw.trim())return;
- hashKW(kw).then(function(h){secretCfg.hash=h;secretCfg.kw=kw;saveSecret();var m=document.getElementById('kwmsg');if(m){m.style.opacity='1';clearTimeout(kwTimer);kwTimer=setTimeout(function(){m.style.opacity='0'},3000)}});
-});
 document.addEventListener('submit',function(e){
  if(e.target.id==='kwform'){e.preventDefault();handleKeywordForm(e.target);return}
+ if(e.target.id==='kwchangeform'){e.preventDefault();handleKwChange(e.target);return}
  if(e.target.id==='secretform'){e.preventDefault();handleSecretForm(e.target);return}
  e.preventDefault();
  var o=mig(syncForm()),idx=items.findIndex(function(i){return i.id===o.id});
