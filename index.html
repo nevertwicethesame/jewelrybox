@@ -266,7 +266,7 @@ header button[data-a="drawer"]{display:flex;align-items:center;justify-content:c
 <input type="file" id="gfile" accept="image/*" multiple hidden>
 <script>
 var K='ntts_items_v2',OK='ntts_order_v1',PER=25,MAX_UPLOAD=300*1024;
-var APP_VERSION='2.4.2',APP_DATE='2026-11-05 · 6:56 PM ET',UPDATE_URL='';
+var APP_VERSION='2.5',APP_DATE='2026-11-05 · 7:58 PM ET',UPDATE_URL='';
 var EMOJI={ring:'💍',earrings:'✨',necklace:'📿',bracelet:'⭕',watch:'⌚',other:'💎'};
 var ICONS={ring:"<circle cx='12' cy='14' r='6'/><path d='M9.5 8 12 4l2.5 4'/><path d='M12 9.5l1.5 2.5-1.5 2.5-1.5-2.5z'/>",earrings:"<path d='M7 3v3'/><path d='M7 6c-1.6 0-2.5 1.3-2.5 3S6 14 7 17c1-3 2.5-5 2.5-8C9.5 7.3 8.6 6 7 6z'/><path d='M17 3v3'/><path d='M17 6c-1.6 0-2.5 1.3-2.5 3S16 14 17 17c1-3 2.5-5 2.5-8C19.5 7.3 18.6 6 17 6z'/>",necklace:"<path d='M4 5c2 7 14 7 16 0'/><path d='M12 12.5V15'/><circle cx='12' cy='17' r='2.2'/>",bracelet:"<ellipse cx='12' cy='12' rx='8' ry='5.5'/><ellipse cx='12' cy='12' rx='5.5' ry='3'/>",watch:"<circle cx='12' cy='13' r='5.5'/><path d='M9 7.5 10 3h4l1 4.5M9 18.5 10 23h4l1-4.5'/><path d='M12 10.5V13l1.8 1.2'/>",other:"<path d='M7 4h10l4 5-9 11L3 9z'/><path d='M3 9h18M9 4l3 16 3-16'/>",heart:"<path d='M12 20s-7-4.4-7-9.5A4 4 0 0 1 12 8a4 4 0 0 1 7 2.5C19 15.6 12 20 12 20z'/>",wrench:"<path d='M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.5 2.5-2.5-.5-.5-2.5z'/>",key:"<g transform='rotate(-45 12.5 12)'><circle cx='8' cy='12' r='4'/><path d='M12 12h9M18 12v3M21 12v2.5'/></g>",curio:"<rect x='4' y='3' width='16' height='18' rx='1'/><path d='M3 3h18M3 21h18'/><path d='M12 3v18'/><path d='M4 11h16'/><path d='M10.5 7v1.5M13.5 7v1.5M10.5 15v1.5M13.5 15v1.5'/>",clock:"<circle cx='12' cy='12' r='9'/><path d='M12 7v5l3 2'/>",pencil:"<path d='M4 20h4L19 9l-4-4L4 16z'/><path d='M13.5 6.5l4 4'/>",lock:"<rect x='5' y='11' width='14' height='10' rx='2'/><path d='M8 11V7a4 4 0 0 1 8 0v4'/>",unlock:"<rect x='3.95' y='11' width='11.1' height='10' rx='2'/><path d='M12.8 11V6.3A3.3 3.3 0 0 1 19.4 6.3V9.5'/>",bag:"<path d='M5 8h14l-1 12H6z'/><path d='M9 8V6a3 3 0 0 1 6 0v2'/>",plus:"<path d='M12 5v14M5 12h14'/>",x:"<path d='M6 6l12 12M18 6L6 18'/>",spark:"<path d='M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z'/>",gallery:"<rect x='3' y='4' width='18' height='16' rx='2'/><circle cx='9' cy='10' r='2'/><path d='M21 16l-5-5-8 9'/>"};
 var ORN='<svg width="72" height="10" viewBox="0 0 72 10" fill="none" stroke="#a8864f" stroke-width="1.2"><path d="M0 5h28M44 5h28"/><path d="M36 1l4 4-4 4-4-4z"/></svg>';
@@ -1071,13 +1071,73 @@ function applyQuick(d){
  });
  return n;
 }
+function collsSubHTML(it){
+ if(it._new)return '<p class="meta">Save the piece first, then add it to a collection.</p>';
+ if(!colls.length)return '<p class="meta">No collections yet. Make one on the Collections page.</p>';
+ return '<div class="seg" style="flex-wrap:wrap;justify-content:flex-start;gap:6px">'+colls.map(function(c){var on=c.pieceIds.indexOf(it.id)>-1;return '<button type="button" data-a="ctogg" data-id="'+c.id+'"'+(on?' class="on"':'')+'>'+esc(c.title||'Untitled')+'</button>'}).join('')+'</div>';
+}
+var pendingLinks=[],linkSel=[];
+function itemOf(id){for(var k=0;k<items.length;k++)if(items[k].id===id)return items[k];return null}
+function linkOf(it){return it&&it.links?it.links:[]}
+function setGroupIds(id,allowed){var seen={},q=[id],out=[];seen[id]=1;while(q.length){var x=q.shift();out.push(x);linkOf(itemOf(x)).forEach(function(y){if(!seen[y]&&itemOf(y)&&(!allowed||allowed.indexOf(y)>-1)){seen[y]=1;q.push(y)}})}return out}
+function setLinkPair(a,b,on){[[a,b],[b,a]].forEach(function(pr){var it=itemOf(pr[0]);if(!it)return;it.links=it.links||[];var k=it.links.indexOf(pr[1]);if(on&&k<0)it.links.push(pr[1]);if(!on&&k>-1)it.links.splice(k,1);if(editing&&editing.id===pr[0])editing.links=it.links.slice()});saveItems()}
+function setSubHTML(it){
+ if(it._new)return '<p class="meta">Save the piece first, then link it to others.</p>';
+ var ok=function(x){return x&&(!secretCfg.on||!isHidden(x))};
+ var direct=linkOf(it).map(itemOf).filter(ok);
+ var grp=setGroupIds(it.id).map(itemOf).filter(ok).filter(function(x){return x.id!==it.id});
+ return (direct.length?'<div class="seg" style="flex-wrap:wrap;justify-content:flex-start;gap:6px">'+direct.map(function(x){return '<button type="button" data-a="unlink" data-id="'+x.id+'" class="on">'+esc(title(x))+' ×</button>'}).join('')+'</div>':'<p class="meta">Not linked to any pieces yet.</p>')
+  +(grp.length?'<p class="meta" style="margin:8px 0 0">Set: '+esc([it].concat(grp).map(function(x){return title(x)}).join(' + '))+'</p>':'')
+  +'<button type="button" data-a="linkpick" style="margin-top:8px">+ Link pieces</button>';
+}
+function linkPickerHTML(){
+ return '<div class="modal" data-a="backdrop"><div style="max-width:520px;width:94vw"><h3 style="margin:0 0 6px">Link pieces</h3>'
+  +'<input type="search" placeholder="Search title, category, era, seller" autocomplete="off" oninput="linkPickRender(this.value)" style="margin:0 0 6px">'
+  +'<p class="meta" id="lkcount" style="margin:0 0 8px">'+linkSel.length+' selected</p>'
+  +'<div id="lkres" style="max-height:55vh;overflow:auto"><p class="meta">Start typing to find pieces. Tap to select.</p></div>'
+  +'<div class="bar" style="justify-content:center;margin:12px 0 0"><button class="pri" data-a="linksave">Link</button><button data-a="x">Cancel</button></div></div></div>';
+}
+function linkPickRender(q){
+ var box=document.getElementById('lkres');if(!box)return;
+ var qq=String(q==null?'':q).trim().toLowerCase();
+ var have=linkOf(editing).concat([editing.id]);
+ if(!qq){box.innerHTML='<p class="meta">Start typing to find pieces. Tap to select.</p>';}
+ else{
+  var hits=matchRank(vis().filter(function(i){return have.indexOf(i.id)<0}),qq,9);
+  box.innerHTML=hits.length?'<div class="grid" style="grid-template-columns:repeat(3,minmax(0,1fr));gap:8px">'+hits.map(function(it){var on=linkSel.indexOf(it.id)>-1;
+   return '<button type="button" data-a="lktoggle" data-id="'+it.id+'" style="padding:0;border:0;background:transparent;text-align:left;display:block;min-height:0;position:relative">'+pickThumb(it)+(on?'<span style="position:absolute;top:6px;right:6px;background:var(--acc);color:#fff;border-radius:50%;width:24px;height:24px;display:flex;align-items:center;justify-content:center"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5 9-10"/></svg></span>':'')+'</button>'}).join('')+'</div>':'<p class="meta">No pieces match.</p>';
+ }
+ var n=document.getElementById('lkcount');if(n)n.textContent=linkSel.length+' selected';
+}
+function linkOtherGroups(ids){
+ var others=[];
+ ids.forEach(function(x){var g=setGroupIds(x);if(g.length>1&&g.indexOf(editing.id)<0&&!others.some(function(o){return o.join()===g.join()}))others.push(g)});
+ return setGroupIds(editing.id).length>1?others:[];
+}
+function linkApply(ids){
+ ids.forEach(function(x){setLinkPair(editing.id,x,true)});
+ linkSel=[];var sb=document.getElementById('setsub');if(sb)sb.innerHTML=setSubHTML(editing);
+ cue('Linked','ok');
+}
+function linkMergeHTML(others){
+ var mine=setGroupIds(editing.id).map(itemOf).filter(Boolean);
+ var rows=[['Current set',mine]].concat(others.map(function(g,n){return [n?'Set '+(n+1):'Other set',g.map(itemOf).filter(Boolean)]}));
+ var total=0;rows.forEach(function(r){total+=r[1].length});
+ return '<div class="modal" data-a="backdrop"><div style="max-width:520px;width:94vw"><h3 style="margin:0 0 6px">Merge sets?</h3>'
+  +rows.map(function(r){return '<p class="meta" style="margin:8px 0 0">'+esc(r[0])+': '+esc(r[1].map(function(x){return title(x)}).join(' + '))+'</p>'}).join('')
+  +'<p style="margin:12px 0 0">Linking will make these one set of '+total+' pieces.</p>'
+  +'<div class="bar" style="justify-content:center;margin:12px 0 0"><button class="pri" data-a="linkmerge">Merge</button><button data-a="x">Cancel</button></div></div></div>';
+}
 function renderEdit(){
  var it=editing;
  var pr=it.shipEstimate!=null&&it.shipEstimate!==''?it.shipEstimate:shipDefault(it.cost);
  shipTouched=false;
  var h='<div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:20px"><h2 style="margin:0">Add/Edit a Piece</h2><button type="button" data-a="quickadd">Quick add</button></div>'+'<form id="form" autocomplete="off">';
+ h+='<details data-sec="stats"'+dOpen('stats',true)+'><summary>Stats</summary><div class="f">'+fieldHTML('status',it.status)+sec(ORDER_STATS)+'</div>'
+  +'<h4 class="sub" style="margin-top:14px">Collections</h4><div id="collsub">'+collsSubHTML(it)+'</div>'
+  +'<h4 class="sub" style="margin-top:14px">Set</h4><div id="setsub">'+setSubHTML(it)+'</div></details>';
  h+='<details data-sec="images"'+dOpen('images',true)+'><summary>Images</summary>'+imagesHTML()+'</details>';
-h+='<details data-sec="piece"'+dOpen('piece',true)+'><summary>Piece</summary><div class="f">'+sec(ORDER_PIECE)+'<h4 class="sub">Stats</h4>'+fieldHTML('status',it.status)+sec(ORDER_STATS)+'</div></details>';
+h+='<details data-sec="piece"'+dOpen('piece',true)+'><summary>Piece</summary><div class="f">'+sec(ORDER_PIECE)+'</div></details>';
  h+='<details data-sec="transaction"'+dOpen('transaction',true)+'><summary>Provenance</summary><div class="f"><h4 class="sub">Acquisition</h4>'+sec(ORDER_PURCH)+'</div>'
   +'<hr style="border:0;border-top:1px solid var(--line);margin:14px 0">'
   +'<h4 class="sub" style="display:flex;justify-content:space-between;align-items:center;gap:8px"><span>Sale</span><button type="button" data-a="listmodal" style="white-space:nowrap">Listing Helper</button></h4>'
@@ -1154,13 +1214,13 @@ function collPruneImg(id){if(!id)return;if(collImgIds().indexOf(id)>-1||wishImgI
 function collDraftFromDOM(){var t=document.getElementById('cedt'),n=document.getElementById('cedn');var base=collDraft||{};return {title:t?t.value:(base.title||''),note:n?n.value:(base.note||''),cover:base.cover||null}}
 function collEditHTML(c){
  var d=collDraft||{title:c?c.title:'',note:c?c.note:'',cover:c?(c.cover||null):null};
- var cov=d.cover?'<div style="width:96px;height:96px;border-radius:10px;overflow:hidden;background:var(--acc);margin:6px 0">'+coverImg(d.cover,true)+'</div>':'<p class="meta" style="margin:6px 0">No cover photo yet.</p>';
- return '<div class="modal" data-a="backdrop"><div style="max-width:520px;width:94vw"><h3 style="margin:0 0 6px">'+(c?'Edit collection':'New collection')+'</h3>'
+ var cov=d.cover?'<div style="width:96px;height:96px;border-radius:10px;overflow:hidden;background:var(--acc);margin:6px 0;position:relative">'+coverImg(d.cover,true)+'</div>':'<p class="meta" style="margin:6px 0">No cover photo yet.</p>';
+ return '<div class="modal" data-a="backdrop"><div style="max-width:520px;width:94vw;max-height:calc(100vh - 32px);overflow-y:auto"><h3 style="margin:0 0 6px">'+(c?'Edit collection':'New collection')+'</h3>'
   +'<label style="margin-top:10px">Title<input id="cedt" value="'+esc(d.title)+'" placeholder="e.g. Victorian celestial"></label>'
-  +'<label style="margin-top:10px">Story (optional)<textarea id="cedn" rows="4" placeholder="The inspiration behind this collection.">'+esc(d.note)+'</textarea></label>'
-  +'<div style="margin-top:10px"><span class="meta">Cover photo</span>'+cov+'<input type="file" id="cfile" accept="image/*"></div>'
-  +'<div id="crop" style="margin-top:10px" hidden><div id="cropv" style="max-width:240px"><img id="cropimg" alt="" draggable="false"></div><input type="range" id="cropz" min="1" max="4" step="0.01" value="1" aria-label="Zoom"><p class="meta">Drag to pan. Use the slider (or pinch) to zoom. The square is your thumbnail.</p><div class="bar" style="justify-content:center;margin:12px 0 0"><button type="button" class="pri" data-a="cvok">Use crop</button><button type="button" data-a="cvcancel">Cancel crop</button></div></div>'
-  +'<div class="bar" style="justify-content:center;margin:12px 0 0"><button class="pri" data-a="csave">Save</button>'+(c?'<button data-a="cdelete">Delete</button>':'')+'<button data-a="x">Cancel</button></div></div></div>';
+  +'<label class="cx" style="margin-top:10px">Story (optional)<textarea id="cedn" rows="4" placeholder="The inspiration behind this collection.">'+esc(d.note)+'</textarea></label>'
+  +'<div class="cx" style="margin-top:10px"><span class="meta">Cover photo</span>'+cov+'<input type="file" id="cfile" accept="image/*"></div>'
+  +'<div id="crop" style="margin-top:10px" hidden><div id="cropv" style="max-width:240px;width:min(240px,max(140px,22vh))"><img id="cropimg" alt="" draggable="false"></div><input type="range" id="cropz" min="1" max="4" step="0.01" value="1" aria-label="Zoom"><p class="meta">Drag to pan. Use the slider (or pinch) to zoom. The square is your thumbnail.</p><div class="bar" style="justify-content:center;margin:12px 0 0"><button type="button" class="pri" data-a="cvok">Use crop</button><button type="button" data-a="cvcancel">Cancel crop</button></div></div>'
+  +'<div class="bar" style="justify-content:center;margin:12px 0 0;position:sticky;bottom:-16px;background:var(--card);padding:10px 0 16px;z-index:2"><button class="pri" data-a="csave">Save</button>'+(c?'<button data-a="cdelete">Delete</button>':'')+'<button data-a="x">Cancel</button></div></div></div>';
 }
 var collPickSel=[];
 function collPickRender(q){
@@ -1168,7 +1228,8 @@ function collPickRender(q){
  var qq=String(q==null?'':q).trim().toLowerCase();
  if(!qq){box.innerHTML='<p class="meta">Start typing to find pieces. Tap to select.</p>';}
  else{
-  var hits=matchRank(vis(),qq,9);
+  var pcur=curColl(),phave=pcur?pcur.pieceIds:[];
+  var hits=matchRank(vis().filter(function(i){return phave.indexOf(i.id)<0}),qq,9);
   box.innerHTML=hits.length?'<div class="grid" style="grid-template-columns:repeat(3,minmax(0,1fr));gap:8px">'+hits.map(function(it){var on=collPickSel.indexOf(it.id)>-1;
    return '<button type="button" data-a="cptoggle" data-id="'+it.id+'" style="padding:0;border:0;background:transparent;text-align:left;display:block;min-height:0;position:relative">'+pickThumb(it)+(on?'<span style="position:absolute;top:6px;right:6px;background:var(--acc);color:#fff;border-radius:50%;width:24px;height:24px;display:flex;align-items:center;justify-content:center"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5 9-10"/></svg></span>':'')+'</button>'}).join('')+'</div>':'<p class="meta">No pieces match.</p>';
  }
@@ -1183,15 +1244,38 @@ function collPickerHTML(c){
 }
 function renderCollDetail(c){
  var p=collVisIds(c);
- var tiles=p.map(function(i){var ctl=collRo?'<div style="display:flex;gap:4px;margin-top:6px;flex-wrap:wrap"><button type="button" data-a="cup" data-id="'+i.id+'" style="font-size:12px;padding:4px 8px">Up</button><button type="button" data-a="cdown" data-id="'+i.id+'" style="font-size:12px;padding:4px 8px">Down</button><button type="button" data-a="cremove" data-id="'+i.id+'" style="font-size:12px;padding:4px 8px">Remove</button></div>':'';return '<div style="min-width:0"><div style="aspect-ratio:1;border-radius:10px;overflow:hidden;background:var(--acc);position:relative">'+(coverImg(i.cover,true)||noThumb(i,40))+'</div>'+ctl+'</div>'}).join('');
+ var tiles=p.map(function(i){var img=coverImg(i.cover,true)||noThumb(i,40);
+  if(!collRo)return '<div data-a="open" data-id="'+i.id+'" style="aspect-ratio:1;border-radius:10px;overflow:hidden;background:var(--acc);position:relative;min-width:0;cursor:pointer">'+img+'</div>';
+  return '<div class="tile" data-id="'+i.id+'" style="aspect-ratio:1;border-radius:10px;overflow:hidden;background:var(--acc);position:relative">'+img+'<button type="button" data-a="cremove" data-id="'+i.id+'" aria-label="Remove from collection" style="position:absolute;z-index:3;top:4px;right:4px;width:26px;height:26px;min-width:0;padding:0;min-height:0;border-radius:50%;display:flex;align-items:center;justify-content:center;line-height:1;font-size:12px;background:var(--card);color:var(--fg);border:1px solid var(--line);box-shadow:0 1px 3px rgba(0,0,0,.4)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>';}).join('');
  return '<div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:12px"><button data-a="cback">Back</button><div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end"><button data-a="cedit">Edit details</button><button class="pri" data-a="cpicker">+ Add pieces</button></div></div>'
   +'<h2 style="margin:0 0 6px">'+esc(c.title||'Untitled collection')+'</h2>'
   +(c.note?'<p class="meta" style="margin:0 0 12px;white-space:pre-wrap">'+esc(c.note)+'</p>':'')
-  +(p.length?'<div class="grid" style="grid-template-columns:repeat('+cols+',minmax(0,1fr));gap:12px">'+tiles+'</div>':'<p class="meta">No pieces yet. Use Add pieces.</p>');
+  +(p.length?'<div class="grid'+(collRo?' ro':'')+'" style="grid-template-columns:repeat('+cols+',minmax(0,1fr));gap:12px">'+tiles+'</div>':'<p class="meta">No pieces yet.</p>');
+}
+var collTab='cur';
+function colorRankOf(i){var ix=(i.colorMain||[]).map(function(c){return COLOR_ORDER.indexOf(c)}).filter(function(x){return x>-1});return ix.length?Math.min.apply(null,ix):99}
+function typeRankOf(i){var k=CATS.indexOf(i.category);return k<0?99:k}
+function setTrays(){
+ var allowed=vis().map(function(i){return i.id}),seen={},trays=[];
+ vis().forEach(function(it){
+   if(seen[it.id]||!linkOf(it).length)return;
+   var g=setGroupIds(it.id,allowed);g.forEach(function(x){seen[x]=1});
+   if(g.length>1)trays.push(g.map(itemOf).filter(Boolean));
+ });
+ trays.forEach(function(t){t.sort(function(a,b){return typeRankOf(a)-typeRankOf(b)||colorRankOf(a)-colorRankOf(b)||title(a).localeCompare(title(b))})});
+ trays.sort(function(a,b){return colorRankOf(a[0])-colorRankOf(b[0])||title(a[0]).localeCompare(title(b[0]))});
+ return trays;
+}
+function renderSets(){
+ var trays=setTrays();
+ if(!trays.length)return '<p class="meta">No sets yet. Link pieces on a piece\u2019s Edit page, under Set.</p>';
+ return trays.map(function(t){return '<div style="margin:0 0 18px"><p class="meta" style="margin:0 0 6px">'+esc(t.map(function(x){return title(x)}).join(' + '))+'</p><div style="display:flex;gap:8px;overflow-x:auto;padding-bottom:4px">'+t.map(function(it){return '<div data-a="open" data-id="'+it.id+'" style="flex:0 0 110px;cursor:pointer">'+pickThumb(it)+'</div>'}).join('')+'</div></div>'}).join('');
 }
 function renderColl(){
  if(collId!=null){var cc=curColl();if(cc)return renderCollDetail(cc);collId=null}
- var head='<div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:12px"><h2 style="margin:0">Collections</h2><button class="pri" data-a="cnew">+ Add new</button></div>';
+ var tabs='<div class="seg" style="margin:0 0 12px"><button type="button" data-a="ctab" data-v="cur"'+(collTab==='cur'?' class="on"':'')+'>Curations</button><button type="button" data-a="ctab" data-v="set"'+(collTab==='set'?' class="on"':'')+'>Sets</button></div>';
+ var head='<div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:12px"><h2 style="margin:0">Collections</h2>'+(collTab==='cur'?'<button class="pri" data-a="cnew">+ Add new</button>':'')+'</div>'+tabs;
+ if(collTab==='set')return head+renderSets();
  var cards=colls.map(function(c){return {c:c,p:collVisIds(c)}}).filter(function(x){return x.p.length||x.c.pieceIds.length===0||!secretCfg.on});
  if(!cards.length)return head+'<p class="meta">'+(colls.length?'Nothing to show while Secret Compartment is on.':'No collections yet.')+'</p>';
  var tiles=cards.map(function(x){var f=x.p[0];return '<button type="button" data-a="copen" data-id="'+x.c.id+'" style="padding:0;border:0;background:transparent;text-align:left;display:block;min-height:0"><div style="aspect-ratio:1;border-radius:10px;overflow:hidden;background:var(--acc);position:relative">'+(x.c.cover?coverImg(x.c.cover,true):(f?(coverImg(f.cover,true)||noThumb(f,40)):'<div class="meta" style="height:100%;display:flex;align-items:center;justify-content:center">Empty</div>'))+'</div><div style="margin-top:6px;font-weight:bold">'+esc(x.c.title||'Untitled')+'</div><div class="meta">'+x.p.length+' piece'+(x.p.length===1?'':'s')+'</div></button>'}).join('');
@@ -1219,6 +1303,7 @@ function cropPlace(){
 }
 function openCrop(img,id,crop){
  var box=document.getElementById('crop');box.hidden=false;var V=cropV().clientWidth;
+ if(collCropOn)document.querySelectorAll('#modal .cx').forEach(function(el){el.style.display='none'});
  CR={img:img,id:id,s0:V/Math.min(img.width,img.height),z:1,x:0,y:0,p:{}};
  if(crop){CR.z=Math.max(1,Math.min(4,crop.w*V/(img.width*CR.s0)));CR.x=crop.l*V;CR.y=crop.t*V}
  else{CR.x=(V-img.width*CR.s0)/2;CR.y=(V-img.height*CR.s0)/2}
@@ -1686,7 +1771,7 @@ document.addEventListener('click',function(e){
   case 'pg':page+=Number(d.v);renderMain();break;
   case 'wro':drawer(false);wro=!wro;render();break;
   case 'ro':drawer(false);ro=!ro;if(ro){order=sorted(vis()).map(function(i){return i.id});sortBy='custom';saveOrder()}render();break;
-  case 'open':if(!ro)popup(items.filter(function(i){return String(i.id)===d.id})[0]);break;
+  case 'open':if(!ro&&!collRo)popup(items.filter(function(i){return String(i.id)===d.id})[0]);break;
   case 'viewpiece':M.innerHTML='';pieceId=d.id;show('piece');break;
 case 'pback':show('box');break;
 case 'edit':M.innerHTML='';keepY=view==='box'?window.pageYOffset:null;editing=JSON.parse(JSON.stringify(items.filter(function(i){return String(i.id)===d.id})[0]));if(view==='piece')backTo='piece';show('edit');break;
@@ -1700,6 +1785,7 @@ case 'copydiag':copyText(diagLines.join('\n')+'\n\nEvent log (newest last):\n'+(
   case 'updx':document.getElementById('upd').hidden=true;break;
   case 'theme':theme=d.v;applyTheme();saveSettings();renderDrawer();refreshAppearance();break;
 case 'cnew':collId=Date.now();collDraft=null;collPendingId=null;document.getElementById('modal').innerHTML=collEditHTML(null);break;
+  case 'ctab':collTab=d.v;render();break;
   case 'copen':collId=Number(d.id);collRo=false;render();break;
   case 'cback':collId=null;collRo=false;render();break;
   case 'cro':collRo=!collRo;render();renderDrawer();break;
@@ -1707,10 +1793,16 @@ case 'cnew':collId=Date.now();collDraft=null;collPendingId=null;document.getElem
   case 'csave':{var ct=document.getElementById('cedt').value.trim(),cn=document.getElementById('cedn').value.trim();if(!ct){alert('Give it a title.');break}var cc=curColl();var oldCov=cc?cc.cover:null;var newCov=collDraft?collDraft.cover:oldCov;if(!cc){cc={id:collId,title:'',note:'',pieceIds:[]};colls.push(cc)}cc.title=ct;cc.note=cn;cc.cover=newCov||null;if(oldCov&&(!newCov||oldCov.id!==newCov.id))collPruneImg(oldCov.id);if(collPendingId)collPruneImg(collPendingId);collDraft=null;collPendingId=null;saveColls();saveGallery();document.getElementById('modal').innerHTML='';render();break}
   case 'cdelete':if(curColl())document.getElementById('modal').innerHTML=collConfirmHTML();break;
   case 'cdeleteyes':if(curColl()){var cdel=curColl();colls=colls.filter(function(x){return x.id!==collId});collId=null;if(cdel.cover)collPruneImg(cdel.cover.id);saveColls();saveGallery();document.getElementById('modal').innerHTML='';render()}break;
-  case 'cpicker':if(curColl()){collPickSel=collVisIds(curColl()).map(function(i){return i.id});document.getElementById('modal').innerHTML=collPickerHTML(curColl())}break;
+  case 'cpicker':if(curColl()){collPickSel=[];document.getElementById('modal').innerHTML=collPickerHTML(curColl())}break;
   case 'cptoggle':{var tid=Number(d.id),tk=collPickSel.indexOf(tid);if(tk>-1)collPickSel.splice(tk,1);else collPickSel.push(tid);var sq=document.querySelector('#modal input[type=search]');collPickRender(sq?sq.value:'');break}
-  case 'cpsave':{var cp=curColl();if(!cp)break;var checked=collPickSel.slice();var vids=vis().map(function(i){return i.id});var keep=cp.pieceIds.filter(function(id){return vids.indexOf(id)<0||checked.indexOf(id)>-1});var added=checked.filter(function(id){return cp.pieceIds.indexOf(id)<0});cp.pieceIds=keep.concat(added);saveColls();document.getElementById('modal').innerHTML='';render();break}
+  case 'cpsave':{var cp=curColl();if(!cp)break;var added=collPickSel.filter(function(id){return cp.pieceIds.indexOf(id)<0});cp.pieceIds=cp.pieceIds.concat(added);saveColls();document.getElementById('modal').innerHTML='';render();break}
   case 'cup':case 'cdown':{var cm=curColl();if(cm){collMove(cm,Number(d.id),d.a==='cup'?-1:1);saveColls();render()}break}
+  case 'linkpick':if(editing&&!editing._new){linkSel=[];document.getElementById('modal').innerHTML=linkPickerHTML()}break;
+  case 'lktoggle':{var lt=Number(d.id),lk=linkSel.indexOf(lt);if(lk>-1)linkSel.splice(lk,1);else linkSel.push(lt);var lsq=document.querySelector('#modal input[type=search]');linkPickRender(lsq?lsq.value:'');break}
+  case 'linksave':{var lids=linkSel.slice();if(!lids.length){document.getElementById('modal').innerHTML='';break}var lo=linkOtherGroups(lids);if(lo.length){pendingLinks=lids;document.getElementById('modal').innerHTML=linkMergeHTML(lo);break}linkApply(lids);document.getElementById('modal').innerHTML='';break}
+  case 'linkmerge':{linkApply(pendingLinks);pendingLinks=[];document.getElementById('modal').innerHTML='';break}
+  case 'unlink':{setLinkPair(editing.id,Number(d.id),false);var ul=document.getElementById('setsub');if(ul)ul.innerHTML=setSubHTML(editing);break}
+  case 'ctogg':{var cg=colls.filter(function(c){return c.id===Number(d.id)})[0];if(cg&&editing&&!editing._new){var pk=cg.pieceIds.indexOf(editing.id);if(pk>-1)cg.pieceIds.splice(pk,1);else cg.pieceIds.push(editing.id);saveColls();var cs=document.getElementById('collsub');if(cs)cs.innerHTML=collsSubHTML(editing)}break}
   case 'cremove':{var cr=curColl();if(cr){cr.pieceIds=cr.pieceIds.filter(function(id){return id!==Number(d.id)});saveColls();render()}break}
   case 'appearance':drawer(false);M.innerHTML=appearanceHTML();break;
 case 'jcolor':M.innerHTML=jcolorHTML();break;
@@ -1849,7 +1941,7 @@ document.addEventListener('toggle',function(e){if(e.target.classList&&e.target.c
 document.addEventListener('pointerdown',function(e){
  var v=e.target.closest('#cropv');
  if(v&&CR){CR.p[e.pointerId]={x:e.clientX,y:e.clientY};v.setPointerCapture(e.pointerId);return}
- if(!ro&&!wro)return;var t=e.target.closest('.ro .tile');if(!t)return;dragEl=t;t.classList.add('drag');makeGhost(t,e);captureBase(t);
+ if(!ro&&!wro&&!collRo)return;var t=e.target.closest('.ro .tile');if(!t)return;dragEl=t;t.classList.add('drag');makeGhost(t,e);captureBase(t);
 });
 document.addEventListener('pointermove',function(e){
  if(CR&&CR.p[e.pointerId]){
@@ -1935,6 +2027,13 @@ function endDrag(e){
    if(wt!=null&&wt!==wf){
      var wfi=wish.findIndex(function(w){return String(w.id)===wf}),wti0=wish.findIndex(function(w){return String(w.id)===wt}),down=wfi<wti0,wmv=wish.splice(wfi,1)[0],wti=wish.findIndex(function(w){return String(w.id)===wt});
      wish.splice(down?wti+1:wti,0,wmv);saveWish();dropId=wf;
+   }
+ }else if(collRo){
+   var cdc=curColl(),cfrom=Number(dragged.dataset.id),cto=overEl?overEl.dataset.id:null;
+   if(cdc&&cto!=null&&cto!==dragged.dataset.id&&dragBase){
+     var cnew=previewIds(cto).map(Number),cvis=dragBase.ids.map(Number),ck=0;
+     cdc.pieceIds=cdc.pieceIds.map(function(id){return cvis.indexOf(id)>-1?cnew[ck++]:id});
+     saveColls();dropId=String(cfrom);
    }
  }else{
    var from=Number(dragged.dataset.id),to=overEl?Number(overEl.dataset.id):null;

@@ -8,7 +8,8 @@ Live site: https://nevertwicethesame.github.io/jewelrybox/
 
 - **Catalog:** record each piece's details, photos, and status.
 - **Gallery:** shared reference photos, linked to pieces as references, comparables, or covers.
-- **Collections:** group related pieces, such as a set, and order them your way.
+- **Curations:** collect pieces around a theme, such as Victorian mourning rings, and order them your way.
+- **Sets:** link pieces that go together, such as matching earrings and a necklace. Linked pieces form one set, shown as a tray on the Collections page, sorted by type and then color.
 - **Coveted Pieces:** wanted items with a photo, a link, and a type.
 - **Secret Compartment:** a keyword-protected section. Hidden pieces stay hidden everywhere, including collections.
 - **Jewelry of the Day:** a random pick, weighted toward pieces not worn recently.
