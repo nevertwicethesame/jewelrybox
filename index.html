@@ -293,7 +293,7 @@ header button[data-a="drawer"]{display:flex;align-items:center;justify-content:c
 <input type="file" id="gfile" accept="image/*" multiple hidden>
 <script>
 var K='ntts_items_v2',OK='ntts_order_v1',PER=25,MAX_UPLOAD=300*1024;
-var APP_VERSION='2.8.2',APP_DATE='2026-11-07 · 7:45 AM ET',UPDATE_URL='';
+var APP_VERSION='2.8.3',APP_DATE='2026-11-07 · 8:50 AM ET',UPDATE_URL='';
 var EMOJI={ring:'💍',earrings:'✨',necklace:'📿',bracelet:'⭕',watch:'⌚',other:'💎'};
 var ICONS={ring:"<circle cx='12' cy='14' r='6'/><path d='M9.5 8 12 4l2.5 4'/><path d='M12 9.5l1.5 2.5-1.5 2.5-1.5-2.5z'/>",earrings:"<path d='M7 3v3'/><path d='M7 6c-1.6 0-2.5 1.3-2.5 3S6 14 7 17c1-3 2.5-5 2.5-8C9.5 7.3 8.6 6 7 6z'/><path d='M17 3v3'/><path d='M17 6c-1.6 0-2.5 1.3-2.5 3S16 14 17 17c1-3 2.5-5 2.5-8C19.5 7.3 18.6 6 17 6z'/>",necklace:"<path d='M4 5c2 7 14 7 16 0'/><path d='M12 12.5V15'/><circle cx='12' cy='17' r='2.2'/>",bracelet:"<ellipse cx='12' cy='12' rx='8' ry='5.5'/><ellipse cx='12' cy='12' rx='5.5' ry='3'/>",watch:"<circle cx='12' cy='13' r='5.5'/><path d='M9 7.5 10 3h4l1 4.5M9 18.5 10 23h4l1-4.5'/><path d='M12 10.5V13l1.8 1.2'/>",other:"<path d='M7 4h10l4 5-9 11L3 9z'/><path d='M3 9h18M9 4l3 16 3-16'/>",heart:"<path d='M12 20s-7-4.4-7-9.5A4 4 0 0 1 12 8a4 4 0 0 1 7 2.5C19 15.6 12 20 12 20z'/>",wrench:"<path d='M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.5 2.5-2.5-.5-.5-2.5z'/>",key:"<g transform='rotate(-45 12.5 12)'><circle cx='8' cy='12' r='4'/><path d='M12 12h9M18 12v3M21 12v2.5'/></g>",curio:"<rect x='4' y='3' width='16' height='18' rx='1'/><path d='M3 3h18M3 21h18'/><path d='M12 3v18'/><path d='M4 11h16'/><path d='M10.5 7v1.5M13.5 7v1.5M10.5 15v1.5M13.5 15v1.5'/>",clock:"<circle cx='12' cy='12' r='9'/><path d='M12 7v5l3 2'/>",pencil:"<path d='M4 20h4L19 9l-4-4L4 16z'/><path d='M13.5 6.5l4 4'/>",lock:"<rect x='5' y='11' width='14' height='10' rx='2'/><path d='M8 11V7a4 4 0 0 1 8 0v4'/>",unlock:"<rect x='3.95' y='11' width='11.1' height='10' rx='2'/><path d='M12.8 11V6.3A3.3 3.3 0 0 1 19.4 6.3V9.5'/>",bag:"<path d='M5 8h14l-1 12H6z'/><path d='M9 8V6a3 3 0 0 1 6 0v2'/>",plus:"<path d='M12 5v14M5 12h14'/>",x:"<path d='M6 6l12 12M18 6L6 18'/>",spark:"<path d='M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z'/>",gallery:"<rect x='3' y='4' width='18' height='16' rx='2'/><circle cx='9' cy='10' r='2'/><path d='M21 16l-5-5-8 9'/>"};
 var ORN='<svg width="72" height="10" viewBox="0 0 72 10" fill="none" stroke="#a8864f" stroke-width="1.2"><path d="M0 5h28M44 5h28"/><path d="M36 1l4 4-4 4-4-4z"/></svg>';
@@ -1105,11 +1105,15 @@ function firstRefCover(){if(!editing.cover&&(editing.refs||[]).length)editing.co
 function quickPrompt(){
  return "Read the attached jewelry listing screenshots and output ONLY a JSON object with the keys below. Omit any key you cannot find. No commentary.\n\nKeys and rules:\n- \"title\": text. Shorten to the core descriptive name, dropping the brand, the era, and the carat/date phrasing. Example: \"Rose Cut Diamond Cluster Ring\" (not \"Victorian Rose Cut Diamond Cluster Ring in 18 Carat Gold; Circa 1880\").\n- \"category\": one of Ring, Earrings, Necklace, Bracelet, Watch, Other\n- \"period\": one of Ancient, Antique, Mid-Century, Vintage, New\n- \"era\": text (era or movement), copied from the listing only. Do not infer it from the year.\n- \"decade\": text. If the listing names a decade (for example \"1880s\") or gives a circa year (for example \"Circa 1880\"), output the decade (for example \"1880s\"). Do not derive it from \"yearMade\" when the listing gives neither.\n- \"yearMade\": number, only when the listing gives an exact year. Leave it out for \"circa\" or ranges. Put circa dates in \"decade\" instead.\n- \"country\": text (country of origin)\n- \"maker\": text\n- \"stone\": array of strings\n- \"metal\": array of strings. Abbreviate gold by karat and color: yellow gold = yg, white gold = wg, rose gold = rg. Examples: \"18k gold\" with yellow gold shown or stated = \"18k yg\"; \"18k rose gold\" = \"18k rg\". Non-gold metals keep their name, such as \"platinum\" or \"silver\".\n- \"hallmark\": text\n- \"measurement\": text\n- \"weight\": text in one of these formats: \"2.2g\" (grams) or \"0.3ct\" (carats). Convert from the listing's unit to this format and keep the number as written. Example: \"2.2 grams approximately\" becomes \"2.2g\".\n- \"ringSize\": number from 1 to 13 in steps of 0.25 (rings only). Convert to US using the chart below and round to the nearest 0.25. The chart overrides any size stated in the listing, including a US size the listing gives. If the listing uses a system not on the chart, omit this key.\n- \"cut\": array of strings\n- \"colorMain\": array of strings. Choose only from: Red, Pink, Orange, Brown, Yellow, Green, Light blue, Blue, Purple, Black, Gray, White, Multi. Ignore emoji and numbers.\n- \"motif\": array of strings\n- \"notes\": text. Include only for a special circumstance, such as a defect, repair, missing part, or a discrepancy between the listing and the item. Seller policies (shipping, returns, payment) are not notes. Omit otherwise.\n- \"purchaseDate\": YYYY-MM-DD. Omit if the listing has no purchase date.\n- \"seller\": text\n- \"purchasePlatform\": \"Etsy\", \"1stDibs\", or \"Seller\". Any other platform is \"Seller\".\n- \"cost\": number with no currency symbol or code\n\nSource priority: the listing text is primary. Use the photos to confirm or fill in color, stone, and cut only when the text is silent. If text and photos conflict, use the text, and record the conflict in \"notes\" only if it is a special circumstance.\n\nRing size chart (US & Canada column):\n5.25 = J.5 (UK); 5.5 = K; 5.75 = K.5; 6 = L; 6.25 = L.5; 6.5 = M; 6.75 = M.5; 7 = N; 7.25 = N.5; 7.5 = O; 7.75 = O.5; 8 = P; 8.25 = P.5; 8.5 = Q; 8.75 = Q.5; 9 = R; 9.25 = R.5\n\nExample: for a ring listed as \"M (UK)\" with \"18k rose gold\" in the text, output:\n{\"title\": \"Rose Cut Diamond Cluster Ring\", \"category\": \"Ring\", \"period\": \"Antique\", \"decade\": \"1880s\", \"metal\": [\"18k rg\"], \"ringSize\": 6.5, \"colorMain\": [\"Yellow\"], \"purchasePlatform\": \"Seller\"}";
 }
+function quickReviewPrompt(){
+ return "I've attached a zip exported from my jewelry app for one piece. It has piece.json (the saved data, plus calculated prices) and an images/ folder with the cover, reference, and comparison photos.\n\nTask: check the saved data against the photos and find data entry errors. The photos are the source of truth for what the piece looks like. Don't change fields the photos can't confirm (for example, cost, seller, or purchase date).\n\nOutput, in this order:\n\n1. A table of every proposed change, with these columns:\n   Field | Before (saved) | After (proposed) | Confidence (High / Medium / Low) | Evidence (which photo or text)\n   Only include fields you'd change. If nothing needs changing, say so and skip the table.\n\n2. One JSON object with ONLY the \"After\" values, using these keys: title, category, period, era, decade, yearMade, country, maker, stone, metal, hallmark, measurement, weight, ringSize, cut, colorMain, motif, notes, purchaseDate, seller, purchasePlatform, cost.\n   - Lists (stone, metal, cut, colorMain, motif) are arrays of strings.\n   - colorMain may only be: Red, Pink, Orange, Brown, Yellow, Green, Light blue, Blue, Purple, Black, Gray, White, Multi.\n   - Metal: gold abbreviated by karat and color, such as \"18k yg\", \"14k wg\", \"18k rg\". Other metals keep their names.\n   - Weight: \"2.2g\" or \"0.3ct\".\n   - Dates: YYYY-MM-DD.\n   - The app overwrites any key I include, so include only keys from the table.\n\nDon't guess. If a Confidence is Low, put it in the table but leave it out of the JSON."; }
 function quickHTML(){
- return '<div class="modal" data-a="backdrop"><div style="max-width:520px;width:94vw"><h3 style="margin:0 0 6px">Quick add</h3><p class="meta">1. Copy the prompt and send it with your listing screenshots to Claude.<br>2. Paste Claude’s JSON reply below and tap Apply.</p>'
-  +'<div class="seg" style="justify-content:space-between"><span class="meta">Prompt</span><button type="button" class="link" data-a="copy" data-id="qaPrompt">Copy</button></div><textarea id="qaPrompt" rows="6" readonly style="height:auto">'+esc(quickPrompt())+'</textarea>'
-  +'<label style="margin-top:12px">Claude’s output<textarea id="qaIn" rows="6" placeholder="Paste output here" style="height:auto"></textarea></label>'
-  +'<div class="bar" style="justify-content:center;margin:12px 0 0"><button class="pri" data-a="qaapply">Apply</button><button data-a="x">Cancel</button></div></div></div>';
+ var box=function(id,txt){return '<div class="seg" style="justify-content:space-between;margin-top:6px"><span class="meta">Prompt</span><button type="button" class="link" data-a="copy" data-id="'+id+'" style="margin-top:0">Copy</button></div><textarea id="'+id+'" rows="2" readonly style="height:56px;font-size:14px;resize:none">'+esc(txt)+'</textarea>'};
+ return '<div class="modal" data-a="backdrop"><div style="max-width:520px;width:94vw"><h3 style="margin:0 0 4px">Quick Fill</h3>'
+  +'<h4 class="sub" style="margin:10px 0 0">New piece</h4><p class="meta" style="margin:2px 0 0">Send the prompt with the listing screenshots.</p>'+box('qaPrompt',quickPrompt())
+  +'<h4 class="sub" style="margin:12px 0 0">Check a saved piece</h4><p class="meta" style="margin:2px 0 0">Export this piece, then send the prompt with the zip.</p>'+'<div class="seg" style="justify-content:space-between;margin-top:6px"><span class="meta">Prompt</span><span><button type="button" class="link" data-a="pexport" style="margin-top:0">Export Zip</button><button type="button" class="link" data-a="copy" data-id="qaPromptReview" style="margin:0 0 0 12px">Copy</button></span></div>'+'<textarea id="qaPromptReview" rows="2" readonly style="height:56px;font-size:14px;resize:none">'+esc(quickReviewPrompt())+'</textarea>'
+  +'<label style="margin-top:12px">Claude’s reply<textarea id="qaIn" rows="3" placeholder="Paste reply here" style="height:72px;resize:none"></textarea></label>'
+  +'<div class="bar" style="justify-content:center;margin:10px 0 0"><button class="pri" data-a="qaapply">Apply</button><button data-a="x">Cancel</button></div></div></div>';
 }
 function applyQuick(d){
  var n=0;
@@ -1190,7 +1194,7 @@ function renderEdit(){
  var it=editing;
  var pr=it.shipEstimate!=null&&it.shipEstimate!==''?it.shipEstimate:shipDefault(it.cost);
  shipTouched=false;
- var h='<div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:20px"><h2 style="margin:0">Add/Edit a Piece</h2><button type="button" data-a="quickadd">Quick add</button></div>'+'<form id="form" autocomplete="off">';
+ var h='<div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:20px"><h2 style="margin:0">Add/Edit a Piece</h2><button type="button" data-a="quickadd">Quick Fill</button></div>'+'<form id="form" autocomplete="off">';
  h+='<details data-sec="stats"'+dOpen('stats',true)+'><summary>Stats</summary><div class="f">'+fieldHTML('status',it.status)+sec(ORDER_STATS)+'</div>'
   +'<h4 class="sub" style="margin-top:14px">Collections</h4><div id="collsub">'+collsSubHTML(it)+'</div>'
   +'<h4 class="sub" style="margin-top:14px">Set</h4><div id="setsub">'+setSubHTML(it)+'</div></details>';
@@ -1236,6 +1240,41 @@ function updateSummary(){
  rows.push('<tr>'+td1+'Cover photo</td>'+td2+(editing.cover?'Added':'—')+'</td></tr>');
  rows.push('<tr>'+td1+'Reference screenshots</td>'+td2+(editing.refs||[]).length+'</td></tr>');
  tb.innerHTML='<tr>'+td1+'ID</td>'+td2+esc(editing.id)+'</td></tr>'+rows.join('');
+}
+var CRC_T=null;
+function crc32(a){if(!CRC_T){CRC_T=[];for(var n=0;n<256;n++){var c=n;for(var k=0;k<8;k++)c=c&1?0xEDB88320^(c>>>1):c>>>1;CRC_T[n]=c>>>0}}var c=0xFFFFFFFF;for(var i=0;i<a.length;i++)c=CRC_T[(c^a[i])&0xFF]^(c>>>8);return (c^0xFFFFFFFF)>>>0}
+function dataUrlBytes(u){var b=atob(u.split(',')[1]),a=new Uint8Array(b.length);for(var i=0;i<b.length;i++)a[i]=b.charCodeAt(i);return a}
+function makeZip(files){
+ var enc=new TextEncoder(),parts=[],cd=[],off=0;
+ files.forEach(function(f){
+   var nm=enc.encode(f.name),crc=crc32(f.data),n=f.data.length;
+   var lh=new DataView(new ArrayBuffer(30));lh.setUint32(0,0x04034b50,true);lh.setUint16(4,20,true);lh.setUint16(6,0x0800,true);lh.setUint16(8,0,true);lh.setUint16(10,0,true);lh.setUint16(12,0x21,true);lh.setUint32(14,crc,true);lh.setUint32(18,n,true);lh.setUint32(22,n,true);lh.setUint16(26,nm.length,true);lh.setUint16(28,0,true);
+   parts.push(new Uint8Array(lh.buffer),nm,f.data);
+   var ch=new DataView(new ArrayBuffer(46));ch.setUint32(0,0x02014b50,true);ch.setUint16(4,20,true);ch.setUint16(6,20,true);ch.setUint16(8,0x0800,true);ch.setUint16(10,0,true);ch.setUint16(12,0,true);ch.setUint16(14,0x21,true);ch.setUint32(16,crc,true);ch.setUint32(20,n,true);ch.setUint32(24,n,true);ch.setUint16(28,nm.length,true);ch.setUint16(30,0,true);ch.setUint16(32,0,true);ch.setUint16(34,0,true);ch.setUint16(36,0,true);ch.setUint32(38,0,true);ch.setUint32(42,off,true);
+   cd.push(new Uint8Array(ch.buffer),nm);
+   off+=30+nm.length+n;
+ });
+ var cdSize=cd.reduce(function(a,x){return a+x.length},0);
+ var end=new DataView(new ArrayBuffer(22));end.setUint32(0,0x06054b50,true);end.setUint16(8,files.length,true);end.setUint16(10,files.length,true);end.setUint32(12,cdSize,true);end.setUint32(16,off,true);
+ return new Blob(parts.concat(cd,[new Uint8Array(end.buffer)]),{type:'application/zip'});
+}
+function downloadBlob(name,blob){var u=URL.createObjectURL(blob),a=document.createElement('a');a.href=u;a.download=name;document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(u);a.remove()},1000)}
+function saveBlob(name,blob){
+ var mobile=/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)||navigator.maxTouchPoints>1;
+ if(mobile&&navigator.canShare&&typeof File==='function'){try{var f=new File([blob],name,{type:blob.type});if(navigator.canShare({files:[f]}))return navigator.share({files:[f]}).catch(function(e){if(!(e&&e.name==='AbortError'))downloadBlob(name,blob)})}catch(e){}}
+ downloadBlob(name,blob);
+}
+function exportPieceZip(){
+ syncForm();var p=editing;if(!p)return;
+ var files=[],imgs={cover:null,reference:[],comparison:[]};
+ var add=function(id,path){var src=gal.imgs[id];if(!src)return null;var mime=(src.match(/^data:([^;]+)/)||[])[1]||'image/jpeg';var name='images/'+path+'.'+(mime==='image/png'?'png':'jpg');files.push({name:name,data:dataUrlBytes(src)});return name};
+ if(p.cover&&p.cover.id)imgs.cover=add(p.cover.id,'cover');
+ (p.refs||[]).forEach(function(id,n){var nm=add(id,'reference-'+(n+1));if(nm)imgs.reference.push(nm)});
+ (p.comps||[]).forEach(function(id,n){var nm=add(id,'comparison-'+(n+1));if(nm)imgs.comparison.push(nm)});
+ var doc={app:'never-twice-the-same',kind:'piece',format:3,exported:new Date().toISOString(),piece:p,calculated:calcs(p),images:imgs};
+ files.unshift({name:'piece.json',data:new TextEncoder().encode(JSON.stringify(doc,null,2))});
+ var slug=String(p.title||'piece').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')||'piece';
+ saveBlob('ntts_backup_piece_'+slug+'_'+stampFile()+'.zip',makeZip(files));
 }
 function copySummary(){
  var tb=document.getElementById('sumtb');if(!tb)return;
@@ -2026,6 +2065,7 @@ case 'frm':frameStyle=d.v;document.documentElement.dataset.frame=frameStyle;kset
   case 'export':exportJSON();break;
   case 'listsexp':exportLists();break;
   case 'sumcopy':copySummary();break;
+  case 'pexport':exportPieceZip();break;
   case 'listsimp':document.getElementById('flists').click();break;
   case 'photosexp':exportPhotos();break;
   case 'photosimp':document.getElementById('flphotos').click();break;
