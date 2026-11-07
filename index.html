@@ -293,7 +293,7 @@ header button[data-a="drawer"]{display:flex;align-items:center;justify-content:c
 <input type="file" id="gfile" accept="image/*" multiple hidden>
 <script>
 var K='ntts_items_v2',OK='ntts_order_v1',PER=25,MAX_UPLOAD=300*1024;
-var APP_VERSION='2.8.0',APP_DATE='2026-11-06 · 8:07 PM ET',UPDATE_URL='';
+var APP_VERSION='2.8.1',APP_DATE='2026-11-06 · 10:27 PM ET',UPDATE_URL='';
 var EMOJI={ring:'💍',earrings:'✨',necklace:'📿',bracelet:'⭕',watch:'⌚',other:'💎'};
 var ICONS={ring:"<circle cx='12' cy='14' r='6'/><path d='M9.5 8 12 4l2.5 4'/><path d='M12 9.5l1.5 2.5-1.5 2.5-1.5-2.5z'/>",earrings:"<path d='M7 3v3'/><path d='M7 6c-1.6 0-2.5 1.3-2.5 3S6 14 7 17c1-3 2.5-5 2.5-8C9.5 7.3 8.6 6 7 6z'/><path d='M17 3v3'/><path d='M17 6c-1.6 0-2.5 1.3-2.5 3S16 14 17 17c1-3 2.5-5 2.5-8C19.5 7.3 18.6 6 17 6z'/>",necklace:"<path d='M4 5c2 7 14 7 16 0'/><path d='M12 12.5V15'/><circle cx='12' cy='17' r='2.2'/>",bracelet:"<ellipse cx='12' cy='12' rx='8' ry='5.5'/><ellipse cx='12' cy='12' rx='5.5' ry='3'/>",watch:"<circle cx='12' cy='13' r='5.5'/><path d='M9 7.5 10 3h4l1 4.5M9 18.5 10 23h4l1-4.5'/><path d='M12 10.5V13l1.8 1.2'/>",other:"<path d='M7 4h10l4 5-9 11L3 9z'/><path d='M3 9h18M9 4l3 16 3-16'/>",heart:"<path d='M12 20s-7-4.4-7-9.5A4 4 0 0 1 12 8a4 4 0 0 1 7 2.5C19 15.6 12 20 12 20z'/>",wrench:"<path d='M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.5 2.5-2.5-.5-.5-2.5z'/>",key:"<g transform='rotate(-45 12.5 12)'><circle cx='8' cy='12' r='4'/><path d='M12 12h9M18 12v3M21 12v2.5'/></g>",curio:"<rect x='4' y='3' width='16' height='18' rx='1'/><path d='M3 3h18M3 21h18'/><path d='M12 3v18'/><path d='M4 11h16'/><path d='M10.5 7v1.5M13.5 7v1.5M10.5 15v1.5M13.5 15v1.5'/>",clock:"<circle cx='12' cy='12' r='9'/><path d='M12 7v5l3 2'/>",pencil:"<path d='M4 20h4L19 9l-4-4L4 16z'/><path d='M13.5 6.5l4 4'/>",lock:"<rect x='5' y='11' width='14' height='10' rx='2'/><path d='M8 11V7a4 4 0 0 1 8 0v4'/>",unlock:"<rect x='3.95' y='11' width='11.1' height='10' rx='2'/><path d='M12.8 11V6.3A3.3 3.3 0 0 1 19.4 6.3V9.5'/>",bag:"<path d='M5 8h14l-1 12H6z'/><path d='M9 8V6a3 3 0 0 1 6 0v2'/>",plus:"<path d='M12 5v14M5 12h14'/>",x:"<path d='M6 6l12 12M18 6L6 18'/>",spark:"<path d='M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z'/>",gallery:"<rect x='3' y='4' width='18' height='16' rx='2'/><circle cx='9' cy='10' r='2'/><path d='M21 16l-5-5-8 9'/>"};
 var ORN='<svg width="72" height="10" viewBox="0 0 72 10" fill="none" stroke="#a8864f" stroke-width="1.2"><path d="M0 5h28M44 5h28"/><path d="M36 1l4 4-4 4-4-4z"/></svg>';
@@ -860,11 +860,11 @@ function renderManage(){
  var nfiles=planChunks().length;
  var imgCount=Object.keys(gal.imgs).length;
  var listsBody='<div class="bar" style="flex-direction:column;align-items:stretch;margin:0"><button data-a="listsexp">Back up links &amp; gallery lists</button><button data-a="listsimp">Restore links &amp; gallery lists (overwrites)</button></div><p class="meta">Covers, comparison and reference lists, plus the cover, photo and piece links on each piece. Small file. Restore replaces the links and lists for the pieces and photos in the backup. Photos not in the backup are kept.</p>';
- var photosBody='<div class="bar" style="flex-direction:column;align-items:stretch;margin:0"><button data-a="photosexp">Back up photos</button><button data-a="photosimp">Restore photos (merge)</button></div><p class="meta">'+imgCount+' photo'+(imgCount===1?'':'s')+' on this device. Restore adds back any photo missing here, as a reference photo. Existing photos are not changed.</p>';
- var jsonBody='<div class="bar" style="flex-direction:column;align-items:stretch;margin:0"><button data-a="export">Back up everything</button><button data-a="import">Restore everything (replaces)</button></div><p class="meta">Export includes '+items.length+' piece'+(items.length===1?'':'s')+' with their details, '+imgCount+' photo'+(imgCount===1?'':'s')+' (covers, curation covers and reference screenshots), '+wish.length+' coveted item'+(wish.length===1?'':'s')+', '+colls.length+' curation'+(colls.length===1?'':'s')+', your order, theme, appearance and secret compartment settings (the keyword itself is never saved). It saves as '+nfiles+' file'+(nfiles===1?'':'s')+'.</p>';
+ var photosBody='<div class="bar" style="flex-direction:column;align-items:stretch;margin:0"><button data-a="photosexp">Back up photos</button><button data-a="photosimp">Restore photos (merge)</button></div><p class="meta">'+imgCount+' photo'+(imgCount===1?'':'s')+' on this device. Restore adds back any photo missing here, as a reference photo. Existing photos are not changed.</p>'+(expKind==='photos'?expPanelHTML():'');
+ var jsonBody='<div class="bar" style="flex-direction:column;align-items:stretch;margin:0"><button data-a="export">Back up everything</button><button data-a="import">Restore everything (replaces)</button></div><p class="meta">Export includes '+items.length+' piece'+(items.length===1?'':'s')+' with their details, '+imgCount+' photo'+(imgCount===1?'':'s')+' (covers, curation covers and reference screenshots), '+wish.length+' coveted item'+(wish.length===1?'':'s')+', '+colls.length+' curation'+(colls.length===1?'':'s')+', your order, theme, appearance and secret compartment settings (the keyword itself is never saved). It saves as '+nfiles+' file'+(nfiles===1?'':'s')+'.</p>'+(expKind==='everything'?expPanelHTML():'');
  return '<h2>I/O</h2>'
   +'<h3 class="side">Diagnostics</h3><div style="border:1px solid var(--line);border-radius:12px;padding:12px"><div id="stormeter" class="meta" style="text-align:left"></div><div class="bar" style="margin:12px 0 0"><button data-a="checkupd">Check for new version</button><button type="button" class="link" data-a="copydiag">Copy</button><span id="copymsg" class="meta"></span></div></div>'
-  +'<h3 class="side">Data Backup</h3><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px">'+card('Piece Data (CSV)',csvBody)+card('Links & Gallery Lists',listsBody)+card('Photos Only',photosBody)+card('Everything (JSON)',jsonBody)+'</div>'+expPanelHTML()
+  +'<h3 class="side">Data Backup</h3><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px">'+card('Piece Data (CSV)',csvBody)+card('Links & Gallery Lists',listsBody)+card('Photos Only',photosBody)+card('Everything (JSON)',jsonBody)+'</div>'
   +'<h3 class="side">Reset</h3><div style="border:1px solid var(--line);border-radius:12px;padding:12px"><button class="dan" data-a="delete">Erase all data</button><p class="meta" style="margin:6px 0 0">Erases every piece, photo, and setting on this device. This cannot be undone.</p>'+(secretCfg.hash?'<p class="meta" style="margin:10px 0 0">Change the keyword: <button type="button" class="link" data-a="kwchange" style="font-size:inherit;margin:0">Change keyword</button></p><p class="meta" style="margin:10px 0 0">Forgot the keyword? <button type="button" class="link" data-a="kwforgot" style="font-size:inherit;margin:0">Delete keyword and settings</button></p>':'')+'</div>'+'';
 }
 function renderAbout(){
@@ -1609,7 +1609,7 @@ function exportCSV(){
    var sets=(i.links||[]).join('; ');
    return CSV_COLS.map(function(c){return csvCell(i[c[0]])}).concat([csvCell(cur),csvCell(sets)]).join(',');
  });
- saveFile('ntts-records-'+stampNow()+'.csv','text/csv',[head].concat(body).join('\r\n'));
+ saveFile('ntts_backup_pieces_'+stampFile()+'.csv','text/csv',[head].concat(body).join('\r\n'));
 }
 function parseCSV(t){
  var rows=[],row=[],f='',inq=false;
@@ -1733,6 +1733,7 @@ function planChunks(){
 }
 var expParts=null,expDone={};
 function docForPart(c,n,N){var doc={app:'never-twice-the-same',format:2,part:n+1,of:N,exported:new Date().toISOString(),items:c.items,images:c.imgs};if(n===N-1){doc.gallery={refs:gal.refs,covers:gal.covers,comps:gal.comps};doc.order=order;doc.theme=theme;doc.hideSold=hideSold;doc.wishlist=wish;doc.collections=colls;doc.appearance={bgStyle:bgStyle,frameStyle:frameStyle};doc.secret={on:!!secretCfg.on,threshold:secretCfg.threshold,hash:secretCfg.hash||''}}return doc}
+function stampFile(){var d=new Date();return today()+'_'+('0'+d.getHours()).slice(-2)+('0'+d.getMinutes()).slice(-2)}
 function stampNow(){var d=new Date();return today()+'-'+('0'+d.getHours()).slice(-2)+('0'+d.getMinutes()).slice(-2)}
 function saveFile(name,mime,text){
  var mobile=/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)||navigator.maxTouchPoints>1;
@@ -1744,7 +1745,7 @@ function saveFile(name,mime,text){
 function exportLists(){
  recordBackup('lists',{pieces:items.length,refs:gal.refs.length,covers:gal.covers.length,comps:gal.comps.length});
  var doc={app:'never-twice-the-same',kind:'lists',format:3,exported:new Date().toISOString(),gallery:{refs:gal.refs.slice(),covers:gal.covers.slice(),comps:gal.comps.slice()},links:items.map(function(i){return {id:i.id,cover:i.cover||null,refs:(i.refs||[]).slice(),comps:(i.comps||[]).slice(),links:(i.links||[]).slice()}})};
- saveFile('ntts-lists-'+stampNow()+'.json','application/json',JSON.stringify(doc));
+ saveFile('ntts_backup_linkslists_'+stampFile()+'.json','application/json',JSON.stringify(doc));
 }
 function mergeLists(text){
  var d;try{d=JSON.parse(text)}catch(e){alert('That file is not a valid lists backup.');return}
@@ -1768,14 +1769,16 @@ var mine={};(d.links||[]).forEach(function(L){if(L.cover&&L.cover.id)mine[L.cove
  alert('Restored: '+st.covers+' cover, '+st.comps+' comparison and '+st.refs+' reference photo(s), and '+st.links+' piece link(s). Skipped '+st.skipped+' that are not on this device. Nothing was deleted.');
 }
 function photoParts(){
- var LIMIT=50*1024*1024,chunks=[],cur={},sz=0,S=stampNow();
+ var LIMIT=50*1024*1024,chunks=[],cur={},sz=0,S=stampFile();
  Object.keys(gal.imgs).forEach(function(k){var l=gal.imgs[k].length;if(sz+l>LIMIT&&Object.keys(cur).length){chunks.push(cur);cur={};sz=0}cur[k]=gal.imgs[k];sz+=l});
  if(Object.keys(cur).length||!chunks.length)chunks.push(cur);
- return chunks.map(function(c,n){var t=0;Object.keys(c).forEach(function(k){t+=c[k].length});return {name:'ntts-photos-'+S+'-part'+(n+1)+'of'+chunks.length+'.json',kind:'photos',chunk:{imgs:c},n:n,N:chunks.length,size:t}});
+ return chunks.map(function(c,n){var t=0;Object.keys(c).forEach(function(k){t+=c[k].length});return {name:'ntts_backup_photos_'+S+'_part'+(n+1)+'of'+chunks.length+'.json',kind:'photos',chunk:{imgs:c},n:n,N:chunks.length,size:t}});
 }
 function exportPhotos(){
  recordBackup('photos',{photos:Object.keys(gal.imgs).length});
- expParts=photoParts();expDone={};renderMain();
+ var parts=photoParts();
+ if(parts.length===1){var ep=parts[0];saveFile(ep.name,'application/json',JSON.stringify({app:'never-twice-the-same',kind:'photos',format:3,part:1,of:1,exported:new Date().toISOString(),images:ep.chunk.imgs}));return}
+ expParts=parts;expKind='photos';expDone={};renderMain();
  var pe=document.getElementById('expPanel');if(pe&&pe.scrollIntoView)pe.scrollIntoView({behavior:'smooth',block:'center'});
 }
 function mergePhotos(text){
@@ -1788,12 +1791,13 @@ function mergePhotos(text){
 }
 function exportJSON(){
  recordBackup('everything',{pieces:items.length,photos:Object.keys(gal.imgs).length});
- var chunks=planChunks(),N=chunks.length,S=stampNow();
- expParts=chunks.map(function(c,n){var sz=0;try{sz=new Blob([JSON.stringify(docForPart(c,n,N))]).size}catch(e){}return {name:'ntts-backup-'+S+'-part'+(n+1)+'of'+N+'.json',chunk:c,n:n,N:N,size:sz}});
- expDone={};
+ var chunks=planChunks(),N=chunks.length,S=stampFile();
+ expParts=chunks.map(function(c,n){var sz=0;try{sz=new Blob([JSON.stringify(docForPart(c,n,N))]).size}catch(e){}return {name:'ntts_backup_everything_'+S+'_part'+(n+1)+'of'+N+'.json',chunk:c,n:n,N:N,size:sz}});
+ expDone={};expKind='everything';
  renderMain();
  var pe=document.getElementById('expPanel');if(pe&&pe.scrollIntoView)pe.scrollIntoView({behavior:'smooth',block:'center'});
 }
+var expKind=null;
 function expPanelHTML(){
  if(!expParts)return '';
  var N=expParts.length,done=Object.keys(expDone).length;
@@ -1878,7 +1882,7 @@ function photoAudit(){
 function backupLines(){
  var b;try{b=JSON.parse(localStorage.getItem('ntts_backups')||'{}')}catch(e){b={}}
  var cur=Object.keys(gal.imgs).length,out=[];
- var names={everything:'Everything (JSON)',lists:'Links & gallery lists',photos:'Photos only',csv:'Piece data (CSV)'};
+ var names={csv:'Piece data (CSV)',lists:'Links & gallery lists',photos:'Photos only',everything:'Everything (JSON)'};
  Object.keys(names).forEach(function(k){
    var x=b[k];if(!x){out.push(names[k]+': never saved');return}
    var det=k==='everything'?x.pieces+' pieces, '+x.photos+' photos at backup, '+cur+' photos now':k==='lists'?x.pieces+' pieces, '+x.refs+' reference, '+x.covers+' cover, '+x.comps+' comparison':k==='photos'?x.photos+' photos':x.pieces+' pieces';
