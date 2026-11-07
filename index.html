@@ -289,10 +289,11 @@ header button[data-a="drawer"]{display:flex;align-items:center;justify-content:c
 <input type="file" id="fcsv" accept=".csv,text/csv" hidden>
 <input type="file" id="fjson" accept=".json,application/json" multiple hidden>
 <input type="file" id="flists" accept=".json,application/json" hidden>
+<input type="file" id="flphotos" accept=".json,application/json" hidden>
 <input type="file" id="gfile" accept="image/*" multiple hidden>
 <script>
 var K='ntts_items_v2',OK='ntts_order_v1',PER=25,MAX_UPLOAD=300*1024;
-var APP_VERSION='2.7.2',APP_DATE='2026-11-06 · 7:35 PM ET',UPDATE_URL='';
+var APP_VERSION='2.8.0',APP_DATE='2026-11-06 · 8:07 PM ET',UPDATE_URL='';
 var EMOJI={ring:'💍',earrings:'✨',necklace:'📿',bracelet:'⭕',watch:'⌚',other:'💎'};
 var ICONS={ring:"<circle cx='12' cy='14' r='6'/><path d='M9.5 8 12 4l2.5 4'/><path d='M12 9.5l1.5 2.5-1.5 2.5-1.5-2.5z'/>",earrings:"<path d='M7 3v3'/><path d='M7 6c-1.6 0-2.5 1.3-2.5 3S6 14 7 17c1-3 2.5-5 2.5-8C9.5 7.3 8.6 6 7 6z'/><path d='M17 3v3'/><path d='M17 6c-1.6 0-2.5 1.3-2.5 3S16 14 17 17c1-3 2.5-5 2.5-8C19.5 7.3 18.6 6 17 6z'/>",necklace:"<path d='M4 5c2 7 14 7 16 0'/><path d='M12 12.5V15'/><circle cx='12' cy='17' r='2.2'/>",bracelet:"<ellipse cx='12' cy='12' rx='8' ry='5.5'/><ellipse cx='12' cy='12' rx='5.5' ry='3'/>",watch:"<circle cx='12' cy='13' r='5.5'/><path d='M9 7.5 10 3h4l1 4.5M9 18.5 10 23h4l1-4.5'/><path d='M12 10.5V13l1.8 1.2'/>",other:"<path d='M7 4h10l4 5-9 11L3 9z'/><path d='M3 9h18M9 4l3 16 3-16'/>",heart:"<path d='M12 20s-7-4.4-7-9.5A4 4 0 0 1 12 8a4 4 0 0 1 7 2.5C19 15.6 12 20 12 20z'/>",wrench:"<path d='M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.5 2.5-2.5-.5-.5-2.5z'/>",key:"<g transform='rotate(-45 12.5 12)'><circle cx='8' cy='12' r='4'/><path d='M12 12h9M18 12v3M21 12v2.5'/></g>",curio:"<rect x='4' y='3' width='16' height='18' rx='1'/><path d='M3 3h18M3 21h18'/><path d='M12 3v18'/><path d='M4 11h16'/><path d='M10.5 7v1.5M13.5 7v1.5M10.5 15v1.5M13.5 15v1.5'/>",clock:"<circle cx='12' cy='12' r='9'/><path d='M12 7v5l3 2'/>",pencil:"<path d='M4 20h4L19 9l-4-4L4 16z'/><path d='M13.5 6.5l4 4'/>",lock:"<rect x='5' y='11' width='14' height='10' rx='2'/><path d='M8 11V7a4 4 0 0 1 8 0v4'/>",unlock:"<rect x='3.95' y='11' width='11.1' height='10' rx='2'/><path d='M12.8 11V6.3A3.3 3.3 0 0 1 19.4 6.3V9.5'/>",bag:"<path d='M5 8h14l-1 12H6z'/><path d='M9 8V6a3 3 0 0 1 6 0v2'/>",plus:"<path d='M12 5v14M5 12h14'/>",x:"<path d='M6 6l12 12M18 6L6 18'/>",spark:"<path d='M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z'/>",gallery:"<rect x='3' y='4' width='18' height='16' rx='2'/><circle cx='9' cy='10' r='2'/><path d='M21 16l-5-5-8 9'/>"};
 var ORN='<svg width="72" height="10" viewBox="0 0 72 10" fill="none" stroke="#a8864f" stroke-width="1.2"><path d="M0 5h28M44 5h28"/><path d="M36 1l4 4-4 4-4-4z"/></svg>';
@@ -440,7 +441,7 @@ var lastChangeAt='',booted=false,bgStyle='velvet',frameStyle='floral';
 var LOGK='ntts_log';
 function logEv(e,d){try{var a=JSON.parse(localStorage.getItem(LOGK)||'[]'),now=new Date().toISOString(),L=a[a.length-1];
  if(e==='save'&&L&&L[1]==='save'&&now.slice(0,16)===L[0].slice(0,16)){var n=(L[3]||1)+1;L[0]=now;L[2]=d;L[3]=n}else a.push([now,e,d==null?'':String(d)]);
- if(a.length>150)a=a.slice(-150);localStorage.setItem(LOGK,JSON.stringify(a))}catch(x){}}
+ if(a.length>400)a=a.slice(-400);localStorage.setItem(LOGK,JSON.stringify(a))}catch(x){}}
 function logArr(){try{return JSON.parse(localStorage.getItem(LOGK)||'[]')}catch(x){return []}}
 function logText(){return logArr().map(function(r){var t=new Date(r[0]);return t.toLocaleString('en-US',{month:'numeric',day:'numeric',hour:'numeric',minute:'2-digit',second:'2-digit'})+'  '+r[1]+(r[2]?'  '+r[2]:'')+(r[3]>1?'  (x'+r[3]+')':'')}).join('\n')}
 var wseq=0,pending=0,dirty=false,cueTimer=null,saveBad=false,revertInfo='',lastVerified='';
@@ -458,7 +459,7 @@ function track(p,key,snap){
  if(!booted)return p;
  if(!DB){saveBad=true;cue('Storage unavailable. Changes will not be kept.','err');return p}
  pending++;if(!saveBad)saveStat('saving');
- var done=function(ok){pending--;if(ok){lastVerified=new Date().toISOString();if(!pending){dirty=false;saveBad=false;writeMirror();logEv('save','seq '+wseq+' · '+items.length+' pieces · '+linkCounts().total+' links');saveStat('saved')}}else saveFailed();return ok};
+ var done=function(ok){pending--;if(ok){lastVerified=new Date().toISOString();if(!pending){dirty=false;saveBad=false;writeMirror();logEv('save','seq '+wseq+' · '+items.length+' pieces · '+linkCounts().total+' links · lists '+gal.refs.length+'/'+gal.covers.length+'/'+gal.comps.length);saveStat('saved')}}else saveFailed();return ok};
  return p.then(function(ok){
    if(ok===false)return done(false);
    if(!key)return done(true);
@@ -516,7 +517,7 @@ function normGal(g){
  ['refs','covers'].forEach(function(k){(g[k]||[]).forEach(function(e){if(!e||!e.src)return;var id=e.id||uid();out.imgs[id]=e.src;out[k].push(id)})});
  return out;
 }
-async function init(){
+async function init(){var _t0=Date.now();
  try{DB=await openDB()}catch(e){DB=null}
  if(!DB)alert('Browser storage is unavailable. Changes will not be kept after you close the app.');
  var it=await kget('items');
@@ -547,7 +548,7 @@ async function init(){
  renumberIds();
  var idbSeq=(await kget('wseq'))||0,mir=null;try{mir=JSON.parse(localStorage.getItem('ntts_mirror')||'null')}catch(e){}
  var lc=linkCounts();
- logEv('boot','v'+APP_VERSION+' · '+runMode()+' · '+items.length+' pieces · '+Object.keys(gal.imgs).length+' images · '+lc.total+' links · seq '+idbSeq+(DB?'':' · NO STORAGE'));
+ logEv('boot','v'+APP_VERSION+' · '+runMode()+' · '+items.length+' pieces · '+Object.keys(gal.imgs).length+' images · '+lc.total+' links · lists '+gal.refs.length+'/'+gal.covers.length+'/'+gal.comps.length+' · ready in '+(Date.now()-_t0)+' ms · seq '+idbSeq+(DB?'':' · NO STORAGE'));
  if(DB&&mir&&idbSeq<mir.seq){
    revertInfo='Saved data is older than the last confirmed save (save #'+idbSeq+' vs #'+mir.seq+'). At that save: '+mir.items+' pieces, '+mir.imgs+' images, '+mir.links+' links. Now: '+items.length+' pieces, '+Object.keys(gal.imgs).length+' images, '+lc.total+' links.';
    logEv('REVERT-DETECTED',revertInfo);
@@ -855,13 +856,15 @@ function themeHTML(){
 }
 function renderManage(){
  var card=function(t,body){return '<div style="border:1px solid var(--line);border-radius:12px;padding:12px"><h4 class="sub" style="margin:0 0 8px">'+t+'</h4>'+body+'</div>'};
- var csvBody='<div class="bar" style="flex-direction:column;align-items:stretch;margin:0"><button data-a="csvup">Import CSV</button><button data-a="csvdown">Export CSV</button></div><p class="meta">Import adds new pieces and updates existing ones by ID. Blank cells keep the existing value. Photos are not included.</p><p class="meta">Export includes '+items.length+' piece'+(items.length===1?'':'s')+' as one CSV file, one row per piece with its details, cost and sale info. Photos are not included.</p><details class="tpl"><summary>CSV Template Fields</summary><p class="meta" style="word-break:break-word;margin:0 0 8px">'+CSV_COLS.map(function(c){return c[0]==='motif'?'motifs':c[0]}).join(', ')+'</p><p class="meta" style="margin:0 0 8px">Lists separate values with ; or commas. Dates use YYYY-MM-DD. Rating is 0 to 5. Photoshoot is true or false. Leave a cell empty to keep the existing value when updating by id.</p></details>';
+ var csvBody='<div class="bar" style="flex-direction:column;align-items:stretch;margin:0"><button data-a="csvdown">Back up piece data</button><button data-a="csvup">Restore piece data (merge)</button></div><p class="meta">Export includes '+items.length+' piece'+(items.length===1?'':'s')+' as one CSV file, one row per piece with its details, cost and sale info. Small file. Photos are not included.</p><p class="meta">Restore adds new pieces and updates existing ones by ID. Blank cells keep the existing value. Never deletes. Photos are not included.</p><details class="tpl"><summary>CSV Template Fields</summary><p class="meta" style="word-break:break-word;margin:0 0 8px">'+CSV_COLS.map(function(c){return c[0]==='motif'?'motifs':c[0]}).join(', ')+'</p><p class="meta" style="margin:0 0 8px">Lists separate values with ; or commas. Dates use YYYY-MM-DD. Rating is 0 to 5. Photoshoot is true or false. Leave a cell empty to keep the existing value when updating by id.</p></details>';
  var nfiles=planChunks().length;
  var imgCount=Object.keys(gal.imgs).length;
- var jsonBody='<div class="bar" style="flex-direction:column;align-items:stretch;margin:0"><button data-a="import">Import JSON</button><button data-a="export">Export JSON</button><button data-a="listsexp">Backup links &amp; gallery lists</button><button data-a="listsimp">Restore links &amp; gallery lists (merge)</button></div><p class="meta">Export includes '+items.length+' piece'+(items.length===1?'':'s')+' with their details, '+imgCount+' photo'+(imgCount===1?'':'s')+' (covers, curation covers and reference screenshots), '+wish.length+' coveted item'+(wish.length===1?'':'s')+', '+colls.length+' curation'+(colls.length===1?'':'s')+', your order, theme, appearance and secret compartment settings (the keyword itself is never saved). It saves as '+nfiles+' file'+(nfiles===1?'':'s')+'.</p>'+expPanelHTML();
+ var listsBody='<div class="bar" style="flex-direction:column;align-items:stretch;margin:0"><button data-a="listsexp">Back up links &amp; gallery lists</button><button data-a="listsimp">Restore links &amp; gallery lists (overwrites)</button></div><p class="meta">Covers, comparison and reference lists, plus the cover, photo and piece links on each piece. Small file. Restore replaces the links and lists for the pieces and photos in the backup. Photos not in the backup are kept.</p>';
+ var photosBody='<div class="bar" style="flex-direction:column;align-items:stretch;margin:0"><button data-a="photosexp">Back up photos</button><button data-a="photosimp">Restore photos (merge)</button></div><p class="meta">'+imgCount+' photo'+(imgCount===1?'':'s')+' on this device. Restore adds back any photo missing here, as a reference photo. Existing photos are not changed.</p>';
+ var jsonBody='<div class="bar" style="flex-direction:column;align-items:stretch;margin:0"><button data-a="export">Back up everything</button><button data-a="import">Restore everything (replaces)</button></div><p class="meta">Export includes '+items.length+' piece'+(items.length===1?'':'s')+' with their details, '+imgCount+' photo'+(imgCount===1?'':'s')+' (covers, curation covers and reference screenshots), '+wish.length+' coveted item'+(wish.length===1?'':'s')+', '+colls.length+' curation'+(colls.length===1?'':'s')+', your order, theme, appearance and secret compartment settings (the keyword itself is never saved). It saves as '+nfiles+' file'+(nfiles===1?'':'s')+'.</p>';
  return '<h2>I/O</h2>'
   +'<h3 class="side">Diagnostics</h3><div style="border:1px solid var(--line);border-radius:12px;padding:12px"><div id="stormeter" class="meta" style="text-align:left"></div><div class="bar" style="margin:12px 0 0"><button data-a="checkupd">Check for new version</button><button type="button" class="link" data-a="copydiag">Copy</button><span id="copymsg" class="meta"></span></div></div>'
-  +'<h3 class="side">Data Backup</h3><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px">'+card('JSON Backup',jsonBody)+card('CSV Backup',csvBody)+'</div>'
+  +'<h3 class="side">Data Backup</h3><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px">'+card('Piece Data (CSV)',csvBody)+card('Links & Gallery Lists',listsBody)+card('Photos Only',photosBody)+card('Everything (JSON)',jsonBody)+'</div>'+expPanelHTML()
   +'<h3 class="side">Reset</h3><div style="border:1px solid var(--line);border-radius:12px;padding:12px"><button class="dan" data-a="delete">Erase all data</button><p class="meta" style="margin:6px 0 0">Erases every piece, photo, and setting on this device. This cannot be undone.</p>'+(secretCfg.hash?'<p class="meta" style="margin:10px 0 0">Change the keyword: <button type="button" class="link" data-a="kwchange" style="font-size:inherit;margin:0">Change keyword</button></p><p class="meta" style="margin:10px 0 0">Forgot the keyword? <button type="button" class="link" data-a="kwforgot" style="font-size:inherit;margin:0">Delete keyword and settings</button></p>':'')+'</div>'+'';
 }
 function renderAbout(){
@@ -1599,6 +1602,7 @@ function download(name,mime,text){var b=new Blob([text],{type:mime}),u=URL.creat
 function readFile(f,cb){var r=new FileReader();r.onload=function(){cb(String(r.result))};r.readAsText(f)}
 function csvCell(v){v=v==null?'':Array.isArray(v)?v.join('; '):typeof v==='boolean'?(v?'true':'false'):String(v);return /[",\r\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v}
 function exportCSV(){
+ recordBackup('csv',{pieces:items.length});
  var head=CSV_COLS.map(function(c){return c[0]==='motif'?'motifs':c[0]}).concat(['curations','sets']).join(',');
  var body=items.map(function(i){
    var cur=colls.filter(function(c){return (c.pieceIds||[]).indexOf(i.id)>-1}).map(function(c){return c.title||'Untitled collection'}).join('; ');
@@ -1738,27 +1742,52 @@ function saveFile(name,mime,text){
  download(name,mime,text);return Promise.resolve(true);
 }
 function exportLists(){
+ recordBackup('lists',{pieces:items.length,refs:gal.refs.length,covers:gal.covers.length,comps:gal.comps.length});
  var doc={app:'never-twice-the-same',kind:'lists',format:3,exported:new Date().toISOString(),gallery:{refs:gal.refs.slice(),covers:gal.covers.slice(),comps:gal.comps.slice()},links:items.map(function(i){return {id:i.id,cover:i.cover||null,refs:(i.refs||[]).slice(),comps:(i.comps||[]).slice(),links:(i.links||[]).slice()}})};
  saveFile('ntts-lists-'+stampNow()+'.json','application/json',JSON.stringify(doc));
 }
 function mergeLists(text){
  var d;try{d=JSON.parse(text)}catch(e){alert('That file is not a valid lists backup.');return}
  if(!d||d.kind!=='lists'||!d.gallery){alert('That file is not a links and gallery lists backup.');return}
- var has=function(id){return !!gal.imgs[id]};
- var st={covers:0,comps:0,refs:0,links:0,skipped:0},g=d.gallery;
- (g.covers||[]).forEach(function(id){if(!has(id)){st.skipped++;return}if(gal.covers.indexOf(id)<0){gal.covers.push(id);st.covers++}gal.refs=gal.refs.filter(function(x){return x!==id})});
- (g.comps||[]).forEach(function(id){if(!has(id)){st.skipped++;return}if(gal.comps.indexOf(id)<0){gal.comps.push(id);st.comps++}gal.refs=gal.refs.filter(function(x){return x!==id})});
- (g.refs||[]).forEach(function(id){if(!has(id)){st.skipped++;return}if(gal.refs.indexOf(id)<0&&gal.covers.indexOf(id)<0&&gal.comps.indexOf(id)<0){gal.refs.push(id);st.refs++}});
+ if(!confirm('Replace the links and gallery lists for the pieces and photos in this backup? Photos not in the backup are kept. Nothing is deleted.'))return;
+ var has=function(id){return !!gal.imgs[id]},st={covers:0,comps:0,refs:0,links:0,skipped:0},g=d.gallery,cur={refs:[],covers:[],comps:[]};
+ ['covers','comps','refs'].forEach(function(k){(g[k]||[]).forEach(function(id){if(!has(id)){st.skipped++;return}if(cur[k].indexOf(id)<0){cur[k].push(id);st[k]++}})});
+ var placed={};['covers','comps','refs'].forEach(function(k){cur[k].forEach(function(id){placed[id]=1})});
+ ['refs','covers','comps'].forEach(function(k){gal[k]=gal[k].filter(function(id){return !placed[id]})});
+ ['covers','comps','refs'].forEach(function(k){cur[k].forEach(function(id){gal[k].push(id)})});
+var mine={};(d.links||[]).forEach(function(L){if(L.cover&&L.cover.id)mine[L.cover.id]=1;(L.refs||[]).forEach(function(id){mine[id]=1});(L.comps||[]).forEach(function(id){mine[id]=1})});
+ items.forEach(function(x){if(x.cover&&mine[x.cover.id])x.cover=null;x.refs=(x.refs||[]).filter(function(id){return !mine[id]});x.comps=(x.comps||[]).filter(function(id){return !mine[id]})});
  (d.links||[]).forEach(function(L){
    var it=items.filter(function(x){return x.id===L.id})[0];if(!it)return;
-   if(!it.cover&&L.cover&&L.cover.id){if(has(L.cover.id)){it.cover=L.cover;st.links++}else st.skipped++}
-   ['refs','comps'].forEach(function(k){(L[k]||[]).forEach(function(id){if(!has(id)){st.skipped++;return}it[k]=it[k]||[];if(it[k].indexOf(id)<0){it[k].push(id);st.links++}})});
-   (L.links||[]).forEach(function(oid){var ot=items.filter(function(x){return x.id===oid})[0];if(!ot){st.skipped++;return}it.links=it.links||[];if(it.links.indexOf(oid)<0){it.links.push(oid);st.links++}ot.links=ot.links||[];if(ot.links.indexOf(it.id)<0)ot.links.push(it.id)});
+   if(!L.cover)it.cover=null;else if(has(L.cover.id)){it.cover=L.cover;st.links++}else st.skipped++;
+   ['refs','comps'].forEach(function(k){it[k]=(L[k]||[]).filter(function(id){if(has(id)){st.links++;return true}st.skipped++;return false})});
+   it.links=[];
+   (L.links||[]).forEach(function(oid){var ot=items.filter(function(x){return x.id===oid})[0];if(!ot){st.skipped++;return}it.links.push(oid);st.links++;ot.links=ot.links||[];if(ot.links.indexOf(it.id)<0)ot.links.push(it.id)});
  });
  saveItems();saveGallery();render();
- alert('Restored from lists backup: '+st.covers+' cover photo(s), '+st.comps+' comparison photo(s), '+st.refs+' reference photo(s), '+st.links+' piece link(s). Skipped '+st.skipped+' that are not on this device. Photos were moved between lists; none were deleted.');
+ alert('Restored: '+st.covers+' cover, '+st.comps+' comparison and '+st.refs+' reference photo(s), and '+st.links+' piece link(s). Skipped '+st.skipped+' that are not on this device. Nothing was deleted.');
+}
+function photoParts(){
+ var LIMIT=50*1024*1024,chunks=[],cur={},sz=0,S=stampNow();
+ Object.keys(gal.imgs).forEach(function(k){var l=gal.imgs[k].length;if(sz+l>LIMIT&&Object.keys(cur).length){chunks.push(cur);cur={};sz=0}cur[k]=gal.imgs[k];sz+=l});
+ if(Object.keys(cur).length||!chunks.length)chunks.push(cur);
+ return chunks.map(function(c,n){var t=0;Object.keys(c).forEach(function(k){t+=c[k].length});return {name:'ntts-photos-'+S+'-part'+(n+1)+'of'+chunks.length+'.json',kind:'photos',chunk:{imgs:c},n:n,N:chunks.length,size:t}});
+}
+function exportPhotos(){
+ recordBackup('photos',{photos:Object.keys(gal.imgs).length});
+ expParts=photoParts();expDone={};renderMain();
+ var pe=document.getElementById('expPanel');if(pe&&pe.scrollIntoView)pe.scrollIntoView({behavior:'smooth',block:'center'});
+}
+function mergePhotos(text){
+ var d;try{d=JSON.parse(text)}catch(e){alert('That file is not a valid photos backup.');return}
+ if(!d||d.kind!=='photos'||!d.images){alert('That file is not a photos backup.');return}
+ var added=0,skipped=0;
+ Object.keys(d.images).forEach(function(id){if(gal.imgs[id]){skipped++;return}gal.imgs[id]=d.images[id];added++});
+ saveGallery();renderMain();
+ alert('Restored '+added+' photo(s) as reference photos. '+skipped+' already on this device were not changed.');
 }
 function exportJSON(){
+ recordBackup('everything',{pieces:items.length,photos:Object.keys(gal.imgs).length});
  var chunks=planChunks(),N=chunks.length,S=stampNow();
  expParts=chunks.map(function(c,n){var sz=0;try{sz=new Blob([JSON.stringify(docForPart(c,n,N))]).size}catch(e){}return {name:'ntts-backup-'+S+'-part'+(n+1)+'of'+N+'.json',chunk:c,n:n,N:N,size:sz}});
  expDone={};
@@ -1792,6 +1821,7 @@ function readFileP(f){return new Promise(function(res){var r=new FileReader();r.
 function importJSON(texts){
  var docs=[];
  try{texts.forEach(function(t){docs.push(JSON.parse(t))})}catch(e){alert('One of the selected files is not a valid backup.');return}
+ var kinded=docs.filter(function(d){return d&&d.kind});if(kinded.length){alert(kinded[0].kind==='photos'?'This is a photos-only backup. Use Restore photos (merge).':'This is a links and gallery lists backup. Use Restore links & gallery lists (merge).');return}
  var allItems=[],imgs={},lists={refs:[],covers:[],comps:[]},ord=null,th=null,hs=null,wl=null,cl=null,ap=null,sc=null;
  var parts={},partOf=0,hasTail=false,fmt2=0;
  docs.forEach(function(d){
@@ -1835,6 +1865,27 @@ function runMode(){var standalone=false;try{standalone=!!(window.navigator.stand
 function copyText(t){if(navigator.clipboard&&navigator.clipboard.writeText)return navigator.clipboard.writeText(t).then(function(){return true},function(){return copyFallback(t)});return Promise.resolve(copyFallback(t))}
 function copyFallback(t){try{var ta=document.createElement('textarea');ta.value=t;ta.setAttribute('readonly','');ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();var ok=document.execCommand('copy');document.body.removeChild(ta);return ok}catch(e){return false}}
 function setPairCount(){var p={};items.forEach(function(i){(i.links||[]).forEach(function(l){p[[i.id,l].sort().join('-')]=1})});return Object.keys(p).length}
+function recordBackup(type,info){try{var b=JSON.parse(localStorage.getItem('ntts_backups')||'{}');info.at=new Date().toISOString();b[type]=info;localStorage.setItem('ntts_backups',JSON.stringify(b))}catch(e){}}
+function photoAudit(){
+ var stored=Object.keys(gal.imgs),listed={},used={},special={},broken=0;
+ ['refs','covers','comps'].forEach(function(k){gal[k].forEach(function(id){listed[id]=1})});
+ items.forEach(function(i){var ids=[];if(i.cover&&i.cover.id)ids.push(i.cover.id);(i.refs||[]).forEach(function(x){ids.push(x)});(i.comps||[]).forEach(function(x){ids.push(x)});ids.forEach(function(id){used[id]=1;if(!gal.imgs[id])broken++})});
+ wishImgIds().concat(collImgIds()).forEach(function(id){special[id]=1});
+ return {stored:stored.length,listed:Object.keys(listed).length,used:Object.keys(used).length,special:Object.keys(special).length,
+  orphans:stored.filter(function(id){return !listed[id]&&!used[id]&&!special[id]}).length,broken:broken,
+  listMissing:Object.keys(listed).filter(function(id){return !gal.imgs[id]}).length};
+}
+function backupLines(){
+ var b;try{b=JSON.parse(localStorage.getItem('ntts_backups')||'{}')}catch(e){b={}}
+ var cur=Object.keys(gal.imgs).length,out=[];
+ var names={everything:'Everything (JSON)',lists:'Links & gallery lists',photos:'Photos only',csv:'Piece data (CSV)'};
+ Object.keys(names).forEach(function(k){
+   var x=b[k];if(!x){out.push(names[k]+': never saved');return}
+   var det=k==='everything'?x.pieces+' pieces, '+x.photos+' photos at backup, '+cur+' photos now':k==='lists'?x.pieces+' pieces, '+x.refs+' reference, '+x.covers+' cover, '+x.comps+' comparison':k==='photos'?x.photos+' photos':x.pieces+' pieces';
+   out.push(names[k]+': '+backupText(x.at)+' · '+det);
+ });
+ return out;
+}
 function updateStorage(){
  var el=document.getElementById('stormeter');if(!el)return;
  var st=storageBytes();
@@ -1845,13 +1896,14 @@ function updateStorage(){
   'Secret compartment: keyword '+(secretCfg.hash?'set':'not set')+' · '+items.filter(isHidden).length+' piece(s) hidden',
   'Photo links: '+lc.total+' ('+lc.cover+' covers, '+lc.refs+' reference photos, '+lc.comps+' comparison photos) · '+lc.none+' pieces without a cover',
   'Gallery lists: '+gal.refs.length+' reference, '+gal.covers.length+' cover, '+gal.comps.length+' comparison'];
+ (function(){var a=photoAudit();lines.push((a.broken||a.listMissing?'BROKEN: ':'')+'Photo check: '+a.stored+' stored · '+a.listed+' on gallery lists · '+a.used+' used by pieces · '+a.special+' for coveted items or curations · '+a.orphans+' unused · '+a.broken+' broken piece links · '+a.listMissing+' list entries with no photo')})();
  if(st.total/1048576>150)lines.push('Large library: consider separate image storage soon.');
  lines.push('');
  var bi=lines.length;lines.push('Browser data: checking');
  lines.push('Persistent storage: '+(persistOK===true?'granted':persistOK===false?'not granted':'checking'));
  lines.push('Storage mode: '+(DB?'on-device database (strict write requested)':'MEMORY ONLY: nothing is kept after closing'));
  lines.push('');
- lines.push('Last change: '+backupText(lastChangeAt));lines.push('Last backup: '+backupText(lastExport));
+ lines.push('Last change: '+backupText(lastChangeAt));lines.push('Last backup: '+backupText(lastExport));backupLines().forEach(function(l){lines.push(l)});
  lines.push('Save counter: #'+wseq+' · last confirmed save: '+(lastVerified?backupText(lastVerified):'none this session')+(saveBad?' · LAST SAVE FAILED':''));
  lines.push('Revert check: '+(revertInfo?'REVERTED. '+revertInfo:'OK'));
  lines.push('Event log: '+logArr().length+' entries (included when you tap Copy)');
@@ -1957,6 +2009,8 @@ case 'frm':frameStyle=d.v;document.documentElement.dataset.frame=frameStyle;kset
   case 'export':exportJSON();break;
   case 'listsexp':exportLists();break;
   case 'listsimp':document.getElementById('flists').click();break;
+  case 'photosexp':exportPhotos();break;
+  case 'photosimp':document.getElementById('flphotos').click();break;
   case 'import':document.getElementById('fjson').click();break;
   case 'restorepick':M.innerHTML='';document.getElementById('fjson').click();break;
   case 'kwchange':showKwChange();break;
@@ -2028,7 +2082,7 @@ case 'frm':frameStyle=d.v;document.documentElement.dataset.frame=frameStyle;kset
   case 'dashsort':dashSort=d.v;renderMain();break;
   case 'dashtog':dashSort=dashSort==='count'?'spend':'count';renderMain();break;
   case 'backupnow':view='manage';exportJSON();window.scrollTo(0,0);break;
-  case 'expsave':var ep=expParts&&expParts[Number(d.n)];if(!ep)break;saveFile(ep.name,'application/json',JSON.stringify(docForPart(ep.chunk,ep.n,ep.N))).then(function(ok){if(!ok)return;expDone[ep.n]=true;if(Object.keys(expDone).length===expParts.length){lastExport=new Date().toISOString();kset('lastExport',lastExport);backupBanner()}refreshExpPanel()});break;
+  case 'expsave':var ep=expParts&&expParts[Number(d.n)];if(!ep)break;saveFile(ep.name,'application/json',JSON.stringify(ep.kind==='photos'?{app:'never-twice-the-same',kind:'photos',format:3,part:ep.n+1,of:ep.N,exported:new Date().toISOString(),images:ep.chunk.imgs}:docForPart(ep.chunk,ep.n,ep.N))).then(function(ok){if(!ok)return;expDone[ep.n]=true;if(Object.keys(expDone).length===expParts.length){lastExport=new Date().toISOString();kset('lastExport',lastExport);backupBanner()}refreshExpPanel()});break;
   case 'expclose':expParts=null;expDone={};renderMain();break;
  }
 });
@@ -2040,6 +2094,7 @@ document.addEventListener('change',function(e){
  if(a==='fc'){toggleFilter(t.getAttribute('data-k'),t.getAttribute('data-val'));render();return}
  if(a==='hidesold'){hideSold=t.checked;saveSettings();render();return}
  if(t.id==='fcsv'&&t.files[0]){readFile(t.files[0],importCSV);t.value='';return}
+ if(t.id==='flphotos'&&t.files.length){var pf=t.files[0];t.value='';readFileP(pf).then(mergePhotos);return}
  if(t.id==='flists'&&t.files.length){var lf=t.files[0];t.value='';readFileP(lf).then(mergeLists);return}
  if(t.id==='fjson'&&t.files.length){var jf=Array.prototype.slice.call(t.files);t.value='';Promise.all(jf.map(readFileP)).then(importJSON);return}
  if(t.id==='cvfile'&&t.files[0]){
