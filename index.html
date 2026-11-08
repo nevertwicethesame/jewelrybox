@@ -288,12 +288,10 @@ header button[data-a="drawer"]{display:flex;align-items:center;justify-content:c
 <div id="modal"></div>
 <input type="file" id="fcsv" accept=".csv,text/csv" hidden>
 <input type="file" id="fjson" accept=".json,application/json" multiple hidden>
-<input type="file" id="flists" accept=".json,application/json" hidden>
-<input type="file" id="flphotos" accept=".json,application/json" hidden>
 <input type="file" id="gfile" accept="image/*" multiple hidden>
 <script>
 var K='ntts_items_v2',OK='ntts_order_v1',PER=25,MAX_UPLOAD=300*1024;
-var APP_VERSION='2.9.4',APP_DATE='2026-11-07 · 11:13 PM ET',UPDATE_URL='';
+var APP_VERSION='2.9.5',APP_DATE='2026-11-08 · 7:24 AM ET',UPDATE_URL='';
 var EMOJI={ring:'💍',earrings:'✨',necklace:'📿',bracelet:'⭕',watch:'⌚',other:'💎'};
 var ICONS={ring:"<circle cx='12' cy='14' r='6'/><path d='M9.5 8 12 4l2.5 4'/><path d='M12 9.5l1.5 2.5-1.5 2.5-1.5-2.5z'/>",earrings:"<path d='M7 3v3'/><path d='M7 6c-1.6 0-2.5 1.3-2.5 3S6 14 7 17c1-3 2.5-5 2.5-8C9.5 7.3 8.6 6 7 6z'/><path d='M17 3v3'/><path d='M17 6c-1.6 0-2.5 1.3-2.5 3S16 14 17 17c1-3 2.5-5 2.5-8C19.5 7.3 18.6 6 17 6z'/>",necklace:"<path d='M4 5c2 7 14 7 16 0'/><path d='M12 12.5V15'/><circle cx='12' cy='17' r='2.2'/>",bracelet:"<ellipse cx='12' cy='12' rx='8' ry='5.5'/><ellipse cx='12' cy='12' rx='5.5' ry='3'/>",watch:"<circle cx='12' cy='13' r='5.5'/><path d='M9 7.5 10 3h4l1 4.5M9 18.5 10 23h4l1-4.5'/><path d='M12 10.5V13l1.8 1.2'/>",other:"<path d='M7 4h10l4 5-9 11L3 9z'/><path d='M3 9h18M9 4l3 16 3-16'/>",heart:"<path d='M12 20s-7-4.4-7-9.5A4 4 0 0 1 12 8a4 4 0 0 1 7 2.5C19 15.6 12 20 12 20z'/>",wrench:"<path d='M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.5 2.5-2.5-.5-.5-2.5z'/>",key:"<g transform='rotate(-45 12.5 12)'><circle cx='8' cy='12' r='4'/><path d='M12 12h9M18 12v3M21 12v2.5'/></g>",curio:"<rect x='4' y='3' width='16' height='18' rx='1'/><path d='M3 3h18M3 21h18'/><path d='M12 3v18'/><path d='M4 11h16'/><path d='M10.5 7v1.5M13.5 7v1.5M10.5 15v1.5M13.5 15v1.5'/>",clock:"<circle cx='12' cy='12' r='9'/><path d='M12 7v5l3 2'/>",pencil:"<path d='M4 20h4L19 9l-4-4L4 16z'/><path d='M13.5 6.5l4 4'/>",lock:"<rect x='5' y='11' width='14' height='10' rx='2'/><path d='M8 11V7a4 4 0 0 1 8 0v4'/>",unlock:"<rect x='3.95' y='11' width='11.1' height='10' rx='2'/><path d='M12.8 11V6.3A3.3 3.3 0 0 1 19.4 6.3V9.5'/>",bag:"<path d='M5 8h14l-1 12H6z'/><path d='M9 8V6a3 3 0 0 1 6 0v2'/>",plus:"<path d='M12 5v14M5 12h14'/>",x:"<path d='M6 6l12 12M18 6L6 18'/>",spark:"<path d='M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z'/>",gallery:"<rect x='3' y='4' width='18' height='16' rx='2'/><circle cx='9' cy='10' r='2'/><path d='M21 16l-5-5-8 9'/>"};
 var ORN='<svg width="72" height="10" viewBox="0 0 72 10" fill="none" stroke="#a8864f" stroke-width="1.2"><path d="M0 5h28M44 5h28"/><path d="M36 1l4 4-4 4-4-4z"/></svg>';
@@ -772,6 +770,7 @@ var FACETS=[
  {k:'inColl',l:'In a Collection',cnt:1,v:function(){return ['Yes','No']},g:function(i){return [pieceInColl(i)?'Yes':'No']}},
  {k:'status',l:'Status',cnt:1,v:function(){return STAT},g:function(i){return [i.status]}},
  {k:'category',l:'Type',cnt:1,v:function(){return CATS},g:function(i){return [i.category]}},
+ {k:'seller',l:'Seller',counted:1,v:function(){return allOf(function(i){return [i.seller]})},g:function(i){return [i.seller]}},
  {k:'period',l:'Period',cnt:1,v:function(){return PERIODS},g:function(i){return [i.period]}},
  {k:'era',l:'Era/Movement',counted:1,v:function(){return allOf(function(i){return [i.era]})},g:function(i){return [i.era]}},
  {k:'motif',l:'Motif',cloud:1,cnt:1,v:function(){return allOf(function(i){return i.motif})},g:function(i){return i.motif||[]}},
@@ -840,7 +839,7 @@ function filtersHTML(){
  FACETS.forEach(function(F){
    var vals=facetVals(F);
    if(vals.length){
-     var sel=fsel[F.k]||[],allC=F.k==='colorMain',open=allC||!!showAllF[F.k],shown=open?vals:vals.slice(0,6);
+     var sel=fsel[F.k]||[],allC=F.k==='colorMain',open=allC||!!showAllF[F.k],shown=open?(F.k==='seller'?vals.slice().sort(function(x,y){return String(x).localeCompare(String(y))}):vals):vals.slice(0,6);
      var chips=shown.map(function(v){
        var on=sel.indexOf(v)>-1;
        if(F.cloud)return '<button data-a="f" data-k="'+F.k+'" data-val="'+esc(v)+'"'+(on?' class="on"':'')+'>'+esc(v)+((F.counted||F.cnt)?' ('+cntF(F,v)+')':'')+'</button>';
@@ -865,12 +864,10 @@ function renderManage(){
  var csvBody='<div class="bar" style="flex-direction:column;align-items:stretch;margin:0"><button data-a="csvdown">Back up piece data</button><button data-a="csvup">Restore piece data (merge)</button></div><p class="meta">Export includes '+items.length+' piece'+(items.length===1?'':'s')+' as one CSV file, one row per piece with its details, cost and sale info. Small file. Photos are not included.</p><p class="meta">Restore adds new pieces and updates existing ones by ID. Blank cells keep the existing value. Never deletes. Photos are not included.</p><details class="tpl"><summary>CSV Template Fields</summary><p class="meta" style="word-break:break-word;margin:0 0 8px">'+CSV_COLS.map(function(c){return c[0]==='motif'?'motifs':c[0]}).join(', ')+'</p><p class="meta" style="margin:0 0 8px">Lists separate values with ; or commas. Dates use YYYY-MM-DD. Rating is 0 to 5. Photoshoot is true or false. Leave a cell empty to keep the existing value when updating by id.</p><p class="meta" style="margin:0 0 8px">Type (clear) in a cell to empty that field. Title cannot be cleared. In Collections or Sets, (clear) removes the piece from all of them.</p></details>';
  var nfiles=planChunks().length;
  var imgCount=Object.keys(gal.imgs).length;
- var listsBody='<div class="bar" style="flex-direction:column;align-items:stretch;margin:0"><button data-a="listsexp">Back up links &amp; gallery lists</button><button data-a="listsimp">Restore links &amp; gallery lists (overwrites)</button></div><p class="meta">Covers, comparison and reference lists, plus the cover, photo and piece links on each piece. Small file. Restore replaces the links and lists for the pieces and photos in the backup. Photos not in the backup are kept.</p>';
- var photosBody='<div class="bar" style="flex-direction:column;align-items:stretch;margin:0"><button data-a="photosexp">Back up photos</button><button data-a="photosimp">Restore photos (merge)</button></div><p class="meta">'+imgCount+' photo'+(imgCount===1?'':'s')+' on this device. Restore adds back any photo missing here, as a reference photo. Existing photos are not changed.</p>'+(expKind==='photos'?expPanelHTML():'');
- var jsonBody='<div class="bar" style="flex-direction:column;align-items:stretch;margin:0"><button data-a="export">Back up everything</button><button data-a="import">Restore everything (replaces)</button></div><p class="meta">Export includes '+items.length+' piece'+(items.length===1?'':'s')+' with their details, '+imgCount+' photo'+(imgCount===1?'':'s')+' (covers, curation covers and reference screenshots), '+wish.length+' coveted item'+(wish.length===1?'':'s')+', '+colls.length+' curation'+(colls.length===1?'':'s')+', your order, theme, appearance and secret compartment settings (the keyword itself is never saved). It saves as '+nfiles+' file'+(nfiles===1?'':'s')+'.</p>'+(expKind==='everything'?expPanelHTML():'');
+ var jsonBody='<div class="bar" style="flex-direction:column;align-items:stretch;margin:0"><button data-a="export">Back up everything</button><button data-a="exportdata">Back up data (no photos)</button><button data-a="import">Restore from backup (replaces all)</button></div><p class="meta">Export includes '+items.length+' piece'+(items.length===1?'':'s')+' with their details, '+imgCount+' photo'+(imgCount===1?'':'s')+' (covers, curation covers and reference screenshots), '+wish.length+' coveted item'+(wish.length===1?'':'s')+', '+colls.length+' curation'+(colls.length===1?'':'s')+', your order, theme, appearance and secret compartment settings (the keyword itself is never saved). It saves as '+nfiles+' file'+(nfiles===1?'':'s')+'.</p>'+(expKind==='everything'?expPanelHTML():'');
  return '<h2>I/O</h2>'
   +'<h3 class="side">Diagnostics</h3><div style="border:1px solid var(--line);border-radius:12px;padding:12px"><div id="stormeter" class="meta" style="text-align:left"></div><div class="bar" style="margin:12px 0 0"><button data-a="checkupd">Check for new version</button><button type="button" class="link" data-a="copydiag">Copy</button><span id="copymsg" class="meta"></span></div></div>'
-  +'<h3 class="side">Data Backup</h3><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px">'+card('Piece Data (CSV)',csvBody)+card('Links & Gallery Lists',listsBody)+card('Photos Only',photosBody)+card('Everything (JSON)',jsonBody)+'</div>'
+  +'<h3 class="side">Data Backup</h3><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px">'+card('Piece Data (CSV)',csvBody)+card('Everything (JSON)',jsonBody)+'</div>'
   +'<h3 class="side">Reset</h3><div style="border:1px solid var(--line);border-radius:12px;padding:12px"><button class="dan" data-a="delete">Erase all data</button><p class="meta" style="margin:6px 0 0">Erases every piece, photo, and setting on this device. This cannot be undone.</p>'+(secretCfg.hash?'<p class="meta" style="margin:10px 0 0">Change the keyword: <button type="button" class="link" data-a="kwchange" style="font-size:inherit;margin:0">Change keyword</button></p><p class="meta" style="margin:10px 0 0">Forgot the keyword? <button type="button" class="link" data-a="kwforgot" style="font-size:inherit;margin:0">Delete keyword and settings</button></p>':'')+'</div>'+'';
 }
 function renderAbout(){
@@ -1396,7 +1393,7 @@ function renderListing(){
  var sold=lhTab==='sold';
  var want=sold?['Sold','Returned']:['To List','Listed'];
  var list=vis().filter(function(i){return want.indexOf(i.status)>-1}).sort(function(a,b){return typeRankOf(a)-typeRankOf(b)||title(a).localeCompare(title(b))});
- var seg='<div class="seg" style="margin:0 0 12px"><button type="button" data-a="lhtab" data-v="to"'+(!sold?' class="on"':'')+'>To List</button><button type="button" data-a="lhtab" data-v="sold"'+(sold?' class="on"':'')+'>Sold/Returned</button></div>';
+ var seg='<div class="seg" style="margin:0 0 12px"><button type="button" data-a="lhtab" data-v="to"'+(!sold?' class="on"':'')+'>Selling</button><button type="button" data-a="lhtab" data-v="sold"'+(sold?' class="on"':'')+'>Sold/Returned</button></div>';
  var cost=function(i){return num(i.cost)||0};
  var acq=function(i){return (num(i.acqShipping)||0)+(num(i.tariffs)||0)+(num(i.repairs)||0)};
  var totalCost=function(i){return cost(i)+acq(i)};
@@ -1411,22 +1408,25 @@ function renderListing(){
  var byCat={},order=[],T=[0,0,0,0,0];
  list.forEach(function(i){var k=i.category||'Other';if(!byCat[k]){byCat[k]={n:0,v:[0,0,0,0,0]};order.push(k)}var b=byCat[k];b.n++;vec(i).forEach(function(x,j){b.v[j]+=x;T[j]+=x})});
  order.sort(function(a,b){var x=CATS.indexOf(a),y=CATS.indexOf(b);return (x<0?99:x)-(y<0?99:y)||a.localeCompare(b)});
- var cell='padding:6px 2px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap;font-size:13px';
- var lab='padding:6px 2px;border-bottom:1px solid var(--line);text-align:left;font-size:13px;overflow:hidden;text-overflow:ellipsis';
- var sumRows=order.map(function(k){var b=byCat[k];return '<tr><td style="'+lab+'">'+esc(k)+' ('+b.n+')</td>'+b.v.map(function(x){return '<td style="'+cell+'">'+lhD(x)+'</td>'}).join('')+'</tr>'}).join('');
- var tot='<tr style="font-weight:bold"><td style="'+lab+'">Total ('+list.length+')</td>'+T.map(function(x){return '<td style="'+cell+'">'+lhD(x)+'</td>'}).join('')+'</tr>';
- var th=function(t,al){return '<th style="padding:6px 2px;text-align:'+al+';border-bottom:1px solid var(--line);font-weight:600;font-size:13px">'+t+'</th>'};
- var sum=list.length?'<table style="width:100%;table-layout:fixed;border-collapse:collapse;margin:0 0 16px"><thead><tr>'+th('Type','left')+heads.map(function(h){return th(h,'right')}).join('')+'</tr></thead><tbody>'+sumRows+tot+'</tbody></table>':'';
- var rows=list.map(function(i){
-   var img=(i.cover?coverImg(i.cover,true):'')||'<span style="display:flex;align-items:center;justify-content:center;width:100%;height:100%">'+ico(String(i.category||'other').toLowerCase(),28)+'</span>';
-   var line;
-   if(sold){var v=vec(i);line=money(num(i.payout))+' − '+money(totalCost(i))+' − '+money(num(i.feeFinal))+' − '+money(num(i.shipActual))+' = '+money(v[4])}
-   else{var f=lhMoney(num(i.cost),num(i.acqShipping),num(i.tariffs),num(i.repairs));line=f.c+' + '+f.s+' + '+f.tf+' + '+f.r+' = '+f.t}
-   return '<div style="display:grid;grid-template-columns:64px minmax(0,1fr);gap:12px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line)">'
-    +'<button type="button" data-a="viewpiece" data-id="'+i.id+'" aria-label="Open '+esc(title(i))+'" style="padding:0;border:0;background:transparent;min-height:0;width:64px"><div style="width:64px;height:64px;border-radius:10px;overflow:hidden;background:var(--acc);position:relative">'+img+'</div></button>'
-    +'<div style="min-width:0"><div style="font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+esc(title(i))+'</div><div class="meta">'+esc((i.metal||[]).join(', ')||'No metal')+'</div><div class="meta">'+esc(line)+'</div></div></div>';
+ var num5=function(v){return v.map(function(x,j){return '<td style="'+NUMC+(j===v.length-1?';font-weight:700':'')+'">'+lhD(x)+'</td>'}).join('')};
+ var NUMC='padding:6px 0;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap;font-size:11px;letter-spacing:-0.1px;vertical-align:middle';
+ var LABC='padding:6px 4px 6px 0;border-bottom:1px solid var(--line);text-align:left;font-size:13px;vertical-align:middle';
+ var HEADL='position:sticky;top:62px;z-index:2;background:var(--card);padding:6px 4px 6px 0;border-bottom:1px solid var(--line);text-align:left;font-size:12px;font-weight:600;vertical-align:bottom';
+ var HEADR='position:sticky;top:62px;z-index:2;background:var(--card);padding:6px 1px;border-bottom:1px solid var(--line);text-align:right;font-size:12px;font-weight:600;vertical-align:bottom';
+ var thead='<thead><tr><th style="'+HEADL+'">Item</th>'+heads.map(function(h){return '<th style="'+HEADR+'">'+h+'</th>'}).join('')+'</tr></thead>';
+ var catRows=order.map(function(k){var b=byCat[k];return '<tr><td style="'+LABC+'">'+esc(k)+' ('+b.n+')</td>'+num5(b.v)+'</tr>'}).join('');
+ var totRow=list.length?'<tr style="font-weight:600"><td style="'+LABC+'">Total ('+list.length+')</td>'+num5(T)+'</tr>':'';
+ var itemRows=list.map(function(i){
+   var img=(i.cover?coverImg(i.cover,true):'')||'<span style="display:flex;align-items:center;justify-content:center;width:100%;height:100%">'+ico(String(i.category||'other').toLowerCase(),20)+'</span>';
+   return '<tr><td style="padding:8px 4px 8px 0;border-bottom:1px solid var(--line);vertical-align:middle">'
+    +'<div style="display:flex;align-items:center;gap:8px;min-width:0">'
+    +'<button type="button" data-a="viewpiece" data-id="'+i.id+'" aria-label="Open '+esc(title(i))+'" style="padding:0;border:0;background:transparent;min-height:0;width:40px;flex:0 0 40px"><div style="width:40px;height:40px;border-radius:8px;overflow:hidden;background:var(--acc);position:relative">'+img+'</div></button>'
+    +'<div style="min-width:0;font-size:13px;line-height:1.25"><div style="font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+esc(title(i))+'</div><div class="meta" style="font-size:12px;margin:0">'+esc((i.metal||[]).join(', ')||'No metal')+'</div></div>'
+    +'</div></td>'+num5(vec(i))+'</tr>';
  }).join('');
- return '<h2>Wares</h2>'+seg+sum+(list.length?'<div>'+rows+'</div>':'<p class="meta">'+(sold?'Nothing sold or returned yet.':'Nothing to list.')+'</p>');
+ var colgroup='<colgroup><col style="width:104px"><col><col><col><col><col></colgroup>';
+ var table=list.length?'<table style="width:100%;table-layout:fixed;border-collapse:separate;border-spacing:0">'+colgroup+thead+'<tbody>'+catRows+totRow+itemRows+'</tbody></table>':'';
+ return '<h2>Wares</h2>'+seg+table+(list.length?'':'<p class="meta">'+(sold?'Nothing sold or returned yet.':'Nothing selling yet.')+'</p>');
 }
 function renderMain(){
  document.getElementById('app').innerHTML=backupBanner()+(view==='box'?renderBox():view==='gallery'?renderGallery():view==='manage'?renderManage():view==='wishlist'?renderWishlist():view==='coll'?renderColl():view==='secret'?renderSecret():view==='jotd'?renderJotd():view==='about'?renderAbout():view==='listing'?renderListing():view==='piece'?renderPiece():renderEdit());
@@ -1733,6 +1733,15 @@ function coerce(k,v){
 }
 function clearedVal(v){return Array.isArray(v)?[]:(typeof v==='number'?null:'')}
 function importCSV(text){
+ var snapI=JSON.stringify(items),snapC=JSON.stringify(colls);
+ var s=applyCSV(text,true);
+ items=JSON.parse(snapI);colls=JSON.parse(snapC);
+ if(!s)return;
+ if(!confirm('Restore '+s.updated+' existing piece(s) from this CSV? Non-blank cells overwrite what is on this device. Blank cells keep the device value.\n\n'+s.added+' new piece(s) will be created'+(s.noIdNew?' ('+s.noIdNew+' have no ID, so they may duplicate existing pieces)':'')+'.'+(s.skipped?'\n'+s.skipped+' row(s) without a title will be skipped.':''))){logEv('restore','csv cancelled');return}
+ logEv('restore','csv: '+s.updated+' updated, '+s.added+' new');
+ applyCSV(text,false);
+}
+function applyCSV(text,dry){
  var rows=parseCSV(text);
  if(rows.length<2){alert('No records found in that file.');return}
  var head=rows[0].map(function(h){return h.trim()}),idx={};
@@ -1746,7 +1755,7 @@ function importCSV(text){
  });
  var colIdx=function(name){var j=-1;head.forEach(function(h,n){if(j<0&&h.toLowerCase()===name)j=n});return j};
  var cCur=colIdx('curations'),cSet=colIdx('sets');
- var added=0,updated=0,skipped=0,curChanged=0,setChanged=0,warn=[],nid=Math.max(Date.now(),items.reduce(function(m,i){return Math.max(m,Number(i.id)||0)},0)+1);
+ var added=0,noIdNew=0,updated=0,skipped=0,curChanged=0,setChanged=0,warn=[],nid=Math.max(Date.now(),items.reduce(function(m,i){return Math.max(m,Number(i.id)||0)},0)+1);
  var nextCid=Math.max(Date.now(),colls.reduce(function(m,c){return Math.max(m,Number(c.id)||0)},0)+1);
  rows.slice(1).forEach(function(r){
    var rec={};
@@ -1761,7 +1770,7 @@ function importCSV(text){
      else out[k]=coerce(k,rec[k]);
    });
    out=mig(out);
-   if(existing){items[items.indexOf(existing)]=out;updated++}else{items.push(out);added++}
+   if(existing){items[items.indexOf(existing)]=out;updated++}else{items.push(out);added++;if(!rec.id||rec.id==='-1')noIdNew+=(rec.id==='-1'?0:1)}
    // Curations column: blank = no change, (clear) = remove from all, names = exact membership
    if(cCur>-1){
      var cv=(r[cCur]||'').trim();
@@ -1808,6 +1817,7 @@ function importCSV(text){
      }
    }
  });
+ if(dry)return {added:added,updated:updated,noIdNew:noIdNew,skipped:skipped};
  saveItems();saveColls();render();
  alert('Added '+added+', updated '+updated+(skipped?', skipped '+skipped+' (no title)':'')+'.\nCollection changes: '+curChanged+'. Set link changes: '+setChanged+'.'+(warn.length?'\n\nWarnings:\n'+warn.slice(0,8).join('\n'):''));
 }
@@ -1835,53 +1845,6 @@ function saveFile(name,mime,text){
    try{var f=new File([text],name,{type:mime});if(navigator.canShare({files:[f]}))return navigator.share({files:[f]}).then(function(){return true},function(e){if(e&&e.name==='AbortError')return false;download(name,mime,text);return true})}catch(e){}
  }
  download(name,mime,text);return Promise.resolve(true);
-}
-function exportLists(){
- recordBackup('lists',{pieces:items.length,refs:gal.refs.length,covers:gal.covers.length,comps:gal.comps.length});
- var doc={app:'never-twice-the-same',kind:'lists',format:3,exported:new Date().toISOString(),gallery:{refs:gal.refs.slice(),covers:gal.covers.slice(),comps:gal.comps.slice()},links:items.map(function(i){return {id:i.id,cover:i.cover||null,refs:(i.refs||[]).slice(),comps:(i.comps||[]).slice(),links:(i.links||[]).slice()}})};
- saveFile('ntts_backup_linkslists_'+stampFile()+'.json','application/json',JSON.stringify(doc));
-}
-function mergeLists(text){
- var d;try{d=JSON.parse(text)}catch(e){alert('That file is not a valid lists backup.');return}
- if(!d||d.kind!=='lists'||!d.gallery){alert('That file is not a links and gallery lists backup.');return}
- if(!confirm('Replace the links and gallery lists for the pieces and photos in this backup? Photos not in the backup are kept. Nothing is deleted.'))return;
- var has=function(id){return !!gal.imgs[id]},st={covers:0,comps:0,refs:0,links:0,skipped:0},g=d.gallery,cur={refs:[],covers:[],comps:[]};
- ['covers','comps','refs'].forEach(function(k){(g[k]||[]).forEach(function(id){if(!has(id)){st.skipped++;return}if(cur[k].indexOf(id)<0){cur[k].push(id);st[k]++}})});
- var placed={};['covers','comps','refs'].forEach(function(k){cur[k].forEach(function(id){placed[id]=1})});
- ['refs','covers','comps'].forEach(function(k){gal[k]=gal[k].filter(function(id){return !placed[id]})});
- ['covers','comps','refs'].forEach(function(k){cur[k].forEach(function(id){gal[k].push(id)})});
-var mine={};(d.links||[]).forEach(function(L){if(L.cover&&L.cover.id)mine[L.cover.id]=1;(L.refs||[]).forEach(function(id){mine[id]=1});(L.comps||[]).forEach(function(id){mine[id]=1})});
- items.forEach(function(x){if(x.cover&&mine[x.cover.id])x.cover=null;x.refs=(x.refs||[]).filter(function(id){return !mine[id]});x.comps=(x.comps||[]).filter(function(id){return !mine[id]})});
- (d.links||[]).forEach(function(L){
-   var it=items.filter(function(x){return x.id===L.id})[0];if(!it)return;
-   if(!L.cover)it.cover=null;else if(has(L.cover.id)){it.cover=L.cover;st.links++}else st.skipped++;
-   ['refs','comps'].forEach(function(k){it[k]=(L[k]||[]).filter(function(id){if(has(id)){st.links++;return true}st.skipped++;return false})});
-   it.links=[];
-   (L.links||[]).forEach(function(oid){var ot=items.filter(function(x){return x.id===oid})[0];if(!ot){st.skipped++;return}it.links.push(oid);st.links++;ot.links=ot.links||[];if(ot.links.indexOf(it.id)<0)ot.links.push(it.id)});
- });
- saveItems();saveGallery();render();
- alert('Restored: '+st.covers+' cover, '+st.comps+' comparison and '+st.refs+' reference photo(s), and '+st.links+' piece link(s). Skipped '+st.skipped+' that are not on this device. Nothing was deleted.');
-}
-function photoParts(){
- var LIMIT=50*1024*1024,chunks=[],cur={},sz=0,S=stampFile();
- Object.keys(gal.imgs).forEach(function(k){var l=gal.imgs[k].length;if(sz+l>LIMIT&&Object.keys(cur).length){chunks.push(cur);cur={};sz=0}cur[k]=gal.imgs[k];sz+=l});
- if(Object.keys(cur).length||!chunks.length)chunks.push(cur);
- return chunks.map(function(c,n){var t=0;Object.keys(c).forEach(function(k){t+=c[k].length});return {name:'ntts_backup_photos_'+S+'_part'+(n+1)+'of'+chunks.length+'.json',kind:'photos',chunk:{imgs:c},n:n,N:chunks.length,size:t}});
-}
-function exportPhotos(){
- recordBackup('photos',{photos:Object.keys(gal.imgs).length});
- var parts=photoParts();
- if(parts.length===1){var ep=parts[0];saveFile(ep.name,'application/json',JSON.stringify({app:'never-twice-the-same',kind:'photos',format:3,part:1,of:1,exported:new Date().toISOString(),images:ep.chunk.imgs}));return}
- expParts=parts;expKind='photos';expDone={};renderMain();
- var pe=document.getElementById('expPanel');if(pe&&pe.scrollIntoView)pe.scrollIntoView({behavior:'smooth',block:'center'});
-}
-function mergePhotos(text){
- var d;try{d=JSON.parse(text)}catch(e){alert('That file is not a valid photos backup.');return}
- if(!d||d.kind!=='photos'||!d.images){alert('That file is not a photos backup.');return}
- var added=0,skipped=0;
- Object.keys(d.images).forEach(function(id){if(gal.imgs[id]){skipped++;return}gal.imgs[id]=d.images[id];added++});
- saveGallery();renderMain();
- alert('Restored '+added+' photo(s) as reference photos. '+skipped+' already on this device were not changed.');
 }
 function exportJSON(){
  recordBackup('everything',{pieces:items.length,photos:Object.keys(gal.imgs).length});
@@ -1916,10 +1879,17 @@ function restoreHTML(missing){
  return '<div class="modal" data-a="backdrop"><div style="max-width:520px;width:94vw"><h3 style="margin:0 0 6px">'+(missing?'Your saved data is missing':'Restore from backup')+'</h3><p class="meta">'+(missing?'This device has no saved pieces, but the app has been used here before. Restore from a JSON backup file you saved. ':'Choose a JSON backup file you saved. ')+'Restoring replaces everything on this device, and you will be asked to confirm.</p><div class="bar" style="justify-content:center;margin:12px 0 0"><button class="pri" data-a="restorepick">Choose backup file(s)</button><button data-a="x">Cancel</button></div></div></div>';
 }
 function readFileP(f){return new Promise(function(res){var r=new FileReader();r.onload=function(){res(String(r.result))};r.readAsText(f)})}
+function exportDataOnly(){
+ var doc=docForPart({items:items,imgs:{}},0,1);
+ doc.noPhotos=true;doc.photoCount=Object.keys(gal.imgs).length;
+ saveFile('ntts_backup_data_'+stampFile()+'.json','application/json',JSON.stringify(doc));
+ logEv('backup','data without photos: '+items.length+' pieces');
+}
 function importJSON(texts){
  var docs=[];
  try{texts.forEach(function(t){docs.push(JSON.parse(t))})}catch(e){alert('One of the selected files is not a valid backup.');return}
- var kinded=docs.filter(function(d){return d&&d.kind});if(kinded.length){alert(kinded[0].kind==='photos'?'This is a photos-only backup. Use Restore photos (merge).':'This is a links and gallery lists backup. Use Restore links & gallery lists (merge).');return}
+ var kinded=docs.filter(function(d){return d&&d.kind});if(kinded.length){alert('This is an older links and gallery lists backup. Restore it with an Everything backup, or back up data again.');return}
+ var noPh=docs.some(function(d){return d&&d.noPhotos});
  var allItems=[],imgs={},lists={refs:[],covers:[],comps:[]},ord=null,th=null,hs=null,wl=null,cl=null,ap=null,sc=null;
  var parts={},partOf=0,hasTail=false,fmt2=0;
  docs.forEach(function(d){
@@ -1940,9 +1910,11 @@ function importJSON(texts){
  if(fmt2){var miss=[];for(var pn=1;pn<=partOf;pn++)if(!parts[pn])miss.push(pn);
    if(miss.length)warn+='\n\nWARNING: part '+miss.join(', ')+' of '+partOf+' is missing, so some pieces and photos will be missing.';
    if(!hasTail)warn+='\n\nWARNING: the last part is not included. Gallery photo lists, piece order, theme, the coveted list, curations, appearance, and secret settings will not be restored.'}
- if(!confirm((warn?'Restore anyway? ':'')+'Replace everything on this device with this backup ('+allItems.length+' pieces, '+Object.keys(imgs).length+' images)?'+warn)){logEv('restore','cancelled'+(warn?' after warning':''));return}
+ if(noPh)imgs=Object.assign({},gal.imgs,imgs);
+ if(!confirm((warn?'Restore anyway? ':'')+'Replace everything on this device with this backup ('+allItems.length+' pieces'+(noPh?', photos on this device are kept':', '+Object.keys(imgs).length+' images')+')?'+warn)){logEv('restore','cancelled'+(warn?' after warning':''));return}
  logEv('restore',allItems.length+' pieces, '+Object.keys(imgs).length+' images, '+docs.length+' file(s)'+(warn?', with warning':''));
- gal={imgs:imgs,refs:lists.refs.filter(function(id){return !!imgs[id]}),covers:lists.covers.filter(function(id){return !!imgs[id]}),comps:lists.comps.filter(function(id){return !!imgs[id]})};
+ var keepL=function(a){return noPh?a:a.filter(function(id){return !!imgs[id]})};
+ gal={imgs:imgs,refs:keepL(lists.refs),covers:keepL(lists.covers),comps:keepL(lists.comps)};
  items=allItems.map(mig);
  order=ord||[];
  if(th&&THEMES[th])theme=th;
@@ -1976,10 +1948,10 @@ function photoAudit(){
 function backupLines(){
  var b;try{b=JSON.parse(localStorage.getItem('ntts_backups')||'{}')}catch(e){b={}}
  var cur=Object.keys(gal.imgs).length,out=[];
- var names={csv:'Piece data (CSV)',lists:'Links & gallery lists',photos:'Photos only',everything:'Everything (JSON)'};
+ var names={csv:'Piece data (CSV)',everything:'Everything (JSON)'};
  Object.keys(names).forEach(function(k){
    var x=b[k];if(!x){out.push(names[k]+': never saved');return}
-   var det=k==='everything'?x.pieces+' pieces, '+x.photos+' photos at backup, '+cur+' photos now':k==='lists'?x.pieces+' pieces, '+x.refs+' reference, '+x.covers+' cover, '+x.comps+' comparison':k==='photos'?x.photos+' photos':x.pieces+' pieces';
+   var det=k==='everything'?x.pieces+' pieces, '+x.photos+' photos at backup, '+cur+' photos now':x.pieces+' pieces';
    out.push(names[k]+': '+backupText(x.at)+' · '+det);
  });
  return out;
@@ -2106,12 +2078,9 @@ case 'jcolorset':jotdColor=d.v||null;M.innerHTML='';if(jotdSel){var keep2=jotdSe
   case 'bgs':bgStyle=d.v;kset('bgStyle',bgStyle);renderDrawer();renderMain();refreshAppearance();break;
 case 'frm':frameStyle=d.v;document.documentElement.dataset.frame=frameStyle;kset('frameStyle',frameStyle);renderDrawer();renderMain();refreshAppearance();break;
   case 'export':exportJSON();break;
-  case 'listsexp':exportLists();break;
+  case 'exportdata':exportDataOnly();break;
   case 'sumcopy':copySummary();break;
   case 'pexport':exportPieceZip();break;
-  case 'listsimp':document.getElementById('flists').click();break;
-  case 'photosexp':exportPhotos();break;
-  case 'photosimp':document.getElementById('flphotos').click();break;
   case 'import':document.getElementById('fjson').click();break;
   case 'restorepick':M.innerHTML='';document.getElementById('fjson').click();break;
   case 'kwchange':showKwChange();break;
@@ -2195,8 +2164,6 @@ document.addEventListener('change',function(e){
  if(a==='fc'){toggleFilter(t.getAttribute('data-k'),t.getAttribute('data-val'));render();return}
  if(a==='hidesold'){hideSold=t.checked;saveSettings();render();return}
  if(t.id==='fcsv'&&t.files[0]){readFile(t.files[0],importCSV);t.value='';return}
- if(t.id==='flphotos'&&t.files.length){var pf=t.files[0];t.value='';readFileP(pf).then(mergePhotos);return}
- if(t.id==='flists'&&t.files.length){var lf=t.files[0];t.value='';readFileP(lf).then(mergeLists);return}
  if(t.id==='fjson'&&t.files.length){var jf=Array.prototype.slice.call(t.files);t.value='';Promise.all(jf.map(readFileP)).then(importJSON);return}
  if(t.id==='cvfile'&&t.files[0]){
    var cf=t.files[0];t.value='';
