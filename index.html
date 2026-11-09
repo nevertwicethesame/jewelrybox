@@ -291,7 +291,7 @@ header button[data-a="drawer"]{display:flex;align-items:center;justify-content:c
 <input type="file" id="gfile" accept="image/*" multiple hidden>
 <script>
 var K='ntts_items_v2',OK='ntts_order_v1',PER=25,MAX_UPLOAD=300*1024;
-var APP_VERSION='2.9.7',APP_DATE='2026-11-08 · 8:39 AM ET',UPDATE_URL='';
+var APP_VERSION='2.10.0',APP_DATE='2026-11-08 · 10:23 PM ET',UPDATE_URL='';
 var EMOJI={ring:'💍',earrings:'✨',necklace:'📿',bracelet:'⭕',watch:'⌚',other:'💎'};
 var ICONS={ring:"<circle cx='12' cy='14' r='6'/><path d='M9.5 8 12 4l2.5 4'/><path d='M12 9.5l1.5 2.5-1.5 2.5-1.5-2.5z'/>",earrings:"<path d='M7 3v3'/><path d='M7 6c-1.6 0-2.5 1.3-2.5 3S6 14 7 17c1-3 2.5-5 2.5-8C9.5 7.3 8.6 6 7 6z'/><path d='M17 3v3'/><path d='M17 6c-1.6 0-2.5 1.3-2.5 3S16 14 17 17c1-3 2.5-5 2.5-8C19.5 7.3 18.6 6 17 6z'/>",necklace:"<path d='M4 5c2 7 14 7 16 0'/><path d='M12 12.5V15'/><circle cx='12' cy='17' r='2.2'/>",bracelet:"<ellipse cx='12' cy='12' rx='8' ry='5.5'/><ellipse cx='12' cy='12' rx='5.5' ry='3'/>",watch:"<circle cx='12' cy='13' r='5.5'/><path d='M9 7.5 10 3h4l1 4.5M9 18.5 10 23h4l1-4.5'/><path d='M12 10.5V13l1.8 1.2'/>",other:"<path d='M7 4h10l4 5-9 11L3 9z'/><path d='M3 9h18M9 4l3 16 3-16'/>",heart:"<path d='M12 20s-7-4.4-7-9.5A4 4 0 0 1 12 8a4 4 0 0 1 7 2.5C19 15.6 12 20 12 20z'/>",wrench:"<path d='M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.5 2.5-2.5-.5-.5-2.5z'/>",key:"<g transform='rotate(-45 12.5 12)'><circle cx='8' cy='12' r='4'/><path d='M12 12h9M18 12v3M21 12v2.5'/></g>",curio:"<rect x='4' y='3' width='16' height='18' rx='1'/><path d='M3 3h18M3 21h18'/><path d='M12 3v18'/><path d='M4 11h16'/><path d='M10.5 7v1.5M13.5 7v1.5M10.5 15v1.5M13.5 15v1.5'/>",clock:"<circle cx='12' cy='12' r='9'/><path d='M12 7v5l3 2'/>",pencil:"<path d='M4 20h4L19 9l-4-4L4 16z'/><path d='M13.5 6.5l4 4'/>",lock:"<rect x='5' y='11' width='14' height='10' rx='2'/><path d='M8 11V7a4 4 0 0 1 8 0v4'/>",unlock:"<rect x='3.95' y='11' width='11.1' height='10' rx='2'/><path d='M12.8 11V6.3A3.3 3.3 0 0 1 19.4 6.3V9.5'/>",bag:"<path d='M5 8h14l-1 12H6z'/><path d='M9 8V6a3 3 0 0 1 6 0v2'/>",plus:"<path d='M12 5v14M5 12h14'/>",x:"<path d='M6 6l12 12M18 6L6 18'/>",spark:"<path d='M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z'/>",gallery:"<rect x='3' y='4' width='18' height='16' rx='2'/><circle cx='9' cy='10' r='2'/><path d='M21 16l-5-5-8 9'/>"};
 var ORN='<svg width="72" height="10" viewBox="0 0 72 10" fill="none" stroke="#a8864f" stroke-width="1.2"><path d="M0 5h28M44 5h28"/><path d="M36 1l4 4-4 4-4-4z"/></svg>';
@@ -1389,7 +1389,32 @@ function renderColl(){
 var lhTab='to';
 function lhD(v){if(v==null||isNaN(v))return '—';var r=Math.round(v);return (r<0?'-':'')+'$'+Math.abs(r).toLocaleString('en-US')}
 function lhMoney(cs,sh,tf,rp){var t=(cs==null&&sh==null&&tf==null&&rp==null)?null:(cs||0)+(sh||0)+(tf||0)+(rp||0);return {c:money(cs),s:money(sh),tf:money(tf),r:money(rp),t:t==null?'—':money(t)}}
+var PRICES=null,pricesTry=false;
+function pricesLoad(){
+ if(pricesTry)return;pricesTry=true;
+ try{PRICES=JSON.parse(localStorage.getItem('ntts_prices'))}catch(e){PRICES=null}
+ fetch('prices.json?t='+Date.now(),{cache:'no-store'}).then(function(r){if(!r.ok)throw 0;return r.json()}).then(function(d){
+  if(!d||!d.gold||!d.gold.karat)return;
+  PRICES=d;try{localStorage.setItem('ntts_prices',JSON.stringify(d))}catch(e){}
+  if(view==='listing')renderMain();
+ }).catch(function(){});
+}
+function priceStrip(){
+ var p=PRICES;if(!p||!p.gold||!p.gold.karat)return '';
+ var k=p.gold.karat,when=p.asOf||p.updated,up=new Date(p.updated||when).getTime();
+ var d=when?new Date(when).toLocaleString('en-US',{month:'short',day:'numeric',hour:'numeric',minute:'2-digit'}):'';
+ var old=isNaN(up)||(Date.now()-up)>36*3600e3;
+ var cell=function(l,v){return '<div style="flex:1 1 0;min-width:0"><div class="meta" style="font-size:11px;margin:0">'+l+'</div><div style="font-weight:600;font-size:13px">'+v+'</div></div>'};
+ return '<div style="background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin:0 0 12px">'
+  +'<div class="meta" style="font-size:12px;margin:0 0 6px">Melt value, as of '+esc(d)+(old?' (may be out of date)':'')+'</div>'
+  +'<div style="display:flex;gap:8px;flex-wrap:wrap">'
+  +cell('Gold 18k',lhD(k['18']))+cell('Gold 14k',lhD(k['14']))+cell('Gold 9k',lhD(k['9']))+cell('Silver /oz',lhD(p.silver&&p.silver.usdPerOz))
+  +'</div>'
+  +'<div class="meta" style="font-size:11px;margin:6px 0 0">Gold spot '+lhD(p.gold.usdPerOz)+'/oz · Prices by <a href="https://metalcharts.org" target="_blank" rel="noopener">MetalCharts</a></div>'
+  +'</div>';
+}
 function renderListing(){
+ pricesLoad();
  var sold=lhTab==='sold';
  var want=sold?['Sold','Returned']:['To List','Listed'];
  var list=vis().filter(function(i){return want.indexOf(i.status)>-1}).sort(function(a,b){return typeRankOf(a)-typeRankOf(b)||title(a).localeCompare(title(b))});
@@ -1426,7 +1451,7 @@ function renderListing(){
  }).join('');
  var colgroup='<colgroup><col style="width:104px"><col><col><col><col><col></colgroup>';
  var table=list.length?'<table style="width:100%;table-layout:fixed;border-collapse:separate;border-spacing:0">'+colgroup+thead+'<tbody>'+catRows+totRow+itemRows+'</tbody></table>':'';
- return '<h2>Wares</h2>'+seg+table+(list.length?'':'<p class="meta">'+(sold?'Nothing sold or returned yet.':'Nothing selling yet.')+'</p>');
+ return '<h2>Wares</h2>'+priceStrip()+seg+table+(list.length?'':'<p class="meta">'+(sold?'Nothing sold or returned yet.':'Nothing selling yet.')+'</p>');
 }
 function renderMain(){
  document.getElementById('app').innerHTML=backupBanner()+(view==='box'?renderBox():view==='gallery'?renderGallery():view==='manage'?renderManage():view==='wishlist'?renderWishlist():view==='coll'?renderColl():view==='secret'?renderSecret():view==='jotd'?renderJotd():view==='about'?renderAbout():view==='listing'?renderListing():view==='piece'?renderPiece():renderEdit());

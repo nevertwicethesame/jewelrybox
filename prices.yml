@@ -1,0 +1,36 @@
+name: Daily metal prices
+
+on:
+  schedule:
+    # GitHub cron is UTC. 17:00 UTC = 12:00 PM Eastern in winter (EST).
+    # In summer (EDT) this lands at 1:00 PM ET; change to '0 16 * * *' after DST starts.
+    - cron: '0 17 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  prices:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Fetch prices
+        env:
+          METALCHARTS_KEY: ${{ secrets.METALCHARTS_KEY }}
+        run: node scripts/fetch-prices.mjs
+      - name: Commit prices.json if it changed
+        run: |
+          git config user.name "price-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add prices.json
+          if git diff --cached --quiet; then
+            echo "No change"
+          else
+            git commit -m "Update prices"
+            git push
+          fi
