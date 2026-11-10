@@ -1,19 +1,19 @@
 {
-  "updated": "2026-11-09T17:50:03.483Z",
-  "asOf": "2026-11-09T17:50:03.429Z",
+  "updated": "2026-11-10T17:40:37.799Z",
+  "asOf": "2026-11-10T17:40:37.736Z",
   "source": "MetalCharts",
   "stale": false,
   "gold": {
-    "usdPerOz": 4103.91,
-    "usdPerGram": 131.94,
+    "usdPerOz": 4015.74,
+    "usdPerGram": 129.11,
     "karat": {
-      "9": 1538.97,
-      "14": 2400.79,
-      "18": 3077.93
+      "9": 1505.9,
+      "14": 2349.21,
+      "18": 3011.81
     }
   },
   "silver": {
-    "usdPerOz": 52.62,
-    "usdPerGram": 1.69
+    "usdPerOz": 51.16,
+    "usdPerGram": 1.64
   }
 }
