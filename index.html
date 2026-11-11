@@ -293,7 +293,7 @@ header button[data-a="drawer"]{display:flex;align-items:center;justify-content:c
 <input type="file" id="gfile" accept="image/*" multiple hidden>
 <script>
 var K='ntts_items_v2',OK='ntts_order_v1',PER=25,MAX_UPLOAD=300*1024;
-var APP_VERSION='2.11',APP_DATE='2026-11-10 · 10:38 PM ET',UPDATE_URL='';
+var APP_VERSION='2.11.1',APP_DATE='2026-11-10 · 10:44 PM ET',UPDATE_URL='';
 var EMOJI={ring:'💍',earrings:'✨',necklace:'📿',bracelet:'⭕',watch:'⌚',other:'💎'};
 var ICONS={ring:"<circle cx='12' cy='14' r='6'/><path d='M9.5 8 12 4l2.5 4'/><path d='M12 9.5l1.5 2.5-1.5 2.5-1.5-2.5z'/>",earrings:"<path d='M7 3v3'/><path d='M7 6c-1.6 0-2.5 1.3-2.5 3S6 14 7 17c1-3 2.5-5 2.5-8C9.5 7.3 8.6 6 7 6z'/><path d='M17 3v3'/><path d='M17 6c-1.6 0-2.5 1.3-2.5 3S16 14 17 17c1-3 2.5-5 2.5-8C19.5 7.3 18.6 6 17 6z'/>",necklace:"<path d='M4 5c2 7 14 7 16 0'/><path d='M12 12.5V15'/><circle cx='12' cy='17' r='2.2'/>",bracelet:"<ellipse cx='12' cy='12' rx='8' ry='5.5'/><ellipse cx='12' cy='12' rx='5.5' ry='3'/>",watch:"<circle cx='12' cy='13' r='5.5'/><path d='M9 7.5 10 3h4l1 4.5M9 18.5 10 23h4l1-4.5'/><path d='M12 10.5V13l1.8 1.2'/>",other:"<path d='M7 4h10l4 5-9 11L3 9z'/><path d='M3 9h18M9 4l3 16 3-16'/>",heart:"<path d='M12 20s-7-4.4-7-9.5A4 4 0 0 1 12 8a4 4 0 0 1 7 2.5C19 15.6 12 20 12 20z'/>",wrench:"<path d='M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.5 2.5-2.5-.5-.5-2.5z'/>",key:"<g transform='rotate(-45 12.5 12)'><circle cx='8' cy='12' r='4'/><path d='M12 12h9M18 12v3M21 12v2.5'/></g>",curio:"<rect x='4' y='3' width='16' height='18' rx='1'/><path d='M3 3h18M3 21h18'/><path d='M12 3v18'/><path d='M4 11h16'/><path d='M10.5 7v1.5M13.5 7v1.5M10.5 15v1.5M13.5 15v1.5'/>",clock:"<circle cx='12' cy='12' r='9'/><path d='M12 7v5l3 2'/>",pencil:"<path d='M4 20h4L19 9l-4-4L4 16z'/><path d='M13.5 6.5l4 4'/>",lock:"<rect x='5' y='11' width='14' height='10' rx='2'/><path d='M8 11V7a4 4 0 0 1 8 0v4'/>",unlock:"<rect x='3.95' y='11' width='11.1' height='10' rx='2'/><path d='M12.8 11V6.3A3.3 3.3 0 0 1 19.4 6.3V9.5'/>",bag:"<path d='M5 8h14l-1 12H6z'/><path d='M9 8V6a3 3 0 0 1 6 0v2'/>",plus:"<path d='M12 5v14M5 12h14'/>",x:"<path d='M6 6l12 12M18 6L6 18'/>",spark:"<path d='M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z'/>",gallery:"<rect x='3' y='4' width='18' height='16' rx='2'/><circle cx='9' cy='10' r='2'/><path d='M21 16l-5-5-8 9'/>"};
 var ORN='<svg width="72" height="10" viewBox="0 0 72 10" fill="none" stroke="#a8864f" stroke-width="1.2"><path d="M0 5h28M44 5h28"/><path d="M36 1l4 4-4 4-4-4z"/></svg>';
@@ -2501,19 +2501,25 @@ document.addEventListener('touchend',function(e){if(!swS)return;var s=swS;swS=nu
 function qtoggle(open){var h=document.querySelector('header'),i=document.getElementById('q');h.classList.toggle('sq',open);document.getElementById('qb').innerHTML=open?'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>':'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l5 5"/></svg>';if(open)i.focus();else if(q){i.value='';q='';page=1;renderMain()}}
 document.getElementById('qb').addEventListener('click',function(){qtoggle(!document.querySelector('header').classList.contains('sq'))});
 document.getElementById('q').addEventListener('input',function(e){q=e.target.value.trim().toLowerCase();page=1;renderMain()});
+var pendingUpd=null;
+function applyUpdateIfSafe(){
+ if(!pendingUpd||pendingUpd===APP_VERSION)return;
+ if(editing||dirty||document.getElementById('modal').innerHTML!=='')return;
+ try{if(sessionStorage.getItem('ntts_try')===pendingUpd)return;sessionStorage.setItem('ntts_try',pendingUpd)}catch(e){}
+ location.reload();
+}
+setInterval(applyUpdateIfSafe,5000);
 function checkUpdate(){
  if(!navigator.onLine)return;
  fetch(new URL(UPDATE_URL||'version.json',location.href).href,{cache:'no-store'}).then(function(r){return r.json()}).then(function(d){
    if(!d||!d.version||d.version===APP_VERSION)return;
-   var b=document.getElementById('upd');
-   b.innerHTML='<span>A new version ('+esc(d.version)+') is available.</span><button data-a="updx">Later</button><button class="pri" data-a="reload">Update</button>';
-   b.hidden=false;
-   backupBanner();
+   pendingUpd=String(d.version);
+   applyUpdateIfSafe();
  }).catch(function(){});
 }
 function manualCheck(){
  fetch(new URL(UPDATE_URL||'version.json',location.href).href,{cache:'no-store'}).then(function(r){if(!r.ok)throw new Error('http');return r.json()}).then(function(d){
-   if(d&&d.version&&d.version!==APP_VERSION){alert('A new version ('+d.version+') is available. Use the Update button in the banner.');checkUpdate()}
+   if(d&&d.version&&d.version!==APP_VERSION){pendingUpd=String(d.version);applyUpdateIfSafe();alert('Version '+d.version+' is ready. The app updates as soon as you are not editing.')}
    else alert('You have the latest version (v'+APP_VERSION+').');
  }).catch(function(){alert('Could not check for updates. Make sure version.json is published in the same folder as index.html.')});
 }
