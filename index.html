@@ -155,9 +155,11 @@ tr.grp td{background:var(--bg);font-weight:bold;letter-spacing:.03em;color:var(-
 .ringtbl{width:100%;table-layout:fixed}
 .ringtbl th,.ringtbl td{min-width:0;max-width:none;white-space:normal;overflow-wrap:normal;word-break:normal;text-align:center;padding:6px 4px}
 .ringtbl th.us,.ringtbl td.us{font-weight:bold}
-.upd{position:relative;left:0;right:0;z-index:20;background:var(--acc);color:#fff;padding:calc(10px + env(safe-area-inset-top,0px)) 14px 10px;display:flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap;font-size:14px}
+.upd{position:relative;left:0;right:0;z-index:20;background:var(--acc);color:#fff;padding:8px 12px;display:flex;gap:8px;align-items:center;justify-content:center;flex-wrap:wrap;font-size:13px}
+#upd{padding-top:calc(8px + env(safe-area-inset-top,0px))}
+.upd>span{flex:1 1 auto;min-width:0;text-align:left}
 .upd[hidden]{display:none}
-.upd button{border-color:#fff;background:transparent;color:#fff;min-height:36px;padding:6px 12px}
+.upd button{border-color:#fff;background:transparent;color:#fff;min-height:32px;padding:4px 10px;font-size:13px}
 .upd button.pri{background:#fff;color:var(--acc)}
 .upd a{color:#fff;text-decoration:underline}
 .tabbar{display:none}
@@ -291,7 +293,7 @@ header button[data-a="drawer"]{display:flex;align-items:center;justify-content:c
 <input type="file" id="gfile" accept="image/*" multiple hidden>
 <script>
 var K='ntts_items_v2',OK='ntts_order_v1',PER=25,MAX_UPLOAD=300*1024;
-var APP_VERSION='2.10.7',APP_DATE='2026-11-10 · 8:49 PM ET',UPDATE_URL='';
+var APP_VERSION='2.11',APP_DATE='2026-11-10 · 10:38 PM ET',UPDATE_URL='';
 var EMOJI={ring:'💍',earrings:'✨',necklace:'📿',bracelet:'⭕',watch:'⌚',other:'💎'};
 var ICONS={ring:"<circle cx='12' cy='14' r='6'/><path d='M9.5 8 12 4l2.5 4'/><path d='M12 9.5l1.5 2.5-1.5 2.5-1.5-2.5z'/>",earrings:"<path d='M7 3v3'/><path d='M7 6c-1.6 0-2.5 1.3-2.5 3S6 14 7 17c1-3 2.5-5 2.5-8C9.5 7.3 8.6 6 7 6z'/><path d='M17 3v3'/><path d='M17 6c-1.6 0-2.5 1.3-2.5 3S16 14 17 17c1-3 2.5-5 2.5-8C19.5 7.3 18.6 6 17 6z'/>",necklace:"<path d='M4 5c2 7 14 7 16 0'/><path d='M12 12.5V15'/><circle cx='12' cy='17' r='2.2'/>",bracelet:"<ellipse cx='12' cy='12' rx='8' ry='5.5'/><ellipse cx='12' cy='12' rx='5.5' ry='3'/>",watch:"<circle cx='12' cy='13' r='5.5'/><path d='M9 7.5 10 3h4l1 4.5M9 18.5 10 23h4l1-4.5'/><path d='M12 10.5V13l1.8 1.2'/>",other:"<path d='M7 4h10l4 5-9 11L3 9z'/><path d='M3 9h18M9 4l3 16 3-16'/>",heart:"<path d='M12 20s-7-4.4-7-9.5A4 4 0 0 1 12 8a4 4 0 0 1 7 2.5C19 15.6 12 20 12 20z'/>",wrench:"<path d='M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.5 2.5-2.5-.5-.5-2.5z'/>",key:"<g transform='rotate(-45 12.5 12)'><circle cx='8' cy='12' r='4'/><path d='M12 12h9M18 12v3M21 12v2.5'/></g>",curio:"<rect x='4' y='3' width='16' height='18' rx='1'/><path d='M3 3h18M3 21h18'/><path d='M12 3v18'/><path d='M4 11h16'/><path d='M10.5 7v1.5M13.5 7v1.5M10.5 15v1.5M13.5 15v1.5'/>",clock:"<circle cx='12' cy='12' r='9'/><path d='M12 7v5l3 2'/>",pencil:"<path d='M4 20h4L19 9l-4-4L4 16z'/><path d='M13.5 6.5l4 4'/>",lock:"<rect x='5' y='11' width='14' height='10' rx='2'/><path d='M8 11V7a4 4 0 0 1 8 0v4'/>",unlock:"<rect x='3.95' y='11' width='11.1' height='10' rx='2'/><path d='M12.8 11V6.3A3.3 3.3 0 0 1 19.4 6.3V9.5'/>",bag:"<path d='M5 8h14l-1 12H6z'/><path d='M9 8V6a3 3 0 0 1 6 0v2'/>",plus:"<path d='M12 5v14M5 12h14'/>",x:"<path d='M6 6l12 12M18 6L6 18'/>",spark:"<path d='M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z'/>",gallery:"<rect x='3' y='4' width='18' height='16' rx='2'/><circle cx='9' cy='10' r='2'/><path d='M21 16l-5-5-8 9'/>"};
 var ORN='<svg width="72" height="10" viewBox="0 0 72 10" fill="none" stroke="#a8864f" stroke-width="1.2"><path d="M0 5h28M44 5h28"/><path d="M36 1l4 4-4 4-4-4z"/></svg>';
@@ -879,7 +881,49 @@ function renderManage(){
  return '<h2>I/O</h2>'
   +'<h3 class="side">Diagnostics</h3><div style="border:1px solid var(--line);border-radius:12px;padding:12px"><div class="bar" style="margin:0 0 12px"><button data-a="checkupd" style="width:100%">Check for new version</button><button type="button" class="link" data-a="copydiag">Copy</button><span id="copymsg" class="meta"></span></div><div id="stormeter" class="meta" style="text-align:left"></div></div>'
   +'<h3 class="side">Data Backup</h3><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px">'+card('Piece Data (CSV)',csvBody)+card('Everything (JSON)',jsonBody)+'</div>'
+  +'<h3 class="side">Renumber a piece</h3>'+renumHTML()
   +'<h3 class="side">Reset</h3><div style="border:1px solid var(--line);border-radius:12px;padding:12px"><button class="dan" data-a="delete" style="width:100%">Erase all data</button><p class="meta" style="margin:6px 0 0">Erases every piece, photo, and setting on this device. This cannot be undone.</p>'+(secretCfg.hash?'<p class="meta" style="margin:10px 0 0">Change the keyword: <button type="button" class="link" data-a="kwchange" style="font-size:inherit;margin:0">Change keyword</button></p>':'<p class="meta" style="margin:10px 0 0">No keyword is saved. <button type="button" class="link" data-a="nav" data-v="secret" style="font-size:inherit;margin:0">Set keyword</button></p>')+'<p class="meta" style="margin:10px 0 0">Forgot the keyword? <button type="button" class="link" data-a="kwforgot" style="font-size:inherit;margin:0">Delete keyword and settings</button></p></div>'+'';
+}
+var renumS={a:'',b:'',prev:null,msg:''};
+function renumMap(a,b){return function(x){x=Number(x);if(x===a)return b;if(b<a)return (x>=b&&x<a)?x+1:x;return (x>a&&x<=b)?x-1:x}}
+function renumPlan(a,b){
+ if(a===''||b===''||a==null||b==null||isNaN(Number(a))||isNaN(Number(b)))return {err:'Enter both piece numbers.'};
+ a=Number(a);b=Number(b);
+ if(a===b)return {err:'Those are the same number.'};
+ if(!items.some(function(i){return Number(i.id)===a}))return {err:'There is no piece #'+a+'.'};
+ if(!items.some(function(i){return Number(i.id)===b}))return {err:'There is no piece #'+b+' to move into. Pick a number that exists.'};
+ var map=renumMap(a,b);
+ var changes=items.filter(function(i){return map(i.id)!==Number(i.id)}).map(function(i){return {from:Number(i.id),to:map(i.id),title:i.title||'Untitled'}}).sort(function(x,y){return x.from-y.from});
+ var nLinks=items.filter(function(i){return (i.links||[]).some(function(l){return map(l)!==Number(l)})}).length;
+ var nColls=colls.filter(function(c){return (c.pieceIds||[]).some(function(x){return map(x)!==Number(x)})}).length;
+ var nOrd=(order||[]).filter(function(x){return map(x)!==Number(x)}).length;
+ return {a:a,b:b,map:map,changes:changes,links:nLinks,colls:nColls,ord:nOrd};
+}
+function renumApply(P){
+ var map=P.map;
+ items.forEach(function(i){i.id=map(i.id);if(i.links)i.links=i.links.map(function(l){return map(l)}).filter(function(v,k,arr){return arr.indexOf(v)===k})});
+ colls.forEach(function(c){c.pieceIds=(c.pieceIds||[]).map(function(x){return map(x)})});
+ order=order.map(function(x){return map(x)});
+ saveItems();saveColls();saveOrder();
+ trail=[];pieceId=null;editing=null;collPickSel=[];linkSel=[];lastJ=null;
+ if(view==='piece')view='box';
+ renumS={a:'',b:'',prev:null,msg:'Renumbered '+P.changes.length+' piece'+(P.changes.length===1?'':'s')+'. Moved #'+P.a+' to #'+P.b+'.'};
+ renderMain();
+}
+function renumHTML(){
+ var P=renumS.prev;
+ var h='<div style="border:1px solid var(--line);border-radius:12px;padding:12px"><p class="meta" style="margin:0 0 8px">Move a piece to an existing number. The numbers in between shift to close the gap, so the sequence stays continuous.</p>'
+  +'<div class="bar" style="margin:0 0 8px;align-items:flex-end"><label style="flex:1">Move piece #<input type="number" id="renumA" min="1" inputmode="numeric" value="'+esc(String(renumS.a))+'"></label><label style="flex:1">To #<input type="number" id="renumB" min="1" inputmode="numeric" value="'+esc(String(renumS.b))+'"></label></div>'
+  +'<button type="button" data-a="renumPreview" style="width:100%">Preview changes</button>';
+ if(renumS.msg)h+='<p class="meta" style="margin:8px 0 0">'+esc(renumS.msg)+'</p>';
+ if(P&&P.err)h+='<p class="meta" style="margin:8px 0 0">'+esc(P.err)+'</p>';
+ if(P&&!P.err){
+  h+='<p style="margin:12px 0 4px">Piece #'+P.a+' moves to #'+P.b+'. '+P.changes.length+' piece'+(P.changes.length===1?'':'s')+' change number, '+P.links+' with sets, '+P.colls+' in collections, '+P.ord+' in custom order.</p>';
+  h+='<div style="max-height:240px;overflow:auto;border:1px solid var(--line);border-radius:8px;padding:6px 8px">'+P.changes.map(function(c){return '<div class="meta" style="font-size:13px;margin:2px 0">#'+c.from+' → #'+c.to+' · '+esc(c.title)+'</div>'}).join('')+'</div>';
+  h+='<label style="display:flex;gap:8px;align-items:center;margin:10px 0 0"><input type="checkbox" id="renumOK"> I have a backup and want to apply this</label>';
+  h+='<div class="bar" style="margin:8px 0 0"><button type="button" data-a="renumApply" class="dan">Apply renumber</button><button type="button" data-a="renumCancel">Cancel</button></div>';
+ }
+ return h+'</div>';
 }
 function renderAbout(){
  return '<h2>Design</h2>'
@@ -2125,7 +2169,7 @@ document.addEventListener('click',function(e){
  var d=b.dataset,M=document.getElementById('modal');
  switch(d.a){
   case 'whatsnew':document.getElementById('modal').innerHTML=whatsNewHTML();break;
-  case 'updclose':{var ub=document.getElementById('updBanner');if(ub)ub.remove();break}
+  case 'updclose':{var ub=document.getElementById('upd');if(ub){ub.hidden=true;ub.innerHTML=''}break}
   case 'drawer':drawer(true);break;
   case 'dclose':drawer(false);break;
   case 'nav':if(d.new)editing=newItem();if(d.v==='secret'){secretGate();break}trailReset();collId=null;show(d.v);break;
@@ -2197,6 +2241,9 @@ case 'frm':frameStyle=d.v;document.documentElement.dataset.frame=frameStyle;kset
   case 'kwforgotyes':secretCfg.hash='';secretCfg.threshold=null;secretCfg.on=false;secretUnlocked=false;saveSecret();M.innerHTML='';render();cue('Keyword and settings deleted. No pieces were deleted.');break;
   case 'delete':deleteAll();break;
   case 'csvup':document.getElementById('fcsv').click();break;
+  case 'renumPreview':renumS.a=document.getElementById('renumA').value;renumS.b=document.getElementById('renumB').value;renumS.msg='';renumS.prev=renumPlan(renumS.a,renumS.b);renderMain();break;
+  case 'renumApply':{var rpa=document.getElementById('renumA').value,rpb=document.getElementById('renumB').value,rpP=renumPlan(rpa,rpb);renumS.a=rpa;renumS.b=rpb;renumS.prev=rpP;renumS.msg='';if(rpP.err){renderMain();break}var rpok=document.getElementById('renumOK');if(!rpok||!rpok.checked){renumS.msg='Tick the backup box before applying.';renderMain();break}renumApply(rpP);break}
+  case 'renumCancel':renumS={a:'',b:'',prev:null,msg:''};renderMain();break;
   case 'csvdown':exportCSV();break;
   case 'quickadd':syncForm();M.innerHTML=quickHTML();break;
   case 'qaapply':var raw=document.getElementById('qaIn').value.trim();var za=raw.indexOf('{'),zb=raw.lastIndexOf('}');var txt=za>=0&&zb>za?raw.slice(za,zb+1):raw;var data=null;try{data=JSON.parse(txt)}catch(err){alert('That does not look like JSON. Paste the output exactly as Claude returns it.');break}syncForm();var cnt=applyQuick(data);M.innerHTML='';renderMain();alert('Filled '+cnt+' field'+(cnt===1?'':'s')+'. Review, then Save.');break;
@@ -2517,12 +2564,11 @@ function updateBannerCheck(){
  var seen=null;try{seen=localStorage.getItem('ntts_seen_ver')}catch(e){}
  try{localStorage.setItem('ntts_seen_ver',APP_VERSION)}catch(e){}
  if(seen===null||seen===APP_VERSION)return;
- var bn=document.createElement('div');bn.id='updBanner';
- bn.style.cssText='position:fixed;left:12px;right:12px;top:68px;z-index:45;display:flex;align-items:center;gap:8px;background:var(--acc);color:#fff;border-radius:12px;padding:10px 12px;box-shadow:0 4px 14px rgba(0,0,0,.35);font-size:14px';
- bn.innerHTML='<span style="flex:1">Updated to '+esc(APP_VERSION)+'</span>'
-  +'<button type="button" data-a="whatsnew" style="background:transparent;border:1px solid #fff;color:#fff;border-radius:999px;padding:6px 12px;min-height:0">What\'s new</button>'
-  +'<button type="button" data-a="updclose" aria-label="Dismiss" style="background:transparent;border:0;color:#fff;min-height:0;padding:4px 6px;font-size:18px">&times;</button>';
- document.body.appendChild(bn);
+ var u=document.getElementById('upd');if(!u)return;
+ u.innerHTML='<span>Updated to '+esc(APP_VERSION)+'</span>'
+  +'<button type="button" data-a="whatsnew">What\'s new</button>'
+  +'<button type="button" data-a="updclose" aria-label="Dismiss">&times;</button>';
+ u.hidden=false;
 }
 function whatsNewHTML(){
  return '<div class="modal" data-a="backdrop"><div style="max-width:420px;width:100%;text-align:center;position:relative;background:var(--card);border-radius:16px;padding:20px">'
