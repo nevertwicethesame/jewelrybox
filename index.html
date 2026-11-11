@@ -291,7 +291,7 @@ header button[data-a="drawer"]{display:flex;align-items:center;justify-content:c
 <input type="file" id="gfile" accept="image/*" multiple hidden>
 <script>
 var K='ntts_items_v2',OK='ntts_order_v1',PER=25,MAX_UPLOAD=300*1024;
-var APP_VERSION='2.10.6',APP_DATE='2026-11-10 · 8:05 AM ET',UPDATE_URL='';
+var APP_VERSION='2.10.7',APP_DATE='2026-11-10 · 8:49 PM ET',UPDATE_URL='';
 var EMOJI={ring:'💍',earrings:'✨',necklace:'📿',bracelet:'⭕',watch:'⌚',other:'💎'};
 var ICONS={ring:"<circle cx='12' cy='14' r='6'/><path d='M9.5 8 12 4l2.5 4'/><path d='M12 9.5l1.5 2.5-1.5 2.5-1.5-2.5z'/>",earrings:"<path d='M7 3v3'/><path d='M7 6c-1.6 0-2.5 1.3-2.5 3S6 14 7 17c1-3 2.5-5 2.5-8C9.5 7.3 8.6 6 7 6z'/><path d='M17 3v3'/><path d='M17 6c-1.6 0-2.5 1.3-2.5 3S16 14 17 17c1-3 2.5-5 2.5-8C19.5 7.3 18.6 6 17 6z'/>",necklace:"<path d='M4 5c2 7 14 7 16 0'/><path d='M12 12.5V15'/><circle cx='12' cy='17' r='2.2'/>",bracelet:"<ellipse cx='12' cy='12' rx='8' ry='5.5'/><ellipse cx='12' cy='12' rx='5.5' ry='3'/>",watch:"<circle cx='12' cy='13' r='5.5'/><path d='M9 7.5 10 3h4l1 4.5M9 18.5 10 23h4l1-4.5'/><path d='M12 10.5V13l1.8 1.2'/>",other:"<path d='M7 4h10l4 5-9 11L3 9z'/><path d='M3 9h18M9 4l3 16 3-16'/>",heart:"<path d='M12 20s-7-4.4-7-9.5A4 4 0 0 1 12 8a4 4 0 0 1 7 2.5C19 15.6 12 20 12 20z'/>",wrench:"<path d='M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.5 2.5-2.5-.5-.5-2.5z'/>",key:"<g transform='rotate(-45 12.5 12)'><circle cx='8' cy='12' r='4'/><path d='M12 12h9M18 12v3M21 12v2.5'/></g>",curio:"<rect x='4' y='3' width='16' height='18' rx='1'/><path d='M3 3h18M3 21h18'/><path d='M12 3v18'/><path d='M4 11h16'/><path d='M10.5 7v1.5M13.5 7v1.5M10.5 15v1.5M13.5 15v1.5'/>",clock:"<circle cx='12' cy='12' r='9'/><path d='M12 7v5l3 2'/>",pencil:"<path d='M4 20h4L19 9l-4-4L4 16z'/><path d='M13.5 6.5l4 4'/>",lock:"<rect x='5' y='11' width='14' height='10' rx='2'/><path d='M8 11V7a4 4 0 0 1 8 0v4'/>",unlock:"<rect x='3.95' y='11' width='11.1' height='10' rx='2'/><path d='M12.8 11V6.3A3.3 3.3 0 0 1 19.4 6.3V9.5'/>",bag:"<path d='M5 8h14l-1 12H6z'/><path d='M9 8V6a3 3 0 0 1 6 0v2'/>",plus:"<path d='M12 5v14M5 12h14'/>",x:"<path d='M6 6l12 12M18 6L6 18'/>",spark:"<path d='M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z'/>",gallery:"<rect x='3' y='4' width='18' height='16' rx='2'/><circle cx='9' cy='10' r='2'/><path d='M21 16l-5-5-8 9'/>"};
 var ORN='<svg width="72" height="10" viewBox="0 0 72 10" fill="none" stroke="#a8864f" stroke-width="1.2"><path d="M0 5h28M44 5h28"/><path d="M36 1l4 4-4 4-4-4z"/></svg>';
@@ -351,7 +351,7 @@ var THEMES={ruby:{n:'Ruby',l:'#5a1538',d:'#7a2a52',t:'#e8a3c4',v1:'#2a0115',v2:'
 var PAT_TPL="data:image/svg+xml,<svg id='patternId' width='100%' height='100%' xmlns='http://www.w3.org/2000/svg'><defs><pattern id='a' patternUnits='userSpaceOnUse' width='69.282' height='40' patternTransform='scale(1) rotate(0)'><rect x='0' y='0' width='100%' height='100%' fill='__FILL__'/><path d='M34.641-20v80m34.64-40L0-20m69.282 80L0 20m69.282 0L0 60m69.282-80L0 20m69.282-40v80M0-20v80M34.64 40l11.547-20m11.547 20l11.547 20M34.641 40h23.094m11.547-20L57.735 40M46.188 20L34.641 40l11.547 20h23.094L80.83 40 69.282 20H46.188zM34.641 40l11.547-20m11.547 20l11.547 20M34.641 40h23.094m11.547-20L57.735 40M46.188 20L34.641 40l11.547 20h23.094L80.83 40 69.282 20H46.188zM34.641 0l11.547-20M57.735 0l11.547 20M34.642 0h23.093m11.547-20L57.735 0M46.188-20L34.641 0l11.547 20h23.094L80.83 0 69.282-20H46.188zM34.641 40L23.094 20M11.547 40L0 60m34.64-20H11.548M0 20l11.547 20m11.547-20l11.547 20-11.547 20H0l-11.547-20L0 20h23.094zM34.641 0L23.094-20M11.547 0L0 20M34.64 0H11.548M0-20L11.547 0m11.547-20L34.641 0 23.094 20H0L-11.547 0 0-20h23.094z'  stroke-width='1' stroke='__STROKE__' fill='none'/></pattern></defs><rect width='800%' height='800%' transform='translate(-139,-80)' fill='url(%23a)'/></svg>";
 var SORTS=[['new','Newest First (Purchase Date)'],['old','Oldest First (Purchase Date)'],['worn','Most Worn'],['rest','Least Recently Worn'],['era','Era'],['grp:colorMain','Group by Color'],['grp:category','Group by Type'],['grp:period','Group by Period'],['custom','My Ordering']];
 var ALIAS={metals:'metal',stones:'stone',hallmarks:'hallmark',measurements:'measurement',tags:'motif',mainColor:'colorMain',pdate:'purchaseDate',platform:'purchasePlatform',dListed:'dateListed',link:'linkSale',shipEst:'shipEstimate',dSold:'dateSold',ship:'shipActual',final:'payout',lastWorn:'wornLast',hearts:'rating',size:'ringSize',channel:'sellPlatform'};
-var CSV_COLS=[['id','id'],['title','title'],['category','category'],['motif','motifs'],['period','period'],['era','era'],['decade','decade'],['yearMade','year'],['country','country'],['maker','maker'],['hallmark','hallmark'],['provenance','provenance'],['measurement','measurement'],['weight','weight'],['ringSize','ring size'],['metal','metal'],['stone','stone'],['cut','cut'],['colorMain','main color'],['condition','condition'],['notes','notes'],['wornLast','last worn'],['wornCount','times worn'],['rating','rating'],['photoshoot','photoshoot'],['status','status'],['seller','seller'],['purchaseDate','purchase date'],['purchasePlatform','platform'],['cost','cost'],['acqShipping','acquisition shipping'],['tariffs','tariffs'],['repairs','repairs'],['shipEstimate','shipping estimate'],['buffer','buffer'],['sellPlatform','selling platform'],['dateListed','date listed'],['linkSale','listing link'],['dateSold','date sold'],['feeFinal','platform fee'],['shipActual','shipping'],['payout','final payout']];
+var CSV_COLS=[['id','id'],['title','title'],['category','category'],['motif','motifs'],['period','period'],['era','era'],['decade','decade'],['yearMade','year'],['country','country'],['maker','maker'],['hallmark','hallmark'],['provenance','provenance'],['measurement','measurement'],['weight','weight'],['grams','grams'],['purity','purity'],['stoneCt','stone weight ct'],['ringSize','ring size'],['metal','metal'],['stone','stone'],['cut','cut'],['colorMain','main color'],['condition','condition'],['notes','notes'],['wornLast','last worn'],['wornCount','times worn'],['rating','rating'],['photoshoot','photoshoot'],['status','status'],['seller','seller'],['purchaseDate','purchase date'],['purchasePlatform','platform'],['cost','cost'],['acqShipping','acquisition shipping'],['tariffs','tariffs'],['repairs','repairs'],['shipEstimate','shipping estimate'],['buffer','buffer'],['sellPlatform','selling platform'],['dateListed','date listed'],['linkSale','listing link'],['dateSold','date sold'],['feeFinal','platform fee'],['shipActual','shipping'],['payout','final payout']];
 var FS={
  title:['Title','text'],
  category:['Category','sel',CATS],
@@ -362,14 +362,13 @@ var FS={
  country:['Country of Origin','text'],
  maker:['Maker','text'],
  stone:['Stone','list'],
- metal:['Metal','list'],
+ metal:['Metals','list'],
  hallmark:['Hallmark','text'],
  measurement:['Measurement','text'],
  weight:['Weight','text'],
  grams:['Weight (g)','number'],
  stoneCt:['Stone weight (ct)','number'],
- purity:['Purity (karat or fineness)','number'],
- goldTone:['Gold tone','sel',['','Yellow','White','Rose']],
+ purity:['Purity (k or fineness)','number'],
  ringSize:['Ring Size','ringsz'],
  cut:['Cut','list'],
  colorMain:['Color','list'],
@@ -413,7 +412,7 @@ var FS={
 var LISTS=['stone','metal','motif','cut','colorMain'];
 var SUGG_KEYS=['era','country','stone','metal','cut','motif','colorMain','seller'];
 var LOWER_KEYS=['stone','cut','motif','colorMain'];
-var ORDER_PIECE=['title','category','motif','period','era','decade','yearMade','country','maker','hallmark','measurement','weight','grams','purity','goldTone','ringSize','metal','stone','stoneCt','cut','colorMain','condition','notes'];
+var ORDER_PIECE=['title','category','motif','period','era','decade','yearMade','country','maker','hallmark','measurement','grams','purity','ringSize','metal','stone','stoneCt','cut','colorMain','condition','notes'];
 var ORDER_STATS=['wornLast','wornCount','rating','trackUrl','deliveryDate'];
 var ORDER_PURCH=['seller','purchaseDate','purchasePlatform','cost','acqShipping','tariffs','repairs','totalCost','provenance'];
 var FULL_KEYS=['provenance'];
@@ -421,11 +420,11 @@ var ORDER_PRICE=['shipEstimate','buffer','ebayPct','igPct','suggestedEbay','sugg
 var ORDER_SOLD=['sellPlatform','dateListed','linkSale','dateSold','turnover','feeFinal','shipActual','payout','netProfit'];
 var PIECE_ID=['title','category','motif','colorMain'];
 var PIECE_ORIGIN=['period','era','decade','yearMade','country','maker','hallmark'];
-var PIECE_MAKE=['metal','purity','goldTone','grams','stone','stoneCt','cut','measurement','ringSize'];
+var PIECE_MAKE=['metal','purity','grams','stone','stoneCt','cut','measurement','ringSize'];
 var PIECE_COND=['condition','notes'];
 var FORM_ORDER=ORDER_PIECE.concat(ORDER_STATS,['status'],ORDER_PURCH,ORDER_PRICE,ORDER_SOLD);
 var SUM_SKIP=['shipEstimate','buffer','ebayPct','igPct','potentialEbay','potentialIG'];
-var QA_KEYS=['title','category','period','era','decade','yearMade','country','maker','stone','metal','hallmark','measurement','weight','ringSize','cut','colorMain','motif','notes','purchaseDate','seller','purchasePlatform','cost'];
+var QA_KEYS=['title','category','period','era','decade','yearMade','country','maker','stone','metal','hallmark','measurement','grams','ringSize','cut','colorMain','motif','notes','purchaseDate','seller','purchasePlatform','cost'];
 var RING_HEAD=['Inside Diameter (mm)','Inside Circumference (mm)','U.S. & Canada (LF sizes)','U.K., Europe & Australia','Italy, Spain, & Switzerland','China, Japan, & South America','India'];
 var RING_TXT=['15.9;50;5.25;J.5;10;;10','16.1;50.6;5.5;K;;10;','16.3;51.2;5.75;K.5;11.75;;11','16.5;51.8;6;L;12.75;11;12','16.7;52.5;6.25;L.5;;12;','16.9;53.1;6.5;M;14;13;13','17.1;53.7;6.75;M.5;;;','17.3;54.3;7;N;15.25;14;14','17.5;55;7.25;N.5;;;15','17.7;55.6;7.5;O;16.5;15;','17.9;56.2;7.75;O.5;;;16','18.1;56.9;8;P;17.75;16;17','18.3;57.5;8.25;P.5;;;','18.5;58.1;8.5;Q;;17;18','18.8;59.1;8.75;Q.5;19;;19','19;59.7;9;R;;18;','19.2;60.3;9.25;R.5;20.25;;20'];
 var seed=[
@@ -637,6 +636,7 @@ function mig(i){
  if(!Array.isArray(i.cut))i.cut=[];
  if(!Array.isArray(i.stone))i.stone=[];
  if(!Array.isArray(i.metal))i.metal=[];
+ i.metal=i.metal.map(function(m){var s=String(m==null?'':m).trim(),l=s.toLowerCase(),tn=String(i.goldTone||'').toLowerCase();if(l==='gold'){return tn==='yellow'?'Yellow gold':tn==='white'?'White gold':tn==='rose'?'Rose gold':'gold'}if(l==='silver')return 'Silver';if(l==='platinum')return 'Platinum';return s}).filter(Boolean);
  if(i.grams==null&&typeof i.weight==='string'){var gm=i.weight.match(/^\s*(\d+(?:\.\d+)?)\s*(?:g|gr|grams?)\s*$/i);if(gm)i.grams=Number(gm[1])}
  if(i.purity==null&&i.karat!=null&&i.karat!=='')i.purity=Number(i.karat);
  delete i.karat;
@@ -955,12 +955,12 @@ function thumb(i){var sold=i.status==='Sold',wait=i.status==='Waiting',cimg=cove
  var soldBadge='<span aria-hidden="true" style="position:absolute;right:6px;bottom:6px;width:24px;height:24px;border-radius:50%;background:rgba(0,0,0,.35);display:flex;align-items:center;justify-content:center;pointer-events:none;font-size:13px;line-height:1;color:#fff">'+ico('heart',14)+'</span>';
  var benchBadge='<span aria-hidden="true" style="position:absolute;right:6px;bottom:6px;width:24px;height:24px;border-radius:50%;background:rgba(0,0,0,.35);display:flex;align-items:center;justify-content:center;pointer-events:none;font-size:13px;line-height:1;color:#fff">'+ico('wrench',14)+'</span>';
  var clock='<span aria-hidden="true" style="position:absolute;right:6px;bottom:6px;width:24px;height:24px;border-radius:50%;background:rgba(0,0,0,.35);display:flex;align-items:center;justify-content:center;pointer-events:none;font-size:13px;line-height:1;color:#fff">'+ico('clock',14)+'</span>';
- return '<div class="tile" data-a="open" data-id="'+i.id+'"'+(sold?' style="filter:grayscale(1)"':'')+'>'+(cimg||noThumb(i,tsz))+(sold?veil+soldBadge:'')+(wait?clock:'')+countPill(i)+(i.status==='Benched'?benchBadge:'')+'</div>'}
+ return '<div class="tile" data-a="tilepiece" data-id="'+i.id+'"'+(sold?' style="filter:grayscale(1)"':'')+'>'+(cimg||noThumb(i,tsz))+(sold?veil+soldBadge:'')+(wait?clock:'')+countPill(i)+(i.status==='Benched'?benchBadge:'')+'</div>'}
 function daysUntil(s){if(!s)return null;var p=String(s).split('-');if(p.length!==3)return null;var d=new Date(+p[0],+p[1]-1,+p[2]);var t=new Date();t=new Date(t.getFullYear(),t.getMonth(),t.getDate());var n=Math.round((d-t)/86400000);return isNaN(n)?null:n}
 function countPill(i){if(i.status!=='Waiting')return '';var n=daysUntil(i.deliveryDate);if(n==null||n<0)return '';return '<span aria-hidden="true" style="position:absolute;left:6px;bottom:6px;padding:2px 7px;border-radius:999px;background:rgba(0,0,0,.5);color:#fff;font-size:11px;line-height:1.4;pointer-events:none">'+(n===0?'Today':n+'d')+'</span>'}
 function countLine(n){return '<p class="meta" style="text-align:center;margin:16px 0 0">'+n+' piece'+(n===1?'':'s')+(anyFilter()?' (filtered)':'')+'</p>'}
 var TC={
- Piece:[['Category',function(i){return esc(i.category)}],['Period',function(i){return esc(i.period)}],['Era/Movement',function(i){return esc(i.era||'—')}],['Year',function(i){return esc(i.yearMade==null?'—':i.yearMade)}],['Country of Origin',function(i){return esc(i.country||'—')}],['Stones',function(i){return esc((i.stone||[]).join(', ')||'—')}],['Metals',function(i){return esc((i.metal||[]).join(', ')||'—')}],['Hallmarks',function(i){return esc(i.hallmark||'—')}],['Measurements',function(i){return esc(i.measurement||'—')}],['Weight',function(i){return esc(i.weight||'—')}],['Ring Size',function(i){return esc(i.ringSize==null||i.ringSize===''?'—':i.ringSize)}],['Cut',function(i){return esc((i.cut||[]).join(', ')||'—')}],['Color',function(i){return colorsHTML(i.colorMain)}],['Motifs',function(i){return esc((i.motif||[]).join(', ')||'—')}],['Notes',function(i){return esc(i.notes||'—')}]],
+ Piece:[['Category',function(i){return esc(i.category)}],['Period',function(i){return esc(i.period)}],['Era/Movement',function(i){return esc(i.era||'—')}],['Year',function(i){return esc(i.yearMade==null?'—':i.yearMade)}],['Country of Origin',function(i){return esc(i.country||'—')}],['Stones',function(i){return esc((i.stone||[]).join(', ')||'—')}],['Metals',function(i){return metalsText(i)}],['Purity',function(i){return purityText(i)}],['Stone weight (ct)',function(i){return esc(i.stoneCt==null||i.stoneCt===''?'—':i.stoneCt+' ct')}],['Hallmarks',function(i){return esc(i.hallmark||'—')}],['Measurements',function(i){return esc(i.measurement||'—')}],['Weight (g)',function(i){return esc(i.grams==null||i.grams===''?(i.weight||'—'):i.grams+' g')}],['Ring Size',function(i){return esc(i.ringSize==null||i.ringSize===''?'—':i.ringSize)}],['Cut',function(i){return esc((i.cut||[]).join(', ')||'—')}],['Color',function(i){return colorsHTML(i.colorMain)}],['Motifs',function(i){return esc((i.motif||[]).join(', ')||'—')}],['Notes',function(i){return esc(i.notes||'—')}]],
  Transaction:[['Status',function(i){return esc(i.status)}],['Date Acquired',function(i){return esc(fmtDate(i.purchaseDate)||'—')}],['Seller',function(i){return esc(i.seller||'—')}],['Purchase Platform',function(i){return esc(i.purchasePlatform||'—')}],['Cost',function(i){return money(num(i.cost))}],['Selling Platform',function(i){return esc(i.sellPlatform||'—')}],['Date Listed',function(i){return esc(fmtDate(i.dateListed)||'—')}],['Listing Link',function(i){return i.linkSale?'<a href="'+esc(i.linkSale)+'" target="_blank" rel="noopener">open</a>':'—'}],['Date Sold',function(i){return esc(fmtDate(i.dateSold)||'—')}],['Turnover',function(i){return days(i)==null?'—':days(i)+' days'}],['Platform Fee',function(i){return fees(i)?money(fees(i)):'—'}],['Shipping',function(i){return money(num(i.shipActual))}],['Final Payout',function(i){return money(num(i.payout))}],['Net Profit',function(i){return calcs(i)['c-net']}]],
  Stats:[['Last Worn',function(i){return esc(fmtDate(i.wornLast)||'—')}],['Times Worn',function(i){return esc(i.wornCount==null||i.wornCount===''?'—':i.wornCount)}],['Rating',function(i){return stars(i.rating)||'—'}],['Photoshoot?',function(i){return i.photoshoot?'Yes':'No'}]]
 };
@@ -1000,6 +1000,8 @@ var WIDE_KEYS=['title','seller','link','notes','description','condition'];
 function fieldHTML(k,v){
  var s=FS[k],t=s[1],val=LISTS.indexOf(k)>-1?(v||[]).join(', '):(v==null?'':v),c;
  if(LOWER_KEYS.indexOf(k)>-1)val=String(val).toLowerCase();
+ if(k==='metal'){var msel=(Array.isArray(v)?v:[]).slice();return '<details class="cdd mdd" data-sel="'+esc(JSON.stringify(msel))+'"><summary class="cddS"><span>'+s[0]+'</span><span class="cddBox"><span class="cddTxt">'+metalTxt(msel)+'</span><span class="cddArr"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></span></span></summary><div style="display:grid;grid-template-columns:1fr;gap:0;margin-top:4px;padding:6px 10px;border:1px solid var(--line);border-radius:8px;background:var(--bg)">'+metalsHTML(msel)+'</div></details>'}
+ if(k==='purity'){var pkind=metalKind(((editing&&editing.metal)||[])[0]);return '<label id="purityWrap"'+(pkind==='none'?' style="display:none"':'')+'>'+s[0]+'<select id="purity" name="purity">'+purityOpts(pkind,v,true)+'</select></label>'}
  if(k==='colorMain'){var cchk=v||[];return '<details class="cdd" data-sel="'+esc(JSON.stringify(cchk))+'"><summary class="cddS"><span>'+s[0]+'</span><span class="cddBox"><span class="cddTxt">'+cchk.map(function(c){return sw(c)+' '+esc(c)}).join(', ')+'</span><span class="cddArr"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></span></span></summary><div style="display:grid;grid-template-columns:1fr;gap:0;margin-top:4px;padding:6px 10px;border:1px solid var(--line);border-radius:8px;background:var(--bg)">'+COLOR_ORDER.map(function(c){return '<label class="swl" style="flex-direction:row;align-items:center;gap:6px;color:var(--fg);margin:0;padding:3px 0;font-size:16px"><input type="checkbox" name="colorMain" value="'+esc(c)+'"'+(cchk.indexOf(c)>-1?' checked':'')+'> '+sw(c)+' '+esc(c)+'</label>'}).join('')+'</div></details>'}
  if(t==='check')return '<label class="swl"><input type="checkbox" name="'+k+'"'+(v?' checked':'')+'> '+s[0]+'</label>';
  if(t==='calc')return '<label>'+s[0]+'<div class="calc" id="'+s[2]+'">'+esc(calcs(editing)[s[2]])+'</div></label>';
@@ -1060,8 +1062,8 @@ function rlRender(q,kind,img){
 function sec(keys){return keys.map(function(k){var h=fieldHTML(k,editing[k]);return FULL_KEYS.indexOf(k)>-1?'<div style="grid-column:1/-1">'+h+'</div>':h}).join('')}
 function listingTexts(g){
  var place=[g('period'),g('era'),g('title')].filter(function(x){return x}).join(' ');
- var metal=g('metal'),ring=g('ringSize'),meas=g('measurement'),wt=g('weight'),hm=g('hallmark'),c=g('country').trim();
- var km=(metal.match(/\d+\s*k\b/i)||[])[0],mat=km?km.replace(/\s+/g,'').toLowerCase():(metal?metal.split(',')[0].trim():'');
+ var metal=g('metal'),ring=g('ringSize'),meas=g('measurement'),wt=g('grams')?g('grams')+'g':g('weight'),hm=g('hallmark'),c=g('country').trim();
+ var pri=metal?metal.split(',')[0].trim():'',pk=metalKind(pri),pu=g('purity'),mat=((pk==='gold'&&pu)?pu+'k ':((pk==='silver'||pk==='platinum')&&pu)?pu+' ':'')+pri.toLowerCase();
  var headline=[g('period'),g('era'),mat,g('title'),ring].filter(function(x){return x}).join(' ');
  var d=[];if(headline)d.push(headline);
  var L=[];if(place)L.push('• '+place);
@@ -1112,10 +1114,10 @@ function imagesHTML(){
 }
 function firstRefCover(){if(!editing.cover&&(editing.refs||[]).length)editing.cover={id:editing.refs[0],l:null,t:null,w:null,h:null}}
 function quickPrompt(){
- return "Read the attached jewelry listing screenshots and output ONLY a JSON object with the keys below. Omit any key you cannot find. No commentary.\n\nKeys and rules:\n- \"title\": text. Shorten to the core descriptive name, dropping the brand, the era, and the carat/date phrasing. Example: \"Rose Cut Diamond Cluster Ring\" (not \"Victorian Rose Cut Diamond Cluster Ring in 18 Carat Gold; Circa 1880\").\n- \"category\": one of Ring, Earrings, Necklace, Bracelet, Watch, Other\n- \"period\": one of Ancient, Antique, Mid-Century, Vintage, New\n- \"era\": text (era or movement), copied from the listing only. Do not infer it from the year.\n- \"decade\": text. If the listing names a decade (for example \"1880s\") or gives a circa year (for example \"Circa 1880\"), output the decade (for example \"1880s\"). Do not derive it from \"yearMade\" when the listing gives neither.\n- \"yearMade\": number, only when the listing gives an exact year. Leave it out for \"circa\" or ranges. Put circa dates in \"decade\" instead.\n- \"country\": text (country of origin)\n- \"maker\": text\n- \"stone\": array of strings\n- \"metal\": array of strings. Abbreviate gold by karat and color: yellow gold = yg, white gold = wg, rose gold = rg. Examples: \"18k gold\" with yellow gold shown or stated = \"18k yg\"; \"18k rose gold\" = \"18k rg\". Non-gold metals keep their name, such as \"platinum\" or \"silver\".\n- \"hallmark\": text\n- \"measurement\": text\n- \"weight\": text in one of these formats: \"2.2g\" (grams) or \"0.3ct\" (carats). Convert from the listing's unit to this format and keep the number as written. Example: \"2.2 grams approximately\" becomes \"2.2g\".\n- \"ringSize\": number from 1 to 13 in steps of 0.25 (rings only). Convert to US using the chart below and round to the nearest 0.25. The chart overrides any size stated in the listing, including a US size the listing gives. If the listing uses a system not on the chart, omit this key.\n- \"cut\": array of strings\n- \"colorMain\": array of strings. Choose only from: Red, Pink, Orange, Brown, Yellow, Green, Light blue, Blue, Purple, Black, Gray, White, Multi. Ignore emoji and numbers.\n- \"motif\": array of strings\n- \"notes\": text. Include only for a special circumstance, such as a defect, repair, missing part, or a discrepancy between the listing and the item. Seller policies (shipping, returns, payment) are not notes. Omit otherwise.\n- \"purchaseDate\": YYYY-MM-DD. Omit if the listing has no purchase date.\n- \"seller\": text\n- \"purchasePlatform\": \"Etsy\", \"1stDibs\", or \"Seller\". Any other platform is \"Seller\".\n- \"cost\": number with no currency symbol or code\n\nSource priority: the listing text is primary. Use the photos to confirm or fill in color, stone, and cut only when the text is silent. If text and photos conflict, use the text, and record the conflict in \"notes\" only if it is a special circumstance.\n\nRing size chart (US & Canada column):\n5.25 = J.5 (UK); 5.5 = K; 5.75 = K.5; 6 = L; 6.25 = L.5; 6.5 = M; 6.75 = M.5; 7 = N; 7.25 = N.5; 7.5 = O; 7.75 = O.5; 8 = P; 8.25 = P.5; 8.5 = Q; 8.75 = Q.5; 9 = R; 9.25 = R.5\n\nExample: for a ring listed as \"M (UK)\" with \"18k rose gold\" in the text, output:\n{\"title\": \"Rose Cut Diamond Cluster Ring\", \"category\": \"Ring\", \"period\": \"Antique\", \"decade\": \"1880s\", \"metal\": [\"18k rg\"], \"ringSize\": 6.5, \"colorMain\": [\"Yellow\"], \"purchasePlatform\": \"Seller\"}";
+ return "Read the attached jewelry listing screenshots and output ONLY a JSON object with the keys below. Omit any key you cannot find. No commentary.\n\nKeys and rules:\n- \"title\": text. Shorten to the core descriptive name, dropping the brand, the era, and the carat/date phrasing. Example: \"Rose Cut Diamond Cluster Ring\" (not \"Victorian Rose Cut Diamond Cluster Ring in 18 Carat Gold; Circa 1880\").\n- \"category\": one of Ring, Earrings, Necklace, Bracelet, Watch, Other\n- \"period\": one of Ancient, Antique, Mid-Century, Vintage, New\n- \"era\": text (era or movement), copied from the listing only. Do not infer it from the year.\n- \"decade\": text. If the listing names a decade (for example \"1880s\") or gives a circa year (for example \"Circa 1880\"), output the decade (for example \"1880s\"). Do not derive it from \"yearMade\" when the listing gives neither.\n- \"yearMade\": number, only when the listing gives an exact year. Leave it out for \"circa\" or ranges. Put circa dates in \"decade\" instead.\n- \"country\": text (country of origin)\n- \"maker\": text\n- \"stone\": array of strings\n- \"metal\": array of strings. Choose only from: Yellow gold, White gold, Rose gold, Silver, Platinum, Base metal, Other. Put the primary metal first. Base metal means brass, copper, steel, or similar. Other means anything else.\n- \"purity\": number. For gold, the karat only (18 for 18k). For silver or platinum, the fineness (925, 950). Gold stamps convert to karat: 585 = 14, 750 = 18. Omit if the listing gives no purity.\n- \"hallmark\": text\n- \"measurement\": text\n- \"grams\": number, the metal weight in grams with no unit. Example: \"2.2 grams approximately\" becomes 2.2.\n- \"stoneCt\": number, total stone weight in carats with no unit. Omit if the listing gives none.\n- \"ringSize\": number from 1 to 13 in steps of 0.25 (rings only). Convert to US using the chart below and round to the nearest 0.25. The chart overrides any size stated in the listing, including a US size the listing gives. If the listing uses a system not on the chart, omit this key.\n- \"cut\": array of strings\n- \"colorMain\": array of strings. Choose only from: Red, Pink, Orange, Brown, Yellow, Green, Light blue, Blue, Purple, Black, Gray, White, Multi. Ignore emoji and numbers.\n- \"motif\": array of strings\n- \"notes\": text. Include only for a special circumstance, such as a defect, repair, missing part, or a discrepancy between the listing and the item. Seller policies (shipping, returns, payment) are not notes. Omit otherwise.\n- \"purchaseDate\": YYYY-MM-DD. Omit if the listing has no purchase date.\n- \"seller\": text\n- \"purchasePlatform\": \"Etsy\", \"1stDibs\", or \"Seller\". Any other platform is \"Seller\".\n- \"cost\": number with no currency symbol or code\n\nSource priority: the listing text is primary. Use the photos to confirm or fill in color, stone, and cut only when the text is silent. If text and photos conflict, use the text, and record the conflict in \"notes\" only if it is a special circumstance.\n\nRing size chart (US & Canada column):\n5.25 = J.5 (UK); 5.5 = K; 5.75 = K.5; 6 = L; 6.25 = L.5; 6.5 = M; 6.75 = M.5; 7 = N; 7.25 = N.5; 7.5 = O; 7.75 = O.5; 8 = P; 8.25 = P.5; 8.5 = Q; 8.75 = Q.5; 9 = R; 9.25 = R.5\n\nExample: for a ring listed as \"M (UK)\" with \"18k rose gold\" in the text, output:\n{\"title\": \"Rose Cut Diamond Cluster Ring\", \"category\": \"Ring\", \"period\": \"Antique\", \"decade\": \"1880s\", \"metal\": [\"Rose gold\"], \"purity\": 18, \"ringSize\": 6.5, \"colorMain\": [\"Yellow\"], \"purchasePlatform\": \"Seller\"}";
 }
 function quickReviewPrompt(){
- return "I've attached a zip exported from my jewelry app for one piece. It has piece.json (the saved data, plus calculated prices) and an images/ folder with the cover, reference, and comparison photos.\n\nTask: check the saved data against the photos and find data entry errors. The photos are the source of truth for what the piece looks like. Don't change fields the photos can't confirm (for example, cost, seller, or purchase date).\n\nOutput, in this order:\n\n1. A table of every proposed change, with these columns:\n   Field | Before (saved) | After (proposed) | Confidence (High / Medium / Low) | Evidence (which photo or text)\n   Only include fields you'd change. If nothing needs changing, say so and skip the table.\n\n2. One JSON object with ONLY the \"After\" values, using these keys: title, category, period, era, decade, yearMade, country, maker, stone, metal, hallmark, measurement, weight, ringSize, cut, colorMain, motif, notes, purchaseDate, seller, purchasePlatform, cost.\n   - Lists (stone, metal, cut, colorMain, motif) are arrays of strings.\n   - colorMain may only be: Red, Pink, Orange, Brown, Yellow, Green, Light blue, Blue, Purple, Black, Gray, White, Multi.\n   - Metal: gold abbreviated by karat and color, such as \"18k yg\", \"14k wg\", \"18k rg\". Other metals keep their names.\n   - Weight: \"2.2g\" or \"0.3ct\".\n   - Dates: YYYY-MM-DD.\n   - The app overwrites any key I include, so include only keys from the table.\n\nDon't guess. If a Confidence is Low, put it in the table but leave it out of the JSON."; }
+ return "I've attached a zip exported from my jewelry app for one piece. It has piece.json (the saved data, plus calculated prices) and an images/ folder with the cover, reference, and comparison photos.\n\nTask: check the saved data against the photos and find data entry errors. The photos are the source of truth for what the piece looks like. Don't change fields the photos can't confirm (for example, cost, seller, or purchase date).\n\nOutput, in this order:\n\n1. A table of every proposed change, with these columns:\n   Field | Before (saved) | After (proposed) | Confidence (High / Medium / Low) | Evidence (which photo or text)\n   Only include fields you'd change. If nothing needs changing, say so and skip the table.\n\n2. One JSON object with ONLY the \"After\" values, using these keys: title, category, period, era, decade, yearMade, country, maker, stone, stoneCt, metal, purity, hallmark, measurement, grams, ringSize, cut, colorMain, motif, notes, purchaseDate, seller, purchasePlatform, cost.\n   - Lists (stone, metal, cut, colorMain, motif) are arrays of strings.\n   - colorMain may only be: Red, Pink, Orange, Brown, Yellow, Green, Light blue, Blue, Purple, Black, Gray, White, Multi.\n   - Metal: one or more of Yellow gold, White gold, Rose gold, Silver, Platinum, Base metal, Other. Primary first.\n   - Purity: gold karat as a number (18), or silver or platinum fineness (925, 950).\n   - Grams: number, no unit. StoneCt: carats as a number, no unit.\n   - Dates: YYYY-MM-DD.\n   - The app overwrites any key I include, so include only keys from the table.\n\nDon't guess. If a Confidence is Low, put it in the table but leave it out of the JSON."; }
 function quickHTML(){
  var box=function(id,txt){return '<div class="seg" style="justify-content:space-between;margin-top:6px"><span class="meta">Prompt</span><button type="button" class="link" data-a="copy" data-id="'+id+'" style="margin-top:0">Copy</button></div><textarea id="'+id+'" rows="2" readonly style="height:56px;font-size:14px;resize:none">'+esc(txt)+'</textarea>'};
  return '<div class="modal" data-a="backdrop"><div style="max-width:520px;width:94vw"><h3 style="margin:0 0 4px">Quick Fill</h3>'
@@ -1225,7 +1227,8 @@ function readForm(){
  Object.keys(FS).forEach(function(k){
    var t=FS[k][1];if(t==='calc'||t==='pct')return;
    if(t==='check'){o[k]=!!fd.get(k);return}
-   if(k==='colorMain'){var cbx=document.querySelector('#form .cdd'),csel=[];try{csel=cbx?JSON.parse(cbx.dataset.sel||'[]'):[]}catch(err){}var chk=fd.getAll(k),cord=csel.filter(function(x){return chk.indexOf(x)>-1});chk.forEach(function(x){if(cord.indexOf(x)<0)cord.push(x)});o[k]=uniqArr(cord.map(function(x){return capColor(x)}).filter(Boolean));return}
+   if(k==='metal'){var mdd=document.querySelector('#form .mdd'),msel=[];try{msel=mdd?JSON.parse(mdd.dataset.sel||'[]'):[]}catch(err){}var mchk=fd.getAll('metal'),mord=msel.filter(function(x){return mchk.indexOf(x)>-1});mchk.forEach(function(x){if(mord.indexOf(x)<0)mord.push(x)});o[k]=mord;return}
+   if(k==='colorMain'){var cbx=document.querySelector('#form .cdd:not(.mdd)'),csel=[];try{csel=cbx?JSON.parse(cbx.dataset.sel||'[]'):[]}catch(err){}var chk=fd.getAll(k),cord=csel.filter(function(x){return chk.indexOf(x)>-1});chk.forEach(function(x){if(cord.indexOf(x)<0)cord.push(x)});o[k]=uniqArr(cord.map(function(x){return capColor(x)}).filter(Boolean));return}
    var raw=fd.get(k);if(raw==null)return;
    if(LISTS.indexOf(k)>-1)o[k]=String(raw).split(',').map(function(x){return x.trim()}).filter(Boolean);
    else if(t==='money')o[k]=parseMoney(raw);
@@ -1246,7 +1249,7 @@ function updateSummary(){
  var rows=FORM_ORDER.filter(function(k){return SUM_SKIP.indexOf(k)<0}).map(function(k){
    var s=FS[k],v='';
    if(s[1]==='calc'){var el=document.getElementById(s[2]);v=el?el.textContent:''}
-   else if(k==='colorMain'){v=Array.from(f.querySelectorAll('[name="colorMain"]:checked')).map(function(x){return x.value}).join(', ')}else{var el2=f.querySelector('[name="'+k+'"]');if(el2){if(el2.type==='checkbox')v=el2.checked?'Yes':'No';else if(el2.tagName==='SELECT')v=el2.options[el2.selectedIndex]?el2.options[el2.selectedIndex].text:'';else v=el2.value}}
+   else if(k==='colorMain'){v=Array.from(f.querySelectorAll('[name="colorMain"]:checked')).map(function(x){return x.value}).join(', ')}else if(k==='metal'){var md=f.querySelector('.mdd');try{v=JSON.parse(md.dataset.sel||'[]').map(metalLabel).join(', ')}catch(err){}}else{var el2=f.querySelector('[name="'+k+'"]');if(el2){if(el2.type==='checkbox')v=el2.checked?'Yes':'No';else if(el2.tagName==='SELECT')v=el2.options[el2.selectedIndex]?el2.options[el2.selectedIndex].text:'';else v=el2.value}}
    return '<tr>'+td1+esc(s[0])+'</td>'+td2+esc(v||'—')+'</td></tr>';
  });
  rows.push('<tr>'+td1+'Cover photo</td>'+td2+(editing.cover?'Added':'—')+'</td></tr>');
@@ -1372,11 +1375,29 @@ function renderCollDetail(c){
   +(p.length?'<div class="box'+(bgStyle==='pattern'?' pat':'')+'" style="overflow:hidden;min-width:0"><div class="grid'+(collRo?' ro':'')+'" style="grid-template-columns:repeat('+cols+',1fr);gap:8px">'+tiles+'</div></div>':'<p class="meta">No pieces yet.</p>');
 }
 var collTab='cur',collListRo=false;
-var GOLD_KT={'9':0.375,'10':0.417,'14':0.585,'18':0.750,'22':0.916,'24':1};
+var GOLD_KT={'8':0.333,'9':0.375,'10':0.417,'12':0.5,'14':0.585,'15':0.625,'18':0.750,'22':0.916,'24':1};
+var METAL_OPTS=['Yellow gold','White gold','Rose gold','Silver','Platinum','Base metal','Other'];
+var GOLD_OPTS=[[8,'8k (333)'],[9,'9k (375)'],[10,'10k (417)'],[12,'12k (500)'],[14,'14k (585)'],[15,'15k (625)'],[18,'18k (750)'],[22,'22k (916)'],[24,'24k (999)']];
+var SILVER_OPTS=[[800,'800'],[925,'925 (sterling)'],[999,'999 (fine)']];
+var PLAT_OPTS=[[850,'850'],[900,'900'],[950,'950'],[999,'999']];
+function metalKind(m){var l=String(m==null?'':m).toLowerCase();if(l.indexOf('gold')>-1)return 'gold';if(l==='silver')return 'silver';if(l==='platinum')return 'platinum';return 'none'}
+function metalLabel(m){return m==='gold'?'Gold (pick a tone)':m}
+function metalTxt(sel){return sel.map(function(m,ix){return esc(metalLabel(m))+(ix===0?' <span class="meta">(primary)</span>':'')}).join(', ')||'Choose metals'}
+function metalsHTML(sel){var all=METAL_OPTS.slice();sel.forEach(function(m){if(all.indexOf(m)<0)all.push(m)});return all.map(function(m){var ix=sel.indexOf(m);return '<label class="swl" style="flex-direction:row;align-items:center;gap:6px;color:var(--fg);margin:0;padding:3px 0;font-size:16px"><input type="checkbox" name="metal" value="'+esc(m)+'"'+(ix>-1?' checked':'')+'> '+esc(metalLabel(m))+'</label>'}).join('')}
+function metalsText(i){var m=i.metal||[];return esc(m.map(function(x,ix){return metalLabel(x)+(ix===0&&m.length>1?' (primary)':'')}).join(', '))||'—'}
+function purityText(i){var p=i.purity;if(p==null||p==='')return '—';var kind=metalKind((i.metal||[])[0]);var L=kind==='gold'?GOLD_OPTS:kind==='silver'?SILVER_OPTS:kind==='platinum'?PLAT_OPTS:[];var o=L.filter(function(x){return String(x[0])===String(p)})[0];return esc(o?o[1]:String(p))}
+function purityOpts(kind,cur,saved){
+ var L=kind==='gold'?GOLD_OPTS:kind==='silver'?SILVER_OPTS:kind==='platinum'?PLAT_OPTS:[];
+ var c=cur==null?'':String(cur);
+ var has=L.some(function(o){return String(o[0])===c});
+ var h='<option value="">—</option>'+L.map(function(o){return '<option value="'+o[0]+'"'+(String(o[0])===c?' selected':'')+'>'+o[1]+'</option>'}).join('');
+ if(saved&&c!==''&&!has)h+='<option value="'+esc(c)+'" selected>'+esc(c)+' (saved)</option>';
+ return h;
+}
 var SILVER_FN={'800':0.800,'835':0.835,'900':0.900,'925':0.925,'999':0.999};
 var TROY_OZ_G=31.1034768;
 function floorOf(i){
- var pm=(i.metal||[])[0],p=num(i.purity),g=num(i.grams);
+ var pm=metalKind((i.metal||[])[0]),p=num(i.purity),g=num(i.grams);
  if(p==null||g==null||g<=0||!PRICES)return null;
  var f,spot;
  if(pm==='gold'){f=GOLD_KT[String(p)];spot=PRICES.gold&&PRICES.gold.usdPerOz}
@@ -1442,8 +1463,10 @@ function priceStrip(){
 function renderListing(){
  pricesLoad();
  var sold=lhTab==='sold';
+ var sortW=function(a,b){return colorRankOf(a)-colorRankOf(b)||typeRankOf(a)-typeRankOf(b)||title(a).localeCompare(title(b))};
  var want=sold?['Sold','Returned']:['To List','Listed'];
- var list=vis().filter(function(i){return want.indexOf(i.status)>-1}).sort(function(a,b){return colorRankOf(a)-colorRankOf(b)||typeRankOf(a)-typeRankOf(b)||title(a).localeCompare(title(b))});
+ var list=vis().filter(function(i){return want.indexOf(i.status)>-1}).sort(sortW);
+ var melt=sold?[]:vis().filter(function(i){return i.status==='To Melt'}).sort(sortW);
  var seg='<div class="seg" style="margin:0 0 12px"><button type="button" data-a="lhtab" data-v="to"'+(!sold?' class="on"':'')+'>Selling</button><button type="button" data-a="lhtab" data-v="sold"'+(sold?' class="on"':'')+'>Sold/Returned</button></div>';
  var cost=function(i){return num(i.cost)||0};
  var acq=function(i){return (num(i.acqShipping)||0)+(num(i.tariffs)||0)+(num(i.repairs)||0)};
@@ -1456,28 +1479,33 @@ function renderListing(){
    return [cost(i),acq(i),totalCost(i),floorOf(i)];
  };
  var heads=sold?['Total Cost','Platform Fee','Shipping','Final Payout','Net Profit']:['Cost','Total Fees','Total Cost','Floor Price'];
- var NC=sold?5:4;var byCat={},order=[],T=new Array(NC).fill(0);
- list.forEach(function(i){var k=i.category||'Other';if(!byCat[k]){byCat[k]={n:0,v:new Array(NC).fill(0)};order.push(k)}var b=byCat[k];b.n++;vec(i).forEach(function(x,j){x=x==null?0:x;b.v[j]+=x;T[j]+=x})});
- order.sort(function(a,b){var x=CATS.indexOf(a),y=CATS.indexOf(b);return (x<0?99:x)-(y<0?99:y)||a.localeCompare(b)});
+ var NC=sold?5:4;
  var num5=function(v){return v.map(function(x,j){return '<td style="'+NUMC+(j===v.length-1?';font-weight:700':'')+'">'+lhD(x)+'</td>'}).join('')};
  var NUMC='padding:6px 0;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap;font-size:11px;letter-spacing:-0.1px;vertical-align:middle';
  var LABC='padding:6px 4px 6px 0;border-bottom:1px solid var(--line);text-align:left;font-size:13px;vertical-align:middle';
  var HEADL='position:sticky;top:62px;z-index:2;background:var(--card);padding:6px 4px 6px 0;border-bottom:1px solid var(--line);text-align:left;font-size:12px;font-weight:600;vertical-align:bottom';
  var HEADR='position:sticky;top:62px;z-index:2;background:var(--card);padding:6px 1px;border-bottom:1px solid var(--line);text-align:right;font-size:12px;font-weight:600;vertical-align:bottom';
  var thead='<thead><tr><th style="'+HEADL+'">Item</th>'+heads.map(function(h){return '<th style="'+HEADR+'">'+h+'</th>'}).join('')+'</tr></thead>';
- var catRows=order.map(function(k){var b=byCat[k];return '<tr><td style="'+LABC+'">'+esc(k)+' ('+b.n+')</td>'+num5(b.v)+'</tr>'}).join('');
- var totRow=list.length?'<tr style="font-weight:600"><td style="'+LABC+'">Total ('+list.length+')</td>'+num5(T)+'</tr>':'';
- var itemRows=list.map(function(i){
-   var img=(i.cover?coverImg(i.cover,true):'')||'<span style="display:flex;align-items:center;justify-content:center;width:100%;height:100%">'+ico(String(i.category||'other').toLowerCase(),20)+'</span>';
-   return '<tr><td style="padding:8px 4px 8px 0;border-bottom:1px solid var(--line);vertical-align:middle">'
-    +'<div style="display:flex;align-items:center;gap:8px;min-width:0">'
-    +'<button type="button" data-a="viewpiece" data-id="'+i.id+'" aria-label="Open '+esc(title(i))+'" style="padding:0;border:0;background:transparent;min-height:0;width:52px;flex:0 0 52px"><div style="width:52px;height:52px;border-radius:8px;overflow:hidden;background:var(--acc);position:relative">'+img+'</div></button>'
-    +'<div style="min-width:0;font-size:13px;line-height:1.25"><div style="font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+esc(title(i))+'</div><div class="meta" style="font-size:12px;margin:0">'+esc((i.metal||[]).join(', ')||'No metal')+'</div></div>'
-    +'</div></td>'+num5(vec(i))+'</tr>';
- }).join('');
  var colgroup='<colgroup><col style="width:124px">'+new Array(NC).fill('<col>').join('')+'</colgroup>';
- var table=list.length?'<table style="width:100%;table-layout:fixed;border-collapse:separate;border-spacing:0">'+colgroup+thead+'<tbody>'+catRows+totRow+itemRows+'</tbody></table>':'';
- return '<h2>Wares</h2>'+priceStrip()+seg+table+(list.length?'':'<p class="meta">'+(sold?'Nothing sold or returned yet.':'Nothing selling yet.')+'</p>');
+ function table(rows){
+   var byCat={},order=[],T=new Array(NC).fill(0);
+   rows.forEach(function(i){var k=i.category||'Other';if(!byCat[k]){byCat[k]={n:0,v:new Array(NC).fill(0)};order.push(k)}var b=byCat[k];b.n++;vec(i).forEach(function(x,j){x=x==null?0:x;b.v[j]+=x;T[j]+=x})});
+   order.sort(function(a,b){var x=CATS.indexOf(a),y=CATS.indexOf(b);return (x<0?99:x)-(y<0?99:y)||a.localeCompare(b)});
+   var catRows=order.map(function(k){var b=byCat[k];return '<tr><td style="'+LABC+'">'+esc(k)+' ('+b.n+')</td>'+num5(b.v)+'</tr>'}).join('');
+   var totRow=rows.length?'<tr style="font-weight:600"><td style="'+LABC+'">Total ('+rows.length+')</td>'+num5(T)+'</tr>':'';
+   var itemRows=rows.map(function(i){
+     var img=(i.cover?coverImg(i.cover,true):'')||'<span style="display:flex;align-items:center;justify-content:center;width:100%;height:100%">'+ico(String(i.category||'other').toLowerCase(),20)+'</span>';
+     return '<tr><td style="padding:8px 4px 8px 0;border-bottom:1px solid var(--line);vertical-align:middle">'
+      +'<div style="display:flex;align-items:center;gap:8px;min-width:0">'
+      +'<button type="button" data-a="viewpiece" data-id="'+i.id+'" aria-label="Open '+esc(title(i))+'" style="padding:0;border:0;background:transparent;min-height:0;width:52px;flex:0 0 52px"><div style="width:52px;height:52px;border-radius:8px;overflow:hidden;background:var(--acc);position:relative">'+img+'</div></button>'
+      +'<div style="min-width:0;font-size:13px;line-height:1.25"><div style="font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+esc(title(i))+'</div><div class="meta" style="font-size:12px;margin:0">'+esc((i.metal||[]).join(', ')||'No metal')+'</div></div>'
+      +'</div></td>'+num5(vec(i))+'</tr>';
+   }).join('');
+   return '<table style="width:100%;table-layout:fixed;border-collapse:separate;border-spacing:0">'+colgroup+thead+'<tbody>'+catRows+totRow+itemRows+'</tbody></table>';
+ }
+ var out='<h2>Wares</h2>'+priceStrip()+seg+(list.length?table(list):'')+(list.length?'':'<p class="meta">'+(sold?'Nothing sold or returned yet.':'Nothing selling yet.')+'</p>');
+ if(melt.length)out+='<h3 style="margin:20px 0 8px">Melting ('+melt.length+')</h3>'+table(melt);
+ return out;
 }
 function renderMain(){
  document.getElementById('app').innerHTML=backupBanner()+(view==='box'?renderBox():view==='gallery'?renderGallery():view==='manage'?renderManage():view==='wishlist'?renderWishlist():view==='coll'?renderColl():view==='secret'?renderSecret():view==='jotd'?renderJotd():view==='about'?renderAbout():view==='listing'?renderListing():view==='piece'?renderPiece():renderEdit());
@@ -1659,7 +1687,7 @@ function renderPiece(){
   ['Payout',function(x){return money(x.payout)}],
   ['Net profit',function(){return net==null?'—':money(net)}]
  ];
- var PIECE_ROWS=TC.Piece.slice();var tone=['Gold tone',function(x){return x.goldTone?esc(x.goldTone):'—'}];var mi=-1;PIECE_ROWS.forEach(function(r,k){if(/^Metal/.test(r[0]))mi=k});if(mi<0)PIECE_ROWS.push(tone);else PIECE_ROWS.splice(mi+1,0,tone);var ei=-1;PIECE_ROWS.forEach(function(r,k){if(r[0]==='Era/Movement')ei=k});PIECE_ROWS.splice(ei+1,0,['Decade',function(x){return esc(x.decade==null||x.decade===''?'—':x.decade)}]);
+ var PIECE_ROWS=TC.Piece.slice();var ei=-1;PIECE_ROWS.forEach(function(r,k){if(r[0]==='Era/Movement')ei=k});PIECE_ROWS.splice(ei+1,0,['Decade',function(x){return esc(x.decade==null||x.decade===''?'—':x.decade)}]);
  var refImgs=(i.refs||[]).filter(function(id){return !!gal.imgs[id]});
  var refBlock=refImgs.length?'<h4 class="sub" style="margin:18px 0 6px;text-align:left">Reference Images</h4><div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:8px">'+refImgs.map(function(id){return '<button type="button" data-a="dpreview" data-id="'+esc(String(id))+'" aria-label="Enlarge reference image" style="padding:0;border:0;background:transparent;min-height:0"><img src="'+esc(gal.imgs[id])+'" alt="" style="width:100%;aspect-ratio:1;object-fit:cover;border-radius:8px;display:block;cursor:zoom-in"></button>'}).join('')+'</div>':'';
  return '<div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:16px"><button data-a="pback">&larr; Back</button><button class="pri" data-a="edit" data-id="'+i.id+'">Edit</button></div>'
@@ -2116,6 +2144,7 @@ document.addEventListener('click',function(e){
   case 'wro':drawer(false);wro=!wro;render();break;
   case 'ro':drawer(false);ro=!ro;if(ro){order=sorted(vis()).map(function(i){return i.id});sortBy='custom';saveOrder()}render();break;
   case 'open':if(!ro&&!collRo)popup(items.filter(function(i){return String(i.id)===d.id})[0]);break;
+  case 'tilepiece':if(!ro&&!collRo){M.innerHTML='';trailPush();pieceId=d.id;show('piece')}break;
   case 'viewpiece':M.innerHTML='';trailPush();pieceId=d.id;show('piece');break;
 case 'pback':trailBack();break;
   case 'lhtab':lhTab=d.v==='sold'?'sold':'to';renderMain();break;
@@ -2268,6 +2297,15 @@ document.addEventListener('change',function(e){
    return;
  }
  if(t.dataset&&t.dataset.money){t.value=fmtMoney(parseMoney(t.value));return}
+});
+document.addEventListener('change',function(e){
+ var t=e.target;if(!t||t.name!=='metal'||!t.closest)return;
+ var box=t.closest('.mdd');if(!box)return;
+ var sel=[];try{sel=JSON.parse(box.dataset.sel||'[]')}catch(err){}var ix=sel.indexOf(t.value);if(t.checked&&ix<0)sel.push(t.value);if(!t.checked&&ix>-1)sel.splice(ix,1);box.dataset.sel=JSON.stringify(sel);
+ var tx=box.querySelector('.cddTxt');if(tx)tx.innerHTML=metalTxt(sel);
+ var pk=metalKind(sel[0]),ps=document.getElementById('purity'),pw=document.getElementById('purityWrap');
+ if(ps){var keep=ps.value,L=pk==='gold'?GOLD_OPTS:pk==='silver'?SILVER_OPTS:pk==='platinum'?PLAT_OPTS:[];var okk=L.some(function(o){return String(o[0])===keep});ps.innerHTML=purityOpts(pk,okk?keep:'',false)}
+ if(pw)pw.style.display=pk==='none'?'none':'';
 });
 var kwTimer=null;
 document.addEventListener('change',function(e){
