@@ -298,7 +298,7 @@ header button[data-a="drawer"]{display:flex;align-items:center;justify-content:c
 <input type="file" id="gfile" accept="image/*" multiple hidden>
 <script>
 var K='ntts_items_v2',OK='ntts_order_v1',PER=25,MAX_UPLOAD=300*1024;
-var APP_VERSION='2.11.3',APP_DATE='2026-11-11 · 8:14 AM ET',UPDATE_URL='';
+var APP_VERSION='2.11.4',APP_DATE='2026-11-11 · 5:57 PM ET',UPDATE_URL='';
 var EMOJI={ring:'💍',earrings:'✨',necklace:'📿',bracelet:'⭕',watch:'⌚',other:'💎'};
 var ICONS={ring:"<circle cx='12' cy='14' r='6'/><path d='M9.5 8 12 4l2.5 4'/><path d='M12 9.5l1.5 2.5-1.5 2.5-1.5-2.5z'/>",earrings:"<path d='M7 3v3'/><path d='M7 6c-1.6 0-2.5 1.3-2.5 3S6 14 7 17c1-3 2.5-5 2.5-8C9.5 7.3 8.6 6 7 6z'/><path d='M17 3v3'/><path d='M17 6c-1.6 0-2.5 1.3-2.5 3S16 14 17 17c1-3 2.5-5 2.5-8C19.5 7.3 18.6 6 17 6z'/>",necklace:"<path d='M4 5c2 7 14 7 16 0'/><path d='M12 12.5V15'/><circle cx='12' cy='17' r='2.2'/>",bracelet:"<ellipse cx='12' cy='12' rx='8' ry='5.5'/><ellipse cx='12' cy='12' rx='5.5' ry='3'/>",watch:"<circle cx='12' cy='13' r='5.5'/><path d='M9 7.5 10 3h4l1 4.5M9 18.5 10 23h4l1-4.5'/><path d='M12 10.5V13l1.8 1.2'/>",other:"<path d='M7 4h10l4 5-9 11L3 9z'/><path d='M3 9h18M9 4l3 16 3-16'/>",heart:"<path d='M12 20s-7-4.4-7-9.5A4 4 0 0 1 12 8a4 4 0 0 1 7 2.5C19 15.6 12 20 12 20z'/>",wrench:"<path d='M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.5 2.5-2.5-.5-.5-2.5z'/>",key:"<g transform='rotate(-45 12.5 12)'><circle cx='8' cy='12' r='4'/><path d='M12 12h9M18 12v3M21 12v2.5'/></g>",curio:"<rect x='4' y='3' width='16' height='18' rx='1'/><path d='M3 3h18M3 21h18'/><path d='M12 3v18'/><path d='M4 11h16'/><path d='M10.5 7v1.5M13.5 7v1.5M10.5 15v1.5M13.5 15v1.5'/>",clock:"<circle cx='12' cy='12' r='9'/><path d='M12 7v5l3 2'/>",pencil:"<path d='M4 20h4L19 9l-4-4L4 16z'/><path d='M13.5 6.5l4 4'/>",lock:"<rect x='5' y='11' width='14' height='10' rx='2'/><path d='M8 11V7a4 4 0 0 1 8 0v4'/>",unlock:"<rect x='3.95' y='11' width='11.1' height='10' rx='2'/><path d='M12.8 11V6.3A3.3 3.3 0 0 1 19.4 6.3V9.5'/>",bag:"<path d='M5 8h14l-1 12H6z'/><path d='M9 8V6a3 3 0 0 1 6 0v2'/>",plus:"<path d='M12 5v14M5 12h14'/>",x:"<path d='M6 6l12 12M18 6L6 18'/>",spark:"<path d='M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z'/>",gallery:"<rect x='3' y='4' width='18' height='16' rx='2'/><circle cx='9' cy='10' r='2'/><path d='M21 16l-5-5-8 9'/>"};
 var ORN='<svg width="72" height="10" viewBox="0 0 72 10" fill="none" stroke="#a8864f" stroke-width="1.2"><path d="M0 5h28M44 5h28"/><path d="M36 1l4 4-4 4-4-4z"/></svg>';
@@ -1426,11 +1426,11 @@ function renderCollDetail(c){
 }
 var collTab='cur',collListRo=false;
 var GOLD_KT={'8':0.333,'9':0.375,'10':0.417,'12':0.5,'14':0.585,'15':0.625,'18':0.750,'22':0.916,'24':1};
-var METAL_OPTS=['Yellow gold','White gold','Rose gold','Silver','Platinum','Base metal','Other'];
+var METAL_OPTS=['Yellow gold','White gold','Rose gold','Silver','Platinum','Gold-filled','Base metal','Other'];
 var GOLD_OPTS=[[8,'8k (333)'],[9,'9k (375)'],[10,'10k (417)'],[12,'12k (500)'],[14,'14k (585)'],[15,'15k (625)'],[18,'18k (750)'],[22,'22k (916)'],[24,'24k (999)']];
 var SILVER_OPTS=[[800,'800'],[925,'925 (sterling)'],[999,'999 (fine)']];
 var PLAT_OPTS=[[850,'850'],[900,'900'],[950,'950'],[999,'999']];
-function metalKind(m){var l=String(m==null?'':m).toLowerCase();if(l.indexOf('gold')>-1)return 'gold';if(l==='silver')return 'silver';if(l==='platinum')return 'platinum';return 'none'}
+function metalKind(m){var l=String(m==null?'':m).toLowerCase();if(l==='gold-filled')return 'none';if(l.indexOf('gold')>-1)return 'gold';if(l==='silver')return 'silver';if(l==='platinum')return 'platinum';return 'none'}
 function metalLabel(m){return m==='gold'?'Gold (pick a tone)':m}
 function metalTxt(sel){return sel.map(function(m,ix){return esc(metalLabel(m))}).join(', ')||'Choose metals'}
 function metalsHTML(sel){var all=METAL_OPTS.slice();sel.forEach(function(m){if(all.indexOf(m)<0)all.push(m)});return all.map(function(m){var ix=sel.indexOf(m);return '<label class="swl" style="flex-direction:row;align-items:center;gap:6px;color:var(--fg);margin:0;padding:3px 0;font-size:16px"><input type="checkbox" name="metal" value="'+esc(m)+'"'+(ix>-1?' checked':'')+'> '+esc(metalLabel(m))+'</label>'}).join('')}
@@ -1545,7 +1545,7 @@ function renderListing(){
  var HEADR='position:sticky;top:calc(var(--hdr-h,62px) + var(--wtop-h,0px));z-index:2;background:var(--card);padding:6px 1px;border-bottom:1px solid var(--line);text-align:right;font-size:12px;font-weight:600;vertical-align:bottom';
  var thead='<thead><tr><th style="'+HEADL+'">Item</th><th style="'+HEADL+'">Metal</th>'+heads.map(function(h){return '<th style="'+HEADR+'">'+h+'</th>'}).join('')+'</tr></thead>';
  var colgroup='<colgroup><col style="width:var(--wItem,120px)"><col style="width:84px">'+new Array(NC).fill('<col>').join('')+'</colgroup>';
- function metalAbbr(m){var k=String(m||'').toLowerCase();return k==='yellow gold'?'yg':k==='white gold'?'wg':k==='rose gold'?'rg':k==='platinum'?'plat':k}
+ function metalAbbr(m){var k=String(m||'').toLowerCase();return k==='yellow gold'?'yg':k==='white gold'?'wg':k==='rose gold'?'rg':k==='platinum'?'plat':k==='gold-filled'?'GF':k}
 function metalShort(i){
  var ms=i.metal||[];if(!ms.length)return '—';
  return ms.map(function(m,ix){
