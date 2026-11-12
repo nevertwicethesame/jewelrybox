@@ -153,6 +153,8 @@ th{color:var(--mute);font-weight:normal;font-size:12px}
 td.stk,th.stk{position:sticky;left:0;z-index:2;background:var(--card);width:156px;min-width:156px;max-width:156px}
 @media (min-width:414px){:root{--wthumb:56px;--wItem:128px}}
 .wtop{position:sticky;top:var(--hdr-h,62px);z-index:4;background:var(--bg);padding-bottom:4px}
+table.wtbl th:first-child,table.wtbl td:first-child{padding-left:8px!important}
+table.wtbl th:last-child,table.wtbl td:last-child{padding-right:8px!important}
 tr.tot td{background:color-mix(in srgb,var(--gold-soft) 35%,var(--card))}
 tr.grp td{background:var(--bg);font-weight:bold;letter-spacing:.03em;color:var(--lnk,var(--acc));font-size:12px;white-space:nowrap}
 .ringtbl{width:100%;table-layout:fixed}
@@ -298,7 +300,7 @@ header button[data-a="drawer"]{display:flex;align-items:center;justify-content:c
 <input type="file" id="gfile" accept="image/*" multiple hidden>
 <script>
 var K='ntts_items_v2',OK='ntts_order_v1',PER=25,MAX_UPLOAD=300*1024;
-var APP_VERSION='2.11.6',APP_DATE='2026-11-11 · 8:57 PM ET',UPDATE_URL='';
+var APP_VERSION='2.11.7',APP_DATE='2026-11-11 · 11:58 PM ET',UPDATE_URL='';
 var EMOJI={ring:'💍',earrings:'✨',necklace:'📿',bracelet:'⭕',watch:'⌚',other:'💎'};
 var ICONS={ring:"<circle cx='12' cy='14' r='6'/><path d='M9.5 8 12 4l2.5 4'/><path d='M12 9.5l1.5 2.5-1.5 2.5-1.5-2.5z'/>",earrings:"<path d='M7 3v3'/><path d='M7 6c-1.6 0-2.5 1.3-2.5 3S6 14 7 17c1-3 2.5-5 2.5-8C9.5 7.3 8.6 6 7 6z'/><path d='M17 3v3'/><path d='M17 6c-1.6 0-2.5 1.3-2.5 3S16 14 17 17c1-3 2.5-5 2.5-8C19.5 7.3 18.6 6 17 6z'/>",necklace:"<path d='M4 5c2 7 14 7 16 0'/><path d='M12 12.5V15'/><circle cx='12' cy='17' r='2.2'/>",bracelet:"<ellipse cx='12' cy='12' rx='8' ry='5.5'/><ellipse cx='12' cy='12' rx='5.5' ry='3'/>",watch:"<circle cx='12' cy='13' r='5.5'/><path d='M9 7.5 10 3h4l1 4.5M9 18.5 10 23h4l1-4.5'/><path d='M12 10.5V13l1.8 1.2'/>",other:"<path d='M7 4h10l4 5-9 11L3 9z'/><path d='M3 9h18M9 4l3 16 3-16'/>",heart:"<path d='M12 20s-7-4.4-7-9.5A4 4 0 0 1 12 8a4 4 0 0 1 7 2.5C19 15.6 12 20 12 20z'/>",wrench:"<path d='M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.5 2.5-2.5-.5-.5-2.5z'/>",key:"<g transform='rotate(-45 12.5 12)'><circle cx='8' cy='12' r='4'/><path d='M12 12h9M18 12v3M21 12v2.5'/></g>",curio:"<rect x='4' y='3' width='16' height='18' rx='1'/><path d='M3 3h18M3 21h18'/><path d='M12 3v18'/><path d='M4 11h16'/><path d='M10.5 7v1.5M13.5 7v1.5M10.5 15v1.5M13.5 15v1.5'/>",clock:"<circle cx='12' cy='12' r='9'/><path d='M12 7v5l3 2'/>",pencil:"<path d='M4 20h4L19 9l-4-4L4 16z'/><path d='M13.5 6.5l4 4'/>",lock:"<rect x='5' y='11' width='14' height='10' rx='2'/><path d='M8 11V7a4 4 0 0 1 8 0v4'/>",unlock:"<rect x='3.95' y='11' width='11.1' height='10' rx='2'/><path d='M12.8 11V6.3A3.3 3.3 0 0 1 19.4 6.3V9.5'/>",bag:"<path d='M5 8h14l-1 12H6z'/><path d='M9 8V6a3 3 0 0 1 6 0v2'/>",plus:"<path d='M12 5v14M5 12h14'/>",x:"<path d='M6 6l12 12M18 6L6 18'/>",spark:"<path d='M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z'/>",gallery:"<rect x='3' y='4' width='18' height='16' rx='2'/><circle cx='9' cy='10' r='2'/><path d='M21 16l-5-5-8 9'/>"};
 var ORN='<svg width="72" height="10" viewBox="0 0 72 10" fill="none" stroke="#a8864f" stroke-width="1.2"><path d="M0 5h28M44 5h28"/><path d="M36 1l4 4-4 4-4-4z"/></svg>';
@@ -675,6 +677,9 @@ function renumberIds(){
  if(!items.some(function(i){return Number(i.id)>1000000000}))return;
  var sortedItems=items.slice().sort(function(a,b){return Number(a.id)-Number(b.id)});
  var map={};sortedItems.forEach(function(i,n){map[i.id]=n+1;i.id=n+1});
+ var rm=function(x){return map[x]!==undefined?map[x]:x};
+ items.forEach(function(i){if(i.links)i.links=i.links.map(rm).filter(function(v,k,arr){return arr.indexOf(v)===k})});
+ colls.forEach(function(c){c.pieceIds=(c.pieceIds||[]).map(rm)});
  order=order.map(function(x){return map[x]}).filter(function(x){return x!==undefined});
  saveItems();saveOrder();
 }
@@ -798,7 +803,7 @@ var FACETS=[
 ];
 function pieceInColl(i){return colls.some(function(c){return (c.pieceIds||[]).indexOf(i.id)>-1})}
 function facetOf(k){return FACETS.filter(function(F){return F.k===k})[0]}
-function vis(){return secretCfg.on?items.filter(function(i){return !isHidden(i)}):items}
+function vis(){return secretCfg.on&&!secretUnlocked?items.filter(function(i){return !isHidden(i)}):items}
 function cntColor(c){var F=facetOf('colorMain');return vis().filter(function(i){return F.g(i).indexOf(c)>-1}).length}
 function cntF(F,v){var lv=String(v).toLowerCase();return vis().filter(function(i){return F.g(i).map(function(x){return String(x==null?'':x).toLowerCase()}).indexOf(lv)>-1}).length}
 function facetVals(F){var v=F.v();if(F.counted)v=v.map(function(x){return {x:x,c:cntF(F,x)}}).sort(function(a,b){return b.c-a.c||String(a.x).localeCompare(String(b.x))}).map(function(o){return o.x});if(F.k==='colorMain')v=v.slice().sort(function(a,b){var ra=COLOR_ORDER.indexOf(a),rb=COLOR_ORDER.indexOf(b);return (ra<0?99:ra)-(rb<0?99:rb)});return v}
@@ -1420,7 +1425,8 @@ function renderCollDetail(c){
   if(!collRo)return t;
   var x=xBtn('data-a="cremove" data-id="'+i.id+'"','Remove from collection');
   return t.slice(0,-6)+x+'</div>'}).join('');
- return '<div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:12px"><button data-a="cback">Back</button><div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end"><button data-a="cedit">Edit details</button><button class="pri" data-a="cpicker">+ Add pieces</button></div></div>'
+ return '<div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:12px"><button data-a="cback">Back</button><div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end"><button data-a="cedit">Edit</button><button class="pri" data-a="cpicker">+ Add pieces</button></div></div>'
+  +'<h2 style="margin:0 0 6px">'+esc(c.title||'Untitled collection')+'</h2>'
   +(c.note?'<p class="meta" style="margin:0 0 12px;white-space:pre-wrap">'+esc(c.note)+'</p>':'')
   +(p.length?'<div class="box'+(bgStyle==='pattern'?' pat':'')+'" style="overflow:hidden;min-width:0"><div class="grid'+(collRo?' ro':'')+'" style="grid-template-columns:repeat('+cols+',1fr);gap:8px">'+tiles+'</div></div>':'<p class="meta">No pieces yet.</p>');
 }
@@ -1574,9 +1580,9 @@ function table(rows){
      if(!open)return head;
      return head+rows.filter(function(i){return (i.category||'Other')===k}).map(itemRow).join('');
    }).join('');
-   return '<table style="width:100%;table-layout:fixed;border-collapse:separate;border-spacing:0">'+colgroup+thead+'<tbody>'+totRow+groups+'</tbody></table>';
+   return '<table class="wtbl" style="width:100%;table-layout:fixed;border-collapse:separate;border-spacing:0">'+colgroup+thead+'<tbody>'+totRow+groups+'</tbody></table>';
  }
- var out='<div class="wtop"><h2>Wares</h2>'+priceStrip()+'<div style="display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap">'+seg+catBar(melting?melt:list,sold?'s':melting?'m':'t')+'</div></div>';
+ var out='<div class="wtop"><h2 style="margin:0 0 14px">Wares</h2>'+priceStrip()+'<div style="display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap">'+seg+catBar(melting?melt:list,sold?'s':melting?'m':'t')+'</div></div>';
  if(melting)out+=melt.length?table(melt):'<p class="meta">Nothing to melt.</p>';
  else out+=(list.length?table(list):'<p class="meta">'+(sold?'Nothing sold yet.':'Nothing selling yet.')+'</p>');
  return out;
@@ -1948,6 +1954,7 @@ function applyCSV(text,dry){
  var cCur=colIdx('curations'),cSet=colIdx('sets');
  var added=0,noIdNew=0,updated=0,skipped=0,curChanged=0,setChanged=0,warn=[],nid=Math.max(Date.now(),items.reduce(function(m,i){return Math.max(m,Number(i.id)||0)},0)+1);
  var nextCid=Math.max(Date.now(),colls.reduce(function(m,c){return Math.max(m,Number(c.id)||0)},0)+1);
+ var fileIdMap={},setJobs=[];
  rows.slice(1).forEach(function(r){
    var rec={};
    CSV_COLS.forEach(function(c){var j=idx[c[0]];if(j<0)return;var v=(r[j]||'').trim();if(v!=='')rec[c[0]]=v});
@@ -1962,6 +1969,7 @@ function applyCSV(text,dry){
    });
    out=mig(out);
    if(existing){items[items.indexOf(existing)]=out;updated++}else{items.push(out);added++;if(!rec.id||rec.id==='-1')noIdNew+=(rec.id==='-1'?0:1)}
+   if(rec.id&&rec.id!=='-1')fileIdMap[rec.id]=out.id;
    // Curations column: blank = no change, (clear) = remove from all, names = exact membership
    if(cCur>-1){
      var cv=(r[cCur]||'').trim();
@@ -1979,34 +1987,37 @@ function applyCSV(text,dry){
        });
      }
    }
-   // Sets column: blank = no change, (clear) = unlink all, IDs = exact set of direct links
+   // Sets column: resolved after all rows are in, so file IDs map to the new IDs
    if(cSet>-1){
      var sv=(r[cSet]||'').trim();
-     if(sv!==''){
-       var wantIds=sv==='(clear)'?[]:sv.split(';').map(function(x){return x.trim()}).filter(Boolean),ids=[];
-       wantIds.forEach(function(t){
-         if(t==='-1'){warn.push('"'+rec.title+'": a new piece can\'t be linked by -1 yet (import it first)');return}
-         var target=items.filter(function(x){return String(x.id)===t})[0];
-         if(!target){warn.push('"'+rec.title+'": unknown ID '+t);return}
-         if(target===out){return}
-         ids.push(target.id);
-       });
-       var cur=(out.links||[]).slice();
-       cur.forEach(function(x){
-         if(ids.some(function(y){return String(y)===String(x)}))return;
-         var other=items.filter(function(i){return String(i.id)===String(x)})[0];
-         if(other)other.links=(other.links||[]).filter(function(l){return String(l)!==String(out.id)});
-         setChanged++;
-       });
-       ids.forEach(function(x){
-         if(cur.some(function(y){return String(y)===String(x)}))return;
-         var other=items.filter(function(i){return String(i.id)===String(x)})[0];
-         if(other&&(other.links||[]).indexOf(out.id)<0)other.links=(other.links||[]).concat([out.id]);
-         setChanged++;
-       });
-       out.links=ids;
-     }
+     if(sv!==''){setJobs.push({out:out,title:rec.title,sv:sv})}
    }
+ });
+ setJobs.forEach(function(job){
+   var out=job.out,ids=[];
+   var wantIds=job.sv==='(clear)'?[]:job.sv.split(';').map(function(x){return x.trim()}).filter(Boolean);
+   wantIds.forEach(function(t){
+     if(t==='-1'){warn.push('"'+job.title+'": a new piece can\'t be linked by -1 yet (import it first)');return}
+     var tid=Object.prototype.hasOwnProperty.call(fileIdMap,t)?fileIdMap[t]:t;
+     var target=items.filter(function(x){return String(x.id)===String(tid)})[0];
+     if(!target){warn.push('"'+job.title+'": unknown ID '+t);return}
+     if(target===out){return}
+     ids.push(target.id);
+   });
+   var cur=(out.links||[]).slice();
+   cur.forEach(function(x){
+     if(ids.some(function(y){return String(y)===String(x)}))return;
+     var other=items.filter(function(i){return String(i.id)===String(x)})[0];
+     if(other)other.links=(other.links||[]).filter(function(l){return String(l)!==String(out.id)});
+     setChanged++;
+   });
+   ids.forEach(function(x){
+     if(cur.some(function(y){return String(y)===String(x)}))return;
+     var other=items.filter(function(i){return String(i.id)===String(x)})[0];
+     if(other&&(other.links||[]).indexOf(out.id)<0)other.links=(other.links||[]).concat([out.id]);
+     setChanged++;
+   });
+   out.links=ids;
  });
  if(dry)return {added:added,updated:updated,noIdNew:noIdNew,skipped:skipped};
  saveItems();saveColls();render();
@@ -2192,7 +2203,7 @@ document.addEventListener('input',function(e){
    var lab=document.getElementById('rl-'+k);if(lab)lab.textContent=(k==='cost'?wholeMoney(lo)+' – '+wholeMoney(hi):lo+' – '+hi);
    renderMain();return;
  }
- if(t.getAttribute('data-a')==='sthr'){var tv=num(parseMoney(t.value));if(tv!==secretCfg.threshold){secretCfg.threshold=tv;saveSecret()}return}
+ if(t.getAttribute('data-a')==='sthr')return;
  if(t.id==='cropz'){cropZoom(Number(t.value));return}
  var f=document.getElementById('form');
  if(f&&f.contains(t)){
@@ -2360,7 +2371,7 @@ document.addEventListener('change',function(e){
  var t=e.target,a=t.getAttribute('data-a');
  if(t.id==='sort'){sortBy=t.value;render();return}
  if(a==='smode'){secretCfg.on=t.checked;saveSecret();render();return}
- if(a==='sthr'){secretCfg.threshold=num(parseMoney(t.value));t.value=secretCfg.threshold==null?'':fmtMoney(secretCfg.threshold);saveSecret();render();return}
+ if(a==='sthr'){var tv=num(parseMoney(t.value));t.value=tv==null?'':fmtMoney(tv);return}
  if(a==='fc'){toggleFilter(t.getAttribute('data-k'),t.getAttribute('data-val'));render();return}
  if(a==='hidesold'){hideSold=t.checked;saveSettings();render();return}
  if(t.id==='fcsv'&&t.files[0]){readFile(t.files[0],importCSV);t.value='';return}
