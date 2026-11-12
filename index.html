@@ -160,9 +160,9 @@ tr.grp td{background:var(--bg);font-weight:bold;letter-spacing:.03em;color:var(-
 .ringtbl th.us,.ringtbl td.us{font-weight:bold}
 .upd{position:relative;left:0;right:0;z-index:20;background:var(--acc);color:#fff;padding:8px 12px;display:flex;gap:8px;align-items:center;justify-content:center;flex-wrap:wrap;font-size:13px}
 #upd{padding-top:calc(8px + env(safe-area-inset-top,0px))}
-.upd>span{flex:1 1 auto;min-width:0;text-align:left}
+.upd>span{flex:1 1 auto;min-width:0;text-align:left;padding-top:5px}
 .upd[hidden]{display:none}
-.upd button{border-color:#fff;background:transparent;color:#fff;min-height:32px;padding:4px 10px 5px;font-size:13px}
+.upd button{border-color:#fff;background:transparent;color:#fff;min-height:32px;padding:10px 10px 6px;font-size:13px}
 .upd button.xb{width:26px;height:26px;min-width:0;min-height:0;padding:0;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:none;border:1px solid #fff}
 .upd button.xb svg{position:relative;top:0}
 .upd button.pri{background:#fff;color:var(--acc)}
@@ -298,7 +298,7 @@ header button[data-a="drawer"]{display:flex;align-items:center;justify-content:c
 <input type="file" id="gfile" accept="image/*" multiple hidden>
 <script>
 var K='ntts_items_v2',OK='ntts_order_v1',PER=25,MAX_UPLOAD=300*1024;
-var APP_VERSION='2.11.5',APP_DATE='2026-11-11 · 8:36 PM ET',UPDATE_URL='';
+var APP_VERSION='2.11.6',APP_DATE='2026-11-11 · 8:57 PM ET',UPDATE_URL='';
 var EMOJI={ring:'💍',earrings:'✨',necklace:'📿',bracelet:'⭕',watch:'⌚',other:'💎'};
 var ICONS={ring:"<circle cx='12' cy='14' r='6'/><path d='M9.5 8 12 4l2.5 4'/><path d='M12 9.5l1.5 2.5-1.5 2.5-1.5-2.5z'/>",earrings:"<path d='M7 3v3'/><path d='M7 6c-1.6 0-2.5 1.3-2.5 3S6 14 7 17c1-3 2.5-5 2.5-8C9.5 7.3 8.6 6 7 6z'/><path d='M17 3v3'/><path d='M17 6c-1.6 0-2.5 1.3-2.5 3S16 14 17 17c1-3 2.5-5 2.5-8C19.5 7.3 18.6 6 17 6z'/>",necklace:"<path d='M4 5c2 7 14 7 16 0'/><path d='M12 12.5V15'/><circle cx='12' cy='17' r='2.2'/>",bracelet:"<ellipse cx='12' cy='12' rx='8' ry='5.5'/><ellipse cx='12' cy='12' rx='5.5' ry='3'/>",watch:"<circle cx='12' cy='13' r='5.5'/><path d='M9 7.5 10 3h4l1 4.5M9 18.5 10 23h4l1-4.5'/><path d='M12 10.5V13l1.8 1.2'/>",other:"<path d='M7 4h10l4 5-9 11L3 9z'/><path d='M3 9h18M9 4l3 16 3-16'/>",heart:"<path d='M12 20s-7-4.4-7-9.5A4 4 0 0 1 12 8a4 4 0 0 1 7 2.5C19 15.6 12 20 12 20z'/>",wrench:"<path d='M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.5 2.5-2.5-.5-.5-2.5z'/>",key:"<g transform='rotate(-45 12.5 12)'><circle cx='8' cy='12' r='4'/><path d='M12 12h9M18 12v3M21 12v2.5'/></g>",curio:"<rect x='4' y='3' width='16' height='18' rx='1'/><path d='M3 3h18M3 21h18'/><path d='M12 3v18'/><path d='M4 11h16'/><path d='M10.5 7v1.5M13.5 7v1.5M10.5 15v1.5M13.5 15v1.5'/>",clock:"<circle cx='12' cy='12' r='9'/><path d='M12 7v5l3 2'/>",pencil:"<path d='M4 20h4L19 9l-4-4L4 16z'/><path d='M13.5 6.5l4 4'/>",lock:"<rect x='5' y='11' width='14' height='10' rx='2'/><path d='M8 11V7a4 4 0 0 1 8 0v4'/>",unlock:"<rect x='3.95' y='11' width='11.1' height='10' rx='2'/><path d='M12.8 11V6.3A3.3 3.3 0 0 1 19.4 6.3V9.5'/>",bag:"<path d='M5 8h14l-1 12H6z'/><path d='M9 8V6a3 3 0 0 1 6 0v2'/>",plus:"<path d='M12 5v14M5 12h14'/>",x:"<path d='M6 6l12 12M18 6L6 18'/>",spark:"<path d='M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z'/>",gallery:"<rect x='3' y='4' width='18' height='16' rx='2'/><circle cx='9' cy='10' r='2'/><path d='M21 16l-5-5-8 9'/>"};
 var ORN='<svg width="72" height="10" viewBox="0 0 72 10" fill="none" stroke="#a8864f" stroke-width="1.2"><path d="M0 5h28M44 5h28"/><path d="M36 1l4 4-4 4-4-4z"/></svg>';
@@ -1536,7 +1536,7 @@ function renderListing(){
    if(sold){var t=totalCost(i),f=fee(i),s=ship(i),p=pay(i);return [t,f,s,p,p-t-f-s]}
    return [cost(i),acq(i),totalCost(i),floorOf(i)];
  };
- var heads=sold?['Total Cost','Platform Fee','Shipping','Final Payout','Net Profit']:['Cost','Total Fees','Total Cost','Est Floor'];
+ var heads=sold?['Total<br>Cost','Plat<br>Fee','Ship','Payout','Net']:['Cost','Total<br>Fees','Total<br>Cost','Est<br>Floor'];
  var NC=sold?5:4;
  var num5=function(v){return v.map(function(x,j){return '<td style="'+NUMC+(j===v.length-1?';font-weight:700':'')+'">'+lhD(x)+'</td>'}).join('')};
  var NUMC='padding:6px 0;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap;font-size:11px;letter-spacing:-0.1px;vertical-align:middle';
@@ -1544,7 +1544,7 @@ function renderListing(){
  var HEADL='position:sticky;top:calc(var(--hdr-h,62px) + var(--wtop-h,0px));z-index:2;background:var(--card);padding:6px 4px 6px 0;border-bottom:1px solid var(--line);text-align:left;font-size:12px;font-weight:600;vertical-align:bottom';
  var HEADR='position:sticky;top:calc(var(--hdr-h,62px) + var(--wtop-h,0px));z-index:2;background:var(--card);padding:6px 1px;border-bottom:1px solid var(--line);text-align:right;font-size:12px;font-weight:600;vertical-align:bottom';
  var thead='<thead><tr><th style="'+HEADL+'">Item</th><th style="'+HEADL+'">Metal</th>'+heads.map(function(h){return '<th style="'+HEADR+'">'+h+'</th>'}).join('')+'</tr></thead>';
- var colgroup='<colgroup><col style="width:var(--wItem,120px)"><col style="width:64px">'+new Array(NC).fill('<col>').join('')+'</colgroup>';
+ var colgroup='<colgroup><col style="width:var(--wItem,112px)"><col style="width:60px">'+new Array(NC).fill('<col>').join('')+'</colgroup>';
  function metalAbbr(m){var k=String(m||'').toLowerCase();return k==='yellow gold'?'yg':k==='white gold'?'wg':k==='rose gold'?'rg':k==='platinum'?'plat':k==='gold-filled'?'GF':k}
 function metalShort(i){
  var ms=i.metal||[];if(!ms.length)return '—';
@@ -1564,7 +1564,7 @@ function table(rows){
    function itemRow(i){
      var img=(i.cover?coverImg(i.cover,true):'')||'<span style="display:flex;align-items:center;justify-content:center;width:100%;height:100%">'+ico(String(i.category||'other').toLowerCase(),20)+'</span>';
      var thumb='<button type="button" data-a="viewpiece" data-id="'+i.id+'" aria-label="Open '+esc(title(i))+'" style="padding:0;border:0;background:transparent;min-height:0;width:var(--wthumb,40px);flex:0 0 var(--wthumb,40px)"><div style="width:var(--wthumb,40px);height:var(--wthumb,40px);border-radius:8px;overflow:hidden;background:var(--acc);position:relative">'+img+'</div></button>';
-     return '<tr><td rowspan="2" style="padding:6px 4px 10px 0;border-bottom:1px solid var(--line);vertical-align:middle">'+thumb+'</td>'
+     return '<tr><td rowspan="2" style="padding:10px 4px 10px 0;border-bottom:1px solid var(--line);vertical-align:middle">'+thumb+'</td>'
       +'<td colspan="'+(1+NC)+'" style="padding:10px 0 0;font-weight:600;font-size:13px;line-height:1.25;overflow-wrap:anywhere">'+esc(title(i))+'</td></tr>'
       +'<tr><td style="padding:4px 4px 10px 0;border-bottom:1px solid var(--line);vertical-align:middle;font-size:12px;line-height:1.25;overflow-wrap:anywhere">'+esc(metalShort(i))+'</td>'+num5(vec(i))+'</tr>';
    }
@@ -1748,6 +1748,14 @@ function pieceSpecs(title,rows,i,skip){
  if(!html.length)return '';
  return '<h4 class="sub" style="margin:18px 0 6px;text-align:left">'+title+'</h4><table class="spec">'+html.map(function(r){return '<tr><th>'+r.l+'</th><td>'+r.v+'</td></tr>'}).join('')+'</table>';
 }
+function setCollBlock(i){
+ var tray=setTrays().filter(function(t){return t.some(function(x){return String(x.id)===String(i.id)})})[0];
+ var cs=colls.filter(function(c){return (c.pieceIds||[]).some(function(x){return String(x)===String(i.id)})}).map(function(c){return esc(c.title||'Untitled collection')});
+ var h='';
+ if(tray&&tray.length)h+='<h4 class="sub" style="margin:18px 0 6px;text-align:left">Set</h4><div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px">'+tray.map(function(x){return thumb(x)}).join('')+'</div>';
+ if(cs.length)h+='<h4 class="sub" style="margin:18px 0 6px;text-align:left">Collections</h4><p style="margin:0;text-align:left">'+cs.join(', ')+'</p>';
+ return h;
+}
 function renderPiece(){
  var i=items.filter(function(x){return String(x.id)===String(pieceId)})[0];
  if(!i){show('box');return '<p class="meta">This piece is no longer in your collection.</p>'}
@@ -1774,9 +1782,9 @@ function renderPiece(){
   +'<h2 class="ttl" style="margin:12px 0 4px">'+esc(title(i))+'</h2>'
   +'<p class="cat">'+esc([i.category,i.period].filter(Boolean).join(' · '))+'</p>'
   +'<div class="rule"></div>'
+  +setCollBlock(i)
   +pieceSpecs('Piece',PIECE_ROWS,i,['Category','Period'])
   +pieceSpecs('Provenance',TC.Transaction,i,[])
-  +pieceSpecs('Pricing',[['Shipping Estimate',function(x){return money(num(x.shipEstimate))}],['Buffer (%)',function(x){return x.buffer==null||x.buffer===''?'—':esc(x.buffer)+'%'}],['Suggested eBay Price',function(x){return calcs(x).sugE}],['Suggested Instagram Price',function(x){return calcs(x).sugI}],['Potential eBay Profit',function(x){return calcs(x).potE}],['Potential Instagram Price',function(x){return calcs(x).potI}]],i,[])
   +pieceSpecs('Wear and Rating',TC.Stats,i,[])
   +notes.map(function(n){return '<div class="note-b"><h4 class="sub">'+n[0]+'</h4><p>'+esc(n[1])+'</p></div>'}).join('')
   +refBlock
